@@ -1,5 +1,6 @@
 import { FormWrapper } from "@/components/formWrapper";
 import { SignupForm1 } from "@/components/forms";
+import { Suspense } from 'react';
 
 export default function Page({
   searchParams,
@@ -14,7 +15,9 @@ export default function Page({
   console.log(searchParams);
   return (
     <FormWrapper step={1}>
-      <SignupForm1 defaultValues={searchParams} />
+      <Suspense fallback={<div>Loading...</div>}>
+        <SignupForm1 defaultValues={searchParams} />
+      </Suspense>
     </FormWrapper>
   );
 }

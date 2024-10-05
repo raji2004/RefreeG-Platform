@@ -27,9 +27,9 @@ import { useState, useEffect } from "react";
 import { Country, User } from "@/lib/type";
 import Image from "next/image";
 import { DatePicker } from "./ui/date-picker";
-import { useSearchParams, usePathname, useRouter,ReadonlyURLSearchParams } from "next/navigation";
+import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import {  sessionAge,  } from "@/lib/utils";
+import { getOldParams, sessionAge,  } from "@/lib/utils";
 import { InputOTP, InputOTPSeparator, InputOTPSlot } from "./ui/input-otp";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
@@ -164,7 +164,6 @@ export const SignupForm1 = ({
     getCountries();
   }, []);
 
-
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     const params = new URLSearchParams(searchParams);
     Object.entries(data).forEach(([key, value]) => {
@@ -296,19 +295,7 @@ export const SignupForm2 = ({
       confirmPassword: defaultValues.confirmPassword ?? "",
     },
   });
-  const getOldParams = (searchParams:ReadonlyURLSearchParams,params:URLSearchParams)=>{
-    const oldObj:any= {}
-    const oldParams =  Array.from(searchParams.keys())
-    oldParams.forEach((key:any) => {
-        const value = params.get(key);
-           if(value){
-             params.set(key, value);
-             oldObj[`${key}`]= value
-           }
-     })
-     return oldObj
-  
-  }
+
   const onSubmit: SubmitHandler<FieldValues> = async(data) => {
     if (data.password !== data.confirmPassword) {
       toast.error("Password does not match");
@@ -412,19 +399,7 @@ export const SignupForm3 = () => {
       phoneNumber: "",
     },
   });
-  const getOldParams = (searchParams:ReadonlyURLSearchParams,params:URLSearchParams)=>{
-    const oldObj:any= {}
-    const oldParams =  Array.from(searchParams.keys())
-    oldParams.forEach((key:any) => {
-        const value = params.get(key);
-           if(value){
-             params.set(key, value);
-             oldObj[`${key}`]= value
-           }
-     })
-     return oldObj
-  
-  }
+
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     console.log(data);
     const params = new URLSearchParams(searchParams);
@@ -474,19 +449,6 @@ export const SignupForm4 = () => {
   const pathname = usePathname();
   const { push } = useRouter();
 
-  const getOldParams = (searchParams:ReadonlyURLSearchParams,params:URLSearchParams)=>{
-    const oldObj:any= {}
-    const oldParams =  Array.from(searchParams.keys())
-    oldParams.forEach((key:any) => {
-        const value = params.get(key);
-           if(value){
-             params.set(key, value);
-             oldObj[`${key}`]= value
-           }
-     })
-     return oldObj
-  
-  }
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     console.log(data);
     const params = new URLSearchParams(searchParams);
@@ -556,19 +518,7 @@ export const SignupForm5 = () => {
     'Agriculture',
     'Environment'
   ]
-  const getOldParams = (searchParams:ReadonlyURLSearchParams,params:URLSearchParams)=>{
-    const oldObj:any= {}
-    const oldParams =  Array.from(searchParams.keys())
-    oldParams.forEach((key:any) => {
-        const value = params.get(key);
-           if(value){
-             params.set(key, value);
-             oldObj[`${key}`]= value
-           }
-     })
-     return oldObj
   
-  }
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
    
