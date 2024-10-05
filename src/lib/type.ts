@@ -85,7 +85,7 @@ export interface Country {
         png: string;
         svg: string;
     };
-    coatOfArms: {};
+    coatOfArms: object;
     startOfWeek: string;
     capitalInfo: {
         latlng: [number, number];

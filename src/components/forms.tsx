@@ -34,7 +34,7 @@ import { InputOTP, InputOTPSeparator, InputOTPSlot } from "./ui/input-otp";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { useCreateUserWithEmailAndPassword, useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth'
-import { auth, db } from "@/lib/firebase/config";
+import { auth } from "@/lib/firebase/config";
 import { addUser, checkEmailExists } from "@/lib/action";
 import { setCookie } from 'cookies-next';
 
@@ -48,7 +48,7 @@ interface LoginFormProps {
 }
 
 // Login Form
-export const LoginForm = ({ defaultValues }: LoginFormProps) => {
+export const LoginForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const loginForm = useForm({
     resolver: zodResolver(loginSchema),
@@ -518,6 +518,7 @@ export const SignupForm5 = () => {
     'Agriculture',
     'Environment'
   ]
+  
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
    
