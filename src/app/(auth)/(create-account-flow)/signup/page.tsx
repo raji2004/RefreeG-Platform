@@ -1,6 +1,6 @@
 import { FormWrapper } from "@/components/formWrapper";
 import { SignupForm1 } from "@/components/forms";
-import { User } from "@/lib/type";
+
 export default function Page({
   searchParams,
 }: {

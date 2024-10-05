@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { processPayment } from "@/utils/paymentGateway";
 import { convertCurrency } from "@/utils/currencyConversion";
-import { recordTransaction, checkFundingTargets } from "@/lib/firebase/config";
+import { recordTransaction,  } from "@/lib/firebase/config";
 
 // Mocking the checkFundingTargets function
 async function mockCheckFundingTargets(causeId: string) {
