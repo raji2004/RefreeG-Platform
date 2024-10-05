@@ -11,5 +11,5 @@ jobs:
       - name: install dependencies
         run: npm install
       - name: run tests
-        run: npm test:unit
+        run: npm run test:unit
       
