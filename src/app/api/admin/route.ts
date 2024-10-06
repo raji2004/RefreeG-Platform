@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { getUsers, getCauses, getDonations } from "@/lib/firebase/admin";
-import { logActivity } from "@/utils/logger"; // Import the logger utility
+import { getUsers, getCauses, getDonations } from "../../../lib/firebase/admin";
+import { logActivity } from "../../../utils/logger"; // Import the logger utility
 
 // Admin Dashboard API
 export async function GET(req: Request) {
