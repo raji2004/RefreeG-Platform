@@ -5,7 +5,7 @@ import { logActivity } from "../../../utils/logger"; // Import the logger utilit
 // Admin Dashboard API
 export async function GET(req: Request) {
   console.log("API called");
-  
+
   // You can retrieve the admin ID from the request or session if applicable
   const adminId = "adminId"; // Replace with actual admin ID retrieval logic
 
@@ -20,7 +20,15 @@ export async function GET(req: Request) {
     );
 
     // Log the activity
-    await logActivity("Fetched Admin Dashboard Data", { totalUsers: totalUsers.length, activeCauses: activeCauses.length, totalDonations: totalDonationAmount }, adminId);
+    await logActivity(
+      "Fetched Admin Dashboard Data",
+      {
+        totalUsers: totalUsers.length,
+        activeCauses: activeCauses.length,
+        totalDonations: totalDonationAmount,
+      },
+      adminId
+    );
 
     return NextResponse.json({
       totalUsers: totalUsers.length,
