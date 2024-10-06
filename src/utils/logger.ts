@@ -2,7 +2,11 @@
 import { db } from "../lib/firebase/config"; // Adjust the import as necessary
 import { collection, addDoc } from "firebase/firestore";
 
-export async function logActivity(activity: string, details: any, adminId: string) {
+export async function logActivity(
+  activity: string,
+  details: any,
+  adminId: string
+) {
   try {
     const logEntry = {
       activity,
