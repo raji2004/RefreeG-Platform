@@ -1,23 +1,27 @@
 import { NextResponse } from "next/server";
-import { processPayment } from "@/utils/paymentGateway";
-import { convertCurrency } from "@/utils/currencyConversion";
+import { processPayment } from "../../../utils/paymentGateway";
+import { convertCurrency } from "../../../utils/currencyConversion";
 import {
   recordTransaction,
   checkFundingTargets,
-} from "@/lib/transactionActions";
+} from "../../../lib/transactionActions";
 
 // Donation API Handler
 export async function POST(req: Request) {
   const res = NextResponse.json;
 
   try {
-    // Parse incoming request data
     const { amount, currency, donorDetails, isRecurring, causeId } =
       await req.json();
 
-    // Validate input data
     if (!amount || !currency || !donorDetails || !causeId) {
       return res({ error: "Missing required fields" }, { status: 400 });
+    }
+
+    // Check if the cause exists before processing payment
+    const fundingTarget = await checkFundingTargets(causeId);
+    if (!fundingTarget) {
+      return res({ error: "Cause not found" }, { status: 404 });
     }
 
     // Convert currency to Naira
@@ -30,14 +34,6 @@ export async function POST(req: Request) {
       isRecurring
     );
 
-    // Fetch funding targets for the cause
-    const fundingTarget = await checkFundingTargets(causeId);
-
-    // Ensure the cause exists
-    if (!fundingTarget) {
-      return res({ error: "Cause not found" }, { status: 404 });
-    }
-
     // Store the transaction record in the database
     await recordTransaction(
       paymentResponse,
@@ -47,27 +43,18 @@ export async function POST(req: Request) {
       causeId
     );
 
-    // Send a success response with payment details and converted amount
     return res({
       success: true,
       paymentResponse,
       convertedAmount: amountInNaira,
     });
   } catch (error: unknown) {
-    // Handle any errors and respond accordingly
-    if (error instanceof Error) {
-      return res(
-        { error: "Payment Processing Failed", details: error.message },
-        { status: 500 }
-      );
-    } else {
-      return res(
-        {
-          error: "Payment Processing Failed",
-          details: "Unknown error occurred",
-        },
-        { status: 500 }
-      );
-    }
+    const errorMessage =
+      error instanceof Error ? error.message : "Unknown error occurred";
+    console.error("Payment Processing Error: ", errorMessage); // Log the error
+    return res(
+      { error: "Payment Processing Failed", details: errorMessage },
+      { status: 500 }
+    );
   }
 }
