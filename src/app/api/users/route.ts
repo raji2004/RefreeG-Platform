@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { db } from "@/lib/firebase/config";
+import { db } from "../../../lib/firebase/config";
 import { collection, getDocs, updateDoc, doc } from "firebase/firestore";
-import { logActivity } from "@/utils/logger"; // Import your logging utility
+import { logActivity } from "../../../utils/logger"; // Import your logging utility
 
 // Fetch all users
 export async function GET() {
@@ -16,7 +16,7 @@ export async function GET() {
     return NextResponse.json(users);
   } catch (error) {
     console.error("Unable to fetch users:", error);
-    return NextResponse.error(); // Handle error
+    return new NextResponse("Error fetching users", { status: 500 }); // Properly set status
   }
 }
 
@@ -29,12 +29,15 @@ export async function POST(req: Request) {
     await updateDoc(userRef, { role });
 
     // Log the role update activity
-    await logActivity("Updated user role", { userId, role }, "adminId"); // Replace "adminId" with actual admin ID retrieval logic
+    await logActivity("Updated user role", { userId, role }, "adminId");
 
     return NextResponse.json({ message: "User role updated successfully." });
   } catch (error) {
     console.error("Unable to update user role:", error);
-    return NextResponse.error(); // Handle error
+    return NextResponse.json(
+      { message: "Error updating user role." },
+      { status: 500 }
+    ); // Specify status
   }
 }
 
@@ -58,6 +61,9 @@ export async function PATCH(req: Request) {
     });
   } catch (error) {
     console.error("Unable to update user status:", error);
-    return NextResponse.error(); // Use without arguments
+    return NextResponse.json(
+      { message: "Error updating user status." },
+      { status: 500 } // Return JSON response on error
+    );
   }
 }
