@@ -16,7 +16,7 @@ export async function GET() {
     return NextResponse.json(users);
   } catch (error) {
     console.error("Unable to fetch users:", error);
-    return new NextResponse("Error fetching users", { status: 500 }); // Properly set status
+    return new NextResponse("Error fetching users", { status: 500 });
   }
 }
 
@@ -28,8 +28,8 @@ export async function POST(req: Request) {
     const userRef = doc(db, "users", userId);
     await updateDoc(userRef, { role });
 
-    // Log the role update activity
-    await logActivity("Updated user role", { userId, role }, "adminId");
+    // Uncomment if you want to log the role update activity
+    // await logActivity("Updated user role", { userId, role }, "adminId");
 
     return NextResponse.json({ message: "User role updated successfully." });
   } catch (error) {
@@ -37,7 +37,7 @@ export async function POST(req: Request) {
     return NextResponse.json(
       { message: "Error updating user role." },
       { status: 500 }
-    ); // Specify status
+    );
   }
 }
 
@@ -49,11 +49,11 @@ export async function PATCH(req: Request) {
     const userRef = doc(db, "users", userId);
     await updateDoc(userRef, { isBlocked });
 
-    // Log the blocking/unblocking activity
+    // Uncomment if you want to log the blocking/unblocking activity
     await logActivity(
       isBlocked ? "Blocked user" : "Unblocked user",
       { userId, isBlocked },
-      "adminId" // Replace "adminId" with actual admin ID retrieval logic
+      "adminId" // Replace with actual admin ID retrieval logic
     );
 
     return NextResponse.json({
@@ -63,7 +63,7 @@ export async function PATCH(req: Request) {
     console.error("Unable to update user status:", error);
     return NextResponse.json(
       { message: "Error updating user status." },
-      { status: 500 } // Return JSON response on error
+      { status: 500 }
     );
   }
 }

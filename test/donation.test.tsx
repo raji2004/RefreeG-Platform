@@ -1,11 +1,14 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { POST } from "../donations/route";
-import * as transactionActions from "../../../lib/transactionActions";
-import * as paymentGateway from "../../../utils/paymentGateway";
-import { convertCurrency } from "../../../utils/currencyConversion";
+import { POST } from "../src/app/api/donations/route";
+import * as transactionActions from "../src/lib/transactionActions";
+import * as paymentGateway from "../src/utils/paymentGateway";
+import { convertCurrency } from "../src/utils/currencyConversion";
 
-vi.mock("../../../utils/currencyConversion", () => ({
-  convertCurrency: vi.fn(), // Mock the convertCurrency function
+vi.mock("../src/utils/currencyConversion", () => ({
+  convertCurrency: vi.fn(
+    (amount: number, fromCurrency: string, toCurrency: string) =>
+      Promise.resolve(5000)
+  ), // Mocking with parameters
 }));
 
 describe("Donations API", () => {
@@ -105,8 +108,7 @@ describe("Donations API", () => {
       currentAmount: 1000,
     });
 
-    // Mocking currency conversion to ensure it returns 5000
-    (convertCurrency as jest.Mock).mockResolvedValue(5000); // Assuming 1 USD = 50 NGN
+    // No need for additional mock here as it's already set in the mock function
 
     const response = await POST(req as Request);
     expect(response.status).toBe(200);

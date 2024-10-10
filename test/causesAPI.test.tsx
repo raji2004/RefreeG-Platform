@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { GET, PATCH, DELETE } from "./route"; // Adjust the import according to your setup
+import { GET, PATCH, DELETE } from "../src/app/api/causes/route"; // Adjust the import according to your setup
 import { db } from "@/lib/firebase/config";
 import {
   collection,

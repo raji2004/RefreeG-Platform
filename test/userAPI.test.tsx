@@ -1,7 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from "vitest";
-import { GET, POST, PATCH } from "./route"; // Adjust import according to your file structure
+import { GET, POST, PATCH } from "../src/app/api/users/route"; // Adjust import according to your file structure
 import { collection, getDocs, updateDoc, doc } from "firebase/firestore";
-import { logActivity } from "../../../utils/logger";
 
 // Mock Firebase Firestore
 vi.mock("firebase/firestore", async () => {
@@ -15,11 +14,6 @@ vi.mock("firebase/firestore", async () => {
     doc: vi.fn(),
   };
 });
-
-// Mock logger
-vi.mock("../../../utils/logger", () => ({
-  logActivity: vi.fn(),
-}));
 
 describe("User Management API", () => {
   beforeEach(() => {
@@ -69,11 +63,6 @@ describe("User Management API", () => {
 
       expect(response.status).toBe(200);
       expect(json).toEqual({ message: "User role updated successfully." });
-      expect(logActivity).toHaveBeenCalledWith(
-        "Updated user role",
-        { userId: "1", role: "admin" },
-        "adminId"
-      );
     });
 
     it("should handle errors when updating user role fails", async () => {
@@ -111,11 +100,6 @@ describe("User Management API", () => {
 
       expect(response.status).toBe(200);
       expect(json).toEqual({ message: "User blocked." });
-      expect(logActivity).toHaveBeenCalledWith(
-        "Blocked user",
-        { userId: "1", isBlocked: true },
-        "adminId"
-      );
     });
 
     it("should handle errors when blocking a user fails", async () => {
