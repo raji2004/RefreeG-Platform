@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { db } from "@/lib/firebase/config";
+import { db } from "../../../lib/firebase/config";
 import {
   collection,
   getDocs,
@@ -7,7 +7,6 @@ import {
   updateDoc,
   deleteDoc,
 } from "firebase/firestore";
-import { logActivity } from "@/utils/logger"; // Update the import path for the logger
 
 // Fetch all causes
 export async function GET() {
@@ -18,9 +17,6 @@ export async function GET() {
       id: doc.id,
       ...doc.data(),
     }));
-
-    // Log the activity
-    await logActivity("Fetched all causes", { count: causes.length }, "adminId"); // Replace "adminId" with actual admin ID retrieval logic
 
     return NextResponse.json(causes);
   } catch (error) {
@@ -40,9 +36,6 @@ export async function PATCH(request: Request) {
     const causeRef = doc(db, "causes", id);
     await updateDoc(causeRef, { status, title, description });
 
-    // Log the activity
-    await logActivity("Updated a cause", { id, status, title }, "adminId"); // Replace "adminId" with actual admin ID retrieval logic
-
     return NextResponse.json({ message: "Cause updated successfully." });
   } catch (error) {
     console.error("Error updating cause:", error);
@@ -60,9 +53,6 @@ export async function DELETE(request: Request) {
   try {
     const causeRef = doc(db, "causes", id);
     await deleteDoc(causeRef);
-
-    // Log the activity
-    await logActivity("Rejected a cause", { id }, "adminId"); // Replace "adminId" with actual admin ID retrieval logic
 
     return NextResponse.json({ message: "Cause rejected successfully." });
   } catch (error) {
