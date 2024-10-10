@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { getUsers, getCauses, getDonations } from "../../../lib/firebase/admin";
-import { logActivity } from "../../../utils/logger"; // Import the logger utility
+// import { getUsers, getCauses, getDonations } from "../../../lib/firebase/admin";
+// import { logActivity } from "../../../utils/logger"; // Import the logger utility
 
 // Admin Dashboard API
 export async function GET(req: Request) {
@@ -10,6 +10,7 @@ export async function GET(req: Request) {
   const adminId = "adminId"; // Replace with actual admin ID retrieval logic
 
   try {
+    /*
     const totalUsers = await getUsers();
     const activeCauses = await getCauses("active");
     const totalDonations = (await getDonations()) || []; // Default to an empty array if null
@@ -29,11 +30,12 @@ export async function GET(req: Request) {
       },
       adminId
     );
+    */
 
     return NextResponse.json({
-      totalUsers: totalUsers.length,
-      activeCauses: activeCauses.length,
-      totalDonations: totalDonationAmount,
+      totalUsers: 0, // temporary dummy data
+      activeCauses: 0,
+      totalDonations: 0,
     });
   } catch (error: unknown) {
     console.error("Error occurred:", error);
