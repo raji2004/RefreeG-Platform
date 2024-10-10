@@ -29,8 +29,7 @@ export async function getCauses(statusQuery: string) {
   }
 }
 
-// Fetch donations
-// Fetch donations
+
 // Fetch donations
 export async function getDonations() {
   try {
