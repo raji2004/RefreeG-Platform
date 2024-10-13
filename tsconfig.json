@@ -1,6 +1,10 @@
 {
   "compilerOptions": {
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -18,11 +22,18 @@
       }
     ],
     "paths": {
+<<<<<<< HEAD
       "@/*": ["./src/*"]
     },
     "types": ["node", "vitest"]
+=======
+      "@/*": [
+        "./src/*"
+      ]
+    },
+    "target": "ES2017"
+>>>>>>> 4948e45 (Addition of Navbar and few components of the homepage)
   },
-
   "include": [
     "next-env.d.ts",
     "**/*.ts",
@@ -31,6 +42,7 @@
     "tests/**/*.ts",
     "jest.config.js"
   ],
-
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }
