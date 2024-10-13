@@ -1,8 +1,14 @@
 'use client'
 
+<<<<<<< HEAD
 import Logo from '../../images/logo.png';
 import Dropdown from '../../images/dropdown.svg';
 import Search from '../../images/search.svg';
+=======
+import Logo from '@/images/logo.png';
+import Dropdown from '@/images/dropdown.svg';
+import Search from '@/images/search.svg';
+>>>>>>> f70fa9edc2da80ae9d8dfaa4dca95dea7cdb8984
 import Image from "next/image";
 import Link from 'next/link';
 import { useState } from 'react';
@@ -18,7 +24,11 @@ const Navbar = () => {
     <div className="w-full px-4 py-6 flex justify-between items-center">
         <div className="flex items-center space-x-2">
             <Link href="/" className="text-xl ml-10 font-bold">
+<<<<<<< HEAD
                 <Image src={Logo} alt="Logo" width={60} height={60} />
+=======
+                <Image src={Logo} alt="icon" width={60} height={60} />
+>>>>>>> f70fa9edc2da80ae9d8dfaa4dca95dea7cdb8984
             </Link>
         </div>
         <div className="hidden md:flex space-x-4">
@@ -37,7 +47,11 @@ const Navbar = () => {
             <Link href="/list-cause" className="text-lg bg-blue-700 text-white px-5 py-2 rounded-sm transition duration-200 ease-in-out hover:bg-blue-900 transform hover:-translate-y-1 hover:scale-110">
                 List a cause
             </Link>
+<<<<<<< HEAD
             <Link href="/login" aria-label="login" className="text-lg bg-white text-gray-700 px-4 py-2 rounded-sm transition duration-200 ease-in-out hover:underline hover:text-blue-800">
+=======
+            <Link href="/login" className="text-lg bg-white text-gray-700 px-4 py-2 rounded-sm transition duration-200 ease-in-out hover:underline hover:text-blue-800">
+>>>>>>> f70fa9edc2da80ae9d8dfaa4dca95dea7cdb8984
                 Login
             </Link>
         </div>
