@@ -36,7 +36,7 @@ const DonationDetail: React.FC = () => {
         </p>
         <Image
           className="w-full md:w-1/2 h-64 object-cover rounded-md mt-4 mx-auto"
-          src={"/DonationDetail/flood.svg"}
+          src={"/DonationDetail/flood15.svg"}
           width={80}
           height={80}
           alt="Flood victims"
@@ -90,7 +90,7 @@ const DonationDetail: React.FC = () => {
       </div>
 
       {/* Right side - Donation details */}
-      <div className="mt-8 md:mt-0 md:w-1/3">
+      <div className="mt-8 md:mt-0 md:w-[40%] mr-10">
         <div className="bg-gray-100 p-4 rounded-md shadow-md">
           {/* Progress Bar */}
           <DonationProgress
@@ -127,7 +127,7 @@ const DonationDetail: React.FC = () => {
           </div>
         </div>
 
-        <div className="mt-8">
+        <div className="bg-gray-100 p-4 rounded-md shadow-md mt-8">
           <h3 className="text-lg font-semibold">300 people just donated</h3>
           <ul className="mt-2 space-y-2">
             <li className="flex justify-between">
