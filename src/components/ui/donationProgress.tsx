@@ -1,37 +1,42 @@
-import React from "react";
+import React from "react"; // Import React library for building components
 
+// Define interface for the component props
 interface DonationProgressProps {
-  currentAmount: number;
-  goalAmount: number;
+  currentAmount: number; // Current donation amount
+  goalAmount: number; // Donation goal amount
 }
 
+// Functional component to display the donation progress bar
 const DonationProgress: React.FC<DonationProgressProps> = ({
   currentAmount,
   goalAmount,
 }) => {
+  // Calculate the donation progress percentage
   const progressPercentage = (currentAmount / goalAmount) * 100;
 
-  // Determine progress bar style based on progress
+  // Determine if the goal is reached and set the color accordingly
   const isGoalReached = progressPercentage >= 100;
   const progressBarColor = isGoalReached
-    ? "bg-red-600"
+    ? "bg-red-600" // Red if goal is exceeded
     : progressPercentage > 50
-    ? "bg-gradient-to-r from-blue-500 to-blue-800"
-    : "bg-blue-600";
+    ? "bg-gradient-to-r from-blue-500 to-blue-800" // Gradient for over 50% progress
+    : "bg-blue-600"; // Blue for less than 50% progress
 
-  // Limit the width to 100% if the goal is reached
+  // Limit the width to 100% when the goal is reached or exceeded
   const progressBarWidth = isGoalReached ? "100%" : `${progressPercentage}%`;
 
   return (
     <div>
+      {/* Background for the progress bar */}
       <div className="w-full bg-gray-200 rounded-full h-2.5">
+        {/* Foreground of the progress bar with dynamic color and width */}
         <div
           className={`${progressBarColor} h-2.5 rounded-full`}
-          style={{ width: progressBarWidth }}
+          style={{ width: progressBarWidth }} // Set the width dynamically
         ></div>
       </div>
     </div>
   );
 };
 
-export default DonationProgress;
+export default DonationProgress; // Export the component for use in other files
