@@ -1,8 +1,19 @@
-"use client"
+"use client";
 
-import React, { useState } from 'react';
-import DonationProgress from '../../../components/ui/donationProgress';
-import Link from 'next/link';
+import React, { useState } from "react";
+import DonationProgress from "../../../components/ui/donationProgress";
+import {
+  FaExclamationTriangle,
+  FaHeartbeat,
+  FaMapMarkerAlt,
+  FaGlobe,
+  FaShare,
+  FaHeart,
+  FaSmile,
+  FaLeaf,
+} from "react-icons/fa";
+import Link from "next/link";
+import Image from "next/image";
 
 const DonationDetail: React.FC = () => {
   const goalAmount = 2000000; // Total goal amount
@@ -18,35 +29,44 @@ const DonationDetail: React.FC = () => {
       <div className="md:w-2/3">
         <h1 className="text-2xl font-bold mb-2">Support Flood Victims</h1>
         <p className="text-red-600 font-medium flex items-center">
-          <i className="fas fa-exclamation-triangle mr-2"></i>
+          <FaExclamationTriangle className="mr-2" />
           This cause is of high precedence
         </p>
-        <img
-          className="w-full h-64 object-cover rounded-md mt-4"
-          src="https://example.com/flood-image.jpg"
+        <Image
+          className="w-full md:w-1/2 h-64 object-cover rounded-md mt-4 mx-auto"
+          src={"/DonationDetail/flood.svg"}
+          width={80}
+          height={80}
           alt="Flood victims"
         />
         <div className="flex space-x-2 mt-3">
           <span className="text-sm bg-gray-200 rounded-full px-3 py-1 flex items-center">
-            <i className="fas fa-heartbeat mr-1"></i> Healthcare
+            <FaHeartbeat className="mr-1" /> Healthcare
           </span>
           <span className="text-sm bg-gray-200 rounded-full px-3 py-1 flex items-center">
-            <i className="fas fa-map-marker-alt mr-1"></i> Abuja, Nigeria
+            <FaMapMarkerAlt className="mr-1" /> Abuja, Nigeria
           </span>
         </div>
 
-        <p className="mt-4 font-semibold text-sm">
-          <i className="fas fa-globe"></i> United Nations International Children's Emergency Fund
+        <p className="flex mt-4 font-semibold text-sm">
+          <FaGlobe className="mr-1" /> United Nations International Children's
+          Emergency Fund
         </p>
 
         <div className="mt-4 space-y-4">
-          <p><strong>Paragraph 1:</strong> The recent floods in Maiduguri have displaced thousands of families...</p>
-          <p><strong>Paragraph 2:</strong> More details on the flood and the victims...</p>
+          <p>
+            <strong>Paragraph 1:</strong> The recent floods in Maiduguri have
+            displaced thousands of families...
+          </p>
+          <p>
+            <strong>Paragraph 2:</strong> More details on the flood and the
+            victims...
+          </p>
         </div>
 
         <div className="flex mt-4 space-x-4">
           <button className="flex items-center bg-gray-200 px-4 py-2 rounded-md shadow-sm">
-            <i className="fas fa-share mr-2"></i> Share
+            <FaShare className="mr-2" /> Share
           </button>
           <button className="bg-black text-white px-4 py-2 rounded-md shadow-sm">
             Donate
@@ -57,11 +77,16 @@ const DonationDetail: React.FC = () => {
       {/* Right side - Donation details */}
       <div className="mt-8 md:mt-0 md:w-1/3">
         <div className="bg-gray-100 p-4 rounded-md shadow-md">
-          <h2 className="text-xl font-bold">₦{donationAmount.toLocaleString()} raised</h2>
+          <h2 className="text-xl font-bold">
+            ₦{donationAmount.toLocaleString()} raised
+          </h2>
           <p>of ₦{goalAmount.toLocaleString()} goal</p>
 
           {/* Progress Bar */}
-          <DonationProgress currentAmount={donationAmount} goalAmount={goalAmount} />
+          <DonationProgress
+            currentAmount={donationAmount}
+            goalAmount={goalAmount}
+          />
 
           <div className="mt-4 text-sm">
             <span className="block">2.4k Donations</span>
@@ -99,9 +124,9 @@ const DonationDetail: React.FC = () => {
           </ul>
 
           <div className="mt-4 flex justify-center space-x-2">
-            <i className="fas fa-heart text-red-500"></i>
-            <i className="fas fa-smile text-yellow-500"></i>
-            <i className="fas fa-flower text-purple-500"></i>
+            <FaHeart className="text-red-500" />
+            <FaSmile className="text-yellow-500" />
+            <FaLeaf className="text-purple-500" />
           </div>
         </div>
       </div>
