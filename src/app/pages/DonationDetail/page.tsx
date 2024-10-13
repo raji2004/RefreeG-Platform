@@ -14,8 +14,65 @@ import {
 } from "react-icons/fa";
 import Link from "next/link";
 import Image from "next/image";
+import Slider from "react-slick";
+import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { MouseEventHandler } from "react";
 
 const DonationDetail: React.FC = () => {
+  const images = [
+    "/DonationDetail/flood1.svg",
+    "/DonationDetail/flood2.svg",
+    "/DonationDetail/flood3.svg",
+    "/DonationDetail/flood4.svg",
+    "/DonationDetail/flood5.svg",
+    "/DonationDetail/flood6.svg",
+    "/DonationDetail/flood7.svg",
+    "/DonationDetail/flood8.svg",
+    "/DonationDetail/flood9.svg",
+    "/DonationDetail/flood10.svg",
+    "/DonationDetail/flood11.svg",
+    "/DonationDetail/flood12.svg",
+    "/DonationDetail/flood13.svg",
+    "/DonationDetail/flood14.svg",
+  ];
+
+  // Custom Next Arrow
+  const NextArrow: React.FC<{ onClick?: MouseEventHandler }> = ({
+    onClick,
+  }) => (
+    <button
+      className="absolute right-2 z-10 top-1/2 transform -translate-y-1/2 text-white bg-blue-600 rounded-full p-[6px] hover:bg-accent-dark"
+      onClick={onClick}
+    >
+      <ChevronRight size={16} className="h-4 w-4" />
+    </button>
+  );
+
+  // Custom Previous Arrow
+  const PrevArrow: React.FC<{ onClick?: MouseEventHandler }> = ({
+    onClick,
+  }) => (
+    <button
+      className="absolute left-2 z-10 top-1/2 transform -translate-y-1/2 text-white bg-blue-600 rounded-full p-[6px] hover:bg-accent-dark"
+      onClick={onClick}
+    >
+      <ChevronLeft size={16} className="h-4 w-4" />
+    </button>
+  );
+
+  const settings = {
+    dots: true,
+    dotsClass: "slick-dots custom-dots",
+    infinite: true,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000,
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />,
+  };
+
   const goalAmount = 2000000; // Total goal amount
   const [donationAmount, setDonationAmount] = useState<number>(24000); // Initial donation amount
 
@@ -34,14 +91,22 @@ const DonationDetail: React.FC = () => {
           <FaExclamationTriangle className="mr-2" />
           This cause is of high precedence
         </p>
-        <Image
-          className="w-full md:w-1/2 h-64 object-cover rounded-md mt-4 mx-auto"
-          src={"/DonationDetail/flood15.svg"}
-          width={80}
-          height={80}
-          alt="Flood victims"
-        />
-        <div className="flex space-x-2 mt-3">
+        <Slider {...settings}>
+          {images.map((src, index) => (
+            <div key={index} className="relative">
+              <Image
+                src={src}
+                alt={`Image of flood relief scenario ${index + 1}`}
+                className="ml-[70px] md:ml-[100px] w-[68%] h-[65%] object-cover rounded-lg items-center"
+                width={867}
+                height={732}
+                priority
+              />
+            </div>
+          ))}
+        </Slider>
+
+        <div className="flex space-x-2 mt-6">
           <span className="text-sm bg-gray-200 rounded-full px-3 py-1 flex items-center">
             <FaHeartbeat className="mr-1" /> Healthcare
           </span>
