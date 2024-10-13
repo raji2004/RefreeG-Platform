@@ -23,10 +23,12 @@ const DonationDetail: React.FC = () => {
     setDonationAmount(donationAmount + amount); // Update donation amount on click
   };
 
+  const progressPercentage = (donationAmount / goalAmount) * 100; // Calculate progress percentage
+
   return (
     <div className="p-4 md:flex md:justify-between">
       {/* Left side - Main content */}
-      <div className="md:w-2/3">
+      <div className="md:w-2/4">
         <h1 className="text-2xl font-bold mb-2">Support Flood Victims</h1>
         <p className="text-red-600 font-medium flex items-center">
           <FaExclamationTriangle className="mr-2" />
@@ -56,11 +58,24 @@ const DonationDetail: React.FC = () => {
         <div className="mt-4 space-y-4">
           <p>
             <strong>Paragraph 1:</strong> The recent floods in Maiduguri have
-            displaced thousands of families...
+            displaced thousands of families, leaving them without food, shelter,
+            and basic necessities. We are raising $50,000 to provide emergency
+            relief, including temporary housing, medical supplies, and food.
+            Together, we can help rebuild their lives.
           </p>
           <p>
-            <strong>Paragraph 2:</strong> More details on the flood and the
-            victims...
+            <strong>Paragraph 2:</strong> The recent floods in Maiduguri have
+            displaced thousands of families, leaving them without food, shelter,
+            and basic necessities. We are raising $50,000 to provide emergency
+            relief, including temporary housing, medical supplies, and food.
+            Together, we can help rebuild their lives.
+          </p>
+          <p>
+            <strong>Paragraph 3:</strong> The recent floods in Maiduguri have
+            displaced thousands of families, leaving them without food, shelter,
+            and basic necessities. We are raising $50,000 to provide emergency
+            relief, including temporary housing, medical supplies, and food.
+            Together, we can help rebuild their lives.
           </p>
         </div>
 
@@ -77,27 +92,34 @@ const DonationDetail: React.FC = () => {
       {/* Right side - Donation details */}
       <div className="mt-8 md:mt-0 md:w-1/3">
         <div className="bg-gray-100 p-4 rounded-md shadow-md">
-          <h2 className="text-xl font-bold">
-            ₦{donationAmount.toLocaleString()} raised
-          </h2>
-          <p>of ₦{goalAmount.toLocaleString()} goal</p>
-
           {/* Progress Bar */}
           <DonationProgress
             currentAmount={donationAmount}
             goalAmount={goalAmount}
           />
+          <h2 className="text-xl font-bold">
+            ₦{donationAmount.toLocaleString()} raised
+          </h2>
+          <p>of ₦{goalAmount.toLocaleString()} goal</p>
 
-          <div className="mt-4 text-sm">
-            <span className="block">2.4k Donations</span>
-            <span className="block">10 days left</span>
+          <div className="flex mt-4 text-sm">
+            <span className="block bg-gray-200 rounded-full px-3 py-1 mr-1">
+              2.4k Donations
+            </span>
+            <span className="block bg-gray-200 rounded-full px-3 py-1 mr-1">
+              {progressPercentage.toFixed(1)}% funded
+            </span>{" "}
+            {/* Moved here */}
+            <span className="block bg-gray-200 rounded-full px-3 py-1 mr-1">
+              10 days left
+            </span>
           </div>
           <div className="mt-4 flex space-x-2">
-            <button className="flex-grow bg-blue-500 text-white py-2 rounded-md">
+            <button className="flex-grow bg-gray-300 text-blue py-2 rounded-md">
               Share
             </button>
             <button
-              className="flex-grow bg-black text-white py-2 rounded-md"
+              className="flex-grow  bg-blue-500 text-white py-2 rounded-md"
               onClick={() => handleDonate(50000)} // Example donation logic
             >
               Donate ₦50,000

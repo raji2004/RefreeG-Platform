@@ -19,9 +19,7 @@ const DonationProgress: React.FC<DonationProgressProps> = ({
           style={{ width: `${progressPercentage}%` }}
         ></div>
       </div>
-      <div className="mt-2 text-sm">
-        <span>{progressPercentage.toFixed(1)}% funded</span>
-      </div>
+      
     </div>
   );
 };
