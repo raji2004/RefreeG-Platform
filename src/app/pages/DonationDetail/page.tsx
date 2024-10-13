@@ -106,7 +106,7 @@ const DonationDetail: React.FC = () => {
           ))}
         </Slider>
 
-        <div className="flex space-x-2 mt-6">
+        <div className="flex space-x-2 mt-9">
           <span className="text-sm bg-gray-200 rounded-full px-3 py-1 flex items-center">
             <FaHeartbeat className="mr-1" /> Healthcare
           </span>

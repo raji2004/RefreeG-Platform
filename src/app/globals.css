@@ -4,7 +4,6 @@
 @import "slick-carousel/slick/slick.css";
 @import "slick-carousel/slick/slick-theme.css";
 
-
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -27,6 +26,21 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+.custom-dots {
+  display: flex !important; /* Use flexbox */
+  justify-content: center; /* Center the dots */
+  margin-top: 10px; /* Adjust spacing as needed */
+}
+
+.custom-dots li {
+  margin: 0 5px; /* Space out the dots */
+}
+
+.custom-dots li.slick-active button {
+  background: rgb(15, 115, 214); /* Change color for active dot */
+  border-radius: 50%;
 }
 
 @layer base {
