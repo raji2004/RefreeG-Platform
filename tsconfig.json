@@ -22,11 +22,9 @@
       }
     ],
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/*": ["./src/*"]
     },
-    "target": "ES2017"
+    "types": ["node", "vitest"]
   },
   "include": [
     "next-env.d.ts",
