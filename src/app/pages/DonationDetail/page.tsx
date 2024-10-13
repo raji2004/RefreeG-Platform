@@ -41,7 +41,7 @@ const DonationDetail: React.FC = () => {
     onClick,
   }) => (
     <button
-      className="absolute right-2 z-10 top-1/2 transform -translate-y-1/2 text-white bg-blue-600 rounded-full p-[6px] hover:bg-accent-dark"
+      className="absolute right-2 z-10 top-1/2 transform -translate-y-1/2 text-white bg-blue-600 rounded-full p-[6px] hover:bg-blue-800 transition-colors duration-300"
       onClick={onClick}
     >
       <ChevronRight size={16} className="h-4 w-4" />
@@ -53,7 +53,7 @@ const DonationDetail: React.FC = () => {
     onClick,
   }) => (
     <button
-      className="absolute left-2 z-10 top-1/2 transform -translate-y-1/2 text-white bg-blue-600 rounded-full p-[6px] hover:bg-accent-dark"
+      className="absolute left-2 z-10 top-1/2 transform -translate-y-1/2 text-white bg-blue-600 rounded-full p-[6px] hover:bg-blue-800 transition-colors duration-300"
       onClick={onClick}
     >
       <ChevronLeft size={16} className="h-4 w-4" />
@@ -107,10 +107,10 @@ const DonationDetail: React.FC = () => {
         </Slider>
 
         <div className="flex space-x-2 mt-9">
-          <span className="text-sm bg-gray-200 rounded-full px-3 py-1 flex items-center">
+          <span className="text-sm bg-gray-200 rounded-full px-3 py-1 flex items-center hover:bg-gray-300 transition-colors duration-300">
             <FaHeartbeat className="mr-1" /> Healthcare
           </span>
-          <span className="text-sm bg-gray-200 rounded-full px-3 py-1 flex items-center">
+          <span className="text-sm bg-gray-200 rounded-full px-3 py-1 flex items-center hover:bg-gray-300 transition-colors duration-300">
             <FaMapMarkerAlt className="mr-1" /> Abuja, Nigeria
           </span>
         </div>
@@ -145,10 +145,10 @@ const DonationDetail: React.FC = () => {
         </div>
 
         <div className="flex mt-4 space-x-4">
-          <button className="flex items-center bg-gray-200 px-4 py-2 rounded-md shadow-sm">
+          <button className="flex items-center bg-gray-200 px-4 py-2 rounded-md shadow-sm hover:bg-gray-300 transition-colors duration-300">
             <FaShare className="mr-2" /> Share
           </button>
-          <button className="bg-black text-white px-4 py-2 rounded-md shadow-sm">
+          <button className="bg-black text-white px-4 py-2 rounded-md shadow-sm hover:bg-gray-700 transition-colors duration-300">
             Donate
           </button>
         </div>
@@ -174,17 +174,16 @@ const DonationDetail: React.FC = () => {
             <span className="block bg-gray-200 rounded-full px-3 py-1 mr-1">
               {progressPercentage.toFixed(1)}% funded
             </span>{" "}
-            {/* Moved here */}
             <span className="block bg-gray-200 rounded-full px-3 py-1 mr-1">
               10 days left
             </span>
           </div>
           <div className="mt-4 flex space-x-2">
-            <button className="flex-grow bg-gray-300 text-blue py-2 rounded-md">
+            <button className="flex-grow bg-gray-300 text-blue py-2 rounded-md hover:bg-gray-400 transition-colors duration-300">
               Share
             </button>
             <button
-              className="flex-grow  bg-blue-500 text-white py-2 rounded-md"
+              className="flex-grow bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition-colors duration-300"
               onClick={() => handleDonate(50000)} // Example donation logic
             >
               Donate ₦50,000
@@ -211,9 +210,9 @@ const DonationDetail: React.FC = () => {
           </ul>
 
           <div className="mt-4 flex justify-center space-x-2">
-            <FaHeart className="text-red-500" />
-            <FaSmile className="text-yellow-500" />
-            <FaLeaf className="text-purple-500" />
+            <FaHeart className="text-red-500 hover:text-red-600 active:text-red-700 transition-colors duration-300" />
+            <FaSmile className="text-yellow-500 hover:text-yellow-600 active:text-yellow-700 transition-colors duration-300" />
+            <FaLeaf className="text-green-500 hover:text-green-600 active:text-green-700 transition-colors duration-300" />
           </div>
         </div>
       </div>
