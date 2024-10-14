@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { FaClock } from "react-icons/fa";
-import Comment from "./Comments";
+import Comment, { getCommentsCount } from "./Comments";
 import FAQ from "./FAQ";
 import Community from "./Community";
 import Updates from "./Updates";
 
 const DonationNav = () => {
   const [activeTab, setActiveTab] = useState("Comment");
+
+  // Fetch the comments count directly from the Comments component
+  const commentsCount = getCommentsCount();
 
   const renderComponent = () => {
     switch (activeTab) {
@@ -35,7 +38,16 @@ const DonationNav = () => {
               }`}
               onClick={() => setActiveTab(tab)}
             >
-              {tab}
+              {tab === "Comment" ? (
+                <>
+                  Comments
+                  <sup className="text-xs text-red-500 ml-1">
+                    {commentsCount}
+                  </sup>
+                </>
+              ) : (
+                tab
+              )}
             </li>
           ))}
         </ul>
