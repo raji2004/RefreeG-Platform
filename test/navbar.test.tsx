@@ -3,7 +3,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { describe, it, expect } from 'vitest';
-import Navbar from '../src/components/ui/navbar';
+import { Navbar } from '../src/components/ui/navbar';
 
 describe('Navbar Component', () => {
   it('renders the logo', () => {
