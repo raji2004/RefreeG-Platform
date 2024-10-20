@@ -1,4 +1,5 @@
 import * as React from "react"
+import Link from "next/link" // Import Link component from Next.js
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
 
@@ -16,7 +17,7 @@ const buttonVariants = cva(
           "border border-palette-baseBlack bg-background hover:bg-accent hover:text-accent-foreground",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        ghost: " bg-neutral-400 text-white hover:bg-black hover:text-white",
+        ghost: "bg-neutral-400 text-white hover:bg-black hover:text-white",
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {
@@ -35,13 +36,28 @@ const buttonVariants = cva(
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
+  VariantProps<typeof buttonVariants> {
   asChild?: boolean
+  href?: string 
+  link?: boolean 
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, asChild = false, ...props }, ref) => {
+  ({ className, variant, size, asChild = false, href, link = false, ...props }, ref) => {
     const Comp = asChild ? Slot : "button"
+
+    if (link && href) {
+      return (
+        <Link href={href}  className={cn(buttonVariants({ variant, size, className }))}
+       >
+          <Comp
+             ref={ref}
+            {...props}
+          />
+        </Link>
+      )
+    }
+
     return (
       <Comp
         className={cn(buttonVariants({ variant, size, className }))}

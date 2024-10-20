@@ -10,11 +10,11 @@ import GlobalAccesImage from '@/images/globalAccess.png';
 import ArrowRight from '@/images/arrow-right.png';
 
 export default async function Home() {
-  const cookieStore = await cookies();
+  const cookieStore =  cookies();
   const userSession = cookieStore.get('userSession')?.value;
 
   if (!userSession) {
-      redirect('/Login');
+      redirect('/create-account');
   }
 
   return (
