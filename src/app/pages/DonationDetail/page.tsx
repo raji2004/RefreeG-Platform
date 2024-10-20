@@ -131,8 +131,8 @@ const DonationDetail: React.FC = () => {
 
           {/* Organization supporting the cause */}
           <p className="flex mt-4 font-semibold text-sm">
-            <FaGlobe className="mr-1" /> United Nations International Children's
-            Emergency Fund
+            <FaGlobe className="mr-1" /> United Nations International
+            Children&apos;s Emergency Fund
           </p>
 
           {/* Cause description paragraphs */}
