@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "./ui/button";
-import { signUpSchema, loginSchema } from "@/lib/schema";
+import { signUpSchema, loginSchema, compnanySchema } from "@/lib/schema";
 import { H1, P } from "./typograpy";
 import { ChevronRight, Eye, EyeOff } from "lucide-react";
 import {
@@ -29,7 +29,7 @@ import Image from "next/image";
 import { DatePicker } from "./ui/date-picker";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import { getOldParams, sessionAge,  } from "@/lib/utils";
+import { getOldParams, sessionAge, } from "@/lib/utils";
 import { InputOTP, InputOTPSeparator, InputOTPSlot } from "./ui/input-otp";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
@@ -64,7 +64,7 @@ export const LoginForm = () => {
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
       const res = await signInWithEmailAndPassword(data.email, data.password)
-      setCookie('userSession', JSON.stringify(res?.user.uid), { maxAge: sessionAge});
+      setCookie('userSession', JSON.stringify(res?.user.uid), { maxAge: sessionAge });
       push('/')
 
     } catch (e) {
@@ -296,7 +296,7 @@ export const SignupForm2 = ({
     },
   });
 
-  const onSubmit: SubmitHandler<FieldValues> = async(data) => {
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     if (data.password !== data.confirmPassword) {
       toast.error("Password does not match");
       return;
@@ -306,7 +306,7 @@ export const SignupForm2 = ({
       // Email exists
       toast.error("Email already exists. Please choose a different email.");
       return;
-    } 
+    }
     const params = new URLSearchParams(searchParams);
     getOldParams(searchParams, params);
     Object.entries(data).forEach(([key, value]) => {
@@ -518,10 +518,10 @@ export const SignupForm5 = () => {
     'Agriculture',
     'Environment'
   ]
-  
+
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-   
+
     const params = new URLSearchParams(searchParams);
     const oldParam = getOldParams(searchParams, params);
     Object.entries(data).forEach(([key, value]) => {
@@ -531,16 +531,16 @@ export const SignupForm5 = () => {
 
       const res = await createUserWithEmailAndPassword(oldParam.email, oldParam.password)
       await addUser(`${res?.user.uid}`, {
-        email:oldParam.email, 
+        email: oldParam.email,
         donationPreference: data.donationPreference,
-        firstName:oldParam.firstName,
-        lastName:oldParam.lastName,
-        DOB:oldParam.DOB,
-        countryOfResidence:oldParam.countryOfResidence,
-        phoneNumber:oldParam.phoneNumber,
-        pin:oldParam.pin
-       })
-       setCookie('userSession', JSON.stringify(res?.user.uid), { maxAge: sessionAge});
+        firstName: oldParam.firstName,
+        lastName: oldParam.lastName,
+        DOB: oldParam.DOB,
+        countryOfResidence: oldParam.countryOfResidence,
+        phoneNumber: oldParam.phoneNumber,
+        pin: oldParam.pin
+      })
+      setCookie('userSession', JSON.stringify(res?.user.uid), { maxAge: sessionAge });
       console.log('successfull')
       push('/')
     } catch (e) {
@@ -584,5 +584,101 @@ export const SignupForm5 = () => {
         </Button>
       </form>
     </Form>
+  )
+}
+
+export const CompanyForm = () => {
+  const companySchema1 = compnanySchema.pick({
+    organizatonName: true,
+    organizationType: true,
+    organizationLocation: true,
+    taxIdentificationNumber: true,
+  });
+
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const { push } = useRouter();
+  const form = useForm({
+    resolver: zodResolver(companySchema1),
+    defaultValues: {
+      organizatonName: "",
+      organizationType: "",
+      organizationLocation: "",
+      taxIdentificationNumber: "",
+    },
+  });
+
+  const onSubmit: SubmitHandler<FieldValues> = (data) => {
+    console.log(data);
+    const params = new URLSearchParams(searchParams);
+    getOldParams(searchParams, params);
+    Object.entries(data).forEach(([key, value]) => {
+      params.set(key, value);
+    });
+    push(`company/signup2?${params.toString()}`);
+  };
+  return (
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="max-w-lg space-y-5 text-center">
+        <H1>Create a company account</H1>
+        <P>{"We need the following information to stay CBN  compliant,Please stay with us :)"}</P>
+        <FormField
+          control={form.control}
+          name="organizatonName"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <Input placeholder="Organization Name" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="organizationType"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <Input placeholder="Organization Type (NGO’s, educational institute, etc)" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="organizationLocation"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <Input placeholder="Organization’s Location" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="taxIdentificationNumber"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <Input  placeholder="Tax Identification Number" {...field}
+                
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit" variant={"ghost"} className="w-full rounded-md">
+          Next <ChevronRight />
+        </Button>
+      </form>
+    </Form>
+
   )
 }

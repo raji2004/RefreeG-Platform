@@ -1,5 +1,4 @@
 import { FormWrapper } from "@/components/formWrapper";
-import { LoginForm } from "@/components/forms"; // LoginForm is in forms
 import { H1 } from "@/components/typograpy";
 import { Button } from "@/components/ui/button";
 import Divider from "@/components/ui/divider";
@@ -14,6 +13,7 @@ export default function Page() {
        <Particles
         className="absolute inset-0 -z-10 animate-fade-in"
         quantity={200}
+        size={20}
       />
       <div className=" gap-10 flex flex-col items-center ">
 
@@ -21,7 +21,7 @@ export default function Page() {
 
         <div className=" flex flex-col gap-4 lg:w-[60%]">
           <Button link href="/signup" className=" text-gray-500" variant={'outline'}>Sign up as an Individual</Button>
-          <Button link href="/" className=" text-gray-500" variant={'outline'}>Sign up as an Organization</Button>
+          <Button link href="/company/signup" className=" text-gray-500" variant={'outline'}>Sign up as an Organization</Button>
           <Divider> or</Divider>
           <Button link href="/login" className=" bg-primaryShades-800" >Log In</Button>
         </div>

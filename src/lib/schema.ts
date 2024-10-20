@@ -15,7 +15,16 @@ export const signUpSchema = z.object({
     donationPreference:z.string(),
 });
 
-// Define login schema based on the signUpSchema
+export const compnanySchema = z.object({
+    organizatonName: z.string().min(2, "Organization name is required"),
+    organizationType: z.string().min(2, "Organization type is required"),
+    organizationLocation: z.string().min(2, "Organization location is required"),
+    taxIdentificationNumber: z.number().refine(value => !isNaN(value), { message: "TIN must be a valid number" }),
+    fullName: z.string().min(2, "Full name is required"),
+    email: z.string().email("Invalid email format"),
+    phoneNo: z.string().min(11, "Phone number must be 11 digits").max(11, "Phone number must be 11 digits"),
+    positon: z.string().min(2, "Position is required"),
+})
 export const loginSchema = signUpSchema.pick({
     email: true,
     password: true,

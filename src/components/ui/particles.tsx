@@ -9,6 +9,7 @@ interface ParticlesProps {
 	staticity?: number;
 	ease?: number;
 	refresh?: boolean;
+	size?: number; // Added size prop
 }
 
 export default function Particles({
@@ -17,6 +18,7 @@ export default function Particles({
 	staticity = 50,
 	ease = 50,
 	refresh = false,
+	size = 8, // Default size if not provided
 }: ParticlesProps) {
 	const canvasRef = useRef<HTMLCanvasElement>(null);
 	const canvasContainerRef = useRef<HTMLDivElement>(null);
@@ -94,12 +96,13 @@ export default function Particles({
 		}
 	};
 
+	// Adjust particle size according to the size prop
 	const particleParams = (): Particle => {
 		const x = Math.floor(Math.random() * canvasSize.current.w);
 		const y = Math.floor(Math.random() * canvasSize.current.h);
 		const translateX = 0;
 		const translateY = 0;
-		const size = Math.floor(Math.random() * 8) + 2; // Increase particle size
+		const particleSize = Math.floor(Math.random() * size) + 2; // Use size prop
 		const alpha = 0;
 		const targetAlpha = parseFloat((Math.random() * 0.6 + 0.1).toFixed(1));
 		const dx = (Math.random() - 0.5) * 0.2;
@@ -111,7 +114,7 @@ export default function Particles({
 			y,
 			translateX,
 			translateY,
-			size,
+			size: particleSize,
 			shape,
 			alpha,
 			targetAlpha,
@@ -179,12 +182,11 @@ export default function Particles({
 	const animate = () => {
 		clearContext();
 		circles.current.forEach((particle: Particle, i: number) => {
-			// Handle the alpha value
 			const edge = [
-				particle.x + particle.translateX - particle.size, // distance from left edge
-				canvasSize.current.w - particle.x - particle.translateX - particle.size, // distance from right edge
-				particle.y + particle.translateY - particle.size, // distance from top edge
-				canvasSize.current.h - particle.y - particle.translateY - particle.size, // distance from bottom edge
+				particle.x + particle.translateX - particle.size,
+				canvasSize.current.w - particle.x - particle.translateX - particle.size,
+				particle.y + particle.translateY - particle.size,
+				canvasSize.current.h - particle.y - particle.translateY - particle.size,
 			];
 			const closestEdge = edge.reduce((a, b) => Math.min(a, b));
 			const remapClosestEdge = parseFloat(
@@ -206,19 +208,15 @@ export default function Particles({
 			particle.translateY +=
 				(mouse.current.y / (staticity / particle.magnetism) - particle.translateY) /
 				ease;
-			// particle gets out of the canvas
 			if (
 				particle.x < -particle.size ||
 				particle.x > canvasSize.current.w + particle.size ||
 				particle.y < -particle.size ||
 				particle.y > canvasSize.current.h + particle.size
 			) {
-				// remove the particle from the array
 				circles.current.splice(i, 1);
-				// create a new particle
 				const newParticle = particleParams();
 				drawParticle(newParticle);
-				// update the particle position
 			} else {
 				drawParticle(
 					{
