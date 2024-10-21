@@ -22,7 +22,7 @@ export const compnanySchema = z.object({
     taxIdentificationNumber: z.number().refine(value => !isNaN(value), { message: "TIN must be a valid number" }),
     fullName: z.string().min(2, "Full name is required"),
     email: z.string().email("Invalid email format"),
-    phoneNo: z.string().min(11, "Phone number must be 11 digits").max(11, "Phone number must be 11 digits"),
+    phoneNo: z.number().min(11, "Phone number must be 11 digits").max(11, "Phone number must be 11 digits"),
     positon: z.string().min(2, "Position is required"),
 })
 export const loginSchema = signUpSchema.pick({

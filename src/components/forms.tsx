@@ -615,7 +615,7 @@ export const CompanyForm = () => {
     Object.entries(data).forEach(([key, value]) => {
       params.set(key, value);
     });
-    push(`company/signup2?${params.toString()}`);
+    push(`/company/signup2?${params.toString()}`);
   };
   return (
     <Form {...form}>
@@ -666,7 +666,109 @@ export const CompanyForm = () => {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input  placeholder="Tax Identification Number" {...field}
+                <Input type="number"  placeholder="Tax Identification Number" {...field}
+                 onChange={(e) => {
+                  const value = e.target.value;
+                  if (value !== "") {
+                    field.onChange(parseInt(value, 10));
+                  } else {
+                    field.onChange(value); 
+                  }
+                }}
+                />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <Button type="submit" variant={"ghost"} className="w-full rounded-md">
+          Next <ChevronRight />
+        </Button>
+      </form>
+    </Form>
+
+  )
+}
+export const CompanyContactForm = () => {
+  const companySchema1 = compnanySchema.pick({
+    fullName: true,
+    email: true,
+    phoneNo: true,
+    positon: true,
+  });
+
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const { push } = useRouter();
+  const form = useForm({
+    resolver: zodResolver(companySchema1),
+    defaultValues: {
+      fullName: "",
+      email: "",
+      phoneNo: "",
+      position: "",
+    },
+  });
+
+  const onSubmit: SubmitHandler<FieldValues> = (data) => {
+    console.log(data);
+    const params = new URLSearchParams(searchParams);
+    getOldParams(searchParams, params);
+    Object.entries(data).forEach(([key, value]) => {
+      params.set(key, value);
+    });
+    push(`company/signup2?${params.toString()}`);
+  };
+  return (
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="max-w-lg space-y-5 text-center">
+        <H1>Contact person information</H1>
+        <P>{"We need the following information to verify the identity of the person who’ll be managing the company’s account"}</P>
+        <FormField
+          control={form.control}
+          name="fullName"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <Input placeholder="Full Name" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <Input placeholder="Email Address" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="phoneNo"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <Input placeholder="Phone Number" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="position"
+          render={({ field }) => (
+            <FormItem>
+              <FormControl>
+                <Input   placeholder="Position/Role Within the Organization" {...field}
                 
                 />
               </FormControl>

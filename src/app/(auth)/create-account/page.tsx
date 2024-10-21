@@ -12,7 +12,7 @@ export default function Page() {
     <FormWrapper hideProgressBar={true} login={true}> 
        <Particles
         className="absolute inset-0 -z-10 animate-fade-in"
-        quantity={200}
+        quantity={100}
         size={20}
       />
       <div className=" gap-10 flex flex-col items-center ">

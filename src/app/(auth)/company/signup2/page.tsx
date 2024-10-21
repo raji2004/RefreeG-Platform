@@ -1,4 +1,4 @@
-import { CompanyForm } from "@/components/forms";
+import { CompanyContactForm } from "@/components/forms";
 import { FormWrapper } from "@/components/formWrapper";
 import Particles from "@/components/ui/particles";
 import { Suspense } from "react";
@@ -15,7 +15,7 @@ export default function Page() {
         size={20}
       />
       <Suspense fallback={<div>Loading...</div>}>
-        <CompanyForm />
+        <CompanyContactForm />
       </Suspense>
     </FormWrapper>
   );
