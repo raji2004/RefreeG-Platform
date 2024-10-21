@@ -90,3 +90,16 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@media (max-width: 950px) {
+  .custom-lg\:hidden {
+      display: none;
+  }
+  .custom-lg\:flex {
+      display: flex;
+  }
+  .custom-lg\:text-sm {
+      font-size: 0.875rem; /* Tailwind's text-sm size */
+  }
+}
+
