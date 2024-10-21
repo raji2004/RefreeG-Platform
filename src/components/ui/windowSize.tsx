@@ -33,10 +33,10 @@ const useWindowSize = (): WindowSize => {
 };
 
 interface UserSession {
-  // Define the properties of userSession here
+  
 }
 
-const ClientHome = ({ userSession }: { userSession: UserSession }) => {
+const ClientHome = ({ userSession }: { userSession?: string }) => {
   const size = useWindowSize();
 
   return (
