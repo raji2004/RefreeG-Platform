@@ -24,7 +24,7 @@ import {
 } from "./ui/select";
 import { fetchCountriesData } from "@/lib/helpers";
 import { useState, useEffect } from "react";
-import { Country, User } from "@/lib/type";
+import { Country, SortedCountry, User } from "@/lib/type";
 import Image from "next/image";
 import { DatePicker } from "./ui/date-picker";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
@@ -153,7 +153,7 @@ export const SignupForm1 = ({
     },
   });
 
-  const [countries, setCountries] = useState<Country[]>([]);
+  const [countries, setCountries] = useState<SortedCountry[]>([]);
 
   useEffect(() => {
     const getCountries = async () => {
