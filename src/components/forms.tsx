@@ -667,14 +667,6 @@ export const CompanyForm = () => {
             <FormItem>
               <FormControl>
                 <Input type="number"  placeholder="Tax Identification Number" {...field}
-                 onChange={(e) => {
-                  const value = e.target.value;
-                  if (value !== "") {
-                    field.onChange(parseInt(value, 10));
-                  } else {
-                    field.onChange(value); 
-                  }
-                }}
                 />
               </FormControl>
               <FormMessage />
