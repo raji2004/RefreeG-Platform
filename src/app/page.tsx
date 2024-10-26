@@ -1,5 +1,4 @@
-import { Navbar, NavbarMedium, NavbarSmall } from "../components/ui/navbar";
-import ClientHome from "@/components/ui/windowSize";
+import { Navbar} from "../components/ui/navbar";
 import { cookies } from 'next/headers';
 import { redirect } from "next/navigation";
 import Image from "next/image";
@@ -20,9 +19,9 @@ export default async function Home() {
   return (
       <div className="">
           <div>
-            <ClientHome userSession={userSession} />
+            <Navbar />
 
-            {/* Section below the hero section */}
+           
             <div className="w-full border-b">
                 <div className="bg-white w-full mt-8 mb-12 px-12 md:w-screen z-10">
                     <div className="text-4xl">Why you should use us!</div>

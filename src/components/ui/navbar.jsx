@@ -1,130 +1,118 @@
-'use client'
+/**
+ * v0 by Vercel.
+ * @see https://v0.dev/t/lJwnQlHSEBA
+ * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
+ */
+import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet"
+import { Button } from "@/components/ui/button"
+import Link from "next/link"
 
-import Logo from '../../images/logo.png';
-import Dropdown from '../../images/dropdown.svg';
-import Search from '../../images/search.svg';
-import Image from "next/image";
-import Link from 'next/link';
-import { useState, useEffect } from 'react';
-import { FaBars, FaTimes } from 'react-icons/fa';
+export  function Navbar() {
+  return (
+    <header className="flex h-20 w-full shrink-0 items-center px-4 md:px-6">
+      <Sheet>
+        <SheetTrigger asChild>
+          <Button variant="outline" size="icon" className="lg:hidden">
+            <MenuIcon className="h-6 w-6" />
+            <span className="sr-only">Toggle navigation menu</span>
+          </Button>
+        </SheetTrigger>
+        <SheetContent side="left">
+          <Link href="#" className="mr-6 hidden lg:flex" prefetch={false}>
+            <MountainIcon className="h-6 w-6" />
+            <span className="sr-only">Acme Inc</span>
+          </Link>
+          <div className="grid gap-2 py-6">
+            <Link href="#" className="flex w-full items-center py-2 text-lg font-semibold" prefetch={false}>
+              Home
+            </Link>
+            <Link href="#" className="flex w-full items-center py-2 text-lg font-semibold" prefetch={false}>
+              About
+            </Link>
+            <Link href="#" className="flex w-full items-center py-2 text-lg font-semibold" prefetch={false}>
+              Services
+            </Link>
+            <Link href="#" className="flex w-full items-center py-2 text-lg font-semibold" prefetch={false}>
+              Contact
+            </Link>
+          </div>
+        </SheetContent>
+      </Sheet>
+      <Link href="#" className="mr-6 hidden lg:flex" prefetch={false}>
+        <MountainIcon className="h-6 w-6" />
+        <span className="sr-only">Acme Inc</span>
+      </Link>
+      <nav className="ml-auto hidden lg:flex gap-6">
+        <Link
+          href="#"
+          className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
+          prefetch={false}
+        >
+          Home
+        </Link>
+        <Link
+          href="#"
+          className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
+          prefetch={false}
+        >
+          About
+        </Link>
+        <Link
+          href="#"
+          className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
+          prefetch={false}
+        >
+          Services
+        </Link>
+        <Link
+          href="#"
+          className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-sm font-medium transition-colors hover:bg-gray-100 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
+          prefetch={false}
+        >
+          Contact
+        </Link>
+      </nav>
+    </header>
+  )
+}
 
-const Navbar = () => {
-    return (
-        <nav className="bg-white shadow-md w-full z-10">
-            <div className="w-full px-4 py-6 flex justify-between items-center">
-                <div className="flex items-center space-x-2">
-                    <Link href="/" className="text-xl ml-10 font-bold">
-                        <Image src={Logo} alt="Logo" width={60} height={60} />
-                    </Link>
-                </div>
-                <div className="flex space-x-4">
-                    <Link href="/" className="flex text-lg text-gray-700 hover:bg-blue-200 px-2 py-2 rounded-sm transition duration-200 ease-in-out transform hover:-translate-y-1 hover:scale-110">
-                        <Image src={Search} alt="icon" width={18} height={18} />Search
-                    </Link>
-                    <Link href="/explore" className="text-lg text-gray-700 hover:bg-blue-200 px-2 py-2 rounded-sm transition duration-200 ease-in-out transform hover:-translate-y-1 hover:scale-110">
-                        Explore causes
-                    </Link>
-                    <Link href="/about" className="flex text-lg text-gray-700 hover:bg-blue-200 px-2 py-2 rounded-sm transition duration-200 ease-in-out transform hover:-translate-y-1 hover:scale-110">
-                        About us<Image src={Dropdown} alt="icon" width={15} height={15} />
-                    </Link>
-                    <Link href="/how-it-works" className="flex text-lg text-gray-700 hover:bg-blue-200 px-2 py-2 rounded-sm transition duration-200 ease-in-out transform hover:-translate-y-1 hover:scale-110">
-                        How it works<Image src={Dropdown} alt="icon" width={15} height={15} />
-                    </Link>
-                    <Link href="/list-cause" className="text-lg bg-blue-700 text-white px-5 py-2 rounded-sm transition duration-200 ease-in-out hover:bg-blue-900 transform hover:-translate-y-1 hover:scale-110">
-                        List a cause
-                    </Link>
-                    <Link href="/login" aria-label="login" className="text-lg bg-white text-gray-700 px-4 py-2 rounded-sm transition duration-200 ease-in-out hover:underline hover:text-blue-800">
-                        Login
-                    </Link>
-                </div>
-            </div>
-        </nav>
-    );
-};
+function MenuIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <line x1="4" x2="20" y1="12" y2="12" />
+      <line x1="4" x2="20" y1="6" y2="6" />
+      <line x1="4" x2="20" y1="18" y2="18" />
+    </svg>
+  )
+}
 
-const NavbarMedium = () => {
-    const [nav, setNav] = useState(false);
 
-    const handleClick = () => setNav(!nav);
-
-    return (
-        <nav className="bg-white shadow-md w-full z-10">
-            <div className="w-full px-4 py-6 flex justify-between items-center">
-                <div className="flex items-center space-x-2">
-                    <Link href="/" className="text-xl ml-10 font-bold">
-                        <Image src={Logo} alt="Logo" width={60} height={60} />
-                    </Link>
-                </div>
-                <div className="flex space-x-4">
-                    <Link href="/" className="flex text-sm text-gray-700 hover:bg-blue-200 px-2 py-2 rounded-sm transition duration-200 ease-in-out transform hover:-translate-y-1 hover:scale-110">
-                        <Image src={Search} alt="icon" width={15} height={15} />Search
-                    </Link>
-                    <Link href="/explore" className="text-sm text-gray-700 hover:bg-blue-200 px-2 py-2 rounded-sm transition duration-200 ease-in-out transform hover:-translate-y-1 hover:scale-110">
-                        Explore causes
-                    </Link>
-                    <Link href="/about" className="flex text-sm text-gray-700 hover:bg-blue-200 px-2 py-2 rounded-sm transition duration-200 ease-in-out transform hover:-translate-y-1 hover:scale-110">
-                        About us<Image src={Dropdown} alt="icon" width={12} height={12} />
-                    </Link>
-                    <Link href="/how-it-works" className="flex text-sm text-gray-700 hover:bg-blue-200 px-2 py-2 rounded-sm transition duration-200 ease-in-out transform hover:-translate-y-1 hover:scale-110">
-                        How it works<Image src={Dropdown} alt="icon" width={12} height={12} />
-                    </Link>
-                    <Link href="/list-cause" className="text-sm bg-blue-700 text-white px-2 py-2 rounded-sm transition duration-200 ease-in-out hover:bg-blue-900 transform hover:-translate-y-1 hover:scale-110">
-                        List a cause
-                    </Link>
-                    <Link href="/login" aria-label="login" className="text-sm bg-white text-gray-700 px-2 py-2 rounded-sm transition duration-200 ease-in-out hover:underline hover:text-blue-800">
-                        Login
-                    </Link>
-                </div>
-            </div>
-        </nav>
-    );
-};
-
-const NavbarSmall = () => {
-    const [nav, setNav] = useState(false);
-
-    const handleClick = () => setNav(!nav);
-
-    return (
-        <nav className="bg-white shadow-md w-full z-10">
-            <div className="w-full px-4 py-6 flex justify-between items-center">
-                <div className="flex items-center space-x-2">
-                    <Link href="/" className="text-xl ml-10 font-bold">
-                        <Image src={Logo} alt="Logo" width={60} height={60} />
-                    </Link>
-                </div>
-                <div className="flex mr-8 items-center">
-                    <button onClick={handleClick}>
-                        {nav ? <FaTimes size={30} /> : <FaBars size={30} />}
-                    </button>
-                </div>
-            </div>
-            {nav && (
-                <div>
-                    <div className="flex flex-col items-center space-y-4 mt-4">
-                        <Link href="/" className="flex text-base text-gray-700 hover:bg-blue-200 px-2 py-2 rounded-sm transition duration-200 ease-in-out transform hover:-translate-y-1 hover:scale-110">
-                            <Image src={Search} alt="icon" width={18} height={18} />Search
-                        </Link>
-                        <Link href="/explore" className="text-base text-gray-700 hover:bg-blue-200 px-2 py-2 rounded-sm transition duration-200 ease-in-out transform hover:-translate-y-1 hover:scale-110">
-                            Explore causes
-                        </Link>
-                        <Link href="/about" className="flex text-base text-gray-700 hover:bg-blue-200 px-2 py-2 rounded-sm transition duration-200 ease-in-out transform hover:-translate-y-1 hover:scale-110">
-                            About us<Image src={Dropdown} alt="icon" width={15} height={15} />
-                        </Link>
-                        <Link href="/how-it-works" className="flex text-base text-gray-700 hover:bg-blue-200 px-2 py-2 rounded-sm transition duration-200 ease-in-out transform hover:-translate-y-1 hover:scale-110">
-                            How it works<Image src={Dropdown} alt="icon" width={15} height={15} />
-                        </Link>
-                        <Link href="/list-cause" className="text-base bg-blue-700 text-white px-5 py-2 rounded-sm transition duration-200 ease-in-out hover:bg-blue-900 transform hover:-translate-y-1 hover:scale-110">
-                            List a cause
-                        </Link>
-                        <Link href="/login" className="text-base bg-white text-gray-700 px-5 py-2 rounded-sm transition duration-200 ease-in-out hover:underline hover:text-blue-800">
-                            Login
-                        </Link>
-                    </div>
-                </div>
-            )}
-        </nav>
-    );
-};
-
-export { Navbar, NavbarMedium, NavbarSmall };
+function MountainIcon(props) {
+  return (
+    <svg
+      {...props}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="m8 3 4 8 5-5 5 15H2L8 3z" />
+    </svg>
+  )
+}
