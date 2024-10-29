@@ -61,6 +61,7 @@ const FAQ: React.FC = () => {
       <h1 className="text-xl font-semibold mb-4 text-center">
         Read through our frequently asked questions here!
       </h1>
+
       <div className="space-y-2">
         {faqs.map((faq, index) => (
           <div
