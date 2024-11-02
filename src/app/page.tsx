@@ -37,11 +37,11 @@ import { Footer } from "@/components/ui/footer";
 
 
 export default async function Home() {
-  const cookieStore = await cookies();
+  const cookieStore =  cookies();
   const userSession = cookieStore.get('userSession')?.value;
 
   if (!userSession) {
-      redirect('/Login');
+      redirect('/create-account');
   }
 
   return (

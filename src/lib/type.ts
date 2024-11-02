@@ -91,3 +91,20 @@ export interface Country {
         latlng: [number, number];
     };
 }
+
+export interface SortedCountry{
+    name: {
+        common: string;
+        official: string;
+        nativeName: {
+            [key: string]: {
+                official: string;
+                common: string;
+            };
+        };
+    };
+    flags: {
+        png: string;
+        svg: string;
+    };
+}
