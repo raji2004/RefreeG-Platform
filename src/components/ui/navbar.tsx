@@ -6,7 +6,7 @@ import Search from '../../../public/images/search.svg';
 import Dropdown from '../../../public/images/dropdown.svg';
 import Image from "next/image";
 
-export  function Navbar() {
+export function Navbar() {
   return (
     <header className="flex h-20 w-full shrink-0 items-center px-4 md:px-6">
       <Sheet>
@@ -23,7 +23,7 @@ export  function Navbar() {
           </Link>
           <div className="grid gap-2 py-6">
             <Link href="#" className="flex w-full items-center py-2 text-lg font-semibold" prefetch={false}>
-              <Image src={Search} alt="search" />
+              <Image src={Search} alt="search" height={24} width={24} />
               Search
             </Link>
             <Link href="#" className="flex w-full items-center py-2 text-lg font-semibold" prefetch={false}>
@@ -45,7 +45,7 @@ export  function Navbar() {
         </SheetContent>
       </Sheet>
       <Link href="#" className="mr-6 hidden lg:flex" prefetch={false}>
-        <Image src={Logo} alt="logo" />
+        <Image src={Logo} alt="logo" height={60} width={60} />
         <span className="sr-only">Acme Inc</span>
       </Link>
       <nav className="ml-auto hidden lg:flex gap-6">
@@ -69,14 +69,14 @@ export  function Navbar() {
           className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-base font-medium transition-colors hover:bg-blue-200 hover:text-gray-900  focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 ease-in-out transform hover:-translate-y-1 hover:scale-110"
           prefetch={false}
         >
-          About us<Image src={Dropdown} alt="search" />
+          About us<Image src={Dropdown} height={12} width={12} alt="dropdown" />
         </Link>
         <Link
           href="#"
           className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-base font-medium transition-colors hover:bg-blue-200 hover:text-gray-900  focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 ease-in-out transform hover:-translate-y-1 hover:scale-110"
           prefetch={false}
         >
-          How it works<Image src={Dropdown} alt="search" />
+          How it works<Image src={Dropdown} height={12} width={12} alt="dropdown" />
         </Link>
         <Link
           href="#"
@@ -97,7 +97,7 @@ export  function Navbar() {
   )
 }
 
-function MenuIcon(props:any) {
+function MenuIcon(props) {
   return (
     <svg
       {...props}
@@ -118,8 +118,7 @@ function MenuIcon(props:any) {
   )
 }
 
-
-function MountainIcon(props:any) {
+function MountainIcon(props) {
   return (
     <svg
       {...props}
