@@ -53,7 +53,7 @@ export default async function Home() {
                 {/* Section below the hero section */}
                 <div className="w-full border-b">
                     <div className="bg-white w-full mt-8 mb-12 px-4 z-10">
-                        <div className="text-2xl md:text-4xl">Why you should use us!</div>
+                        <div className="text-2xl w-full md:text-4xl">Why you should use us!</div>
                         <div className="text-lg md:text-xl">Reasons why your donation will be used right!</div>
                         <div className="w-full py-6 flex flex-wrap justify-between items-center space-y-6 md:space-y-0">
                             <div className="flex w-full md:w-2/5 lg:w-1/5 flex-col space-y-2 items-center">
@@ -107,7 +107,7 @@ export default async function Home() {
                                             <div>
                                                 <h3 className="text-2xl font-semibold">Cancer foundation</h3>
                                                 <p className="flex mt-2 text-gray-600"><Image src={Clock} alt="clock" className="mr-1" />15 days left • 80% funded</p>
-                                                <p className="mt-2">This cause is for Ikemefuna, a Nigerian boy that needs surgery for his cancer and is seeking your funding for the sum of 100m more...</p>
+                                                <p className="mt-2 hidden lg:block">This cause is for Ikemefuna, a Nigerian boy that needs surgery for his cancer and is seeking your funding for the sum of 100m more...</p>
                                             </div>
                                             <div>
                                                 <Image src={Bookmark} alt="bookmark" height={50} width={50} />
@@ -130,7 +130,7 @@ export default async function Home() {
                         {/* Other causes */}
                         <div className="lg:4/12">
                             <div className="flex flex-wrap bg-white w-full z-10">
-                                <div className="flex justify-between w-full mb-5">
+                                <div className="md:flex justify-between w-full mb-5">
                                     <div className="bg-white  rounded-lg mr-10 w-full md:w-5/12 lg:w-1/2 ">
                                         <Image src={MaiduguriFloodImage1} alt="Maiduguri flood" className="rounded-lg h-3/5 w-full" />
                                         <div className="flex justify-between mt-2">
@@ -172,46 +172,46 @@ export default async function Home() {
                                 </div>
 
 
-                                <div className="flex justify-between w-full">
-                                <div className="bg-white  rounded-lg mr-10 w-full md:w-5/12 lg:w-1/2 ">
-                                        <Image src={MaiduguriFloodImage3} alt="Maiduguri flood" className="rounded-lg h-3/5 w-full" />
-                                        <div className="flex justify-between mt-2">
-                                            <div className="flex">
-                                                <div><Image src={MaiduguriEllipse3} alt="profile" /></div>
-                                                <div className="ml-2 mb-2">
-                                                    <h3 className="text-xl font-semibold">Maiduguri flood</h3>
-                                                    <p className="mt-2 text-gray-600">15 days left • 80% funded</p>
-                                                </div>
-                                            </div>
-                                            <div><Image src={Bookmark} alt="bookmark" /></div>
-                                        </div>
-                                        <div className="mt-2">
-                                            <Progress value={85} />
-                                            <div className="font-bold text-gray-800">₦1,700,000 raised</div>
-                                            <div className="text-gray-800">Goal: ₦2,000,000</div>
-                                        </div>
-                                    </div>
-
+                                <div className="md:flex justify-between w-full">
                                     <div className="bg-white  rounded-lg mr-10 w-full md:w-5/12 lg:w-1/2 ">
-                                        <Image src={MaiduguriFloodImage4} alt="Maiduguri flood" className="rounded-lg h-3/5 w-full" />
-                                        <div className="flex justify-between mt-2">
-                                            <div className="flex">
-                                                <div><Image src={MaiduguriEllipse3} alt="profile" /></div>
-                                                <div className="ml-2 mb-2">
-                                                    <h3 className="text-xl font-semibold">Maiduguri flood</h3>
-                                                    <p className="mt-2 text-gray-600">15 days left • 80% funded</p>
+                                            <Image src={MaiduguriFloodImage3} alt="Maiduguri flood" className="rounded-lg h-3/5 w-full" />
+                                            <div className="flex justify-between mt-2">
+                                                <div className="flex">
+                                                    <div><Image src={MaiduguriEllipse3} alt="profile" /></div>
+                                                    <div className="ml-2 mb-2">
+                                                        <h3 className="text-xl font-semibold">Maiduguri flood</h3>
+                                                        <p className="mt-2 text-gray-600">15 days left • 80% funded</p>
+                                                    </div>
                                                 </div>
+                                                <div><Image src={Bookmark} alt="bookmark" /></div>
                                             </div>
-                                            <div><Image src={Bookmark} alt="bookmark" /></div>
+                                            <div className="mt-2">
+                                                <Progress value={85} />
+                                                <div className="font-bold text-gray-800">₦1,700,000 raised</div>
+                                                <div className="text-gray-800">Goal: ₦2,000,000</div>
+                                            </div>
                                         </div>
-                                        <div className="mt-2">
-                                            <Progress value={85} />
-                                            <div className="font-bold text-gray-800">₦1,700,000 raised</div>
-                                            <div className="text-gray-800">Goal: ₦2,000,000</div>
+
+                                        <div className="bg-white  rounded-lg mr-10 w-full md:w-5/12 lg:w-1/2 ">
+                                            <Image src={MaiduguriFloodImage4} alt="Maiduguri flood" className="rounded-lg h-3/5 w-full" />
+                                            <div className="flex justify-between mt-2">
+                                                <div className="flex">
+                                                    <div><Image src={MaiduguriEllipse3} alt="profile" /></div>
+                                                    <div className="ml-2 mb-2">
+                                                        <h3 className="text-xl font-semibold">Maiduguri flood</h3>
+                                                        <p className="mt-2 text-gray-600">15 days left • 80% funded</p>
+                                                    </div>
+                                                </div>
+                                                <div><Image src={Bookmark} alt="bookmark" /></div>
+                                            </div>
+                                            <div className="mt-2">
+                                                <Progress value={85} />
+                                                <div className="font-bold text-gray-800">₦1,700,000 raised</div>
+                                                <div className="text-gray-800">Goal: ₦2,000,000</div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
                         </div>
                     </div>
 
@@ -265,7 +265,7 @@ export default async function Home() {
                 <Link href="#" className="flex"><Image src={ChevronRight} alt="right arrow" /></Link>
             </div>
 
-            <div className="flex flex-nowrap ml-10">
+            <div className="md:flex flex-nowrap ml-10">
                 <div className="bg-white rounded-lg mr-10">
                     <Image src={MaiduguriFloodImage2} alt="Maiduguri flood" className="rounded-lg" />
                     <div className="flex justify-between mt-2">
@@ -364,7 +364,7 @@ export default async function Home() {
                 <Link href="#" className="flex"><Image src={ChevronRight} alt="right arrow" /></Link>
             </div>
 
-            <div className="flex flex-nowrap ml-10">
+            <div className="md:flex flex-nowrap ml-10">
                 <div className="bg-white rounded-lg mr-10">
                     <Image src={MaiduguriFloodImage2} alt="Maiduguri flood" className="rounded-lg" />
                     <div className="flex justify-between mt-2">
