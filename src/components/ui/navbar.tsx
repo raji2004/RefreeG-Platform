@@ -1,5 +1,5 @@
 import { Sheet, SheetTrigger, SheetContent } from "../ui/sheet"
-import { Button } from "@/components/ui/button"
+import { Button } from "../ui/button"
 import Link from "next/link"
 import Logo from '../../../public/images/logo.svg'
 import Search from '../../../public/images/search.svg';
