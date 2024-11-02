@@ -1,4 +1,4 @@
-import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet"
+import { Sheet, SheetTrigger, SheetContent } from "../ui/sheet"
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import Logo from '../../../public/images/logo.svg'
