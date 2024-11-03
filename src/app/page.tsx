@@ -2,7 +2,7 @@ import { Navbar } from "@/components/ui/navbar";
 import { cookies } from 'next/headers';
 import { redirect } from "next/navigation";
 import Image from "next/image";
-import Link from "next/link"
+import Link from "next/link";
 import BlockChain from '../../public/images/blockchain.png';
 import VettedImage from '../../public/images/vetted.png';
 import EasyDonations from '../../public/images/easyDonation.png';
@@ -22,7 +22,7 @@ import MaiduguriCause from '../../public/images/maiduguriCauses.svg';
 import Radio from '../../public/images/radio.svg';
 import ArrowRight1 from '../../public/images/arrowRight.svg';
 import ArrowRightBlue from '../../public/images/arrowRightBlue.svg';
-import ChevronRight from '../../public/images/ViewAll.svg';
+import ChevronRight from '../../public/images/viewAll.svg';
 import ChevronRight2 from '../../public/images/chevronRight2.svg';
 import RightArrow from '../../public/images/chevronRight3.svg';
 import IconRight from '../../public/images/iconArrowRight.svg';
@@ -459,8 +459,8 @@ export default async function Home() {
             </div>
             <div className="w-3/5 mx-auto text-2xl text-center mb-10">At RefreeG, we support a wide range of causes that align with our mission to empower less privileged individuals in the community and foster socio-economic growth. Here are some of the key areas we focus on:</div>
             <div>
-                <div className="flex mb-16 pb-10 border-b justify-between">
-                    <div className="self-center"><Image src={Radio} alt="radio" /></div>
+                <div className="md:flex mb-16 pb-10 border-b justify-between">
+                    <div className="self-center hidden md:block"><Image src={Radio} alt="radio" /></div>
                     <div className="text-3xl self-center font-medium w-3/12">Vocational Training</div>
                     <div className="w-6/12">
                         <div className="text-base text-blue-900 font-medium">Empowering Artisans: We provide vocational training to individuals, helping them acquire valuable skills to become proficient artisans.</div>
@@ -470,8 +470,8 @@ export default async function Home() {
                     
                 </div>
 
-                <div className="flex mb-16 pb-10 border-b justify-between">
-                    <div className="self-center"><Image src={Radio} alt="radio" /></div>
+                <div className="md:flex mb-16 pb-10 border-b justify-between">
+                    <div className="self-center hidden md:block"><Image src={Radio} alt="radio" /></div>
                     <div className="text-3xl self-center font-medium w-3/12">Support for GBV Victims</div>
                     <div className="w-6/12">
                         <div className="text-base text-blue-900 font-medium">Holistic Recovery: We offer comprehensive support to victims of gender-based violence, aiding in both their emotional and physical healing.</div>
@@ -481,8 +481,8 @@ export default async function Home() {
                     
                 </div>
 
-                <div className="flex mb-16 pb-10 border-b justify-between">
-                    <div className="self-center"><Image src={Radio} alt="radio" /></div>
+                <div className="md:flex mb-16 pb-10 border-b justify-between">
+                    <div className="self-center hidden md:block"><Image src={Radio} alt="radio" /></div>
                     <div className="text-3xl self-center font-medium w-3/12">Education</div>
                     <div className="w-6/12">
                         <div className="text-base text-blue-900 font-medium">Access to Education: We strive to send children of various ages to school, ensuring they have access to quality education.</div>
@@ -492,8 +492,8 @@ export default async function Home() {
                     
                 </div>
 
-                <div className="flex mb-16 pb-10 border-b justify-between">
-                    <div className="self-center"><Image src={Radio} alt="radio" /></div>
+                <div className="md:flex mb-16 pb-10 border-b justify-between">
+                    <div className="self-center hidden md:block"><Image src={Radio} alt="radio" /></div>
                     <div className="text-3xl self-center font-medium w-3/12">Basic Necessities</div>
                     <div className="w-6/12">
                         <div className="text-base text-blue-900 font-medium">Essential Aid: We provide food, healthcare, shelter, and clothing to those in need, ensuring they have access to basic life necessities.</div>
@@ -509,8 +509,8 @@ export default async function Home() {
         <div className="mr-10 ml-10 mb-16">
             <div className="text-4xl font-semibold mb-3">FAQS</div>
             <div className="text-xl mb-6">Here are some popular questions our users can’t stop asking.</div>
-            <div className="flex w-11/12 mx-auto">
-                <div className="w-2/5">
+            <div className="md:flex w-11/12 mx-auto">
+                <div className="w-full">
                     <div className="w-11/12 rounded-3xl px-6 py-6 bg-customNavyBlue mb-6">
                         <div className="flex justify-between text-white border-b mx-auto mb-2">
                             <div className="text-lg font-semibold">What is RefreeG?</div>
@@ -536,7 +536,7 @@ export default async function Home() {
                 </div>
 
 
-                <div className="w-2/5">
+                <div className="w-full">
                     <div className="flex justify-between w-11/12 rounded-3xl px-6 py-6 bg-blue-50 mb-6">
                         <div className="text-base font-semibold">How does RefreeG ensure transparency?</div>
                         <div className="text-lg font-semibold"><Image src={Plus} alt="dash"/></div>
@@ -564,7 +564,7 @@ export default async function Home() {
                 </div>
 
 
-                <div className="w-2/5">
+                <div className="w-full">
                     <div className="flex justify-between w-11/12 rounded-3xl px-6 py-6 bg-blue-50 mb-6">
                         <div className="text-base font-semibold">How does RefreeG ensure transparency?</div>
                         <div className="text-lg font-semibold"><Image src={Plus} alt="dash"/></div>
