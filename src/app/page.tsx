@@ -1,4 +1,4 @@
-import { Navbar } from "@/components/ui/navbar";
+import { Navbar } from "../components/ui/navbar";
 import { cookies } from 'next/headers';
 import { redirect } from "next/navigation";
 import Image from "next/image";
@@ -32,8 +32,8 @@ import CategoryAndLocation from '../../public/images/cat-loc.svg';
 import Dash from '../../public/images/dash.svg';
 import Plus from '../../public/images/plus.svg';
 import Video from '../../public/images/video.svg';
-import { Progress } from "@/components/ui/progress";
-import { Footer } from "@/components/ui/footer";
+import { Progress } from "../components/ui/progress";
+import { Footer } from "../components/ui/footer";
 
 
 export default async function Home() {
