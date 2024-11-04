@@ -464,7 +464,7 @@ export default async function Home() {
                     <div className="text-3xl self-center font-medium w-3/12">Vocational Training</div>
                     <div className="w-6/12">
                         <div className="text-base text-blue-900 font-medium">Empowering Artisans: We provide vocational training to individuals, helping them acquire valuable skills to become proficient artisans.</div>
-                        <div className="text-base text-blue-900 font-medium mt-8">Economic Contribution: By gaining these skills, individuals can join the labor force, contributing to the nation's GDP and overall economic growth.</div>
+                        <div className="text-base text-blue-900 font-medium mt-8">Economic Contribution: By gaining these skills, individuals can join the labor force, contributing to the nation’s GDP and overall economic growth.</div>
                     </div>
                     <Link href='#' className="flex self-center underline text-blue-900 text-lg font-semibold">Get Started<Image src={ChevronRight2} alt="right arrow" /></Link>
                     
@@ -486,7 +486,7 @@ export default async function Home() {
                     <div className="text-3xl self-center font-medium w-3/12">Education</div>
                     <div className="w-6/12">
                         <div className="text-base text-blue-900 font-medium">Access to Education: We strive to send children of various ages to school, ensuring they have access to quality education.</div>
-                        <div className="text-base text-blue-900 font-medium mt-8">Future Leaders: By investing in their education, we aim to improve their lives and contribute to the country's future development.</div>
+                        <div className="text-base text-blue-900 font-medium mt-8">Future Leaders: By investing in their education, we aim to improve their lives and contribute to the country’s future development.</div>
                     </div>
                     <Link href='#' className="flex self-center underline text-blue-900 text-lg font-semibold">Get Started<Image src={ChevronRight2} alt="right arrow" /></Link>
                     
