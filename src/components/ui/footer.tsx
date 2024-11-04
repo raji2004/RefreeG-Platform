@@ -29,7 +29,7 @@ export function Footer() {
                 <div className="flex flex-col w-full mb-12">
                     <div className="text-blue-950 text-2xl pb-3 font-semibold">Contact Us</div>
                     <Link href="#" className="underline hidden md:text-lg md:block mb-3">refreegcorrespondence@gmail.com</Link>
-                    <Link href="#" className="underline text-lg mb-3">Phone: +234- 090-174-6760</Link>
+                    <Link href="#" className="underline text-lg mb-3">Phone: +234-090-174-6760</Link>
                     <Link href="#" className="underline text-lg mb-3">Abuja, Nigeria</Link>
                 </div>
                 <div className="flex flex-col w-full mb-12">
