@@ -97,7 +97,9 @@ export function Navbar() {
   )
 }
 
-function MenuIcon(props) {
+interface IconProps extends React.SVGProps<SVGSVGElement> {}
+
+function MenuIcon(props: IconProps) {
   return (
     <svg
       {...props}
@@ -118,7 +120,7 @@ function MenuIcon(props) {
   )
 }
 
-function MountainIcon(props) {
+function MountainIcon(props: IconProps) {
   return (
     <svg
       {...props}
@@ -136,3 +138,4 @@ function MountainIcon(props) {
     </svg>
   )
 }
+
