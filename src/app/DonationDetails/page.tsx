@@ -1,7 +1,7 @@
 "use client"; // Ensures that this component is rendered on the client-side
 
 import React, { useState } from "react";
-import DonationProgress from "../../../components/ui/donationProgress"; // Import a custom donation progress bar
+import DonationProgress from "../../components/ui/donationProgress"; // Import a custom donation progress bar
 import {
   FaExclamationTriangle,
   FaHeartbeat,
@@ -18,6 +18,7 @@ import Slider from "react-slick"; // Import Slider component for the image carou
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react"; // Import Lucide React icons
 import { MouseEventHandler } from "react"; // Import type for event handling
 import DonationNav from "@/components/donationNavbar";
+import { Navbar } from "@/components/ui/navbar";
 
 // Main component definition
 const DonationDetail: React.FC = () => {
@@ -92,6 +93,7 @@ const DonationDetail: React.FC = () => {
 
   return (
     <div>
+      <Navbar />
       <div className="p-4 md:flex md:justify-between">
         {/* Left side - Main content */}
         <div className="md:w-2/4">
