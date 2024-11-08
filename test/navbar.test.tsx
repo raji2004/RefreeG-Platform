@@ -1,34 +1,46 @@
 // __tests__/Navbar.test.tsx
-import React from 'react';
-import { render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom';
-import { describe, it, expect } from 'vitest';
-import { Navbar } from '../src/components/ui/navbar';
+import React from "react";
+import { render, screen } from "@testing-library/react";
+import "@testing-library/jest-dom";
+import { describe, it, expect } from "vitest";
+import { Navbar } from "../src/components/ui/navbar";
 
-describe('Navbar Component', () => {
-  it('renders the logo', () => {
+describe("Navbar Component", () => {
+  it("renders the MountainIcon logo", () => {
     render(<Navbar />);
-    const logo = screen.getByAltText('Logo');
+    // Check if the MountainIcon logo is in the document
+    const logo = screen.getByRole("link", { name: /acme inc/i });
     expect(logo).toBeInTheDocument();
   });
 
-  it('renders navigation links', () => {
+  it("renders navigation links", () => {
     render(<Navbar />);
-    const links = ['Search', 'Explore causes', 'About us', 'How it works', 'List a cause'];
-    links.forEach(link => {
+    const links = ["Home", "About", "Services", "Contact"];
+    links.forEach((link) => {
       expect(screen.getByText(link)).toBeInTheDocument();
     });
   });
 
-  it('renders the login button', () => {
+  it("renders the menu button for mobile", () => {
     render(<Navbar />);
-    const loginButton = screen.getByText('Login');
-    expect(loginButton).toBeInTheDocument();
+    const menuButton = screen.getByRole("button", {
+      name: /toggle navigation menu/i,
+    });
+    expect(menuButton).toBeInTheDocument();
   });
 
-  it('renders the custom Button component', () => {
+  it("renders the sheet menu links on mobile", () => {
     render(<Navbar />);
-    const loginButton = screen.getByLabelText(/login/i);
-    expect(loginButton).toBeInTheDocument();
+    // Open the menu by clicking the hamburger button
+    const menuButton = screen.getByRole("button", {
+      name: /toggle navigation menu/i,
+    });
+    expect(menuButton).toBeInTheDocument();
+
+    // Check if the menu links are visible after the button is clicked
+    const menuLinks = ["Home", "About", "Services", "Contact"];
+    menuLinks.forEach((link) => {
+      expect(screen.getByText(link)).toBeInTheDocument();
+    });
   });
 });
