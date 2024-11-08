@@ -3,8 +3,8 @@
  * @see https://v0.dev/t/lJwnQlHSEBA
  * Documentation: https://v0.dev/docs#integrating-generated-code-into-your-nextjs-app
  */
-import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet"
-import { Button } from "@/components/ui/button"
+import { Sheet, SheetTrigger, SheetContent } from "./sheet"
+import { Button } from "./button"
 import Link from "next/link"
 
 export  function Navbar() {
