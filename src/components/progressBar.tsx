@@ -21,7 +21,6 @@ export const FormProgressBar: React.FC<FormProgressBarProps> = ({
                     style={{
                         flex: 1,
                         height: '10px',
-                        color: 'red',
                         backgroundColor: index < currentStep ? '#0070E0' : '#E6EEF8',
                         borderRadius: '5px',
                         margin: '0 5px',

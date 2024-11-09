@@ -1,100 +1,80 @@
-import { Sheet, SheetTrigger, SheetContent } from "../ui/sheet"
-import { Button } from "../ui/button"
-import Link from "next/link"
-import Logo from '../../../public/images/logo.svg'
+import { Sheet, SheetTrigger, SheetContent } from "../ui/sheet";
+import { Button } from "../ui/button";
+import Link from "next/link";
+import Logo from '../../../public/images/logo.svg';
 import Search from '../../../public/images/search.svg';
 import Dropdown from '../../../public/images/dropdown.svg';
 import Image from "next/image";
+import { ReactNode } from "react";
+
+interface MenuLinkProps {
+  href: string;
+  children: ReactNode;
+  className?: string;
+}
+
+const MenuLink = ({ href, children, className, ...props }: MenuLinkProps) => (
+  <Link
+    href={href}
+    className={`group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-base font-medium transition-colors hover:bg-blue-200 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 ease-in-out transform hover:-translate-y-1 hover:scale-110 ${className}`}
+    prefetch={false}
+    {...props}
+  >
+    {children}
+  </Link>
+);
 
 export function Navbar() {
   return (
     <header className="flex h-20 w-full shrink-0 items-center px-4 md:px-6">
+      <Link href="#" className="mr-6 lg:mr-0" prefetch={false}>
+        <Image src={Logo} alt="logo" height={60} width={60} />
+        <span className="sr-only">Acme Inc</span>
+      </Link>
+      <nav className="hidden lg:flex ml-auto gap-6">
+        <MenuLink href="#">
+          <Image src={Search} height={20} width={20} alt="search" /> Search
+        </MenuLink>
+        <MenuLink href="#">Explore causes</MenuLink>
+        <MenuLink href="#">
+          About us <Image src={Dropdown} height={12} width={12} alt="dropdown" />
+        </MenuLink>
+        <MenuLink href="#">
+          How it works <Image src={Dropdown} height={12} width={12} alt="dropdown" />
+        </MenuLink>
+        <MenuLink href="#" className="bg-blue-600 hover:bg-blue-700">
+          List a cause
+        </MenuLink>
+        <MenuLink href="/login" className="hover:text-blue-700 hover:underline">
+          Login
+        </MenuLink>
+      </nav>
       <Sheet>
         <SheetTrigger asChild>
-          <Button variant="outline" size="icon" className="lg:hidden">
+          <Button variant="outline" size="icon" className="lg:hidden ml-auto">
             <MenuIcon className="h-6 w-6" />
             <span className="sr-only">Toggle navigation menu</span>
           </Button>
         </SheetTrigger>
-        <SheetContent side="left">
+        <SheetContent side="left" className="bg-white"> {/* Add the bg-white class here */}
           <Link href="#" className="mr-6 hidden lg:flex" prefetch={false}>
             <MountainIcon className="h-6 w-6" />
             <span className="sr-only">Acme Inc</span>
           </Link>
           <div className="grid gap-2 py-6">
-            <Link href="#" className="flex w-full items-center py-2 text-lg font-semibold" prefetch={false}>
-              <Image src={Search} alt="search" height={24} width={24} />
-              Search
-            </Link>
-            <Link href="#" className="flex w-full items-center py-2 text-lg font-semibold" prefetch={false}>
-              Explore causes
-            </Link>
-            <Link href="#" className="flex w-full items-center py-2 text-lg font-semibold" prefetch={false}>
-              About us
-            </Link>
-            <Link href="#" className="flex w-full items-center py-2 text-lg font-semibold" prefetch={false}>
-              How it works
-            </Link>
-            <Link href="#" className="flex w-full items-center py-2 text-lg font-semibold" prefetch={false}>
-              List a cause
-            </Link>
-            <Link href="/login" className="flex w-full items-center py-2 text-lg font-semibold" prefetch={false}>
-              Login
-            </Link>
+            <MenuLink href="#">
+              <Image src={Search} alt="search" height={24} width={24} /> Search
+            </MenuLink>
+            <MenuLink href="#">Explore causes</MenuLink>
+            <MenuLink href="#">About us</MenuLink>
+            <MenuLink href="#">How it works</MenuLink>
+            <MenuLink href="#">List a cause</MenuLink>
+            <MenuLink href="/login">Login</MenuLink>
           </div>
         </SheetContent>
       </Sheet>
-      <Link href="#" className="mr-6 hidden lg:flex" prefetch={false}>
-        <Image src={Logo} alt="logo" height={60} width={60} />
-        <span className="sr-only">Acme Inc</span>
-      </Link>
-      <nav className="ml-auto hidden lg:flex gap-6">
-        <Link
-          href="#"
-          className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-base font-medium transition-colors hover:bg-blue-200 hover:text-gray-900  focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 ease-in-out transform hover:-translate-y-1 hover:scale-110"
-          prefetch={false}
-        >
-         <Image src={Search} height={20} width={20} alt="search" />
-         Search
-        </Link>
-        <Link
-          href="#"
-          className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-base font-medium transition-colors hover:bg-blue-200 hover:text-gray-900  focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 ease-in-out transform hover:-translate-y-1 hover:scale-110"
-          prefetch={false}
-        >
-          Explore causes
-        </Link>
-        <Link
-          href="#"
-          className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-base font-medium transition-colors hover:bg-blue-200 hover:text-gray-900  focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 ease-in-out transform hover:-translate-y-1 hover:scale-110"
-          prefetch={false}
-        >
-          About us<Image src={Dropdown} height={12} width={12} alt="dropdown" />
-        </Link>
-        <Link
-          href="#"
-          className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-base font-medium transition-colors hover:bg-blue-200 hover:text-gray-900  focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 ease-in-out transform hover:-translate-y-1 hover:scale-110"
-          prefetch={false}
-        >
-          How it works<Image src={Dropdown} height={12} width={12} alt="dropdown" />
-        </Link>
-        <Link
-          href="#"
-          className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-blue-600 px-4 py-2 text-base text-white font-medium transition-colors hover:bg-blue-700 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 ease-in-out transform hover:-translate-y-1 hover:scale-110"
-          prefetch={false}
-        >
-          List a cause
-        </Link>
-        <Link
-          href="/login"
-          className="group inline-flex h-9 w-max items-center justify-center rounded-md bg-white px-4 py-2 text-base font-medium transition-colors hover:text-blue-700 hover:underline focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 dark:focus:text-gray-50 dark:data-[active]:bg-gray-800/50 dark:data-[state=open]:bg-gray-800/50"
-          prefetch={false}
-        >
-          Login
-        </Link>
-      </nav>
     </header>
-  )
+  );
 }
 
 interface IconProps extends React.SVGProps<SVGSVGElement> {}
@@ -117,7 +97,7 @@ function MenuIcon(props: IconProps) {
       <line x1="4" x2="20" y1="6" y2="6" />
       <line x1="4" x2="20" y1="18" y2="18" />
     </svg>
-  )
+  );
 }
 
 function MountainIcon(props: IconProps) {
@@ -136,6 +116,5 @@ function MountainIcon(props: IconProps) {
     >
       <path d="m8 3 4 8 5-5 5 15H2L8 3z" />
     </svg>
-  )
+  );
 }
-
