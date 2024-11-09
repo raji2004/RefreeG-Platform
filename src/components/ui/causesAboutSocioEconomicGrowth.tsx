@@ -1,6 +1,6 @@
 import { FC } from "react";
 import Link from "next/link";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import MaiduguriFloodImage2 from "../../../public/images/flood2.png"; // Import the image
 import MaiduguriEllipse2 from "../../../public/images/maiduguriEllipse2.png"; // Import the profile image
 import Bookmark from "../../../public/images/bookmark.svg"; // Import the bookmark image
@@ -11,8 +11,8 @@ import IconRight from "../../../public/images/iconArrowRight.svg"; // Import the
 import { Progress } from "./progress";
 
 interface EventCardProps {
-  imageSrc: string;
-  profileSrc: string;
+  imageSrc: StaticImageData;
+  profileSrc: StaticImageData;
   title: string;
   daysLeft: number;
   funded: string;
@@ -63,7 +63,6 @@ export const EventCard: FC<EventCardProps> = ({
     </Link>
   </div>
 );
-
 
 export const EventsSection = () => {
   const events = [
@@ -140,9 +139,6 @@ export const EventsSection = () => {
     </div>
   );
 }
-
-
-
 
 export default function CausesAboutSocioEconomicGrowth() {
   return (

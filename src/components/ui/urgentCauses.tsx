@@ -1,5 +1,5 @@
 import { FC } from "react";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image"; // Import StaticImageData type
 import Bookmark from "../../../public/images/bookmark.svg"; // Import the bookmark image
 import { Progress } from "./progress"; // Import the Progress component
 import CancerImage from "../../../public/images/cancerFoundation.png"; // Import the Cancer image
@@ -13,8 +13,8 @@ import MaiduguriEllipse2 from "../../../public/images/maiduguriEllipse2.png"; //
 import MaiduguriEllipse3 from "../../../public/images/maiduguriEllipse3.png"; // Import the Maiduguri profile image 3
 
 interface CauseCardProps {
-  imageSrc: string;
-  profileSrc: string;
+  imageSrc: StaticImageData; // Change type to StaticImageData
+  profileSrc: StaticImageData; // Change type to StaticImageData
   title: string;
   daysLeft: number;
   funded: string;
@@ -62,7 +62,6 @@ export const CauseCard: FC<CauseCardProps> = ({
     </a>
   </div>
 );
-
 
 export const UrgentCausesSection = () => {
   const causes = [
@@ -165,4 +164,3 @@ export default function UrgentCauses() {
     </div>
   );
 }
-
