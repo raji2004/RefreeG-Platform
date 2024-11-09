@@ -4,7 +4,7 @@ import { FC, useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import Dash from "../../../public/images/dash.svg"; // Import the dash image
 import Plus from "../../../public/images/plus.svg"; // Import the plus image
-import '../../global.css';
+import '../../app/globals.css';
 
 interface FAQItemProps {
   question: string;
