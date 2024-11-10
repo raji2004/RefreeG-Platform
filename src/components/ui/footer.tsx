@@ -8,8 +8,8 @@ import X from '../../../public/images/x.svg';
 export function Footer() {
     return(
         <footer className="bg-blue-50">
-            <div className="lg:flex ml-10 mr-10 pb-10 py-8 border-b border-gray-500">
-                <div className="md:flex md:justify-between lg:justify-between lg:w-6/12 lg:mb-12">
+            <div className="lg:flex ml-10 mr-10 pt-8 border-b border-gray-500">
+                <div className="md:flex md:justify-between lg:justify-between lg:w-6/12 ">
                     <div className="flex flex-col w-full mb-16 md:w-1/2 lg:w-8/12 md:mr-16">
                         <div className="text-blue-950 text-2xl font-semibold pb-3">Subscribe</div>
                         <div className="text-lg pb-3">Join our newsletter to stay up to date on features and releases.</div>

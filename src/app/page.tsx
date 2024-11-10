@@ -99,7 +99,7 @@ export default async function Home() {
                     </div>
 
                     <div className="w-full flex flex-col lg:flex-row justify-between">
-                        <div className="w-full lg:w-8/12 md:mb-5 md: flex md:justify-center mr-20">
+                        <div className="w-full lg:w-8/12 mb-3 md:mb-5 md: flex md:justify-center mr-20">
                             <div className="bg-white w-full rounded-lg">
                                 <Image src={CancerImage} alt="Cancer foundation" height={300} className="rounded-lg w-full" />
                                 <div className="flex justify-between mt-4">
@@ -135,7 +135,7 @@ export default async function Home() {
                         <div className="lg:4/12 md:w-full">
                             <div className="flex flex-wrap bg-white w-full z-10">
                                 <div className="md:flex justify-between w-full mb-5">
-                                    <div className="bg-white mr-5 rounded-lg w-full md:w-6/12 lg:w-1/2 ">
+                                    <div className="bg-white mr-5 mb-3 rounded-lg w-full md:w-6/12 lg:w-1/2 ">
                                         <Image src={MaiduguriFloodImage1} alt="Maiduguri flood" className="rounded-lg h-3/5 w-full" />
                                         <div className="flex justify-between mt-2">
                                             <div className="flex">
@@ -177,7 +177,7 @@ export default async function Home() {
 
 
                                 <div className="md:flex justify-between w-full mb-5">
-                                    <div className="bg-white mr-5 rounded-lg w-full md:w-6/12 lg:w-1/2 ">
+                                    <div className="bg-white mb-3 mr-5 rounded-lg w-full md:w-6/12 lg:w-1/2 ">
                                         <Image src={MaiduguriFloodImage3} alt="Maiduguri flood" className="rounded-lg h-3/5 w-full" />
                                         <div className="flex justify-between mt-2">
                                             <div className="flex">
@@ -255,7 +255,7 @@ export default async function Home() {
                 <div className="flex mb-4 text-lg lg:text-2xl"><div className="mr-2">4.</div>Third-Party Audits: Regular audits by independent third parties verify the accuracy and integrity of our financial records and processes.</div>
                 <div className="flex mb-4 text-lg lg:text-2xl"><div className="mr-2">5.</div>User Verification: Both donors and recipients undergo a verification process to ensure legitimacy and prevent fraud.</div>
             </div>
-            <div className=" md:flex lg:flex flex mt-10 mb-10 text-base lg:text-2xl"><span className="mr-4">Want to be a part of us?</span><span className="flex mr-1 font-semibold underline">Join our Community!<Image src={ArrowRight1} alt="arrow right" height={15} width={15} /></span></div>
+            <div className=" md:flex lg:flex  mt-10 mb-10 text-base lg:text-2xl"><span className="mr-4">Want to be a part of us?</span><span className="flex mr-1 md:font-semibold lg:font-semibold underline">Join our Community!<Image src={ArrowRight1} alt="arrow right" height={15} width={15} /></span></div>
         </div>
 
         {/* {Causes about socio economic growth} */}

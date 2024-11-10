@@ -33,12 +33,12 @@ export const EventCard: FC<EventCardProps> = ({
   goal,
   linkHref,
 }) => (
-  <div className="bg-white rounded-lg mr-10 mb-8">
-    <Image src={imageSrc} alt={title} className="rounded-lg" />
+  <div className="bg-white rounded-lg p-4">
+    <Image src={imageSrc} alt={title} className="rounded-lg w-full" />
     <div className="flex justify-between mt-2">
       <div className="flex">
         <div>
-          <Image src={profileSrc} alt="profile" />
+          <Image src={profileSrc} alt="profile" width={50} height={50} />
         </div>
         <div className="ml-2 mb-2">
           <h3 className="text-xl font-semibold">{title}</h3>
@@ -48,7 +48,7 @@ export const EventCard: FC<EventCardProps> = ({
         </div>
       </div>
       <div>
-        <Image src={Bookmark} alt="bookmark" />
+        <Image src={Bookmark} alt="bookmark" width={30} height={30} />
       </div>
     </div>
     <div className="mt-2">
@@ -57,8 +57,8 @@ export const EventCard: FC<EventCardProps> = ({
       <div className="text-gray-800">Goal: {goal}</div>
     </div>
     <Link href={linkHref} passHref>
-      <button className="flex mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 leading-4 pt-4 pb-4">
-        Donate now <Image src={RightArrow} alt="right arrow" />
+      <button className="flex items-center justify-center mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 leading-4">
+        Donate now <Image src={RightArrow} alt="right arrow" className="ml-2" width={20} height={20} />
       </button>
     </Link>
   </div>
@@ -117,9 +117,9 @@ export const EventsSection = () => {
     <div className="w-full mb-16 border-b pb-16">
       <div className="lg:flex justify-between mr-10 ml-10 mb-10">
         <div>
-          <p className="text-3xl font-medium">Causes about socio-economic growth</p>
+          <p className="text-3xl font-medium">Happening near you</p>
           <p className="text-lg">
-            The causes contribute to the socio-economic growth of the community.
+            These causes are happening close to your current location.
           </p>
         </div>
         <Link href="#" className="flex justify-end">
@@ -127,7 +127,7 @@ export const EventsSection = () => {
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 ml-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 ml-10">
         {events.map((event, index) => (
           <EventCard key={index} {...event} />
         ))}
@@ -142,11 +142,10 @@ export const EventsSection = () => {
 
 export default function HappeningNearYou() {
   return (
-    <div>
+    <div className="mr-10">
       {/* Other content */}
       <EventsSection />
       {/* Other content */}
     </div>
   );
 }
-

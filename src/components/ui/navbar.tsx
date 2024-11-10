@@ -24,57 +24,66 @@ const MenuLink = ({ href, children, className, ...props }: MenuLinkProps) => (
   </Link>
 );
 
-export function Navbar() {
-  return (
-    <header className="flex h-20 w-full shrink-0 items-center px-4 md:px-6">
-      <Link href="#" className="mr-6 lg:mr-0" prefetch={false}>
-        <Image src={Logo} alt="logo" height={60} width={60} />
-        <span className="sr-only">Acme Inc</span>
-      </Link>
-      <nav className="hidden lg:flex ml-auto gap-6">
-        <MenuLink href="#">
-          <Image src={Search} height={20} width={20} alt="search" /> Search
-        </MenuLink>
-        <MenuLink href="#">Explore causes</MenuLink>
-        <MenuLink href="#">
-          About us <Image src={Dropdown} height={12} width={12} alt="dropdown" />
-        </MenuLink>
-        <MenuLink href="#">
-          How it works <Image src={Dropdown} height={12} width={12} alt="dropdown" />
-        </MenuLink>
-        <MenuLink href="#" className="bg-blue-600 hover:bg-blue-700">
-          List a cause
-        </MenuLink>
-        <MenuLink href="/login" className="hover:text-blue-700 hover:underline">
-          Login
-        </MenuLink>
-      </nav>
-      <Sheet>
-        <SheetTrigger asChild>
-          <Button variant="outline" size="icon" className="lg:hidden ml-auto">
-            <MenuIcon className="h-6 w-6" />
-            <span className="sr-only">Toggle navigation menu</span>
-          </Button>
-        </SheetTrigger>
-        <SheetContent side="left" className="bg-white"> {/* Add the bg-white class here */}
-          <Link href="#" className="mr-6 hidden lg:flex" prefetch={false}>
-            <MountainIcon className="h-6 w-6" />
-            <span className="sr-only">Acme Inc</span>
-          </Link>
-          <div className="grid gap-2 py-6">
-            <MenuLink href="#">
-              <Image src={Search} alt="search" height={24} width={24} /> Search
-            </MenuLink>
-            <MenuLink href="#">Explore causes</MenuLink>
-            <MenuLink href="#">About us</MenuLink>
-            <MenuLink href="#">How it works</MenuLink>
-            <MenuLink href="#">List a cause</MenuLink>
-            <MenuLink href="/login">Login</MenuLink>
-          </div>
-        </SheetContent>
-      </Sheet>
-    </header>
-  );
+export function Navbar() { 
+  return ( 
+    <header className="flex h-20 w-full shrink-0 items-center px-4 md:px-6"> 
+      <Link href="#" className="mr-6 lg:mr-0" prefetch={false}> 
+        <Image src={Logo} alt="logo" height={50} width={50} /> 
+        <span className="sr-only">Acme Inc</span> 
+      </Link> 
+      
+      <nav className="hidden lg:flex ml-auto gap-6"> 
+        <MenuLink href="#"> 
+          <Image src={Search} height={20} width={20} alt="search" /> 
+          Search 
+        </MenuLink> 
+        
+        <MenuLink href="#">Explore causes</MenuLink> 
+
+        <MenuLink href="#"> 
+          About us <Image src={Dropdown} height={12} width={12} alt="dropdown" /> 
+        </MenuLink> 
+        
+        <MenuLink href="#"> 
+          How it works <Image src={Dropdown} height={12} width={12} alt="dropdown" /> 
+        </MenuLink> 
+        
+        <MenuLink href="#" className="bg-blue-600 hover:bg-blue-700"> 
+          List a cause 
+        </MenuLink> 
+        
+        <MenuLink href="/login" className="hover:text-blue-700 hover:underline"> 
+          Login 
+        </MenuLink> 
+      </nav> 
+      
+      <Sheet> 
+        <SheetTrigger asChild> 
+          <Button variant="outline" size="icon" className="lg:hidden ml-auto border-none"> 
+            <MenuIcon className="h-6 w-6" /> 
+            <span className="sr-only">Toggle navigation menu</span> 
+          </Button> 
+        </SheetTrigger> 
+        
+        <SheetContent side="left" className="bg-white"> 
+          <Link href="#" className="mr-6 hidden lg:flex" prefetch={false}> 
+            <MountainIcon className="h-6 w-6" /> 
+            <span className="sr-only">Acme Inc</span> 
+          </Link> 
+          <div className="grid gap-2 py-6"> 
+            <MenuLink href="#"> 
+              <Image src={Search} alt="search" height={24} width={24} /> Search 
+            </MenuLink> 
+            <MenuLink href="#">Explore causes</MenuLink> 
+            <MenuLink href="#">About us</MenuLink> 
+            <MenuLink href="#">How it works</MenuLink> 
+            <MenuLink href="#">List a cause</MenuLink> 
+            <MenuLink href="/login">Login</MenuLink> 
+          </div> 
+        </SheetContent> 
+      </Sheet> 
+    </header> 
+  ); 
 }
 
 interface IconProps extends React.SVGProps<SVGSVGElement> {}
@@ -93,9 +102,9 @@ function MenuIcon(props: IconProps) {
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <line x1="4" x2="20" y1="12" y2="12" />
-      <line x1="4" x2="20" y1="6" y2="6" />
-      <line x1="4" x2="20" y1="18" y2="18" />
+      <line x1="2" x2="20" y1="12" y2="12" />
+      <line x1="2" x2="20" y1="6" y2="6" />
+      <line x1="2" x2="20" y1="18" y2="18" />
     </svg>
   );
 }

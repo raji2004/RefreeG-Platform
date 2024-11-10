@@ -11,9 +11,9 @@ interface SectionHeaderProps {
 }
 
 export const SectionHeader: FC<SectionHeaderProps> = ({ title, buttonLabel, buttonHref }) => (
-  <div className="flex justify-between mb-6">
-    <div className="text-blue-900 text-sm md:text-2xl font-semibold">{title}</div>
-    <div>
+  <div className="lg:flex md:flex justify-between mb-3">
+    <div className="text-blue-900 mb-2 text-sm md:text-2xl font-semibold">{title}</div>
+    <div className="flex justify-end">
       <Link href={buttonHref} className="px-2 py-2 md:px-3 md:py-3 lg:px-4 lg:py-4 border-2 border-blue-900 rounded-lg text-blue-900 text-sm md:text-xl font-semibold">
         {buttonLabel}
       </Link>
