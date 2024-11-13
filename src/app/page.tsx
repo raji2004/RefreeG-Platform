@@ -240,7 +240,7 @@ const progressPercentage5 = (donationAmount5 / goalAmount5) * 100;
                 {/* {How it works section} */}
                 <div className='pt-2 pb-8 mb-8'>
                     <div className="mt-8 font-semibold text-2xl">How it works</div>
-                    <p className="text-xl">How donation on <span className='text-gray-500 text-xl font-semibold underline'>Refreeg</span> works!</p>
+                    <p className="text-xl mb-12">How donation on <span className='text-gray-500 text-xl font-semibold underline'>Refreeg</span> works!</p>
                     <div className="w-full flex justify-center mt-2">
                         <Image src={Video} alt="How it works video"/>
                     </div>

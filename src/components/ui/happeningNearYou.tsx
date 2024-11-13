@@ -1,4 +1,6 @@
-import { FC } from "react";
+"use client"; // Ensures that this component is rendered on the client-side
+
+import React, { FC } from "react";
 import Link from "next/link";
 import Image, { StaticImageData } from "next/image";
 import MaiduguriFloodImage2 from "../../../public/images/flood2.png"; // Import the image
@@ -8,8 +10,32 @@ import RightArrow from "../../../public/images/chevronRight3.svg"; // Import the
 import ChevronRight from "../../../public/images/viewAll.svg"; // Import the chevron right image
 import IconLeft from "../../../public/images/iconArrowLeft.svg"; // Import the icon left image
 import IconRight from "../../../public/images/iconArrowRight.svg"; // Import the icon right image
-import { Progress } from "./progress";
 
+// Donation Progress Component with conditional color
+interface DonationProgressProps {
+  value: number;
+}
+
+const DonationProgress: FC<DonationProgressProps> = ({ value }) => {
+  // Determine if the goal is reached and set the color accordingly
+  const isGoalReached = value >= 100;
+  const progressBarColor = isGoalReached
+    ? "bg-green-600" // Green if goal is reached
+    : value > 50
+    ? "bg-gradient-to-r from-blue-500 to-blue-800" // Gradient for over 50% progress
+    : "bg-blue-600"; // Solid blue for less than 50% progress
+
+  return (
+    <div className="relative w-full h-2.5 bg-gray-200 rounded">
+      <div
+        className={`absolute top-0 left-0 h-2.5 rounded ${progressBarColor}`}
+        style={{ width: `${value}%` }}
+      />
+    </div>
+  );
+};
+
+// Event Card Component
 interface EventCardProps {
   imageSrc: StaticImageData;
   profileSrc: StaticImageData;
@@ -52,29 +78,32 @@ export const EventCard: FC<EventCardProps> = ({
       </div>
     </div>
     <div className="mt-2">
-      <Progress value={progressValue} />
+      <DonationProgress value={progressValue} />
       <div className="font-bold text-gray-800">{amountRaised} raised</div>
       <div className="text-gray-800">Goal: {goal}</div>
     </div>
     <Link href={linkHref} passHref>
-      <button className="flex items-center justify-center mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 leading-4">
+      <button className="flex items-center justify-center mt-4 bg-blue-600 text-white px-4 py-3 rounded-lg hover:bg-blue-700 leading-4">
         Donate now <Image src={RightArrow} alt="right arrow" className="ml-2" width={20} height={20} />
       </button>
     </Link>
   </div>
 );
 
+// Events Section Component
 export const EventsSection = () => {
+  const goalAmount = 2000000; // Set the donation goal amount (in Naira)
+  
   const events = [
     {
       imageSrc: MaiduguriFloodImage2,
       profileSrc: MaiduguriEllipse2,
       title: "Maiduguri flood",
       daysLeft: 15,
-      funded: "80% funded",
-      progressValue: 85,
-      amountRaised: "₦1,700,000",
-      goal: "₦2,000,000",
+      funded: `${(1700000 / goalAmount) * 100}% funded`,
+      progressValue: (1700000 / goalAmount) * 100,
+      amountRaised: `₦${1700000}`,
+      goal: `₦${goalAmount}`,
       linkHref: "#",
     },
     {
@@ -82,10 +111,10 @@ export const EventsSection = () => {
       profileSrc: MaiduguriEllipse2,
       title: "Maiduguri flood",
       daysLeft: 15,
-      funded: "80% funded",
-      progressValue: 85,
-      amountRaised: "₦1,700,000",
-      goal: "₦2,000,000",
+      funded: `${(1300000 / goalAmount) * 100}% funded`,
+      progressValue: (1300000 / goalAmount) * 100,
+      amountRaised: `₦${1300000}`,
+      goal: `₦${goalAmount}`,
       linkHref: "#",
     },
     {
@@ -93,10 +122,10 @@ export const EventsSection = () => {
       profileSrc: MaiduguriEllipse2,
       title: "Maiduguri flood",
       daysLeft: 15,
-      funded: "80% funded",
-      progressValue: 85,
-      amountRaised: "₦1,700,000",
-      goal: "₦2,000,000",
+      funded: `${(700000 / goalAmount) * 100}% funded`,
+      progressValue: (700000 / goalAmount) * 100,
+      amountRaised: `₦${700000}`,
+      goal: `₦${goalAmount}`,
       linkHref: "#",
     },
     {
@@ -104,13 +133,12 @@ export const EventsSection = () => {
       profileSrc: MaiduguriEllipse2,
       title: "Maiduguri flood",
       daysLeft: 15,
-      funded: "80% funded",
-      progressValue: 85,
-      amountRaised: "₦1,700,000",
-      goal: "₦2,000,000",
+      funded: `${(200000 / goalAmount) * 100}% funded`,
+      progressValue: (200000 / goalAmount) * 100,
+      amountRaised: `₦${200000}`,
+      goal: `₦${goalAmount}`,
       linkHref: "#",
     },
-    // Add more events as needed...
   ];
 
   return (
