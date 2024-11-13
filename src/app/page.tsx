@@ -38,6 +38,7 @@ import CausesAboutSocioEconomicGrowth from "@/components/ui/causesAboutSocioEcon
 import HappeningNearYou from "@/components/ui/happeningNearYou";
 import CausesSupported from "@/components/ui/causesWeSupport";
 import FAQ from "@/components/ui/frequentlyAskedQuestions";
+import WhyUseUs from "@/components/ui/whyUseUs";
 
 
 export default async function Home() {
@@ -55,41 +56,7 @@ export default async function Home() {
                 <Navbar />
 
                 {/* Section below the hero section */}
-                <div className="w-full border-b">
-                    <div className="bg-white w-full mt-8 mb-12 px-4 z-10">
-                        <div className="text-2xl w-full md:text-4xl">Why you should use us!</div>
-                        <div className="text-lg md:text-xl">Reasons why your donation will be used right!</div>
-                        <div className="w-full py-6 flex flex-wrap justify-between items-center space-y-6 md:space-y-0">
-                            <div className="flex w-full md:w-2/5 lg:w-1/5 flex-col space-y-2 items-center">
-                                <Image src={BlockChain} alt="icon" width={350} height={350} />
-                                <h2 className="text-xl md:text-2xl font-medium text-center md:text-left">Blockchain Transparency</h2>
-                                <p className="text-base md:text-lg text-center md:text-left">Track your donations in real-time using blockchain technology for complete transparency.</p>
-                                <a href="#" className="flex font-medium hover:text-blue-800 hover:underline transition duration-500 ease-in-out transform items-center">Read more<Image src={ArrowRight} alt="icon" width={25} height={25} /></a>
-                            </div>
-                            <div className="flex w-full md:w-2/5 lg:w-1/5 flex-col space-y-2 items-center">
-                                <Image src={VettedImage} alt="icon" width={350} height={350} />
-                                <h2 className="text-xl md:text-2xl font-medium text-center md:text-left">Vetted Causes</h2>
-                                <p className="text-base md:text-lg text-center md:text-left">Every cause is carefully vetted to ensure your contributions make a genuine impact.</p>
-                                <a href="#" className="flex font-medium hover:text-blue-800 hover:underline transition duration-500 ease-in-out transform items-center">Read more<Image src={ArrowRight} alt="icon" width={25} height={25} /></a>
-                            </div>
-                            <div className="flex w-full md:w-2/5 lg:w-1/5 flex-col space-y-2 items-center">
-                                <Image src={EasyDonations} alt="icon" width={350} height={350} />
-                                <h2 className="text-xl md:text-2xl font-medium text-center md:text-left">Easy Donation Process</h2>
-                                <p className="text-base md:text-lg text-center md:text-left">Donate to causes with just a few clicks and track progress every step of the way.</p>
-                                <a href="#" className="flex font-medium hover:text-blue-800 hover:underline transition duration-500 ease-in-out transform items-center">Read more<Image src={ArrowRight} alt="icon" width={25} height={25} /></a>
-                            </div>
-                            <div className="flex w-full md:w-2/5 lg:w-1/5 flex-col space-y-2 items-center">
-                                <Image src={GlobalAccesImage} alt="icon" width={350} height={350} />
-                                <h2 className="text-xl md:text-2xl font-medium text-center md:text-left">Global Access</h2>
-                                <p className="text-base md:text-lg text-center md:text-left">Support causes from anywhere in the world with our secure, web-based platform.</p>
-                                <a href="#" className="flex font-medium hover:text-blue-800 hover:underline transition duration-500 ease-in-out transform items-center">Read more<Image src={ArrowRight} alt="icon" width={25} height={25} /></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-
+                <WhyUseUs />
 
                 {/* Urgent causes section */}
                 <div className="w-full px-4 py-8 bg-white border-b">
