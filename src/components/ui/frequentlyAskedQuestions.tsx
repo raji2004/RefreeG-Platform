@@ -35,8 +35,10 @@ export const FAQItem: FC<FAQItemProps> = ({ question, answer, isOpen, onToggle }
         <div className={`${isOpen ? "text-lg text-white" : "text-lg text-black"} font-semibold`}>
           {question}
         </div>
-        <div className="text-lg font-semibold">
-          <Image src={isOpen ? Dash : Plus} alt={isOpen ? "dash" : "plus"} height={20} width={20} />
+        <div className="text-lg font-semibold flex items-center">
+          <div className="w-5 h-5 flex items-center justify-center">
+            <Image src={isOpen ? Dash : Plus} alt={isOpen ? "dash" : "plus"} />
+          </div>
         </div>
       </div>
       <div
@@ -60,63 +62,47 @@ export const FAQSection = () => {
       answer:
         "RefreeG is a crowdfunding platform dedicated to supporting various causes with a strong focus on fostering socio-economic growth in African communities through blockchain transparency.",
     },
-    {
-      question: "How does RefreeG ensure transparency?",
-      answer:
-        "RefreeG is a crowdfunding platform dedicated to supporting various causes with a strong focus on fostering socio-economic growth in African communities through blockchain transparency.",
+    { 
+      question: "How does RefreeG ensure transparency?", 
+      answer: "RefreeG is a crowdfunding platform dedicated to supporting various causes with a strong focus on fostering socio-economic growth in African communities through blockchain transparency.", 
     },
     {
       question: "What is RefreeG?",
       answer:
         "RefreeG is a crowdfunding platform dedicated to supporting various causes with a strong focus on fostering socio-economic growth in African communities through blockchain transparency.",
     },
-    {
-      question: "How does RefreeG ensure transparency?",
-      answer:
-        "RefreeG is a crowdfunding platform dedicated to supporting various causes with a strong focus on fostering socio-economic growth in African communities through blockchain transparency.",
+    { 
+      question: "How does RefreeG ensure transparency?", 
+      answer: "RefreeG is a crowdfunding platform dedicated to supporting various causes with a strong focus on fostering socio-economic growth in African communities through blockchain transparency.", 
     },
     {
       question: "What is RefreeG?",
       answer:
         "RefreeG is a crowdfunding platform dedicated to supporting various causes with a strong focus on fostering socio-economic growth in African communities through blockchain transparency.",
     },
-    {
-      question: "How does RefreeG ensure transparency?",
-      answer:
-        "RefreeG is a crowdfunding platform dedicated to supporting various causes with a strong focus on fostering socio-economic growth in African communities through blockchain transparency.",
+    { 
+      question: "How does RefreeG ensure transparency?", 
+      answer: "RefreeG is a crowdfunding platform dedicated to supporting various causes with a strong focus on fostering socio-economic growth in African communities through blockchain transparency.", 
     },
     {
       question: "What is RefreeG?",
       answer:
         "RefreeG is a crowdfunding platform dedicated to supporting various causes with a strong focus on fostering socio-economic growth in African communities through blockchain transparency.",
     },
-    {
-      question: "How does RefreeG ensure transparency?",
-      answer:
-        "RefreeG is a crowdfunding platform dedicated to supporting various causes with a strong focus on fostering socio-economic growth in African communities through blockchain transparency.",
+    { 
+      question: "How does RefreeG ensure transparency?", 
+      answer: "RefreeG is a crowdfunding platform dedicated to supporting various causes with a strong focus on fostering socio-economic growth in African communities through blockchain transparency.", 
     },
     {
       question: "What is RefreeG?",
       answer:
         "RefreeG is a crowdfunding platform dedicated to supporting various causes with a strong focus on fostering socio-economic growth in African communities through blockchain transparency.",
     },
-    {
-      question: "How does RefreeG ensure transparency?",
-      answer:
-        "RefreeG is a crowdfunding platform dedicated to supporting various causes with a strong focus on fostering socio-economic growth in African communities through blockchain transparency.",
+    { 
+      question: "How does RefreeG ensure transparency?", 
+      answer: "RefreeG is a crowdfunding platform dedicated to supporting various causes with a strong focus on fostering socio-economic growth in African communities through blockchain transparency.", 
     },
-    {
-      question: "What is RefreeG?",
-      answer:
-        "RefreeG is a crowdfunding platform dedicated to supporting various causes with a strong focus on fostering socio-economic growth in African communities through blockchain transparency.",
-    },
-    {
-      question: "How does RefreeG ensure transparency?",
-      answer:
-        "RefreeG is a crowdfunding platform dedicated to supporting various causes with a strong focus on fostering socio-economic growth in African communities through blockchain transparency.",
-    },
-    
-    // Add more FAQs as needed
+    // Additional FAQs...
   ];
 
   const handleToggleFAQ = (index: number) => {

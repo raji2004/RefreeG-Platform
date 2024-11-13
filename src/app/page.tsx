@@ -1,13 +1,20 @@
+"use client"; // Ensures that this component is rendered on the client-side
+
+import React, { useState } from "react";
 import { Navbar } from "../components/ui/navbar";
 import { cookies } from 'next/headers';
 import { redirect } from "next/navigation";
+import {
+    FaExclamationTriangle,
+    FaHeartbeat,
+    FaMapMarkerAlt,
+    FaGlobe,
+    FaShare,
+    FaHeart,
+    FaSmile,
+    FaLeaf,
+} from "react-icons/fa";
 import Image from "next/image";
-import Link from "next/link";
-import BlockChain from '../../public/images/blockchain.png';
-import VettedImage from '../../public/images/vetted.png';
-import EasyDonations from '../../public/images/easyDonation.png';
-import GlobalAccesImage from '../../public/images/globalAccess.png';
-import ArrowRight from '../../public/images/arrow-right.png';
 import CancerImage from '../../public/images/cancerFoundation.png';
 import MaiduguriFloodImage1 from '../../public/images/flood1.png';
 import MaiduguriFloodImage2 from '../../public/images/flood2.png';
@@ -18,19 +25,9 @@ import CancerEllipse from '../../public/images/cancerEllipse.svg';
 import MaiduguriEllipse1 from '../../public/images/maiduguriEllipse1.png';
 import MaiduguriEllipse2 from '../../public/images/maiduguriEllipse2.png';
 import MaiduguriEllipse3 from '../../public/images/maiduguriEllipse3.png';
-import MaiduguriCause from '../../public/images/maiduguriCauses.svg';
-import Radio from '../../public/images/radio.svg';
 import ArrowRight1 from '../../public/images/arrowRight.svg';
 import ArrowRightBlue from '../../public/images/arrowRightBlue.svg';
-import ChevronRight from '../../public/images/viewAll.svg';
-import ChevronRight2 from '../../public/images/chevronRight2.svg';
-import RightArrow from '../../public/images/chevronRight3.svg';
-import IconRight from '../../public/images/iconArrowRight.svg';
-import IconLeft from '../../public/images/iconArrowLeft.svg';
 import Clock from '../../public/images/clock.svg';
-import CategoryAndLocation from '../../public/images/cat-loc.svg';
-import Dash from '../../public/images/dash.svg';
-import Plus from '../../public/images/plus.svg';
 import Video from '../../public/images/video.svg';
 import { Progress } from "../components/ui/progress";
 import { Footer } from "../components/ui/footer";
@@ -39,6 +36,7 @@ import HappeningNearYou from "@/components/ui/happeningNearYou";
 import CausesSupported from "@/components/ui/causesWeSupport";
 import FAQ from "@/components/ui/frequentlyAskedQuestions";
 import WhyUseUs from "@/components/ui/whyUseUs";
+import DonationProgress from "@/components/ui/donationProgress";
 
 
 export default async function Home() {
@@ -48,6 +46,27 @@ export default async function Home() {
 //   if (!userSession) {
 //       redirect('/create-account');
 //   }
+
+const goalAmount = 2000000; // Set the donation goal amount (in Naira)
+const [donationAmount, setDonationAmount] = useState<number>(1700000); // Initial donation amount
+const progressPercentage = (donationAmount / goalAmount) * 100;
+
+const goalAmount2 = 2000000; // Set the donation goal amount (in Naira)
+const [donationAmount2, setDonationAmount2] = useState<number>(1300000); // Initial donation amount
+const progressPercentage2 = (donationAmount2 / goalAmount2) * 100;
+
+const goalAmount3 = 2000000; // Set the donation goal amount (in Naira)
+const [donationAmount3, setDonationAmount3] = useState<number>(700000); // Initial donation amount
+const progressPercentage3 = (donationAmount3 / goalAmount3) * 100;
+
+const goalAmount4 = 2000000; // Set the donation goal amount (in Naira)
+const [donationAmount4, setDonationAmount4] = useState<number>(200000); // Initial donation amount
+const progressPercentage4 = (donationAmount4 / goalAmount4) * 100;
+
+const goalAmount5 = 2000000; // Set the donation goal amount (in Naira)
+const [donationAmount5, setDonationAmount5] = useState<number>(1000000); // Initial donation amount
+const progressPercentage5 = (donationAmount5 / goalAmount5) * 100;
+
 
   return (
     <div>
@@ -74,7 +93,7 @@ export default async function Home() {
                                         <Image src={CancerEllipse} alt="Cancer Ellipse" height={60} width={60} className="mr-4" />
                                         <div className="flex-1">
                                             <h3 className="text-2xl font-semibold">Cancer foundation</h3>
-                                            <p className="flex mt-2 text-gray-600"><Image src={Clock} alt="clock" className="mr-1" />15 days left • 80% funded</p>
+                                            <p className="flex mt-2 text-gray-600"><Image src={Clock} alt="clock" className="mr-1" />15 days left • {progressPercentage}% funded</p>
                                             <p className="mt-2 hidden lg:block">This cause is for Ikemefuna, a Nigerian boy that needs surgery for his cancer and is seeking your funding for the sum of 100m more...</p>
                                         </div>
                                     </div>
@@ -82,12 +101,20 @@ export default async function Home() {
                                         <Image src={Bookmark} alt="bookmark" height={30} width={30} />
                                     </div>
                                 </div>
-                                <div className="mt-2">
-                                    <Image src={CategoryAndLocation} alt="category and location" />
+                                <div className="flex space-x-2 mt-9">
+                                    <span className="text-sm bg-gray-200 rounded-full px-3 py-1 flex items-center hover:bg-gray-300 transition-colors duration-300">
+                                    <FaHeartbeat className="mr-1" /> Healthcare
+                                    </span>
+                                    <span className="text-sm bg-gray-200 rounded-full px-3 py-1 flex items-center hover:bg-gray-300 transition-colors duration-300">
+                                    <FaMapMarkerAlt className="mr-1" /> Abuja, Nigeria
+                                    </span>
                                 </div>
                                 <div className="mt-6">
-                                    <Progress value={85} />
-                                    <div className="font-bold text-gray-800 mt-2">₦1,700,000 raised</div>
+                                <DonationProgress
+                                  currentAmount={donationAmount} // Pass current donation amount
+                                  goalAmount={goalAmount} // Pass total goal amount
+                                />
+                                    <div className="font-bold text-gray-800 mt-2">₦{donationAmount} raised</div>
                                     <div className="text-gray-800">Goal: ₦2,000,000</div>
                                 </div>
                                 <div className="flex justify-center mt-4">
@@ -109,14 +136,17 @@ export default async function Home() {
                                                 <div><Image src={MaiduguriEllipse1} alt="profile" /></div>
                                                 <div className="ml-2 mb-2">
                                                     <h3 className="text-xl font-semibold">Maiduguri flood</h3>
-                                                    <p className="mt-2 text-gray-600">15 days left • 80% funded</p>
+                                                    <p className="mt-2 text-gray-600">15 days left • {progressPercentage2}% funded</p>
                                                 </div>
                                             </div>
                                             <div><Image src={Bookmark} alt="bookmark" /></div>
                                         </div>
                                         <div className="mt-2">
-                                            <Progress value={85} />
-                                            <div className="font-bold text-gray-800">₦1,700,000 raised</div>
+                                        <DonationProgress
+                                          currentAmount={donationAmount2} // Pass current donation amount
+                                          goalAmount={goalAmount2} // Pass total goal amount
+                                        />
+                                            <div className="font-bold text-gray-800">₦{donationAmount2} raised</div>
                                             <div className="text-gray-800">Goal: ₦2,000,000</div>
                                         </div>
                                     </div>
@@ -129,14 +159,17 @@ export default async function Home() {
                                                 <div><Image src={MaiduguriEllipse2} alt="profile" /></div>
                                                 <div className="ml-2 mb-2">
                                                     <h3 className="text-xl font-semibold">Maiduguri flood</h3>
-                                                    <p className="mt-2 text-gray-600">15 days left • 80% funded</p>
+                                                    <p className="mt-2 text-gray-600">15 days left • {progressPercentage3}% funded</p>
                                                 </div>
                                             </div>
                                             <div><Image src={Bookmark} alt="bookmark" /></div>
                                         </div>
                                         <div className="mt-2">
-                                            <Progress value={85} />
-                                            <div className="font-bold text-gray-800">₦1,700,000 raised</div>
+                                        <DonationProgress
+                                          currentAmount={donationAmount3} // Pass current donation amount
+                                          goalAmount={goalAmount3} // Pass total goal amount
+                                        />
+                                            <div className="font-bold text-gray-800">₦{donationAmount3} raised</div>
                                             <div className="text-gray-800">Goal: ₦2,000,000</div>
                                         </div>
                                     </div>
@@ -151,14 +184,17 @@ export default async function Home() {
                                                 <div><Image src={MaiduguriEllipse3} alt="profile" /></div>
                                                 <div className="ml-2 mb-2">
                                                     <h3 className="text-xl font-semibold">Maiduguri flood</h3>
-                                                    <p className="mt-2 text-gray-600">15 days left • 80% funded</p>
+                                                    <p className="mt-2 text-gray-600">15 days left • {progressPercentage4}% funded</p>
                                                 </div>
                                             </div>
                                             <div><Image src={Bookmark} alt="bookmark" /></div>
                                         </div>
                                         <div className="mt-2">
-                                            <Progress value={85} />
-                                            <div className="font-bold text-gray-800">₦1,700,000 raised</div>
+                                        <DonationProgress
+                                          currentAmount={donationAmount4} // Pass current donation amount
+                                          goalAmount={goalAmount4} // Pass total goal amount
+                                        />
+                                            <div className="font-bold text-gray-800">₦{donationAmount4} raised</div>
                                             <div className="text-gray-800">Goal: ₦2,000,000</div>
                                         </div>
                                     </div>
@@ -170,14 +206,17 @@ export default async function Home() {
                                                 <div><Image src={MaiduguriEllipse3} alt="profile" /></div>
                                                 <div className="ml-2 mb-2">
                                                     <h3 className="text-xl font-semibold">Maiduguri flood</h3>
-                                                    <p className="mt-2 text-gray-600">15 days left • 80% funded</p>
+                                                    <p className="mt-2 text-gray-600">15 days left • {progressPercentage5}% funded</p>
                                                 </div>
                                             </div>
                                             <div><Image src={Bookmark} alt="bookmark" /></div>
                                         </div>
                                         <div className="mt-2">
-                                            <Progress value={85} />
-                                            <div className="font-bold text-gray-800">₦1,700,000 raised</div>
+                                        <DonationProgress
+                                          currentAmount={donationAmount5} // Pass current donation amount
+                                          goalAmount={goalAmount5} // Pass total goal amount
+                                        />
+                                            <div className="font-bold text-gray-800">₦{donationAmount5} raised</div>
                                             <div className="text-gray-800">Goal: ₦2,000,000</div>
                                         </div>
                                     </div>
