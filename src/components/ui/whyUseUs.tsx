@@ -4,7 +4,7 @@ import { FC } from "react";
 import BlockChain from '../../../public/images/blockchain.png';
 import VettedImage from '../../../public/images/vetted.png';
 import EasyDonations from '../../../public/images/easyDonation.png';
-import GlobalAccesImage from '../../../public/images/globalaccess.png';
+import GlobalAccesImage from '../../../public/images/globalAccess.png';
 import ArrowRight from '../../../public/images/arrow-right.png';
 
 interface FeatureCardProps {
