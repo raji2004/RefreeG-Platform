@@ -1,6 +1,6 @@
 "use client"; // Ensures that this component is rendered on the client-side
 
-import React, { FC } from "react";
+import React, { FC, useRef } from "react";
 import Link from "next/link";
 import Image, { StaticImageData } from "next/image";
 import MaiduguriFloodImage2 from "../../../public/images/flood2.png"; // Import the image
@@ -59,7 +59,7 @@ export const EventCard: FC<EventCardProps> = ({
   goal,
   linkHref,
 }) => (
-  <div className="bg-white rounded-lg p-4">
+  <div className="bg-white rounded-lg p-4 w-[25rem] flex-shrink-0 mr-4">
     <Image src={imageSrc} alt={title} className="rounded-lg w-full" />
     <div className="flex justify-between mt-2">
       <div className="flex">
@@ -93,7 +93,7 @@ export const EventCard: FC<EventCardProps> = ({
 // Events Section Component
 export const EventsSection = () => {
   const goalAmount = 2000000; // Set the donation goal amount (in Naira)
-  
+
   const events = [
     {
       imageSrc: MaiduguriFloodImage2,
@@ -111,9 +111,9 @@ export const EventsSection = () => {
       profileSrc: MaiduguriEllipse2,
       title: "Maiduguri flood",
       daysLeft: 15,
-      funded: `${(1300000 / goalAmount) * 100}% funded`,
-      progressValue: (1300000 / goalAmount) * 100,
-      amountRaised: `₦${1300000}`,
+      funded: `${(1700000 / goalAmount) * 100}% funded`,
+      progressValue: (1700000 / goalAmount) * 100,
+      amountRaised: `₦${1700000}`,
       goal: `₦${goalAmount}`,
       linkHref: "#",
     },
@@ -122,9 +122,9 @@ export const EventsSection = () => {
       profileSrc: MaiduguriEllipse2,
       title: "Maiduguri flood",
       daysLeft: 15,
-      funded: `${(700000 / goalAmount) * 100}% funded`,
-      progressValue: (700000 / goalAmount) * 100,
-      amountRaised: `₦${700000}`,
+      funded: `${(1700000 / goalAmount) * 100}% funded`,
+      progressValue: (1700000 / goalAmount) * 100,
+      amountRaised: `₦${1700000}`,
       goal: `₦${goalAmount}`,
       linkHref: "#",
     },
@@ -133,16 +133,53 @@ export const EventsSection = () => {
       profileSrc: MaiduguriEllipse2,
       title: "Maiduguri flood",
       daysLeft: 15,
-      funded: `${(200000 / goalAmount) * 100}% funded`,
-      progressValue: (200000 / goalAmount) * 100,
-      amountRaised: `₦${200000}`,
+      funded: `${(1700000 / goalAmount) * 100}% funded`,
+      progressValue: (1700000 / goalAmount) * 100,
+      amountRaised: `₦${1700000}`,
       goal: `₦${goalAmount}`,
       linkHref: "#",
     },
+    {
+      imageSrc: MaiduguriFloodImage2,
+      profileSrc: MaiduguriEllipse2,
+      title: "Maiduguri flood",
+      daysLeft: 15,
+      funded: `${(1700000 / goalAmount) * 100}% funded`,
+      progressValue: (1700000 / goalAmount) * 100,
+      amountRaised: `₦${1700000}`,
+      goal: `₦${goalAmount}`,
+      linkHref: "#",
+    },
+    {
+      imageSrc: MaiduguriFloodImage2,
+      profileSrc: MaiduguriEllipse2,
+      title: "Maiduguri flood",
+      daysLeft: 15,
+      funded: `${(1700000 / goalAmount) * 100}% funded`,
+      progressValue: (1700000 / goalAmount) * 100,
+      amountRaised: `₦${1700000}`,
+      goal: `₦${goalAmount}`,
+      linkHref: "#",
+    },
+    // Add more events as needed...
   ];
 
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+
+  const scrollLeft = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({ left: -300, behavior: "smooth" });
+    }
+  };
+
+  const scrollRight = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({ left: 300, behavior: "smooth" });
+    }
+  };
+
   return (
-    <div className="w-full mb-16 border-b pb-16">
+    <div className="w-full mb-16 border-b pb-16 relative">
       <div className="lg:flex justify-between mr-10 ml-10 mb-10">
         <div>
           <p className="text-3xl font-medium">Causes about socio-economic growth</p>
@@ -155,18 +192,28 @@ export const EventsSection = () => {
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 ml-10">
+      {/* Scrollable Cards */}
+      <div
+        ref={scrollContainerRef}
+        className="flex overflow-x-scroll scroll-smooth space-x-4 ml-10 mr-10 hide-scrollbar"
+      >
         {events.map((event, index) => (
           <EventCard key={index} {...event} />
         ))}
       </div>
-      <div className="flex justify-end mt-5 mr-10">
-        <Image src={IconLeft} alt="left icon" className="rounded-full border mr-5" />
-        <Image src={IconRight} alt="right icon" className="rounded-full border" />
+
+      {/* Scroll Icons at Bottom of Component */}
+      <div className="absolute bottom-0 right-0 flex items-center space-x-4 p-4">
+        <button onClick={scrollLeft} className="bg-white rounded-full shadow-lg">
+          <Image src={IconLeft} alt="left icon" className="rounded-full" />
+        </button>
+        <button onClick={scrollRight} className="bg-white rounded-full shadow-lg">
+          <Image src={IconRight} alt="right icon" className="rounded-full" />
+        </button>
       </div>
     </div>
   );
-}
+};
 
 export default function HappeningNearYou() {
   return (
