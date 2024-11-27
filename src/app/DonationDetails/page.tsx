@@ -19,6 +19,7 @@ import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react"; // Import 
 import { MouseEventHandler } from "react"; // Import type for event handling
 import DonationNav from "@/components/donationNavbar";
 import { Navbar } from "@/components/ui/navbar";
+import CrowdfundingFeatures from "@/components/crowdfundingFeatures";
 
 // Main component definition
 const DonationDetail: React.FC = () => {
@@ -242,6 +243,7 @@ const DonationDetail: React.FC = () => {
         </div>
       </div>
       <DonationNav />
+      <CrowdfundingFeatures />
     </div>
   );
 };
