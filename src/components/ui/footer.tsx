@@ -28,13 +28,13 @@ export function Footer() {
                     </div>
                 </div>
                 <div className="md:flex md:justify-between lg:justify-between lg:w-6/12">
-                    <div className="flex flex-col w-full mb-12 md:w-1/3">
+                    <div className="flex flex-col w-full mb-12 md:w-1/2">
                         <div className="text-blue-950 text-2xl pb-3 font-semibold">Contact Us</div>
                         <Link href="#" className="underline hidden md:text-lg md:block mb-3">refreegcorrespondence@gmail.com</Link>
                         <Link href="#" className="underline text-lg mb-3">Phone: +234-090-174-6760</Link>
                         <Link href="#" className="underline text-lg mb-3">Abuja, Nigeria</Link>
                     </div>
-                    <div className="flex flex-col w-full md:w-1/3">
+                    <div className="flex flex-col w-full md:w-2/5">
                         <div className="text-blue-950 text-2xl pb-3 font-semibold">Legal</div>
                         <Link href='#' className="underline text-lg mb-3">Privacy Policy</Link>
                         <Link href='#' className="underline text-lg mb-3">Terms of Service</Link>

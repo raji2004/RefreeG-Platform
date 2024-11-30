@@ -59,19 +59,19 @@ export function Navbar() {
       {/* Large Screen Navigation */}
       <nav className="hidden lg:flex ml-auto gap-6">
         <div className="relative">
-          <MenuLink href="#" onClick={toggleSearchModal}>
+          <MenuLink href="#" onClick={toggleSearchModal} className='hover:bg-blue-100'>
             <Image src={Search} height={20} width={20} alt="search" />
             Search
           </MenuLink>
         </div>
 
-        <MenuLink href="#">Explore causes</MenuLink>
+        <MenuLink href="#" className='hover:bg-blue-100'>Explore causes</MenuLink>
 
-        <MenuLink href="#">
+        <MenuLink href="#" className='hover:bg-blue-100'>
           <DropdownMenu>
-            <DropdownMenuTrigger className="flex items-center">
+            <DropdownMenuTrigger className="flex outline-none items-center">
               About us
-              <Image src={Dropdown} height={12} width={12} alt="dropdown" />
+              <Image src={Dropdown} height={12} width={12} alt="dropdown" className='ml-2' />
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
@@ -84,11 +84,11 @@ export function Navbar() {
           </DropdownMenu>
         </MenuLink>
 
-        <MenuLink href="#">
+        <MenuLink href="#" className='hover:bg-blue-100'>
           <DropdownMenu>
-            <DropdownMenuTrigger className="flex items-center">
+            <DropdownMenuTrigger className="flex outline-none items-center">
               How it works
-              <Image src={Dropdown} height={12} width={12} alt="dropdown" />
+              <Image src={Dropdown} height={12} width={12} alt="dropdown" className='ml-2' />
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuLabel>My Account</DropdownMenuLabel>

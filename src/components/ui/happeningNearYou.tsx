@@ -21,8 +21,6 @@ const DonationProgress: FC<DonationProgressProps> = ({ value }) => {
   const isGoalReached = value >= 100;
   const progressBarColor = isGoalReached
     ? "bg-green-600" // Green if goal is reached
-    : value > 50
-    ? "bg-gradient-to-r from-blue-500 to-blue-800" // Gradient for over 50% progress
     : "bg-blue-600"; // Solid blue for less than 50% progress
 
   return (
@@ -217,7 +215,7 @@ export const EventsSection = () => {
 
 export default function HappeningNearYou() {
   return (
-    <div className="mr-10">
+    <div className="mr-10 hidden md:block lg:block">
       {/* Other content */}
       <EventsSection />
       {/* Other content */}

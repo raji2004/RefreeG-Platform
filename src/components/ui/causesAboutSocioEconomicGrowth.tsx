@@ -21,8 +21,6 @@ const DonationProgress: FC<DonationProgressProps> = ({ value }) => {
   const isGoalReached = value >= 100;
   const progressBarColor = isGoalReached
     ? "bg-green-600" // Green if goal is reached
-    : value > 50
-    ? "bg-gradient-to-r from-blue-500 to-blue-800" // Gradient for over 50% progress
     : "bg-blue-600"; // Solid blue for less than 50% progress
 
   return (
@@ -182,9 +180,9 @@ export const EventsSection = () => {
     <div className="w-full mb-16 border-b pb-16 relative">
       <div className="lg:flex justify-between mr-10 ml-10 mb-10">
         <div>
-          <p className="text-3xl font-medium">Causes about socio-economic growth</p>
+          <p className="text-3xl font-medium">Happening Near You</p>
           <p className="text-lg">
-            The causes contribute to the socio-economic growth of the community.
+            These causes are happening close to your current location.
           </p>
         </div>
         <Link href="#" className="flex justify-end">
@@ -217,7 +215,7 @@ export const EventsSection = () => {
 
 export default function HappeningNearYou() {
   return (
-    <div className="mr-10">
+    <div className="mr-10 hidden md:block lg:block">
       {/* Other content */}
       <EventsSection />
       {/* Other content */}

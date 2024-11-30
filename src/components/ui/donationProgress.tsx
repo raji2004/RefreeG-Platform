@@ -18,8 +18,6 @@ const DonationProgress: React.FC<DonationProgressProps> = ({
   const isGoalReached = progressPercentage >= 100;
   const progressBarColor = isGoalReached
     ? "bg-green-600" // Red if goal is exceeded
-    : progressPercentage > 50
-    ? "bg-gradient-to-r from-blue-500 to-blue-800" // Gradient for over 50% progress
     : "bg-blue-600"; // Blue for less than 50% progress
 
   // Limit the width to 100% when the goal is reached or exceeded

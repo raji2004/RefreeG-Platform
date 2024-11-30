@@ -15,15 +15,26 @@ interface FeatureCardProps {
 }
 
 export const FeatureCard: FC<FeatureCardProps> = ({ imageSrc, title, description, linkHref }) => (
-  <div className="flex w-full md:w-2/5 lg:w-1/5 flex-col space-y-2 items-center transform transition-transform duration-300 hover:scale-105 hover:shadow-lg hover:bg-slate-50 pb-5 hover:rounded-xl p-4">
-    <Image src={imageSrc} alt="icon" width={350} height={350} />
-    <h2 className="text-xl md:text-2xl font-medium text-center">{title}</h2>
-    <p className="text-base md:text-lg text-center">{description}</p>
-    <Link href={linkHref} className="flex font-medium hover:text-blue-800 hover:underline transition duration-500 ease-in-out transform items-center">
-      Read more
-      <Image src={ArrowRight} alt="icon" width={25} height={25} />
-    </Link>
-  </div>
+  <div className="flex w-full md:w-2/4 lg:w-1/5 flex-col space-y-2  transform transition-transform duration-300 hover:scale-105 hover:shadow-lg hover:bg-slate-50 pb-5 hover:rounded-xl p-4">
+  {/* Add mx-auto to center the image */}
+  <Image
+    src={imageSrc}
+    alt="icon"
+    width={350}
+    height={350}
+    className="mx-auto"
+  />
+  <h2 className="text-xl md:text-2xl font-medium">{title}</h2>
+  <p className="text-base md:text-lg">{description}</p>
+  <Link
+    href={linkHref}
+    className="flex font-medium hover:text-blue-800 hover:underline transition duration-500 ease-in-out transform items-center"
+  >
+    Read more
+    <Image src={ArrowRight} alt="icon" width={25} height={25} />
+  </Link>
+</div>
+
 );
 
 export const WhyUseUs: FC = () => {
