@@ -10,6 +10,9 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        customBlueGray: '#323F49',
+        customNavyBlue: '#214570',
+        customNavyBlue2: '#183251',
         palette: {
           baseWhite: "#fafafa",
           baseBlack: "#0a0a0b",

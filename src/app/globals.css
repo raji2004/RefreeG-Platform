@@ -1,5 +1,5 @@
-@import "slick-carousel/slick/slick.css";
-@import "slick-carousel/slick/slick-theme.css";
+@import "~slick-carousel/slick/slick.css";
+@import "~slick-carousel/slick/slick-theme.css";
 
 @tailwind base;
 @tailwind components;
@@ -119,4 +119,40 @@ body {
   .custom-lg\:text-sm {
       font-size: 0.875rem; /* Tailwind's text-sm size */
   }
+}
+
+
+.faq-collapsed {
+  max-height: 500px; /* Adjust based on the initial visible content */
+  overflow: hidden;
+  transition: max-height 0.5s ease-in-out;
+}
+
+.faq-expanded {
+  max-height: 2000px; /* Adjust based on the expanded content */
+  overflow: hidden;
+  transition: max-height 0.5s ease-in-out;
+}
+
+/* Hide scrollbar */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+@keyframes slideIn {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+.animate-slideIn {
+  animation: slideIn 1s ease-out forwards;
 }
