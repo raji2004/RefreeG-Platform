@@ -180,9 +180,9 @@ export const EventsSection = () => {
     <div className="w-full mb-16 border-b pb-16 relative">
       <div className="lg:flex justify-between mr-10 ml-10 mb-10">
         <div>
-          <p className="text-3xl font-medium">Happening Near You</p>
+          <p className="text-3xl font-medium">Causes About Socio-Economic Growth</p>
           <p className="text-lg">
-            These causes are happening close to your current location.
+            These causes contribute to the socio-economic growth of the community.
           </p>
         </div>
         <Link href="#" className="flex justify-end">

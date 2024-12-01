@@ -188,7 +188,7 @@ export const EventsSection = () => {
         <div>
           <p className="text-3xl font-medium">Causes About Socio-Economic Growth</p>
           <p className="text-lg">
-            These causes are happening close to your current location.
+            These causes contribute to the socio-economic growth of the community.
           </p>
         </div>
         <Link href="#" className="flex justify-end">

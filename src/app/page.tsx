@@ -2,33 +2,30 @@
 
 import React, { useState } from "react";
 import { Navbar } from "../components/ui/navbar";
-import { cookies } from 'next/headers';
-import { redirect } from "next/navigation";
 import {
-    FaExclamationTriangle,
-    FaHeartbeat,
-    FaMapMarkerAlt,
-    FaGlobe,
-    FaShare,
-    FaHeart,
-    FaSmile,
-    FaLeaf,
+  FaExclamationTriangle,
+  FaHeartbeat,
+  FaMapMarkerAlt,
+  FaShare,
+  FaHeart,
+  FaSmile,
+  FaLeaf,
 } from "react-icons/fa";
 import Image from "next/image";
-import CancerImage from '../../public/images/cancerFoundation.png';
-import MaiduguriFloodImage1 from '../../public/images/flood1.png';
-import MaiduguriFloodImage2 from '../../public/images/flood2.png';
-import MaiduguriFloodImage3 from '../../public/images/flood3.png';
-import MaiduguriFloodImage4 from '../../public/images/flood4.png';
-import Bookmark from '../../public/images/bookmark.svg';
-import CancerEllipse from '../../public/images/cancerEllipse.svg';
-import MaiduguriEllipse1 from '../../public/images/maiduguriEllipse1.png';
-import MaiduguriEllipse2 from '../../public/images/maiduguriEllipse2.png';
-import MaiduguriEllipse3 from '../../public/images/maiduguriEllipse3.png';
-import ArrowRight1 from '../../public/images/arrowRight.svg';
-import ArrowRightBlue from '../../public/images/arrowRightBlue.svg';
-import Clock from '../../public/images/clock.svg';
-import Video from '../../public/images/video.svg';
+import CancerImage from "../../public/images/cancerFoundation.png";
+import MaiduguriFloodImage1 from "../../public/images/flood1.png";
+import MaiduguriFloodImage2 from "../../public/images/flood2.png";
+import MaiduguriFloodImage3 from "../../public/images/flood3.png";
+import MaiduguriFloodImage4 from "../../public/images/flood4.png";
+import Bookmark from "../../public/images/bookmark.svg";
+import CancerEllipse from "../../public/images/cancerEllipse.svg";
+import MaiduguriEllipse1 from "../../public/images/maiduguriEllipse1.png";
+import MaiduguriEllipse2 from "../../public/images/maiduguriEllipse2.png";
+import MaiduguriEllipse3 from "../../public/images/maiduguriEllipse3.png";
+import ArrowRight1 from "../../public/images/arrowRight.svg";
+import ArrowRightBlue from "../../public/images/arrowRightBlue.svg";
+import Clock from "../../public/images/clock.svg";
+import Video from "../../public/images/video.svg";
 import { Progress } from "../components/ui/progress";
 import { Footer } from "../components/ui/footer";
 import CausesAboutSocioEconomicGrowth from "@/components/ui/causesAboutSocioEconomicGrowth";
@@ -40,35 +37,26 @@ import DonationProgress from "@/components/ui/donationProgress";
 import { HappeningNearYouMobile } from "@/components/ui/happeningNearYouMobile";
 import { CausesAboutSocioEconomicGrowthMobile } from "@/components/ui/causesAboutSocioEconimicGrowthMobile";
 
+export default function Home() {
+  const goalAmount = 2000000; // Set the donation goal amount (in Naira)
+  const [donationAmount, setDonationAmount] = useState<number>(1700000); // Initial donation amount
+  const progressPercentage = (donationAmount / goalAmount) * 100;
 
-export default async function Home() {
-//   const cookieStore =  cookies();
-//   const userSession = cookieStore.get('userSession')?.value;
+  const goalAmount2 = 2000000;
+  const [donationAmount2, setDonationAmount2] = useState<number>(1300000);
+  const progressPercentage2 = (donationAmount2 / goalAmount2) * 100;
 
-//   if (!userSession) {
-//       redirect('/create-account');
-//   }
+  const goalAmount3 = 2000000;
+  const [donationAmount3, setDonationAmount3] = useState<number>(700000);
+  const progressPercentage3 = (donationAmount3 / goalAmount3) * 100;
 
-const goalAmount = 2000000; // Set the donation goal amount (in Naira)
-const [donationAmount, setDonationAmount] = useState<number>(1700000); // Initial donation amount
-const progressPercentage = (donationAmount / goalAmount) * 100;
+  const goalAmount4 = 2000000;
+  const [donationAmount4, setDonationAmount4] = useState<number>(200000);
+  const progressPercentage4 = (donationAmount4 / goalAmount4) * 100;
 
-const goalAmount2 = 2000000; // Set the donation goal amount (in Naira)
-const [donationAmount2, setDonationAmount2] = useState<number>(1300000); // Initial donation amount
-const progressPercentage2 = (donationAmount2 / goalAmount2) * 100;
-
-const goalAmount3 = 2000000; // Set the donation goal amount (in Naira)
-const [donationAmount3, setDonationAmount3] = useState<number>(700000); // Initial donation amount
-const progressPercentage3 = (donationAmount3 / goalAmount3) * 100;
-
-const goalAmount4 = 2000000; // Set the donation goal amount (in Naira)
-const [donationAmount4, setDonationAmount4] = useState<number>(200000); // Initial donation amount
-const progressPercentage4 = (donationAmount4 / goalAmount4) * 100;
-
-const goalAmount5 = 2000000; // Set the donation goal amount (in Naira)
-const [donationAmount5, setDonationAmount5] = useState<number>(1000000); // Initial donation amount
-const progressPercentage5 = (donationAmount5 / goalAmount5) * 100;
-
+  const goalAmount5 = 2000000;
+  const [donationAmount5, setDonationAmount5] = useState<number>(1000000);
+  const progressPercentage5 = (donationAmount5 / goalAmount5) * 100;
 
   return (
     <div>
