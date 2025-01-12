@@ -28,7 +28,7 @@ export default function Listacause() {
               height={50}
             />
             <span>
-              <h4>Unoagu Amadike Nomso </h4>
+              <h4>Unoagu Amadike Nomso</h4>
               <p>Developer, Refreeg</p>
             </span>
           </div>
