@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import Step2Form from "./step_2";
+import UploadImage from "./uploadimages";
 
 export default function StepperForm() {
   const [step, setStep] = useState(1);
@@ -79,14 +80,22 @@ export default function StepperForm() {
           <h2 className="text-xl font-medium font-montserrat">
             Help us give people information about the cause
           </h2>
-            <p className="text-sm font-bormal font-montserrat">Choose the location where you plan to receive your funds.</p>
+          <p className="text-sm font-bormal font-montserrat">
+            Choose the location where you plan to receive your funds.
+          </p>
           <Step2Form />
         </TabsContent>
 
         {/* Step 3 */}
         <TabsContent value="step-3">
-          <h2 className="text-xl font-semibold">Confirm and Submit</h2>
-          <p className="mt-4">Review your inputs and submit the form.</p>
+          <h2 className="text-xl font-medium font-montserrat">
+            Bring Your Cause to Life with Images
+          </h2>
+          <p className="text-sm font-bormal font-montserrat">
+            An image can be worth a thousand words. Add photos or videos that
+            showcase the real people, places, or situations your cause supports.
+          </p>
+          <UploadImage />
         </TabsContent>
 
         {/* Step 4 */}

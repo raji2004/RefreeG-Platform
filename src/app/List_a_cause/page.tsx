@@ -35,7 +35,7 @@ export default function Listacause() {
         </div>
       </div>
 
-      <div className=" md:px-14 md:py-20 px-4 py-4">
+      <div className="md:w-2/5 md:px-14 md:py-20 px-4 py-4">
         <StepperForm />
       </div>
     </div>
