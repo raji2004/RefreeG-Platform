@@ -5,9 +5,9 @@ import StepperForm from "@/components/Listacause_component/stepper_form";
 export default function Listacause() {
   return (
     <div className="w-full md:flex md:flex-row">
-      <div className="w-full md:w-2/5 md:px-14 md:py-20 px-4 py-4 bg-[#f3f7fc]">
+      <div className="w-5/12 md:px-14 md:py-20 px-4 py-4 bg-[#f3f7fc]">
         <div className="mb-80">
-          <h3 className="text-[#2b2829] text-2xl font-semibold font-montserrat">
+          <h3 className="text-[#2b2829] text-xl font-semibold font-montserrat">
             Welcome to the RefreeG cause listing!
           </h3>
           <p className="text-[#2b2829] text base font-montserrat">
@@ -35,7 +35,7 @@ export default function Listacause() {
         </div>
       </div>
 
-      <div className=" md:px-14 md:py-20 px-4 py-4">
+      <div className="w-7/12 md:px-14 md:py-20 px-4 py-4">
         <StepperForm />
       </div>
     </div>

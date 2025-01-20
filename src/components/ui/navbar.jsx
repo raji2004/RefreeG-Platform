@@ -30,7 +30,7 @@ const Navbar = () => {
                     <Link href="/how-it-works" className="flex text-lg text-gray-700 hover:bg-blue-200 px-2 py-2 rounded-sm transition duration-200 ease-in-out transform hover:-translate-y-1 hover:scale-110">
                         How it works<Image src={Dropdown} alt="icon" width={15} height={15} />
                     </Link>
-                    <Link href="/list-cause" className="text-lg bg-blue-700 text-white px-5 py-2 rounded-sm transition duration-200 ease-in-out hover:bg-blue-900 transform hover:-translate-y-1 hover:scale-110">
+                    <Link href="/list-a-cause" className="text-lg bg-blue-700 text-white px-5 py-2 rounded-sm transition duration-200 ease-in-out hover:bg-blue-900 transform hover:-translate-y-1 hover:scale-110">
                         List a cause
                     </Link>
                     <Link href="/login" aria-label="login" className="text-lg bg-white text-gray-700 px-4 py-2 rounded-sm transition duration-200 ease-in-out hover:underline hover:text-blue-800">

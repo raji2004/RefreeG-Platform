@@ -3,10 +3,14 @@ import Image from "next/image";
 
 export default function Step2() {
   const [dateValue, setDateValue] = useState("");
-  const [goalAmount, setGoalAmount] = useState(""); // State to track goal amount
+  const [goalAmount, setGoalAmount] = useState("0"); // State to track goal amount
 
   const incrementGoal = () => setGoalAmount((prev) => prev + 1);
-  const decrementGoal = () => setGoalAmount((prev) => Math.max(prev - 1, 0));
+  const decrementGoal = () =>
+    setGoalAmount((prev) => {
+      const newValue = Math.max(parseInt(prev, 10) - 1, 0);
+      return newValue.toString();
+    });
 
   return (
     <div>
