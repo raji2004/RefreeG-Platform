@@ -16,7 +16,7 @@ export default function StepperForm() {
     <div className="mx-auto">
       {/* Stepper Tabs */}
       <Tabs value={`step-${step}`}>
-        <TabsList className="flex justify-between mb-20 lg:hidden">
+        <TabsList className="flex justify-between mb-20">
           <TabsTrigger value="step-1" disabled={step < 1}>
             Step 1
           </TabsTrigger>
