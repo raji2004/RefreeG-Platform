@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import Step2Form from "./step_2";
+import Image from "next/image";
 
 export default function StepperForm() {
   const [step, setStep] = useState(1);
@@ -12,10 +13,10 @@ export default function StepperForm() {
   const handleBack = () => setStep((prev) => Math.max(prev - 1, 1));
 
   return (
-    <div className=" mx-auto">
+    <div className="mx-auto">
       {/* Stepper Tabs */}
       <Tabs value={`step-${step}`}>
-        <TabsList className="flex justify-between mb-20">
+        <TabsList className="flex justify-between mb-20 lg:hidden">
           <TabsTrigger value="step-1" disabled={step < 1}>
             Step 1
           </TabsTrigger>
@@ -91,8 +92,67 @@ export default function StepperForm() {
 
         {/* Step 4 */}
         <TabsContent value="step-4">
-          <h2 className="text-xl font-semibold">Confirm and Submit</h2>
-          <p className="mt-4">Review your inputs and submit the form.</p>
+          <div className="">
+            {/* Centering the progress tracker */}
+            <div className="flex justify-center mb-14">
+              <Image 
+                src="/List_a_cause/progressTracker3.svg" 
+                alt="progress tracker" 
+                width={200} 
+                height={20} 
+              />
+            </div>
+
+            <div className="pb-24">
+              <div className="font-medium pb-2">Bring Your Cause to Life with Images</div>
+              <div className="text-sm pb-2">
+                An image can be worth a thousand words. Add photos or videos that showcase 
+                the real people, places, or situations your cause supports.
+              </div>
+              <div className="text-sm pb-2">Upload Media</div>
+              <div className="pb-2">
+                <Image 
+                  src="/List_a_cause/uploadImage.svg" 
+                  alt="upload image" 
+                  width={400} 
+                  height={20} 
+                />
+              </div>
+              <div className="flex items-center">
+                <span className="text-xs underline">
+                  To ensure the best experience, please follow these guidelines when uploading 
+                  images or videos
+                </span>
+                <Image 
+                  src="/list_a_cause/arrowDown.svg" 
+                  alt="progress tracker" 
+                  width={20} 
+                  height={20} 
+                />
+              </div>
+            </div>
+
+            <div className="text-xs border-b-2">
+              Note: Upload images that capture the spirit of your cause—a smile, a community, 
+              a place in need. Add a short video to show the heart of your cause. Let donors see 
+              and feel its impact.
+            </div>
+
+            <div className="flex justify-end pt-3">
+              <div className="bg-[#0070E0] w-80 flex justify-center items-center h-12">
+                <button className="flex items-center gap-2 text-white font-semibold">
+                  <span>Proceed</span>
+                  <Image 
+                    src="/list_a_cause/arrowRight.svg" 
+                    alt="progress tracker" 
+                    width={16} 
+                    height={16} 
+                  />
+                </button>
+              </div>
+            </div>
+
+          </div>
         </TabsContent>
       </Tabs>
 
