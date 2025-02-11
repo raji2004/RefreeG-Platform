@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@ethersproject/providers": "^5.7.2",
+    "@heroicons/react": "^2.2.0",
     "@hookform/resolvers": "^3.9.0",
     "@next-auth/firebase-adapter": "^2.0.1",
     "@radix-ui/react-dialog": "^1.1.2",
@@ -24,6 +25,7 @@
     "@radix-ui/react-select": "^2.1.1",
     "@radix-ui/react-slot": "^1.1.0",
     "axios": "^1.7.7",
+    "chart.js": "^4.4.7",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "coinpayments": "^2.2.0",
@@ -39,6 +41,7 @@
     "next-auth": "^4.24.7",
     "paystack-api": "^2.0.6",
     "react": "^18.0.0",
+    "react-chartjs-2": "^5.3.0",
     "react-day-picker": "^8.10.1",
     "react-dom": "^18.0.0",
     "react-firebase-hooks": "^5.1.1",
