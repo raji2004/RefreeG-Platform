@@ -60,7 +60,7 @@ export default function StepperForm() {
               </span>
             </div>
 
-            <h2 className="text-xl font-semibold font-montserrat mt-16">
+            <h2 className=" text-xl font-semibold font-montserrat mt-16">
               How would you like to collect your donation?
             </h2>
             <p className="text-sm font-bormal font-montserrat">
