@@ -6,6 +6,7 @@ import Image from "next/image";
 interface UploadedImage {
   src: string;
   name: string;
+  size: number; // Size in KB
   progress: number;
 }
 
@@ -16,10 +17,12 @@ export default function UploadImage() {
     if (!event.target.files || event.target.files.length === 0) return;
 
     const file = event.target.files[0];
+    const sizeInKB = Math.round(file.size / 1024);
 
     const newImage = {
       src: URL.createObjectURL(file),
       name: file.name,
+      size: sizeInKB,
       progress: 0,
     };
 
@@ -89,24 +92,56 @@ export default function UploadImage() {
       {/* Display uploaded image name, progress, and delete button */}
       {image && (
         <div className="mt-4">
-          {/* Display image name */}
-          <p className="text-sm text-gray-700 mb-2">{image.name}</p>
+          {/* Display image name and size */}
+          <div className="border border-[#b5b3b3] py-3 px-2">
+            <div className="flex items-center justify-between">
+              <div className="flex gap-2">
+                <Image
+                  src="/List_a_cause/file.svg"
+                  alt="Img file"
+                  width={30}
+                  height={30}
+                />
+                <span>
+                  <p className="text-[#363939] text-lg font-normal font-montserrat">{image.name}</p>
+                  <p className="text-[#b5b3b3] text-xs font-normal font-montserrat">{image.size} KB</p>
+                </span>
+              </div>
+              {image.progress === 100 && (
+                <span className="justify-end">
+                  <Image
+                    src="/List_a_cause/check.svg"
+                    alt="Check"
+                    width={20}
+                    height={20}
+                  />
+                </span>
+              )}
+            </div>
 
-          {/* Show progress bar if upload is not complete */}
-          <div className="relative w-full h-4 bg-gray-200 rounded-lg overflow-hidden mb-2">
-            <div
-              className="bg-blue-500 h-full rounded-lg"
-              style={{ width: `${image.progress}%` }}
-            ></div>
+            {/* Progress bar */}
+            <div className="flex">
+              <div className="w-full mt-2 bg-gray-200 rounded-lg overflow-hidden">
+                <div
+                  className="bg-blue-500 h-4 transition-all duration-200"
+                  style={{ width: `${image.progress}%` }}
+                ></div>
+              </div>
+              <p className="text-sm text-gray-700 mt-1">
+                {image.progress === 100 ? "100%" : `${image.progress}%`}
+              </p>
+            </div>
           </div>
 
-          {/* Delete button */}
-          <button
-            onClick={handleRemoveImage}
-            className="text-red-500 text-sm underline"
-          >
-            Remove
-          </button>
+          <div>
+            {/* Delete button */}
+            <button
+              onClick={handleRemoveImage}
+              className="text-red-500 text-sm underline mt-6"
+            >
+              Remove
+            </button>
+          </div>
         </div>
       )}
     </div>
