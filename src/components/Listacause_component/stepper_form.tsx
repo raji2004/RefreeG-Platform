@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import Step2Form from "./step_2";
+import Image from "next/image";
 import UploadImage from "./uploadimages";
 
 export default function StepperForm() {
@@ -13,7 +14,7 @@ export default function StepperForm() {
   const handleBack = () => setStep((prev) => Math.max(prev - 1, 1));
 
   return (
-    <div className=" mx-auto">
+    <div className="mx-auto">
       {/* Stepper Tabs */}
       <Tabs value={`step-${step}`}>
         <TabsList className="flex justify-between mb-20">
