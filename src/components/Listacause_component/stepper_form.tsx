@@ -1,50 +1,80 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation"; // Use Next.js router
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
+import { db } from "@/lib/firebase/config"; // Import Firebase config
+import { collection, addDoc } from "firebase/firestore"; // Import Firestore functions
 import Step2Form from "./step_2";
-import Image from "next/image";
 import UploadImage from "./uploadimages";
 
 export default function StepperForm() {
   const [step, setStep] = useState(1);
+  const router = useRouter(); // Use Next.js router for navigation
+  const [formData, setFormData] = useState({
+    state: "",
+    zipCode: "",
+    currency: "",
+    causeTitle: "",
+    causeCategory: "",
+    deadline: "",
+    goalAmount: "",
+  });
+
+  // Load saved data from localStorage on mount
+  useEffect(() => {
+    const savedData = localStorage.getItem("formData");
+    if (savedData) {
+      setFormData(JSON.parse(savedData));
+    }
+  }, []);
+
+  // Save form data to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem("formData", JSON.stringify(formData));
+  }, [formData]);
 
   const handleNext = () => setStep((prev) => Math.min(prev + 1, 4));
   const handleBack = () => setStep((prev) => Math.max(prev - 1, 1));
 
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Prevent default form submission
+
+    try {
+      const docRef = await addDoc(collection(db, "formSubmissions"), formData);
+      console.log("Document written with ID: ", docRef.id);
+
+      localStorage.removeItem("formData"); // Clear storage on submit
+      router.push("/preview"); // Navigate to preview page
+    } catch (error) {
+      console.error("Error adding document: ", error);
+    }
+  };
+
   return (
     <div className="mx-auto">
-      {/* Stepper Tabs */}
       <Tabs value={`step-${step}`}>
         <TabsList className="flex justify-between mb-20">
-          <TabsTrigger value="step-1" disabled={step < 1}>
-            Step 1
-          </TabsTrigger>
-          <TabsTrigger value="step-2" disabled={step < 2}>
-            Step 2
-          </TabsTrigger>
-          <TabsTrigger value="step-3" disabled={step < 3}>
-            Step 3
-          </TabsTrigger>
-          <TabsTrigger value="step-4" disabled={step < 4}>
-            Step 4
-          </TabsTrigger>
+          <TabsTrigger value="step-1" disabled={step < 1}>Step 1</TabsTrigger>
+          <TabsTrigger value="step-2" disabled={step < 2}>Step 2</TabsTrigger>
+          <TabsTrigger value="step-3" disabled={step < 3}>Step 3</TabsTrigger>
+          <TabsTrigger value="step-4" disabled={step < 4}>Step 4</TabsTrigger>
         </TabsList>
 
         {/* Step 1 */}
         <TabsContent value="step-1">
-          <h2 className="text-xl font-semibold font-montserrat">
-            Where are the donations going?
-          </h2>
-          <p className="text-sm font-bormal font-montserrat">
-            Choose the location where you plan to receive your funds.
-          </p>
-          <form className="mt-4 items-center">
+          <h2 className="text-xl font-semibold">Where are the donations going?</h2>
+          <form onSubmit={handleSubmit} className="mt-4">
             <div className="flex gap-4">
               <span>
                 <label className="block text-sm font-medium">State</label>
-                <select className="mt-1 px-5 py-3.5 w-[200px] block rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200">
+                <select name="state" value={formData.state} onChange={handleChange} className="mt-1 px-5 py-3.5 w-[200px] block rounded-md border-gray-300">
+                  <option value="">Select State</option>
                   <option>F.C.T Abuja</option>
                   <option>Lagos</option>
                   <option>Kano</option>
@@ -52,24 +82,14 @@ export default function StepperForm() {
               </span>
               <span>
                 <label className="block text-sm font-medium">ZIP Code</label>
-                <input
-                  type="text"
-                  className="mt-1 px-5 py-3.5 block w-[200px] rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200"
-                  placeholder="Enter ZIP Code"
-                />
+                <input name="zipCode" type="text" value={formData.zipCode} onChange={handleChange} placeholder="Enter ZIP Code"
+                  className="mt-1 px-5 py-3.5 block w-[200px] rounded-md border-gray-300" />
               </span>
             </div>
 
-            <h2 className=" text-xl font-semibold font-montserrat mt-16">
-              How would you like to collect your donation?
-            </h2>
-            <p className="text-sm font-bormal font-montserrat">
-              Choose the currency you want to receive donations in.
-            </p>
-            <label className="block text-sm font-medium mt-4">
-              Currency type
-            </label>
-            <select className="mt-1 px-5 py-3.5 w-[200px] block rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200">
+            <label className="block text-sm font-medium mt-4">Currency type</label>
+            <select name="currency" value={formData.currency} onChange={handleChange} className="mt-1 px-5 py-3.5 w-[200px] block rounded-md border-gray-300">
+              <option value="">Select Currency</option>
               <option>Flat Currency</option>
               <option>Crypto Currency</option>
             </select>
@@ -78,25 +98,12 @@ export default function StepperForm() {
 
         {/* Step 2 */}
         <TabsContent value="step-2">
-          <h2 className="text-xl font-medium font-montserrat">
-            Help us give people information about the cause
-          </h2>
-          <p className="text-sm font-bormal font-montserrat">
-            Choose the location where you plan to receive your funds.
-          </p>
-          <Step2Form />
+          <Step2Form formData={formData} handleChange={handleChange} />
         </TabsContent>
 
         {/* Step 3 */}
         <TabsContent value="step-3">
-          <h2 className="text-xl font-medium font-montserrat">
-            Bring Your Cause to Life with Images
-          </h2>
-          <p className="text-sm font-bormal font-montserrat">
-            An image can be worth a thousand words. Add photos or videos that
-            showcase the real people, places, or situations your cause supports.
-          </p>
-          <UploadImage />
+          <UploadImage formData={formData} handleChange={handleChange} />
         </TabsContent>
 
         {/* Step 4 */}
@@ -106,17 +113,10 @@ export default function StepperForm() {
         </TabsContent>
       </Tabs>
 
-      {/* Navigation Buttons */}
       <div className="flex justify-between mt-6">
-        {step > 1 && (
-          <Button variant="secondary" onClick={handleBack}>
-            Back
-          </Button>
-        )}
+        {step > 1 && <Button variant="secondary" onClick={handleBack}>Back</Button>}
         {step < 4 && <Button onClick={handleNext}>Next</Button>}
-        {step === 4 && (
-          <Button onClick={() => alert("Form Submitted!")}>Submit</Button>
-        )}
+        {step === 4 && <Button onClick={handleSubmit}>Submit</Button>}
       </div>
     </div>
   );

@@ -5,12 +5,13 @@ import { getStorage } from "firebase/storage";
 
 // Firebase config settings
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
+  apiKey: "AIzaSyBhhG9B1OilB6sWri-YO-TSDf_K5nOMLAU",
+  authDomain: "refreeg-platform.firebaseapp.com",
+  projectId: "refreeg-platform",
+  storageBucket: "refreeg-platform.appspot.com",
+  messagingSenderId: "577446198718",
+  appId: "1:577446198718:web:b5449a7d4f60467e894def",
+  measurementId: "G-H60QNGPDF5",
 };
 
 // Initialize Firebase app

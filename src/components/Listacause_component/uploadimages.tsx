@@ -3,17 +3,10 @@
 import { useState } from "react";
 import Image from "next/image";
 
-interface UploadedImage {
-  src: string;
-  name: string;
-  size: number; // Size in KB
-  progress: number;
-}
+export default function UploadImage({ formData, handleChange }) {
+  const [image, setImage] = useState(formData.image || null);
 
-export default function UploadImage() {
-  const [image, setImage] = useState<UploadedImage | null>(null);
-
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = (event) => {
     if (!event.target.files || event.target.files.length === 0) return;
 
     const file = event.target.files[0];
@@ -27,6 +20,7 @@ export default function UploadImage() {
     };
 
     setImage(newImage);
+    handleChange({ target: { name: "image", value: newImage } });
 
     // Simulate upload progress
     const interval = setInterval(() => {
@@ -38,23 +32,20 @@ export default function UploadImage() {
 
         return { ...prev, progress: updatedProgress };
       });
-    }, 200); // Update progress every 200ms
+    }, 200);
   };
 
   const handleRemoveImage = () => {
     setImage(null);
+    handleChange({ target: { name: "image", value: null } });
   };
 
   return (
     <div className="mt-4">
-      <label
-        htmlFor="image-upload"
-        className="block text-sm font-medium text-gray-700 mb-2"
-      >
+      <label htmlFor="image-upload" className="block text-sm font-medium text-gray-700 mb-2">
         Upload Media
       </label>
 
-      {/* Button to trigger file upload */}
       <button
         type="button"
         onClick={() => document.getElementById("image-upload")?.click()}
@@ -63,45 +54,20 @@ export default function UploadImage() {
         }`}
       >
         {image ? (
-          <Image
-            src={image.src}
-            alt="Uploaded preview"
-            width={200}
-            height={200}
-            className="object-cover rounded-lg"
-          />
+          <Image src={image.src} alt="Uploaded preview" width={200} height={200} className="object-cover rounded-lg" />
         ) : (
-          <Image
-            src="/List_a_cause/Upload_to_Cloud.png"
-            alt="Upload"
-            width={70}
-            height={70}
-          />
+          <Image src="/List_a_cause/Upload_to_Cloud.png" alt="Upload" width={70} height={70} />
         )}
       </button>
 
-      {/* Hidden file input */}
-      <input
-        id="image-upload"
-        type="file"
-        accept="image/*"
-        onChange={handleImageUpload}
-        className="hidden"
-      />
+      <input id="image-upload" type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
 
-      {/* Display uploaded image name, progress, and delete button */}
       {image && (
         <div className="mt-4">
-          {/* Display image name and size */}
           <div className="border border-[#b5b3b3] py-3 px-2">
             <div className="flex items-center justify-between">
               <div className="flex gap-2">
-                <Image
-                  src="/List_a_cause/file.svg"
-                  alt="Img file"
-                  width={30}
-                  height={30}
-                />
+                <Image src="/List_a_cause/file.svg" alt="Img file" width={30} height={30} />
                 <span>
                   <p className="text-[#363939] text-lg font-normal font-montserrat">{image.name}</p>
                   <p className="text-[#b5b3b3] text-xs font-normal font-montserrat">{image.size} KB</p>
@@ -109,39 +75,21 @@ export default function UploadImage() {
               </div>
               {image.progress === 100 && (
                 <span className="justify-end">
-                  <Image
-                    src="/List_a_cause/check.svg"
-                    alt="Check"
-                    width={20}
-                    height={20}
-                  />
+                  <Image src="/List_a_cause/check.svg" alt="Check" width={20} height={20} />
                 </span>
               )}
             </div>
 
-            {/* Progress bar */}
             <div className="flex">
               <div className="w-full mt-2 bg-gray-200 rounded-lg overflow-hidden">
-                <div
-                  className="bg-blue-500 h-4 transition-all duration-200"
-                  style={{ width: `${image.progress}%` }}
-                ></div>
+                <div className="bg-blue-500 h-4 transition-all duration-200" style={{ width: `${image.progress}%` }}></div>
               </div>
-              <p className="text-sm text-gray-700 mt-1">
-                {image.progress === 100 ? "100%" : `${image.progress}%`}
-              </p>
             </div>
           </div>
 
-          <div>
-            {/* Delete button */}
-            <button
-              onClick={handleRemoveImage}
-              className="text-red-500 text-sm underline mt-6"
-            >
-              Remove
-            </button>
-          </div>
+          <button onClick={handleRemoveImage} className="text-red-500 text-sm underline mt-6">
+            Remove
+          </button>
         </div>
       )}
     </div>
