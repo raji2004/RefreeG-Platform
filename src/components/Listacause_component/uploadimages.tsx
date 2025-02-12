@@ -1,10 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 
-export default function UploadImage({ formData, handleChange }) {
-  const [image, setImage] = useState(formData.image || null);
+interface UploadedImage {
+  src: string;
+  name: string;
+  size: number; // Size in KB
+  progress: number;
+}
+
+export default function UploadImage() {
+  const [image, setImage] = useState<UploadedImage | null>(null);
+
+  // Load saved image data when the component mounts
+  useEffect(() => {
+    const savedImage = localStorage.getItem("uploadedImage");
+    if (savedImage) {
+      setImage(JSON.parse(savedImage));
+    }
+  }, []);
 
   const handleImageUpload = (event) => {
     if (!event.target.files || event.target.files.length === 0) return;
@@ -20,7 +35,9 @@ export default function UploadImage({ formData, handleChange }) {
     };
 
     setImage(newImage);
-    handleChange({ target: { name: "image", value: newImage } });
+
+    // Save image data to localStorage immediately
+    localStorage.setItem("uploadedImage", JSON.stringify(newImage));
 
     // Simulate upload progress
     const interval = setInterval(() => {
@@ -30,14 +47,19 @@ export default function UploadImage({ formData, handleChange }) {
         const updatedProgress = Math.min(prev.progress + 10, 100);
         if (updatedProgress === 100) clearInterval(interval);
 
-        return { ...prev, progress: updatedProgress };
+        const updatedImage = { ...prev, progress: updatedProgress };
+
+        // Save updated image progress to localStorage
+        localStorage.setItem("uploadedImage", JSON.stringify(updatedImage));
+
+        return updatedImage;
       });
     }, 200);
   };
 
   const handleRemoveImage = () => {
     setImage(null);
-    handleChange({ target: { name: "image", value: null } });
+    localStorage.removeItem("uploadedImage"); // Remove image data from localStorage
   };
 
   return (

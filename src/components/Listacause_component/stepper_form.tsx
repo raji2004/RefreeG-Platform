@@ -2,12 +2,20 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation"; // Use Next.js router
+import { useRouter } from "next/router";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { db } from "@/lib/firebase/config"; // Import Firebase config
 import { collection, addDoc } from "firebase/firestore"; // Import Firestore functions
+import { Step4Form } from "./step_4";
 import Step2Form from "./step_2";
 import UploadImage from "./uploadimages";
+
+interface Section {
+  id: number;
+  header: string;
+  description: string;
+}
 
 export default function StepperForm() {
   const [step, setStep] = useState(1);
@@ -34,6 +42,35 @@ export default function StepperForm() {
   useEffect(() => {
     localStorage.setItem("formData", JSON.stringify(formData));
   }, [formData]);
+  const [sections, setSections] = useState<Section[]>([
+    { id: 1, header: "", description: "" }
+  ]);
+  const maxLength = 2000;
+
+  const addSection = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault(); // Prevent form submission
+  
+    if (sections.length >= 4) return; // Max 4 sections
+  
+    setSections([
+      ...sections,
+      { id: sections.length + 1, header: "", description: "" }
+    ]);
+  };
+
+  const deleteLastSection = () => {
+    if (sections.length > 1) {
+      setSections(sections.slice(0, -1)); // Removes the last section
+    }
+  };
+
+  const handleInputChange = (id: number, field: "header" | "description", value: string) => {
+    setSections(
+      sections.map((section) =>
+        section.id === id ? { ...section, [field]: value } : section
+      )
+    );
+  };
 
   const handleNext = () => setStep((prev) => Math.min(prev + 1, 4));
   const handleBack = () => setStep((prev) => Math.max(prev - 1, 1));
@@ -59,11 +96,19 @@ export default function StepperForm() {
   return (
     <div className="mx-auto">
       <Tabs value={`step-${step}`}>
-        <TabsList className="flex justify-between mb-20">
-          <TabsTrigger value="step-1" disabled={step < 1}>Step 1</TabsTrigger>
-          <TabsTrigger value="step-2" disabled={step < 2}>Step 2</TabsTrigger>
-          <TabsTrigger value="step-3" disabled={step < 3}>Step 3</TabsTrigger>
-          <TabsTrigger value="step-4" disabled={step < 4}>Step 4</TabsTrigger>
+        <TabsList className="flex justify-between mb-10">
+          <TabsTrigger value="step-1" disabled={step < 1}>
+            Step 1
+          </TabsTrigger>
+          <TabsTrigger value="step-2" disabled={step < 2}>
+            Step 2
+          </TabsTrigger>
+          <TabsTrigger value="step-3" disabled={step < 3}>
+            Step 3
+          </TabsTrigger>
+          <TabsTrigger value="step-4" disabled={step < 4}>
+            Step 4
+          </TabsTrigger>
         </TabsList>
 
         {/* Step 1 */}
@@ -98,7 +143,13 @@ export default function StepperForm() {
 
         {/* Step 2 */}
         <TabsContent value="step-2">
-          <Step2Form formData={formData} handleChange={handleChange} />
+          <h2 className="text-xl font-medium font-montserrat">
+            Help us give people information about the cause
+          </h2>
+            <p className="text-sm font-bormal font-montserrat">
+              Choose the location where you plan to receive your funds.
+            </p>
+          <Step2Form />
         </TabsContent>
 
         {/* Step 3 */}
@@ -108,8 +159,8 @@ export default function StepperForm() {
 
         {/* Step 4 */}
         <TabsContent value="step-4">
-          <h2 className="text-xl font-semibold">Confirm and Submit</h2>
-          <p className="mt-4">Review your inputs and submit the form.</p>
+          <Step4Form />
+
         </TabsContent>
       </Tabs>
 
