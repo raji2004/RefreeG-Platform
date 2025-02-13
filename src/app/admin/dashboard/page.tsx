@@ -25,18 +25,24 @@ const Dashboard: React.FC = () => {
     },
   ];
 
-  return (
-    <div className="flex min-h-screen bg-gray-100">
-      {/* Sidebar */}
-      <Sidebar />
+  const comments = [
+    { user: "Jon Snow", comment: "I just donated and it was awesome" },
+    { user: "Salim Ibrahim", comment: "An amazing system I helped design..." },
+    { user: "Amadike Nomso", comment: "An amazing system I helped design..." },
+  ];
 
-      {/* Main Content */}
-      <div className="flex-1">
-        {/* Topbar */}
-        <Topbar />
+  return (
+    <div className="min-h-screen bg-gray-100">
+      {/* Topbar (Navbar) */}
+      <Topbar />
+
+      {/* Main Content Area */}
+      <div className="flex">
+        {/* Sidebar */}
+        <Sidebar />
 
         {/* Dashboard Content */}
-        <div className="p-6">
+        <div className="flex-1 p-6">
           {/* Page Title */}
           <h1 className="text-2xl font-bold text-gray-800 mb-6">Dashboard</h1>
 

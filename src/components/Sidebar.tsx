@@ -4,15 +4,15 @@ import {
   UserIcon,
   BellIcon,
   ShieldCheckIcon,
-  LifebuoyIcon, // Replaces SupportIcon
-  BanknotesIcon, // Replaces CashIcon (for Donation Management)
-  CogIcon, // For Privacy
-  PowerIcon, // Replaces LogoutIcon
+  LifebuoyIcon,
+  BanknotesIcon,
+  CogIcon,
+  PowerIcon,
 } from "@heroicons/react/24/outline";
 
 const Sidebar: React.FC = () => {
   return (
-    <div className="w-64 bg-gray-800 text-white h-screen p-4">
+    <div className="w-64 bg-blue-900 text-white min-h-screen p-4">
       <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
       <nav>
         <ul>
