@@ -72,7 +72,8 @@ const HelpCenter: React.FC = () => {
         {
           id: "resetPassword",
           label: "How to reset your password",
-          content: "We use manual verification to confirm your details.",
+          content:
+            "Click Forgot Password?, enter your email, check your inbox for the reset link, set a new password, and log in.",
         },
         {
           id: "twofactorAuthentication",
