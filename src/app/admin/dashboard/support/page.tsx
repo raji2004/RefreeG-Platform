@@ -1,0 +1,191 @@
+"use client";
+
+import React, { useState } from "react";
+import {
+  ChevronDownIcon,
+  InformationCircleIcon,
+} from "@heroicons/react/24/outline";
+import Sidebar from "@/components/Sidebar";
+import Topbar from "@/components/Topbar";
+
+const HelpCenter: React.FC = () => {
+  const [openItems, setOpenItems] = useState<Record<string, boolean>>({});
+
+  const toggleItem = (item: string) => {
+    setOpenItems((prev) => ({
+      ...prev,
+      [item]: !prev[item],
+    }));
+  };
+
+  const sections = [
+    {
+      title: "Getting Started",
+      id: "gettingStarted",
+      items: [
+        {
+          id: "createAccount",
+          label: "How to create an account",
+          content:
+            "To create an account, click on Sign Up and follow the instructions.",
+        },
+        {
+          id: "setupProfile",
+          label: "Setting up your profile",
+          content: "Go to your profile settings and fill out your details.",
+        },
+        {
+          id: "mission",
+          label: "Understanding RefreeG’s mission",
+          content:
+            "RefreeG aims to provide transparent crowdfunding for education.",
+        },
+      ],
+    },
+    {
+      title: "Donations & Fundraising",
+      id: "donationsFundraising",
+      items: [
+        {
+          id: "makingDonation",
+          label: "How to donate",
+          content: "Choose a campaign and use Paystack or crypto to donate.",
+        },
+        {
+          id: "paymentMethods",
+          label: "How to list a cause",
+          content:
+            "Go to 'Start a Cause,' fill in details, upload documents, and submit for review.",
+        },
+        {
+          id: "withdrawFunds",
+          label: "Withdrawal process & timelines",
+          content:
+            "Naira donations are instant, while crypto transfers depend on network confirmation.",
+        },
+      ],
+    },
+    {
+      title: "Account & Security",
+      id: "accountSecurity",
+      items: [
+        {
+          id: "resetPassword",
+          label: "How to reset your password",
+          content: "We use manual verification to confirm your details.",
+        },
+        {
+          id: "twofactorAuthentication",
+          label: "Two-factor authentication (2FA) setup",
+          content:
+            "Enable 2FA in account settings to add an extra layer of security using email.",
+        },
+        {
+          id: "scamPrevention",
+          label: "Avoiding scams on RefreeG",
+          content:
+            "Only donate to vetted campaigns and report suspicious activity.",
+        },
+      ],
+    },
+    {
+      title: "Policy & Compliance",
+      id: "policyCompliance",
+      items: [
+        {
+          id: "termsService",
+          label: "Terms of service & prohibited content",
+          content:
+            "Review our terms to understand usage rules and prohibited content to ensure compliance.",
+        },
+        {
+          id: "causeVerification",
+          label: "Cause verification guidelines",
+          content:
+            "All causes go through a verification process to ensure authenticity before approval.",
+        },
+        {
+          id: "refundPolicies",
+          label: "Refund policies",
+          content: "Donations are final.",
+        },
+      ],
+    },
+    {
+      title: "Contact Support",
+      id: "contactSupport",
+      items: [
+        {
+          id: "liveChat",
+          label: "Live chat & email support",
+          content:
+            "Get real-time assistance through live chat or reach us via email for support.",
+        },
+        {
+          id: "reportProblem",
+          label: "Report a problem",
+          content:
+            "Encounter an issue? Let us know, and we'll work to resolve it as soon as possible.",
+        },
+        {
+          id: "communitySupport",
+          label: "Community support forum",
+          content:
+            "Join discussions, ask questions, and get help from other users in our forum.",
+        },
+      ],
+    },
+  ];
+
+  return (
+    <div className="flex bg-gray-100 min-h-screen">
+      <Sidebar />
+      <div className="flex-1 flex flex-col">
+        <Topbar />
+        <div className="p-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-6">
+            Support & Help Center
+          </h1>
+          <div className="space-y-6">
+            {sections.map((section) => (
+              <div key={section.id} className="bg-white p-4 rounded-lg shadow">
+                <h2 className="text-lg font-semibold text-gray-900">
+                  {section.title}
+                </h2>
+                <ul className="mt-4 space-y-2">
+                  {section.items.map((item) => (
+                    <li key={item.id} className="border rounded">
+                      <div
+                        className="flex justify-between items-center p-3 cursor-pointer transition-colors duration-300 hover:bg-gray-100"
+                        onClick={() => toggleItem(item.id)}
+                      >
+                        <div className="flex items-center">
+                          <InformationCircleIcon className="w-5 h-5 mr-2 text-gray-600" />
+                          {item.label}
+                        </div>
+                        <ChevronDownIcon
+                          className={`w-5 h-5 transition-transform duration-300 ease-in-out ${
+                            openItems[item.id] ? "rotate-180" : ""
+                          }`}
+                        />
+                      </div>
+                      <div
+                        className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                          openItems[item.id] ? "max-h-40 p-3" : "max-h-0 p-0"
+                        }`}
+                      >
+                        <p className="text-gray-700">{item.content}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default HelpCenter;

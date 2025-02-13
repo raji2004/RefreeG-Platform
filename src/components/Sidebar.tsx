@@ -77,7 +77,7 @@ const Sidebar: React.FC = () => {
 
           <li className="mb-4">
             <button
-              onClick={() => router.push("/admin/support")}
+              onClick={() => router.push("/admin/dashboard/support")}
               className="flex items-center hover:bg-gray-700 p-2 rounded w-full text-left"
             >
               <LifebuoyIcon className="w-5 h-5 mr-2" /> Support
