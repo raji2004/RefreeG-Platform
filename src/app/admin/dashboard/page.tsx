@@ -74,7 +74,7 @@ const Dashboard: React.FC = () => {
           </div>
 
           {/* Comments Section */}
-          <div>
+          <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200 mb-8">
             <Comments />
           </div>
         </div>
