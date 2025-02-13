@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React, { useState } from "react";
 import Topbar from "../../../../components/Topbar";
@@ -21,7 +21,7 @@ const Notifications = () => {
   ]);
 
   return (
-    <div className="flex">
+    <div className="flex min-h-screen">
       <Sidebar />
       <div className="w-full">
         <Topbar />
