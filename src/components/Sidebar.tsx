@@ -23,13 +23,8 @@ const Sidebar: React.FC = () => {
   const pathname = usePathname();
   const [isActivityOpen, setIsActivityOpen] = useState(false);
 
-  // Automatically open Activity Overflow if a submenu is active
   useEffect(() => {
-    if (
-      ["/my-causes", "/donation-history", "/signed-petitions"].includes(
-        pathname
-      )
-    ) {
+    if (["/my-causes", "/donation-history", "/signed-petitions"].includes(pathname)) {
       setIsActivityOpen(true);
     }
   }, [pathname]);
@@ -43,39 +38,15 @@ const Sidebar: React.FC = () => {
       hasDropdown: true,
       subItems: [
         { name: "My Causes", path: "/my-causes", icon: CausesIcon },
-        {
-          name: "Donation History",
-          path: "/donation-history",
-          icon: DonationHistoryIcon,
-        },
-        {
-          name: "Signed Petitions",
-          path: "/signed-petitions",
-          icon: PetitionsIcon,
-        },
+        { name: "Donation History", path: "/donation-history", icon: DonationHistoryIcon },
+        { name: "Signed Petitions", path: "/signed-petitions", icon: PetitionsIcon },
       ],
     },
-    {
-      name: "Cause Dashboard",
-      path: "/admin/dashboard",
-      icon: CauseDashboardIcon,
-    },
-    {
-      name: "Notification Centre",
-      path: "/admin/dashboard/notifications",
-      icon: NotificationIcon,
-    },
+    { name: "Cause Dashboard", path: "/admin/dashboard", icon: CauseDashboardIcon },
+    { name: "Notification Centre", path: "/admin/dashboard/notifications", icon: NotificationIcon },
     { name: "Account", path: "/account", icon: AccountIcon },
-    {
-      name: "Security",
-      path: "/admin/dashboard/security",
-      icon: SecurityIcon,
-    },
-    {
-      name: "Support & Help Center",
-      path: "/admin/dashboard/support",
-      icon: SupportIcon,
-    },
+    { name: "Security", path: "/admin/dashboard/security", icon: SecurityIcon },
+    { name: "Support & Help Center", path: "/admin/dashboard/support", icon: SupportIcon },
   ];
 
   return (
@@ -95,7 +66,7 @@ const Sidebar: React.FC = () => {
                     router.push(path);
                   }
                 }}
-                className={`flex items-center justify-between p-2 rounded w-full text-left transition ${
+                className={`flex items-center justify-between p-2 rounded w-full text-left transition duration-300 ${
                   pathname === path || (hasDropdown && isActivityOpen)
                     ? "bg-gray-200 font-semibold"
                     : "hover:bg-gray-100"
@@ -104,25 +75,37 @@ const Sidebar: React.FC = () => {
                 <span className="flex items-center">
                   <Icon className="w-5 h-5 mr-2" /> {name}
                 </span>
-                {hasDropdown && <ChevronDownIcon className="w-4 h-4" />}
+                {hasDropdown && (
+                  <ChevronDownIcon
+                    className={`w-4 h-4 transition-transform duration-300 ${
+                      isActivityOpen ? "rotate-180" : "rotate-0"
+                    }`}
+                  />
+                )}
               </button>
-              {hasDropdown && isActivityOpen && subItems && (
-                <ul className="ml-6 mt-2 space-y-2">
-                  {subItems.map(({ name, path, icon: SubIcon }) => (
-                    <li key={name}>
-                      <button
-                        className={`flex items-center p-2 rounded w-full text-left ${
-                          pathname === path
-                            ? "bg-gray-300 font-semibold"
-                            : "hover:bg-gray-100"
-                        }`}
-                        onClick={() => router.push(path)}
-                      >
-                        <SubIcon className="w-5 h-5 mr-2" /> {name}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
+              {hasDropdown && (
+                <div
+                  className={`overflow-hidden transition-[max-height] duration-300 ease-in-out ${
+                    isActivityOpen ? "max-h-60" : "max-h-0"
+                  }`}
+                >
+                  <ul className="ml-6 mt-2 space-y-2">
+                    {subItems.map(({ name, path, icon: SubIcon }) => (
+                      <li key={name}>
+                        <button
+                          className={`flex items-center p-2 rounded w-full text-left transition duration-300 ${
+                            pathname === path
+                              ? "bg-gray-300 font-semibold"
+                              : "hover:bg-gray-100"
+                          }`}
+                          onClick={() => router.push(path)}
+                        >
+                          <SubIcon className="w-5 h-5 mr-2" /> {name}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               )}
             </li>
           ))}
@@ -133,8 +116,7 @@ const Sidebar: React.FC = () => {
           onClick={() => router.push("/signout")}
           className="flex items-center text-black p-2 rounded w-full text-left hover:bg-gray-100"
         >
-          <SignOutIcon className="w-5 h-5 mr-2" />
-          Sign Out
+          <SignOutIcon className="w-5 h-5 mr-2" /> Sign Out
         </button>
       </div>
     </div>
