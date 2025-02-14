@@ -59,22 +59,22 @@ const Comments = ({
         {comments.map((comment) => (
           <li
             key={comment.id}
-            className="flex justify-between items-center mb-4"
+            className="flex justify-between items-start mb-4"
           >
-            <div className="flex items-center">
+            <div className="flex items-start gap-x-4">
               <Image
                 src={comment.profilePicture}
                 alt={`${comment.author}'s profile`}
                 width={40}
                 height={40}
-                className="rounded-full mr-4"
+                className="rounded-full w-10 h-10 object-cover"
               />
-              <div>
+              <div className="flex flex-col">
                 <p className="font-semibold text-gray-900">{comment.author}</p>
-                <p className="text-sm text-gray-500 truncate w-[200px]">
+                <p className="text-sm text-gray-600 break-words max-w-xs">
                   {comment.content}
                 </p>
-                <p className="text-xs text-gray-400">
+                <p className="text-xs text-gray-400 mt-1">
                   {comment.amount} • {comment.time}
                 </p>
               </div>
