@@ -8,28 +8,6 @@ import TransactionsTable from "../../../components/TransactionsTable";
 import Comments from "../../../components/Comments";
 
 const Dashboard: React.FC = () => {
-  // Mock data for the dashboard
-  const transactions = [
-    {
-      id: "#300",
-      date: "10-05-25",
-      amount: "N3,000,000",
-      status: "In progress",
-    },
-    { id: "#301", date: "10-05-25", amount: "N3,000,000", status: "Completed" },
-    {
-      id: "#302",
-      date: "10-05-25",
-      amount: "N3,000,000",
-      status: "In progress",
-    },
-  ];
-
-  const comments = [
-    { user: "Jon Snow", comment: "I just donated and it was awesome" },
-    { user: "Salim Ibrahim", comment: "An amazing system I helped design..." },
-    { user: "Amadike Nomso", comment: "An amazing system I helped design..." },
-  ];
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -70,11 +48,11 @@ const Dashboard: React.FC = () => {
 
           {/* Transactions Table */}
           <div className="mb-8">
-            <TransactionsTable transactions={transactions} />
+            <TransactionsTable />
           </div>
 
           {/* Comments Section */}
-          <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200 mb-8">
+          <div className="mb-8">
             <Comments />
           </div>
         </div>

@@ -8,10 +8,6 @@ interface Transaction {
   status: "In progress" | "Completed";
 }
 
-interface TransactionsTableProps {
-  transactions: Transaction[];
-}
-
 const formatCurrency = (amount: number) => {
   return new Intl.NumberFormat("en-NG", {
     style: "currency",
@@ -25,7 +21,7 @@ const dummyTransactions: Transaction[] = [
   { id: "302", date: "10-05-25", amount: 500000, status: "In progress" },
 ];
 
-const TransactionsTable: React.FC<TransactionsTableProps> = () => {
+const TransactionsTable: React.FC = () => {
   return (
     <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
       <div className="flex justify-between items-center mb-4">
