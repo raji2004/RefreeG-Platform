@@ -66,7 +66,11 @@ const Sidebar: React.FC = () => {
       icon: NotificationIcon,
     },
     { name: "Account", path: "/account", icon: AccountIcon },
-    { name: "Security", path: "/security", icon: SecurityIcon },
+    {
+      name: "Security",
+      path: "/admin/dashboard/security",
+      icon: SecurityIcon,
+    },
     {
       name: "Support & Help Center",
       path: "/admin/dashboard/support",
