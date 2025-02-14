@@ -50,7 +50,7 @@ const Sidebar: React.FC = () => {
   ];
 
   return (
-    <div className="w-64 bg-white text-black min-h-screen p-4 border-r">
+    <div className="w-96 bg-[#FAFCFF] text-black min-h-screen p-4 border-r border-[#E3E3E3]">
       <h1 className="text-2xl font-bold flex items-center mb-6">
         <DashboardIcon className="w-6 h-6 mr-2" /> Dashboard
       </h1>

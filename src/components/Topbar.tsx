@@ -1,24 +1,30 @@
+"use client"
+
 import React from "react";
 import { BellIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 
-const Topbar: React.FC = () => {
+interface TopbarProps {
+  profileImage: string;
+}
+
+const Topbar: React.FC<TopbarProps> = ({ profileImage }) => {
   return (
-    <div className="bg-white shadow-md p-4 w-full">
+    <div className="fixed border-b border-[#B6C3CD] h-28 bg-white shadow-md p-4 w-full flex items-center z-10">
       <div className="container mx-auto flex justify-between items-center">
         {/* Left Section: Logo */}
         <div className="flex items-center">
           <Image
             src="/logo.svg" // Update this with your actual logo path
             alt="Logo"
-            width={90}
-            height={40}
+            width={70}
+            height={35}
             className="mr-4"
           />
         </div>
 
         {/* Center Section: Search Bar */}
-        <div className="flex items-center w-full max-w-md bg-gray-100 px-4 py-2 rounded-lg">
+        <div className="flex items-center border border-[#B5B3B3] w-full max-w-md bg-[#FAFAFA] px-4 py-4 rounded-lg">
           <MagnifyingGlassIcon className="w-5 h-5 text-gray-500" />
           <input
             type="text"
@@ -30,13 +36,17 @@ const Topbar: React.FC = () => {
         {/* Right Section: Notifications & Profile */}
         <div className="flex items-center">
           <BellIcon className="w-6 h-6 text-gray-500 mr-4 cursor-pointer" />
-          <Image
-            src=""
-            alt="Profile"
-            width={40}
-            height={40}
-            className="rounded-full"
-          />
+          
+          {/* Profile Image */}
+          <div className="relative">
+            <Image
+              src={profileImage} // Display the selected image or default
+              alt="Profile"
+              width={40}
+              height={40}
+              className="rounded-full cursor-pointer w-12 h-12"
+            />
+          </div>
         </div>
       </div>
     </div>
