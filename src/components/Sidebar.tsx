@@ -28,7 +28,9 @@ const Sidebar: React.FC = () => {
 
   useEffect(() => {
     if (
-      ["/my-causes", "/donation-history", "/signed-petitions"].includes(pathname)
+      ["/my-causes", "/donation-history", "/signed-petitions"].includes(
+        pathname
+      )
     ) {
       setIsActivityOpen(true);
     }
@@ -43,15 +45,36 @@ const Sidebar: React.FC = () => {
       hasDropdown: true,
       subItems: [
         { name: "My Causes", path: "/my-causes", icon: CausesIcon },
-        { name: "Donation History", path: "/donation-history", icon: DonationHistoryIcon },
-        { name: "Signed Petitions", path: "/signed-petitions", icon: PetitionsIcon },
+        {
+          name: "Donation History",
+          path: "/donation-history",
+          icon: DonationHistoryIcon,
+        },
+        {
+          name: "Signed Petitions",
+          path: "/signed-petitions",
+          icon: PetitionsIcon,
+        },
       ],
     },
-    { name: "Cause Dashboard", path: "/admin/dashboard", icon: CauseDashboardIcon },
-    { name: "Notification Centre", path: "/admin/dashboard/notifications", icon: NotificationIcon },
+    {
+      name: "Cause Dashboard",
+      path: "/admin/dashboard",
+      icon: CauseDashboardIcon,
+    },
+    {
+      name: "Notification Centre",
+      path: "/admin/dashboard/notifications",
+      icon: NotificationIcon,
+    },
     { name: "Account", path: "/account", icon: AccountIcon },
     { name: "Security", path: "/admin/dashboard/security", icon: SecurityIcon },
-    { name: "Support & Help Center", path: "/admin/dashboard/support", icon: SupportIcon },
+    {
+      name: "Support & Help Center",
+      path: "/admin/dashboard/support",
+      icon: SupportIcon,
+    },
+    { name: "Sign Out", path: "/signout", icon: SignOutIcon },
   ];
 
   // Extract the common sidebar content into a function
@@ -121,17 +144,6 @@ const Sidebar: React.FC = () => {
           ))}
         </ul>
       </nav>
-      <div className="absolute bottom-4 left-4 w-full">
-        <button
-          onClick={() => {
-            router.push("/signout");
-            setIsMobileSidebarOpen(false);
-          }}
-          className="flex items-center text-black p-2 rounded w-full text-left hover:bg-gray-100"
-        >
-          <SignOutIcon className="w-5 h-5 mr-2" /> Sign Out
-        </button>
-      </div>
     </div>
   );
 
@@ -145,9 +157,7 @@ const Sidebar: React.FC = () => {
       </div>
 
       {/* Desktop Sidebar */}
-      <div className="hidden md:block">
-        {renderSidebarContent()}
-      </div>
+      <div className="hidden md:block">{renderSidebarContent()}</div>
 
       {/* Mobile Sidebar */}
       <div
@@ -165,11 +175,6 @@ const Sidebar: React.FC = () => {
             <XMarkIcon className="w-6 h-6" />
           </button>
         </div>
-        {/* Overlay */}
-        <div
-          className="fixed inset-0 bg-black opacity-50"
-          onClick={() => setIsMobileSidebarOpen(false)}
-        ></div>
       </div>
     </>
   );
