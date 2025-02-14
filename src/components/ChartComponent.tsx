@@ -1,20 +1,16 @@
 "use client";
 
 import React from "react";
-import { Bar } from "react-chartjs-2";
 import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
   Tooltip,
   Legend,
-  ChartOptions,
-} from "chart.js";
-
-// Register Chart.js components
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+  ResponsiveContainer,
+} from "recharts";
 
 interface ChartComponentProps {
   title: string;
@@ -29,47 +25,34 @@ const ChartComponent: React.FC<ChartComponentProps> = ({
   dataValues,
   isHorizontal = false,
 }) => {
-  // Data for the chart
-  const data = {
-    labels,
-    datasets: [
-      {
-        label: title,
-        data: dataValues,
-        backgroundColor: "rgba(75, 192, 192, 0.6)", // Light blue color
-        borderColor: "rgba(75, 192, 192, 1)", // Blue border
-        borderWidth: 1,
-      },
-    ],
-  };
-
-  // Chart options
-  const options: ChartOptions<"bar"> = {
-    indexAxis: isHorizontal ? "y" : "x", // Horizontal or vertical bar chart
-    responsive: true,
-    plugins: {
-      legend: {
-        position: "top",
-      },
-      title: {
-        display: true,
-        text: title, // Chart title
-      },
-    },
-    scales: {
-      x: {
-        beginAtZero: true,
-      },
-      y: {
-        beginAtZero: true,
-      },
-    },
-  };
+  // Transform data into the format Recharts expects
+  const data = labels.map((label, index) => ({
+    name: label,
+    value: dataValues[index],
+  }));
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
       <h2 className="text-xl font-semibold text-gray-800 mb-4">{title}</h2>
-      <Bar data={data} options={options} />
+      <ResponsiveContainer width="100%" height={400}>
+        <BarChart data={data} layout={isHorizontal ? "vertical" : "horizontal"}>
+          <CartesianGrid strokeDasharray="3 3" />
+          {isHorizontal ? (
+            <>
+              <YAxis type="category" dataKey="name" />
+              <XAxis type="number" />
+            </>
+          ) : (
+            <>
+              <XAxis type="category" dataKey="name" />
+              <YAxis type="number" />
+            </>
+          )}
+          <Tooltip />
+          <Legend />
+          <Bar dataKey="value" fill="rgba(75, 192, 192, 0.6)" />
+        </BarChart>
+      </ResponsiveContainer>
     </div>
   );
 };
