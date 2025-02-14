@@ -1,10 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 import StatsCard from "../../../components/StatsCard";
 import ChartComponent from "../../../components/ChartComponent";
 import TransactionsTable from "../../../components/TransactionsTable";
 import Comments from "../../../components/Comments";
 
 const Dashboard: React.FC = () => {
+  // State to track the number of comments
+  const [commentsCount, setCommentsCount] = useState(0);
+
+  // Function to update comments count
+  const updateCommentsCount = (count: number) => {
+    setCommentsCount(count);
+  };
+
   return (
     <div className="p-6 bg-gray-100">
       {/* Stats Cards */}
@@ -54,7 +62,7 @@ const Dashboard: React.FC = () => {
 
       {/* Comments Section */}
       <div className="mb-8">
-        <Comments />
+        <Comments updateCommentsCount={updateCommentsCount} />
       </div>
     </div>
   );
