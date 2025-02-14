@@ -8,12 +8,12 @@ const Security = () => {
   const router = useRouter();
 
   const securityOptions = [
-    { icon: "🔘", label: "2FA toggle switch" },
-    { icon: "👁", label: "Visibility control" },
-    { icon: "📧", label: "Change email" },
-    { icon: "📞", label: "Change number" },
-    { icon: "🔒", label: "Change password" },
-    { icon: "💾", label: "Data and storage" },
+    { icon: "🔘", label: "2FA toggle switch", path: "" },
+    { icon: "👁", label: "Visibility control", path: "" },
+    { icon: "📧", label: "Change email", path: "" },
+    { icon: "📞", label: "Change number", path: "" },
+    { icon: "🔒", label: "Change password", path: "/admin/dashboard/change-password" },
+    { icon: "💾", label: "Data and storage", path: "" },
   ];
 
   return (
@@ -33,6 +33,7 @@ const Security = () => {
               <div
                 key={index}
                 className="flex items-center justify-between p-4 border-b last:border-b-0 cursor-pointer hover:bg-gray-100 rounded-md"
+                onClick={() => option.path && router.push(option.path)}
               >
                 <div className="flex items-center gap-3">
                   <span className="text-xl">{option.icon}</span>
