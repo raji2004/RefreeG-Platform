@@ -7,7 +7,7 @@ const Security = () => {
     { icon: "🔘", label: "2FA toggle switch", path: "" },
     { icon: "👁", label: "Visibility control", path: "" },
     { icon: "📧", label: "Change email", path: "" },
-    { icon: "📞", label: "Change number", path: "" },
+    { icon: "📞", label: "Change number", path: "/admin/dashboard/change-number" },
     {
       icon: "🔒",
       label: "Change password",
