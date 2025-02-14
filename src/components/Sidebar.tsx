@@ -30,14 +30,14 @@ const Sidebar: React.FC = () => {
   }, [pathname]);
 
   const navItems = [
-    { name: "Profile", path: "/profile", icon: UserIcon },
+    { name: "Profile", path: "/UserProfile", icon: UserIcon },
     {
       name: "Activity Overflow",
       path: "#",
       icon: ActivityIcon,
       hasDropdown: true,
       subItems: [
-        { name: "My Causes", path: "/my-causes", icon: CausesIcon },
+        { name: "My Causes", path: "/MyCauses", icon: CausesIcon },
         { name: "Donation History", path: "/donation-history", icon: DonationHistoryIcon },
         { name: "Signed Petitions", path: "/signed-petitions", icon: PetitionsIcon },
       ],
