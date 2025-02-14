@@ -6,7 +6,7 @@ import {
   InformationCircleIcon,
 } from "@heroicons/react/24/outline";
 
-const HelpCenter: React.FC = () => {
+const Support: React.FC = () => {
   const [openItems, setOpenItems] = useState<Record<string, boolean>>({});
 
   const toggleItem = (item: string) => {
@@ -181,4 +181,4 @@ const HelpCenter: React.FC = () => {
   );
 };
 
-export default HelpCenter;
+export default Support;
