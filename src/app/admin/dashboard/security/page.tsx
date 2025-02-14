@@ -6,7 +6,7 @@ const Security = () => {
   const securityOptions = [
     { icon: "🔘", label: "2FA toggle switch", path: "" },
     { icon: "👁", label: "Visibility control", path: "" },
-    { icon: "📧", label: "Change email", path: "" },
+    { icon: "📧", label: "Change email", path: "/admin/dashboard/change-email" },
     { icon: "📞", label: "Change number", path: "/admin/dashboard/change-number" },
     {
       icon: "🔒",
