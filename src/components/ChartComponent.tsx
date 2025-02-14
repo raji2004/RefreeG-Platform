@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import React from "react";
 import { Bar } from "react-chartjs-2";
@@ -10,26 +10,32 @@ import {
   Title,
   Tooltip,
   Legend,
+  ChartOptions,
 } from "chart.js";
 
 // Register Chart.js components
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend
-);
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-const DonationChart: React.FC = () => {
+interface ChartComponentProps {
+  title: string;
+  labels: string[];
+  dataValues: number[];
+  isHorizontal?: boolean;
+}
+
+const ChartComponent: React.FC<ChartComponentProps> = ({
+  title,
+  labels,
+  dataValues,
+  isHorizontal = false,
+}) => {
   // Data for the chart
   const data = {
-    labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"], // Days of the week
+    labels,
     datasets: [
       {
-        label: "Funds Donated",
-        data: [200, 300, 400, 500, 600, 700, 800], // Example data (replace with real data)
+        label: title,
+        data: dataValues,
         backgroundColor: "rgba(75, 192, 192, 0.6)", // Light blue color
         borderColor: "rgba(75, 192, 192, 1)", // Blue border
         borderWidth: 1,
@@ -38,32 +44,34 @@ const DonationChart: React.FC = () => {
   };
 
   // Chart options
-  const options = {
+  const options: ChartOptions<"bar"> = {
+    indexAxis: isHorizontal ? "y" : "x", // Horizontal or vertical bar chart
     responsive: true,
     plugins: {
       legend: {
-        position: "top" as const,
+        position: "top",
       },
       title: {
         display: true,
-        text: "Funds Donated Over Time", // Chart title
+        text: title, // Chart title
       },
     },
     scales: {
+      x: {
+        beginAtZero: true,
+      },
       y: {
-        beginAtZero: true, // Start the y-axis from 0
+        beginAtZero: true,
       },
     },
   };
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
-      <h2 className="text-xl font-semibold text-gray-800 mb-4">
-        Funds donated
-      </h2>
+      <h2 className="text-xl font-semibold text-gray-800 mb-4">{title}</h2>
       <Bar data={data} options={options} />
     </div>
   );
 };
 
-export default DonationChart;
+export default ChartComponent;

@@ -1,7 +1,6 @@
 import React from "react";
 import StatsCard from "../../../components/StatsCard";
-import DonationChart from "../../../components/DonationChart";
-import CountryChart from "../../../components/CountryChart";
+import ChartComponent from "../../../components/ChartComponent";
 import TransactionsTable from "../../../components/TransactionsTable";
 import Comments from "../../../components/Comments";
 
@@ -26,8 +25,26 @@ const Dashboard: React.FC = () => {
 
       {/* Charts Section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        <DonationChart />
-        <CountryChart />
+        <ChartComponent
+          title="Funds Donated Over Time"
+          labels={["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]}
+          dataValues={[200, 300, 400, 500, 600, 700, 800]}
+        />
+        <ChartComponent
+          title="Donations per Country"
+          labels={[
+            "Nigeria",
+            "UK",
+            "USA",
+            "Ghana",
+            "Egypt",
+            "Canada",
+            "India",
+            "Austria",
+          ]}
+          dataValues={[500, 300, 400, 200, 100, 150, 250, 50]}
+          isHorizontal={true}
+        />
       </div>
 
       {/* Transactions Table */}
