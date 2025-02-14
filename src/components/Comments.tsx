@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import { HiOutlineHand, HiOutlineChevronRight } from "react-icons/hi";
 
@@ -39,8 +39,16 @@ const commentsData: Comment[] = [
   },
 ];
 
-const Comments = () => {
+const Comments = ({
+  updateCommentsCount,
+}: {
+  updateCommentsCount: (count: number) => void;
+}) => {
   const [comments] = useState<Comment[]>(commentsData);
+
+  useEffect(() => {
+    updateCommentsCount(comments.length);
+  }, [comments.length, updateCommentsCount]);
 
   return (
     <div className="w-full p-4 bg-white rounded-xl shadow-md">
