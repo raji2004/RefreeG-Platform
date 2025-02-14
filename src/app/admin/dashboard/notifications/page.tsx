@@ -21,10 +21,14 @@ const Notifications = () => {
   ]);
 
   return (
-    <div className="flex min-h-screen">
-      <Sidebar />
-      <div className="w-full">
-        <Topbar />
+    <div className="min-h-screen bg-gray-100">
+      {/* Topbar (Navbar) */}
+      <Topbar />
+
+      {/* Main Content Area */}
+      <div className="flex">
+        {/* Sidebar */}
+        <Sidebar />
         <div className="p-8">
           <h1 className="text-2xl font-semibold mb-4">Notification Center</h1>
 

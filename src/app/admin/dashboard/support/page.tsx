@@ -139,10 +139,14 @@ const HelpCenter: React.FC = () => {
   ];
 
   return (
-    <div className="flex bg-gray-100 min-h-screen">
-      <Sidebar />
-      <div className="flex-1 flex flex-col">
-        <Topbar />
+    <div className="min-h-screen bg-gray-100">
+      {/* Topbar (Navbar) */}
+      <Topbar />
+
+      {/* Main Content Area */}
+      <div className="flex">
+        {/* Sidebar */}
+        <Sidebar />
         <div className="p-8">
           <h1 className="text-3xl font-bold text-gray-900 mb-6">
             Support & Help Center

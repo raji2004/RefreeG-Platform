@@ -12,18 +12,23 @@ const Security = () => {
     { icon: "👁", label: "Visibility control", path: "" },
     { icon: "📧", label: "Change email", path: "" },
     { icon: "📞", label: "Change number", path: "" },
-    { icon: "🔒", label: "Change password", path: "/admin/dashboard/change-password" },
+    {
+      icon: "🔒",
+      label: "Change password",
+      path: "/admin/dashboard/change-password",
+    },
     { icon: "💾", label: "Data and storage", path: "" },
   ];
 
   return (
-    <div className="flex h-screen bg-gray-100">
-      {/* Sidebar */}
-      <Sidebar />
+    <div className="min-h-screen bg-gray-100">
+      {/* Topbar (Navbar) */}
+      <Topbar />
 
-      <div className="flex flex-col w-full">
-        {/* Topbar */}
-        <Topbar />
+      {/* Main Content Area */}
+      <div className="flex">
+        {/* Sidebar */}
+        <Sidebar />
 
         {/* Security Settings */}
         <div className="p-6">
