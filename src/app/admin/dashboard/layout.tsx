@@ -11,7 +11,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
       <Topbar />
 
       {/* Sidebar and main content container */}
-      <div className="flex flex-1 min-h-0">
+      <div className="flex flex-1 min-h-screen">
         {/* Sidebar */}
         <Sidebar />
 
