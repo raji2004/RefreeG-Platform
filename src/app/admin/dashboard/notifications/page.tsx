@@ -1,6 +1,6 @@
-"use client";
-
+"use client"
 import React, { useState } from "react";
+import NotificationItem from "../../../../components/NotificationItem"; // Import the new component
 
 const Notifications = () => {
   const [notifications, setNotifications] = useState([
@@ -26,9 +26,10 @@ const Notifications = () => {
         <p>You have no new notifications at this time :)</p>
       ) : (
         notifications.map((notification) => (
-          <div key={notification.id} className="border p-4 mb-2">
-            <p>{notification.message}</p>
-          </div>
+          <NotificationItem
+            key={notification.id}
+            message={notification.message}
+          />
         ))
       )}
     </div>
