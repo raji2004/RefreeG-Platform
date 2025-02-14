@@ -1,8 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import Topbar from "../../../../components/Topbar";
-import Sidebar from "../../../../components/Sidebar";
 
 const Notifications = () => {
   const [notifications, setNotifications] = useState([
@@ -21,28 +19,18 @@ const Notifications = () => {
   ]);
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      {/* Topbar (Navbar) */}
-      <Topbar />
+    <div className="p-8 bg-gray-100">
+      <h1 className="text-2xl font-semibold mb-4">Notification Center</h1>
 
-      {/* Main Content Area */}
-      <div className="flex">
-        {/* Sidebar */}
-        <Sidebar />
-        <div className="p-8">
-          <h1 className="text-2xl font-semibold mb-4">Notification Center</h1>
-
-          {notifications.length === 0 ? (
-            <p>You have no new notifications at this time :)</p>
-          ) : (
-            notifications.map((notification) => (
-              <div key={notification.id} className="border p-4 mb-2">
-                <p>{notification.message}</p>
-              </div>
-            ))
-          )}
-        </div>
-      </div>
+      {notifications.length === 0 ? (
+        <p>You have no new notifications at this time :)</p>
+      ) : (
+        notifications.map((notification) => (
+          <div key={notification.id} className="border p-4 mb-2">
+            <p>{notification.message}</p>
+          </div>
+        ))
+      )}
     </div>
   );
 };
