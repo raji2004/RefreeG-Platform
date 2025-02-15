@@ -34,9 +34,10 @@ const Topbar: React.FC<TopbarProps> = ({ profileImage }) => {
         </div>
 
         {/* Right Section: Notifications & Profile */}
-        <div className="flex items-center">
-          <BellIcon className="w-6 h-6 text-gray-500 mr-4 cursor-pointer" />
-          
+        <div className="flex items-center gap-3">
+          <div className="p-4 border border-[#B5B3B3] rounded-full">
+            <BellIcon className="w-8 h-8 text-gray-500 cursor-pointer" />
+          </div>
           {/* Profile Image */}
           <div className="relative">
             <Image
@@ -44,7 +45,7 @@ const Topbar: React.FC<TopbarProps> = ({ profileImage }) => {
               alt="Profile"
               width={40}
               height={40}
-              className="rounded-full cursor-pointer w-12 h-12"
+              className="rounded-full cursor-pointer w-16 h-16"
             />
           </div>
         </div>

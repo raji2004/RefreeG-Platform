@@ -24,21 +24,21 @@ const Sidebar: React.FC = () => {
   const [isActivityOpen, setIsActivityOpen] = useState(false);
 
   useEffect(() => {
-    if (["/my-causes", "/donation-history", "/signed-petitions"].includes(pathname)) {
+    if (["/UserFlow/MyCauses", "/UserFlow/DonationHistory", "/signed-petitions"].includes(pathname)) {
       setIsActivityOpen(true);
     }
   }, [pathname]);
 
   const navItems = [
-    { name: "Profile", path: "/UserProfile", icon: UserIcon },
+    { name: "Profile", path: "/UserFlow/UserProfile", icon: UserIcon },
     {
       name: "Activity Overflow",
       path: "#",
       icon: ActivityIcon,
       hasDropdown: true,
       subItems: [
-        { name: "My Causes", path: "/MyCauses", icon: CausesIcon },
-        { name: "Donation History", path: "/donation-history", icon: DonationHistoryIcon },
+        { name: "My Causes", path: "/UserFlow/MyCauses", icon: CausesIcon },
+        { name: "Donation History", path: "/UserFlow/DonationHistory", icon: DonationHistoryIcon },
         { name: "Signed Petitions", path: "/signed-petitions", icon: PetitionsIcon },
       ],
     },
@@ -111,7 +111,7 @@ const Sidebar: React.FC = () => {
           ))}
         </ul>
       </nav>
-      <div className="absolute bottom-4 left-4 w-full">
+      <div className=" pt-32 bottom-4 left-4 w-full">
         <button
           onClick={() => router.push("/signout")}
           className="flex items-center text-black p-2 rounded w-full text-left hover:bg-gray-100"

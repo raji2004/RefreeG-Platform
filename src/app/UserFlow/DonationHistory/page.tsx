@@ -6,16 +6,17 @@ import React, { useState } from 'react'
 import Sidebar from "@/components/Sidebar";
 import Topbar from "@/components/Topbar";
 import Causes from '@/components/UserProfileComponents/causes';
+import DonationHistory from '@/components/UserProfileComponents/donationHistory';
 
-export default function MyCauses() {
+export default function Donations() {
 
-    const [profileImage, setProfileImage] = useState("/UserProfile/defaultProfile.svg");
+  const [profileImage, setProfileImage] = useState("/UserProfile/defaultProfile.svg");
   return (
-    <div className='w-11/12'>
+    <div className='w-full pr-16 bg-[#FAFCFF]'>
       <Topbar profileImage={profileImage} />
       <div className="flex pt-28 w-full">
         <Sidebar />
-        <Causes />
+        <DonationHistory />
       </div>
     </div>
   )

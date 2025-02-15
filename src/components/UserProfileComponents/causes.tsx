@@ -67,7 +67,7 @@ export default function Causes() {
   const totalPages = Math.ceil(filteredCauses.length / causesPerPage);
 
   return (
-    <div className="px-6 py-4 w-full">
+    <div className="px-6 py-4 w-full bg-[#FAFCFF]">
       <div className="text-2xl font-semibold">
         <span className="text-gray-500 pr-10">Activity Overview</span>
         <span className="text-black"> &gt; <span className='pl-6'> My Causes</span></span>
@@ -101,7 +101,7 @@ export default function Causes() {
 
       {/* Causes Table */}
       <div className="overflow-x-auto w-full">
-        <table className="w-full bg-white border-collapse">
+        <table className="w-full bg-[#FAFCFF] border-collapse">
           <thead>
             <tr className="border-b bg-[#E7EBEF]">
               <th className="p-3 py-4 text-left w-1/12">
@@ -119,7 +119,7 @@ export default function Causes() {
           <tbody>
             {currentCauses.map((cause, index) => (
               <tr key={cause.id} className="">
-                <td className="p-3 w-1/12">
+                <td className="p-3 w-1/12 bg-[#FAFCFF]">
                   <input
                     type="checkbox"
                     checked={selectedCauses[index]}
@@ -149,91 +149,91 @@ export default function Causes() {
 
       {/* Pagination Controls */}
       <div className="flex mt-4 items-center">
-  {/* Previous Arrow */}
-  <button
-    onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-    disabled={currentPage === 1}
-    className={`mx-1 px-3 py-1 rounded ${
-      currentPage === 1 ? "bg-gray-300 cursor-not-allowed" : "bg-gray-200 hover:bg-gray-400"
-    }`}
-  >
-    &lt;
-  </button>
+        {/* Previous Arrow */}
+        <button
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+          className={`mx-1 px-3 py-1 rounded ${
+            currentPage === 1 ? "bg-gray-300 cursor-not-allowed" : "bg-gray-200 hover:bg-gray-400"
+          }`}
+        >
+          &lt;
+        </button>
 
-  {/* Page Numbers with Ellipsis */}
-  {totalPages <= 5 ? (
-    Array.from({ length: totalPages }, (_, i) => (
-      <button
-        key={i}
-        onClick={() => setCurrentPage(i + 1)}
-        className={`mx-1 px-3 py-1 rounded ${
-          currentPage === i + 1 ? "bg-blue-600 text-white" : "bg-gray-200"
-        }`}
-      >
-        {i + 1}
-      </button>
-    ))
-  ) : (
-    <>
-      {/* Always show first page */}
-      <button
-        onClick={() => setCurrentPage(1)}
-        className={`mx-1 px-3 py-1 rounded ${currentPage === 1 ? "bg-blue-600 text-white" : "bg-gray-200"}`}
-      >
-        1
-      </button>
+        {/* Page Numbers with Ellipsis */}
+        {totalPages <= 5 ? (
+          Array.from({ length: totalPages }, (_, i) => (
+            <button
+              key={i}
+              onClick={() => setCurrentPage(i + 1)}
+              className={`mx-1 px-3 py-1 rounded ${
+                currentPage === i + 1 ? "bg-blue-600 text-white" : "bg-gray-200"
+              }`}
+            >
+              {i + 1}
+            </button>
+          ))
+        ) : (
+          <>
+            {/* Always show first page */}
+            <button
+              onClick={() => setCurrentPage(1)}
+              className={`mx-1 px-3 py-1 rounded ${currentPage === 1 ? "bg-blue-600 text-white" : "bg-gray-200"}`}
+            >
+              1
+            </button>
 
-      {/* Show second page only if current page is far from the start */}
-      {currentPage > 3 && <span className="mx-1 px-2">...</span>}
+            {/* Show second page only if current page is far from the start */}
+            {currentPage > 3 && <span className="mx-1 px-2">...</span>}
 
-      {/* Dynamic middle pages */}
-      {currentPage > 2 && currentPage < totalPages - 1 && (
-        <>
-          <button
-            onClick={() => setCurrentPage(currentPage - 1)}
-            className="mx-1 px-3 py-1 rounded bg-gray-200"
-          >
-            {currentPage - 1}
-          </button>
-          <button
-            onClick={() => setCurrentPage(currentPage)}
-            className="mx-1 px-3 py-1 rounded bg-blue-600 text-white"
-          >
-            {currentPage}
-          </button>
-          <button
-            onClick={() => setCurrentPage(currentPage + 1)}
-            className="mx-1 px-3 py-1 rounded bg-gray-200"
-          >
-            {currentPage + 1}
-          </button>
-        </>
-      )}
+            {/* Dynamic middle pages */}
+            {currentPage > 2 && currentPage < totalPages - 1 && (
+              <>
+                <button
+                  onClick={() => setCurrentPage(currentPage - 1)}
+                  className="mx-1 px-3 py-1 rounded bg-gray-200"
+                >
+                  {currentPage - 1}
+                </button>
+                <button
+                  onClick={() => setCurrentPage(currentPage)}
+                  className="mx-1 px-3 py-1 rounded bg-blue-600 text-white"
+                >
+                  {currentPage}
+                </button>
+                <button
+                  onClick={() => setCurrentPage(currentPage + 1)}
+                  className="mx-1 px-3 py-1 rounded bg-gray-200"
+                >
+                  {currentPage + 1}
+                </button>
+              </>
+            )}
 
-      {/* Show ellipsis before last page if current page is far */}
-      {currentPage < totalPages - 2 && <span className="mx-1 px-2">...</span>}
+            {/* Show ellipsis before last page if current page is far */}
+            {currentPage < totalPages - 2 && <span className="mx-1 px-2">...</span>}
 
-      {/* Always show last page */}
-      <button
-        onClick={() => setCurrentPage(totalPages)}
-        className={`mx-1 px-3 py-1 rounded ${currentPage === totalPages ? "bg-blue-600 text-white" : "bg-gray-200"}`}
-      >
-        {totalPages}
-      </button>
-    </>
-  )}
+            {/* Always show last page */}
+            <button
+              onClick={() => setCurrentPage(totalPages)}
+              className={`mx-1 px-3 py-1 rounded ${currentPage === totalPages ? "bg-blue-600 text-white" : "bg-gray-200"}`}
+            >
+              {totalPages}
+            </button>
+          </>
+        )}
 
-  {/* Next Arrow */}
-  <button
-    onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-    disabled={currentPage === totalPages}
-    className={`mx-1 px-3 py-1 rounded ${
-      currentPage === totalPages ? "bg-gray-300 cursor-not-allowed" : "bg-gray-200 hover:bg-gray-400"
-    }`}
-  >
-    &gt;
-  </button>
-</div>
+        {/* Next Arrow */}
+        <button
+          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+          disabled={currentPage === totalPages}
+          className={`mx-1 px-3 py-1 rounded ${
+            currentPage === totalPages ? "bg-gray-300 cursor-not-allowed" : "bg-gray-200 hover:bg-gray-400"
+          }`}
+        >
+          &gt;
+        </button>
+      </div>
 
     </div>
   );
