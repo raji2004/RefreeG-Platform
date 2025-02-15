@@ -5,17 +5,17 @@ import React, { useState } from 'react'
 
 import Sidebar from "@/components/Sidebar";
 import Topbar from "@/components/Topbar";
-import DonationHistory from '@/components/UserProfileComponents/donationHistory';
+import SignedPetitions from '@/components/UserProfileComponents/signedPetitions';
 
-export default function Donations() {
+export default function Petitions() {
 
-  const [profileImage, setProfileImage] = useState("/UserProfile/defaultProfile.svg");
+    const [profileImage, setProfileImage] = useState("/UserProfile/defaultProfile.svg");
   return (
-    <div className='w-full pr-16 bg-[#FAFCFF]'>
+    <div className='w-full bg-[#FAFCFF] pr-16'>
       <Topbar profileImage={profileImage} />
       <div className="flex pt-28 w-full">
         <Sidebar />
-        <DonationHistory />
+        <SignedPetitions />
       </div>
     </div>
   )

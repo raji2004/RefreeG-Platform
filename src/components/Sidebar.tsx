@@ -39,7 +39,7 @@ const Sidebar: React.FC = () => {
       subItems: [
         { name: "My Causes", path: "/UserFlow/MyCauses", icon: CausesIcon },
         { name: "Donation History", path: "/UserFlow/DonationHistory", icon: DonationHistoryIcon },
-        { name: "Signed Petitions", path: "/signed-petitions", icon: PetitionsIcon },
+        { name: "Signed Petitions", path: "/UserFlow/SignedPetitions", icon: PetitionsIcon },
       ],
     },
     { name: "Cause Dashboard", path: "/admin/dashboard", icon: CauseDashboardIcon },
