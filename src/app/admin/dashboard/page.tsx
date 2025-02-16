@@ -1,83 +1,70 @@
-import React from "react";
-import Sidebar from "../../../components/Sidebar";
-import Topbar from "../../../components/Topbar";
+"use client";
+
+import React, { useState } from "react";
 import StatsCard from "../../../components/StatsCard";
-import DonationChart from "../../../components/DonationChart";
-import CountryChart from "../../../components/CountryChart";
+import ChartComponent from "../../../components/ChartComponent";
 import TransactionsTable from "../../../components/TransactionsTable";
 import Comments from "../../../components/Comments";
 
 const Dashboard: React.FC = () => {
-  // Mock data for the dashboard
-  const transactions = [
-    {
-      id: "#300",
-      date: "10-05-25",
-      amount: "N3,000,000",
-      status: "In progress",
-    },
-    { id: "#301", date: "10-05-25", amount: "N3,000,000", status: "Completed" },
-    {
-      id: "#302",
-      date: "10-05-25",
-      amount: "N3,000,000",
-      status: "In progress",
-    },
-  ];
+  // State to track the number of comments
+  const [commentsCount, setCommentsCount] = useState(0);
 
-  const comments = [
-    { user: "Jon Snow", comment: "I just donated and it was awesome" },
-    { user: "Salim Ibrahim", comment: "An amazing system I helped design..." },
-    { user: "Amadike Nomso", comment: "An amazing system I helped design..." },
-  ];
+  // Function to update comments count
+  const updateCommentsCount = (count: number) => {
+    setCommentsCount(count);
+  };
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      {/* Topbar (Navbar) */}
-      <Topbar />
+    <div className="p-6 bg-gray-100">
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        <StatsCard
+          title="Maiduguri Flood Victims"
+          progress={90}
+          amount="N200,000.00"
+          percentageIncrease="20% more than 7 days ago"
+        />
+        <StatsCard
+          title="Funds donated"
+          progress={75}
+          amount="N150,000.00"
+          percentageIncrease="15% more than 7 days ago"
+        />
+      </div>
 
-      {/* Main Content Area */}
-      <div className="flex">
-        {/* Sidebar */}
-        <Sidebar />
+      {/* Charts Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        <ChartComponent
+          title="Funds Donated Over Time"
+          labels={["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]}
+          dataValues={[200, 300, 400, 500, 600, 700, 800]}
+        />
+        <ChartComponent
+          title="Donations per Country"
+          labels={[
+            "Nigeria",
+            "UK",
+            "USA",
+            "Ghana",
+            "Egypt",
+            "Canada",
+            "India",
+            "Austria",
+          ]}
+          dataValues={[500, 300, 400, 200, 100, 150, 250, 50]}
+          isHorizontal={true}
+        />
+      </div>
 
-        {/* Dashboard Content */}
-        <div className="flex-1 p-6">
-          {/* Page Title */}
-          {/* <h1 className="text-2xl font-bold text-gray-800 mb-6">Dashboard</h1> */}
+      {/* Transactions Table */}
+      <div className="mb-8">
+        <TransactionsTable />
+      </div>
 
-          {/* Stats Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            <StatsCard
-              title="Maiduguri Flood Victims"
-              progress={90}
-              amount="N200,000.00"
-              percentageIncrease="20% more than 7 days ago"
-            />
-            <StatsCard
-              title="Funds donated"
-              progress={75}
-              amount="N150,000.00"
-              percentageIncrease="15% more than 7 days ago"
-            />
-          </div>
-
-          {/* Charts Section */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-            <DonationChart />
-            <CountryChart />
-          </div>
-
-          {/* Transactions Table */}
-          <div className="mb-8">
-            <TransactionsTable transactions={transactions} />
-          </div>
-
-          {/* Comments Section */}
-          <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200 mb-8">
-            <Comments />
-          </div>
-        </div>
+      {/* Comments Section */}
+      <div className="mb-8">
+        <Comments updateCommentsCount={updateCommentsCount} />
       </div>
     </div>
   );

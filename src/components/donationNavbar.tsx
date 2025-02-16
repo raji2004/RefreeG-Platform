@@ -1,20 +1,22 @@
 import { useState } from "react";
 import { FaClock } from "react-icons/fa";
-import Comment, { getCommentsCount } from "./Comments";
+import Comment from "./Comments";
 import FAQ from "./FAQ";
 import Community from "./Community";
 import Updates from "./Updates";
 
 const DonationNav = () => {
   const [activeTab, setActiveTab] = useState("Comment");
+  const [commentsCount, setCommentsCount] = useState(0);
 
-  // Fetch the comments count directly from the Comments component
-  const commentsCount = getCommentsCount();
+  const updateCommentsCount = (count: number) => {
+    setCommentsCount(count);
+  };
 
   const renderComponent = () => {
     switch (activeTab) {
       case "Comment":
-        return <Comment />;
+        return <Comment updateCommentsCount={updateCommentsCount} />;
       case "FAQ":
         return <FAQ />;
       case "Community":
@@ -22,7 +24,7 @@ const DonationNav = () => {
       case "Updates":
         return <Updates />;
       default:
-        return <Comment />;
+        return <Comment updateCommentsCount={updateCommentsCount} />;
     }
   };
 

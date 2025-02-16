@@ -73,8 +73,8 @@ export default function Causes() {
         <span className="text-black"> &gt; <span className='pl-6'> My Causes</span></span>
       </div>
 
-      <div className="flex justify-between mt-4">
-        <div className="flex gap-8 MajorLinker">
+      <div className="lg:flex justify-between mt-4">
+        <div className="flex gap-6 lg:text-base md:text-sm sm:text-xs MajorLinker">
           {["All", "Pending", "Approved", "Completed"].map((status) => (
             <div
               key={status}
@@ -87,7 +87,7 @@ export default function Causes() {
         </div>
 
         <div className="flex gap-4 items-center">
-          <div className="flex items-center gap-2 cursor-pointer">
+          <div className="flex items-center gap-2 cursor-pointer lg:text-base md:text-sm sm:text-xs">
             <PlusIcon /> Add Cause
           </div>
           <div
@@ -100,7 +100,7 @@ export default function Causes() {
       </div>
 
       {/* Causes Table */}
-      <div className="overflow-x-auto w-full">
+      <div className="w-full">
         <table className="w-full bg-[#FAFCFF] border-collapse">
           <thead>
             <tr className="border-b bg-[#E7EBEF]">

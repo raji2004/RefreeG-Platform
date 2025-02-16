@@ -16,12 +16,15 @@ import {
   LifebuoyIcon as SupportIcon,
   ArrowLeftOnRectangleIcon as SignOutIcon,
   ChevronDownIcon,
+  Bars3Icon,
+  XMarkIcon,
 } from "@heroicons/react/24/outline";
 
 const Sidebar: React.FC = () => {
   const router = useRouter();
   const pathname = usePathname();
   const [isActivityOpen, setIsActivityOpen] = useState(false);
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
   useEffect(() => {
     if (["/UserFlow/MyCauses", "/UserFlow/DonationHistory", "/signed-petitions"].includes(pathname)) {
@@ -42,15 +45,29 @@ const Sidebar: React.FC = () => {
         { name: "Signed Petitions", path: "/UserFlow/SignedPetitions", icon: PetitionsIcon },
       ],
     },
-    { name: "Cause Dashboard", path: "/admin/dashboard", icon: CauseDashboardIcon },
-    { name: "Notification Centre", path: "/admin/dashboard/notifications", icon: NotificationIcon },
+    {
+      name: "Cause Dashboard",
+      path: "/admin/dashboard",
+      icon: CauseDashboardIcon,
+    },
+    {
+      name: "Notification Centre",
+      path: "/admin/dashboard/notifications",
+      icon: NotificationIcon,
+    },
     { name: "Account", path: "/account", icon: AccountIcon },
     { name: "Security", path: "/admin/dashboard/security", icon: SecurityIcon },
-    { name: "Support & Help Center", path: "/admin/dashboard/support", icon: SupportIcon },
+    {
+      name: "Support & Help Center",
+      path: "/admin/dashboard/support",
+      icon: SupportIcon,
+    },
+    { name: "Sign Out", path: "/signout", icon: SignOutIcon },
   ];
 
-  return (
-    <div className="w-96 bg-[#FAFCFF] text-black min-h-screen p-4 border-r border-[#E3E3E3]">
+  // Extract the common sidebar content into a function
+  const renderSidebarContent = () => (
+    <div className="w-64 bg-white text-black min-h-screen p-4 border-r relative">
       <h1 className="text-2xl font-bold flex items-center mb-6">
         <DashboardIcon className="w-6 h-6 mr-2" /> Dashboard
       </h1>
@@ -64,6 +81,7 @@ const Sidebar: React.FC = () => {
                     setIsActivityOpen(!isActivityOpen);
                   } else {
                     router.push(path);
+                    setIsMobileSidebarOpen(false);
                   }
                 }}
                 className={`flex items-center justify-between p-2 rounded w-full text-left transition duration-300 ${
@@ -98,7 +116,10 @@ const Sidebar: React.FC = () => {
                               ? "bg-gray-300 font-semibold"
                               : "hover:bg-gray-100"
                           }`}
-                          onClick={() => router.push(path)}
+                          onClick={() => {
+                            router.push(path);
+                            setIsMobileSidebarOpen(false);
+                          }}
                         >
                           <SubIcon className="w-5 h-5 mr-2" /> {name}
                         </button>
@@ -111,15 +132,39 @@ const Sidebar: React.FC = () => {
           ))}
         </ul>
       </nav>
-      <div className=" pt-32 bottom-4 left-4 w-full">
-        <button
-          onClick={() => router.push("/signout")}
-          className="flex items-center text-black p-2 rounded w-full text-left hover:bg-gray-100"
-        >
-          <SignOutIcon className="w-5 h-5 mr-2" /> Sign Out
+    </div>
+  );
+
+  return (
+    <>
+      {/* Mobile toggle button */}
+      <div className="md:hidden p-4">
+        <button onClick={() => setIsMobileSidebarOpen(true)}>
+          <Bars3Icon className="w-6 h-6" />
         </button>
       </div>
-    </div>
+
+      {/* Desktop Sidebar */}
+      <div className="hidden md:block">{renderSidebarContent()}</div>
+
+      {/* Mobile Sidebar */}
+      <div
+        className={`fixed inset-0 z-50 transition-transform transform ${
+          isMobileSidebarOpen ? "translate-x-0" : "-translate-x-full"
+        } md:hidden`}
+      >
+        {/* Sidebar panel */}
+        <div className="relative">
+          {renderSidebarContent()}
+          <button
+            className="absolute top-4 right-4 p-2"
+            onClick={() => setIsMobileSidebarOpen(false)}
+          >
+            <XMarkIcon className="w-6 h-6" />
+          </button>
+        </div>
+      </div>
+    </>
   );
 };
 

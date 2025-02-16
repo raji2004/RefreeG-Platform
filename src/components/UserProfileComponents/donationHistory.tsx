@@ -109,7 +109,7 @@ export default function DonationHistory() {
   };
 
   return (
-    <div className="px-6 py-4 w-full bg-[#FAFCFF]">
+    <div className="px-6 py-4 w-full lg:bg-[#FAFCFF]">
       <div className="flex justify-between text-2xl font-semibold">
         <div>
           <span className="text-gray-500 pr-10">Activity Overview</span>
@@ -127,8 +127,8 @@ export default function DonationHistory() {
         </div>
       </div>
 
-      <div className='flex justify-between items-center mt-4'>
-        <div>
+      <div className='lg:flex justify-between items-center mt-4'>
+        <div className='mb-2'>
           <form>
             <input
               type='search'
@@ -170,7 +170,7 @@ export default function DonationHistory() {
         </div>
       </div>
 
-      <div className='mt-6 overflow-x-auto'>
+      <div className='mt-6'>
         <table className='w-full'>
           <thead className='bg-gray-200'>
             <tr>

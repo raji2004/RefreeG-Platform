@@ -11,7 +11,7 @@ export default function Donations() {
 
   const [profileImage, setProfileImage] = useState("/UserProfile/defaultProfile.svg");
   return (
-    <div className='w-full pr-16 bg-[#FAFCFF]'>
+    <div className='w-full lg:bg-[#FAFCFF] lg:pr-16'>
       <Topbar profileImage={profileImage} />
       <div className="flex pt-28 w-full">
         <Sidebar />
