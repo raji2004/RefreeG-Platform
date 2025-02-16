@@ -20,3 +20,19 @@ export const P = ({ className, children, }: typographyProps) => {
     )
 
 }
+
+export const Ul = ({ className, children }: typographyProps) => {
+    return (
+      <ul className={cn(className, "list-disc list-inside text-sm md:text-base leading-normal space-y-2")}>
+        {children}
+      </ul>
+    );
+  };
+  
+export const Ol = ({ className, children }: typographyProps) => {
+    return (
+      <ol className={cn(className, "list-decimal list-inside text-sm md:text-base leading-normal space-y-2")}>
+        {children}
+      </ol>
+    );
+  };

@@ -21,7 +21,7 @@ import { HappeningNearYouMobile } from "@/components/ui/happeningNearYouMobile";
 import { CausesAboutSocioEconomicGrowthMobile } from "@/components/ui/causesAboutSocioEconimicGrowthMobile";
 import { cookies } from 'next/headers';
 import { redirect } from "next/navigation";
-import { H2 } from "@/components/typograpy";
+import { H2, P, Ol } from "@/components/typograpy";
 import { DonationCarousel } from "@/components/donationCarousel";
 
 export default function Home() {
@@ -61,7 +61,7 @@ export default function Home() {
           <H2>Urgent causes</H2>
           <a href="#" className="text-blue-600 hover:underline">View all</a>
         </div>
-        <DonationCarousel/>
+        <DonationCarousel />
 
       </div>
 
@@ -79,7 +79,7 @@ export default function Home() {
 
       <div className='pt-2 pb-8 mb-8'>
         <div className="mt-8 font-semibold text-2xl">How it works</div>
-        <p className="text-xl mb-12">How donation on <span className='text-gray-500 text-xl font-semibold underline'>Refreeg</span> works!</p>
+        <P className="text-xl mb-12">How donation on <span className='text-gray-500 text-xl font-semibold underline'>Refreeg</span> works!</P>
         <div className="w-full flex justify-center mt-2">
           <Image
             src="/images/video.svg"
@@ -92,14 +92,24 @@ export default function Home() {
 
       <div className="w-full justify-center pt-20 pb-12 lg:pb-20 px-10 mb-20 text-white bg-customBlueGray">
         <div className="text-xl mb-16 font-bold lg:text-4xl">How do we ensure transparency?</div>
-        <div className="mb-16">
-          <div className="text-lg lg:text-2xl mb-3 font-normal">At RefreeG, transparency is at the core of our operations. We utilize blockchain technology to provide an immutable and transparent record of all transactions. Here's how we ensure transparency:</div>
-          <div className="flex mb-4 text-lg lg:text-2xl"><div className="mr-2">1.</div>Blockchain Integration: Every donation and disbursement is recorded on the blockchain, creating a public ledger accessible to all stakeholders. This ensures that funds are tracked and cannot be altered retroactively.</div>
-          <div className="flex mb-4 text-lg lg:text-2xl"><div className="mr-2">2.</div>Real-Time Tracking: Donors can track their contributions in real-time, from donation to final allocation, providing assurance that funds are used as intended.</div>
-          <div className="flex mb-4 text-lg lg:text-2xl"><div className="mr-2">3.</div>Detailed Reporting: We offer comprehensive reports on the use of funds, project outcomes, and the impact created. These reports are made publicly available, ensuring accountability.</div>
-          <div className="flex mb-4 text-lg lg:text-2xl"><div className="mr-2">4.</div>Third-Party Audits: Regular audits by independent third parties verify the accuracy and integrity of our financial records and processes.</div>
-          <div className="flex mb-4 text-lg lg:text-2xl"><div className="mr-2">5.</div>User Verification: Both donors and recipients undergo a verification process to ensure legitimacy and prevent fraud.</div>
-        </div>
+        <Ol className="mb-16">
+          <P>At RefreeG, transparency is at the core of our operations. We utilize blockchain technology to provide an immutable and transparent record of all transactions. Here's how we ensure transparency:</P>
+          <li className="mb-4 text-lg">
+            Blockchain Integration: Every donation and disbursement is recorded on the blockchain, creating a public ledger accessible to all stakeholders. This ensures that funds are tracked and cannot be altered retroactively.
+          </li>
+          <li className="mb-4 text-lg">
+            Real-Time Tracking: Donors can track their contributions in real-time, from donation to final allocation, providing assurance that funds are used as intended.
+          </li>
+          <li className="mb-4 text-lg">
+            Detailed Reporting: We offer comprehensive reports on the use of funds, project outcomes, and the impact created. These reports are made publicly available, ensuring accountability.
+          </li>
+          <li className="mb-4 text-lg">
+            Third-Party Audits: Regular audits by independent third parties verify the accuracy and integrity of our financial records and processes.
+          </li>
+          <li className="mb-4 text-lg">
+            User Verification: Both donors and recipients undergo a verification process to ensure legitimacy and prevent fraud.
+          </li>
+        </Ol>
         <div className="md:flex lg:flex mt-10 mb-10 text-base lg:text-2xl">
           <span className="mr-4">Want to be a part of us?</span>
           <span className="flex mr-1 md:font-semibold lg:font-semibold underline">
