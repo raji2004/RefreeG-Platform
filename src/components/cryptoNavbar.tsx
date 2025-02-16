@@ -65,7 +65,7 @@ const CryptoNavbar = () => {
             </div>
             <div className="hidden sm:ml-6 sm:block">
               <div className="flex space-x-4">
-                <Link href={"/"}>
+                <Link href={"/crypto-donation"}>
                   <p className="rounded-md px-3 py-2 text-sm font-medium text-slate-700">
                     Campaigns
                   </p>

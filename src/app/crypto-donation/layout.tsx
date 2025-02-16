@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Montserrat } from "next/font/google";
 import "../../app/globals.css";
 import { ThirdwebProvider } from "thirdweb/react";
 import CryptoNavbar from "../../components/cryptoNavbar";
-
-const inter = Inter({ subsets: ["latin"] });
+const montserrat = Montserrat({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "RefreeG Crypto Feature",
@@ -18,7 +17,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-slate-100 text-slate-700">
+      <body className={`${montserrat.className} bg-white text-black  `}>
         <ThirdwebProvider>
           <CryptoNavbar />
           {children}
