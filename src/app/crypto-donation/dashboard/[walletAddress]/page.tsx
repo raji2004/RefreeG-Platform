@@ -93,7 +93,7 @@ const CreateCampaignModal = ({
     try {
       console.log("Deploying contract...");
 
-      // Deploy the contract using the provided parameters
+      // Deploy the contract from CrowdfundingFactory
       const response = await deployPublishedContract({
         client: client,
         chain: polygonAmoy,
@@ -105,37 +105,17 @@ const CreateCampaignModal = ({
           _goal: campaignGoal,
           _durationInDays: campaignDeadline,
         },
-        publisher: "0x49CE102E4366DC747bB18CeaC975A22645Ee9Eba", // Publisher address (ensure it's correct)
+        publisher: "0xC6d64870FD10b109b940EAAC286D5c00Bdd1db3a", // Publisher address (ensure it's correct)
         version: "1.0.0", // Version of the contract you're deploying
       });
 
-      // Log the response to check its structure
-      console.log("Deployment Response:", response);
-
-      // If the response is a string (the contract address), use it directly
-      const contractAddress =
-        typeof response === "string" ? response : response?.[0] || "0x0";
-
-      console.log("Contract deployed at address:", contractAddress);
-
-      if (contractAddress && contractAddress !== "0x0") {
-        alert("Contract deployed successfully!");
-        refetch(); // Refresh campaign list after deployment
-      } else {
-        console.error("Failed to deploy contract, address is not valid.");
-        alert("Failed to deploy contract: Invalid contract address returned.");
-      }
-    } catch (error: unknown) {
-      // Cast error to an instance of Error
-      if (error instanceof Error) {
-        console.error("Error deploying contract:", error.message);
-        alert("Error deploying contract: " + error.message); // Display error message to the user
-      } else {
-        console.error("Unknown error during contract deployment", error);
-        alert("Unknown error occurred during contract deployment.");
-      }
+      alert("Contract deployed successfully!");
+    } catch (error) {
+      console.error(error);
     } finally {
       setIsDeployingContract(false);
+      setIsModalOpen(false);
+      refetch;
     }
   };
 
