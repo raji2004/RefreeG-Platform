@@ -69,24 +69,20 @@ export const DonationCarousel: React.FC = () => {
           <div className="hidden md:block">
             <Carousel
               setApi={setApi}
-              opts={{
-                align: "start",
-                slidesToScroll: 1, // Scroll one slide (2x2 grid) at a time
-              }}
             >
               <CarouselContent>
                 {groupedCauses.map((group, groupIndex) => (
                   <CarouselItem key={groupIndex} className="basis-full">
                     <div className="grid grid-cols-2 grid-rows-2 gap-6">
                       {group.map((cause) => (
-                        <div key={cause.id} className="w-full">
-                          <CauseCard {...cause} />
-                        </div>
+                       
+                          <CauseCard key={cause.id} {...cause} />
+                    
                       ))}
-                      {/* Fill empty slots if the last group has fewer than 4 cards */}
-                      {Array.from({ length: 4 - group.length }).map((_, index) => (
+                     
+                      {/* {Array.from({ length: 4 - group.length }).map((_, index) => (
                         <div key={`empty-${index}`} className="w-full" aria-hidden="true" />
-                      ))}
+                      ))} */}
                     </div>
                   </CarouselItem>
                 ))}
