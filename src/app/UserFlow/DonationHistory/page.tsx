@@ -9,9 +9,9 @@ export default function Donations() {
   const [profileImage, setProfileImage] = useState<string>("/UserProfile/defaultProfile.svg");
 
   return (
-    <div className="w-full lg:bg-[#FAFCFF] lg:pr-16">
+    <div className="w-full lg:bg-[#FAFCFF]">
       <Topbar profileImage={profileImage} />
-      <div className="flex pt-28 w-full">
+      <div className="flex w-full">
         <Sidebar />
         <DonationHistory />
       </div>

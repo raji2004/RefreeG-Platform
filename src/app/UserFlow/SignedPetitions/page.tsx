@@ -11,9 +11,9 @@ export default function Petitions() {
 
     const [profileImage, setProfileImage] = useState("/UserProfile/defaultProfile.svg");
   return (
-    <div className='w-full lg:bg-[#FAFCFF] lg:pr-16'>
+    <div className='w-full lg:bg-[#FAFCFF]'>
       <Topbar profileImage={profileImage} />
-      <div className="flex pt-28 w-full">
+      <div className="flex w-full">
         <Sidebar />
         <SignedPetitions />
       </div>

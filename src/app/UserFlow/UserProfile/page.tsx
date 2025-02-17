@@ -11,7 +11,7 @@ export default function UserProfile() {
   return (
     <div>
       <Topbar profileImage={profileImage} />
-      <div className="flex pt-28 w-full">
+      <div className="flex w-full">
         <Sidebar />
         <GeneralInfo profileImage={profileImage} setProfileImage={setProfileImage} />
       </div>
