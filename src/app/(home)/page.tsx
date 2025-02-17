@@ -14,7 +14,9 @@ export default function Home() {
 
   const cookieStore = cookies();
   const userSession = cookieStore.get('userSession')?.value;
-
+  if (!userSession) {
+      redirect('/create-account');
+  }
 
   return (
     <div>
