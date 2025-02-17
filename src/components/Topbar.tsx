@@ -2,7 +2,11 @@ import React from "react";
 import { BellIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import Image from "next/image";
 
-const Topbar: React.FC = () => {
+interface TopbarProps {
+  profileImage: string;
+}
+
+const Topbar: React.FC<TopbarProps> = ({ profileImage }) => {
   return (
     <div className="bg-white shadow-md p-4 w-full">
       <div className="container mx-auto flex justify-between items-center">
@@ -31,7 +35,7 @@ const Topbar: React.FC = () => {
         <div className="flex items-center">
           <BellIcon className="w-6 h-6 text-gray-500 mr-4 cursor-pointer" />
           <Image
-            src=""
+            src={profileImage || "/UserProfile/defaultProfile.svg"}
             alt="Profile"
             width={40}
             height={40}
@@ -44,3 +48,4 @@ const Topbar: React.FC = () => {
 };
 
 export default Topbar;
+
