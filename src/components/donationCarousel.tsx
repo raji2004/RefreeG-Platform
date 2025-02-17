@@ -7,7 +7,7 @@ import {
     CarouselPrevious,
     type CarouselApi,
 } from "@/components/ui/carousel";
-import { MainCauseCard, CauseCard } from "@/components/CauseCard";
+import { MainCauseCard } from "@/components/CauseCard";
 import { useState, useEffect } from "react";
 import { causesData } from "@/lib/dummyData";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -58,7 +58,7 @@ export const DonationCarousel: React.FC = () => {
                             <CarouselContent>
                                 {otherCauses.map((cause) => (
                                     <CarouselItem key={cause.id} className="basis-full">
-                                        <CauseCard {...cause} />
+                                        <MainCauseCard {...cause} hideButton hideDescription hideTags />
                                     </CarouselItem>
                                 ))}
                             </CarouselContent>
@@ -76,13 +76,13 @@ export const DonationCarousel: React.FC = () => {
                                         <div className="grid grid-cols-2 grid-rows-2 gap-6">
                                             {group.map((cause) => (
 
-                                                <CauseCard key={cause.id} {...cause} />
+                                                <MainCauseCard key={cause.id} {...cause} hideButton hideDescription hideTags />
 
                                             ))}
 
-                                            {/* {Array.from({ length: 4 - group.length }).map((_, index) => (
+                                            {Array.from({ length: 4 - group.length }).map((_, index) => (
                         <div key={`empty-${index}`} className="w-full" aria-hidden="true" />
-                      ))} */}
+                      ))} 
                                         </div>
                                     </CarouselItem>
                                 ))}

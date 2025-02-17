@@ -25,25 +25,6 @@ import { H2, P, Ol } from "@/components/typograpy";
 import { DonationCarousel } from "@/components/donationCarousel";
 
 export default function Home() {
-  const goalAmount = 2000000;
-  const donationAmount = 1700000;
-  const progressPercentage = (donationAmount / goalAmount) * 100;
-
-  const goalAmount2 = 2000000;
-  const donationAmount2 = 1300000;
-  const progressPercentage2 = (donationAmount2 / goalAmount2) * 100;
-
-  const goalAmount3 = 2000000;
-  const donationAmount3 = 700000;
-  const progressPercentage3 = (donationAmount3 / goalAmount3) * 100;
-
-  const goalAmount4 = 2000000;
-  const donationAmount4 = 200000;
-  const progressPercentage4 = (donationAmount4 / goalAmount4) * 100;
-
-  const goalAmount5 = 2000000;
-  const donationAmount5 = 1000000;
-  const progressPercentage5 = (donationAmount5 / goalAmount5) * 100;
 
   const cookieStore = cookies();
   const userSession = cookieStore.get('userSession')?.value;
@@ -78,20 +59,21 @@ export default function Home() {
       </div> */}
 
       <div className='pt-2 pb-8 mb-8'>
-        <div className="mt-8 font-semibold text-2xl">How it works</div>
+        <H2 className="mt-8 font-semibold text-2xl">How it works</H2>
         <P className="text-xl mb-12">How donation on <span className='text-gray-500 text-xl font-semibold underline'>Refreeg</span> works!</P>
-        <div className="w-full flex justify-center mt-2">
-          <Image
-            src="/images/video.svg"
-            alt="How it works video"
-            height={400}
-            width={800}
-          />
-        </div>
+
+        <Image
+          src="/images/video.svg"
+          alt="How it works video"
+          height={400}
+          width={800}
+          className=" mx-auto"
+        />
+
       </div>
 
-      <div className="w-full justify-center pt-20 pb-12 lg:pb-20 px-10 mb-20 text-white bg-customBlueGray">
-        <div className="text-xl mb-16 font-bold lg:text-4xl">How do we ensure transparency?</div>
+      <div className="w-full justify-center pt-20 pb-12 lg:pb-20 px-10 mb-20 space-y-5 text-white bg-customBlueGray">
+        <H2>How do we ensure transparency?</H2>
         <Ol className="mb-16">
           <P>At RefreeG, transparency is at the core of our operations. We utilize blockchain technology to provide an immutable and transparent record of all transactions. Here's how we ensure transparency:</P>
           <li className="mb-4 text-lg">
@@ -125,7 +107,6 @@ export default function Home() {
       </div>
 
       <CausesAboutSocioEconomicGrowth />
-      <CausesAboutSocioEconomicGrowthMobile />
       <HappeningNearYou />
       <HappeningNearYouMobile />
       <CausesSupported />
