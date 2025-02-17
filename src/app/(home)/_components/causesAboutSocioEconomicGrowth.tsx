@@ -12,6 +12,7 @@ import { useState, useEffect } from "react";
 import { causesData } from "@/lib/dummyData";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { H2, P } from "@/components/typograpy";
 
 export default function CausesAboutSocioEconomicGrowth() {
   const mainCause = { ...causesData[0], description: causesData[0].description || "" }; // Ensure description is defined
@@ -32,7 +33,11 @@ export default function CausesAboutSocioEconomicGrowth() {
 
   };
   return (
-    <div className=" my-10">
+    <div className=" my-10 space-y-5">
+      <div>
+        <H2 className=" font-medium">Causes about socio-economic growth</H2>
+        <P className=" mt-1 text-gray-400">These causes contribute to socio-economic growth of the community</P>
+      </div>
       <Carousel setApi={setApi}>
         <CarouselContent>
           {otherCauses.map((cause) => (

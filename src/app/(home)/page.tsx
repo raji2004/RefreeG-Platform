@@ -1,24 +1,10 @@
 import React from "react";
 import Image from "next/image";
-import { Navbar } from "../../components/ui/navbar";
-import {
-  FaExclamationTriangle,
-  FaHeartbeat,
-  FaMapMarkerAlt,
-  FaShare,
-  FaHeart,
-  FaSmile,
-  FaLeaf,
-} from "react-icons/fa";
-import { Progress } from "../../components/ui/progress";
-import { Footer } from "../../components/ui/footer";
-import CausesAboutSocioEconomicGrowth from "@/components/ui/causesAboutSocioEconomicGrowth";
-import HappeningNearYou from "@/components/ui/happeningNearYou";
-import CausesSupported from "@/components/ui/causesWeSupport";
-import FAQ from "@/components/ui/frequentlyAskedQuestions";
+import CausesAboutSocioEconomicGrowth from "./_components/causesAboutSocioEconomicGrowth";
+import HappeningNearYou from "./_components/happeningNearYou";
+import CausesSupported from "./_components/causesWeSupport";
+import FAQ from "./_components/frequentlyAskedQuestions";
 import WhyUseUs from "@/components/ui/whyUseUs";
-import { HappeningNearYouMobile } from "@/components/ui/happeningNearYouMobile";
-import { CausesAboutSocioEconomicGrowthMobile } from "@/components/ui/causesAboutSocioEconimicGrowthMobile";
 import { cookies } from 'next/headers';
 import { redirect } from "next/navigation";
 import { H2, P, Ol } from "@/components/typograpy";
@@ -108,7 +94,7 @@ export default function Home() {
 
       <CausesAboutSocioEconomicGrowth />
       <HappeningNearYou />
-      <HappeningNearYouMobile />
+
       <CausesSupported />
       <FAQ />
 

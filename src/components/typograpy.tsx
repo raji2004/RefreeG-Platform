@@ -13,6 +13,11 @@ export const H2 = ({ className, children }: typographyProps) => {
         <h2 className={cn(className,'text-xl md:text-4xl leading-relaxed')}>{children}</h2>
     )
 }
+export const H3 = ({ className, children }: typographyProps) => {
+    return (
+        <h2 className={cn(className,'text-lg md:text-2xl leading-relaxed')}>{children}</h2>
+    )
+}
 
 export const P = ({ className, children, }: typographyProps) => {
     return (
