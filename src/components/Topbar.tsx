@@ -32,7 +32,7 @@ const Topbar: React.FC<TopbarProps> = ({ profileImage }) => {
         </div>
 
         {/* Right Section: Notifications & Profile */}
-        <div className="flex items-center">
+       {profileImage && <div className="flex items-center">
           <BellIcon className="w-6 h-6 text-gray-500 mr-4 cursor-pointer" />
           {profileImage ? (
             <Image
@@ -46,6 +46,7 @@ const Topbar: React.FC<TopbarProps> = ({ profileImage }) => {
             <div className="w-10 h-10 bg-gray-300 rounded-full" /> // Placeholder if no profile image
           )}
         </div>
+        }
       </div>
     </div>
   );
