@@ -4,7 +4,7 @@ import CausesAboutSocioEconomicGrowth from "./_components/causesAboutSocioEconom
 import HappeningNearYou from "./_components/happeningNearYou";
 import CausesSupported from "./_components/causesWeSupport";
 import FAQ from "./_components/frequentlyAskedQuestions";
-import WhyUseUs from "@/components/ui/whyUseUs";
+import WhyUseUs from "./_components/whyUseUs";
 import { cookies } from 'next/headers';
 import { redirect } from "next/navigation";
 import { H2, P, Ol } from "@/components/typograpy";
