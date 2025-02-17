@@ -98,19 +98,7 @@ export default function Home() {
       <CausesSupported />
       <FAQ />
 
-      <div className="flex flex-col items-center w-10/12 lg:w-8/12 mx-auto rounded-3xl text-white bg-customNavyBlue2 px-10 py-10 mb-16">
-        <div className="text-lg lg:text-3xl font-semibold mb-6">Ready to be part of the solution?</div>
-        <div className="w-11/12 text-center text-base lg:text-lg mb-6">Join the RefreeG community and become a RefreeGerian today! By joining us, you contribute to empowering less privileged individuals in African communities, supporting causes that foster socio-economic growth, and promoting sustainable development. Together, we can make a significant impact and create a brighter future for all.</div>
-        <button className="flex border-1 rounded-md bg-white px-3 py-3 text-blue-900 font-semibold hover:bg-gray-300 transition delay-150">
-          Join our community
-          <Image
-            src="/images/arrowRightBlue.svg"
-            alt="right arrow"
-            height={20}
-            width={20}
-          />
-        </button>
-      </div>
+     
 
 
     </div>

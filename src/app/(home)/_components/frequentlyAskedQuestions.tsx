@@ -40,16 +40,16 @@ export default function FAQ  ()  {
       <h1 className="text-4xl font-semibold mb-3">FAQS</h1>
       <p className="text-xl mb-6">Here are some popular questions our users can’t stop asking.</p>
       
-      <Accordion type="multiple" className="w-full grid grid-cols-3 ">
+      <Accordion type="multiple" className="w-full grid grid-cols-1  md:grid-cols-2 lg:grid-cols-3 ">
         {faqs.map((faq, index) => (
-          <AccordionItem key={index} value={`item-${index}`} className="mb-6 w-[300px] border-none">
+          <AccordionItem key={index} value={`item-${index}`} className="mb-6 md:w-[300px] border-none">
             <AccordionTrigger className="flex justify-between items-center p-6 rounded-3xl border-none bg-blue-50 hover:bg-blue-100 data-[state=open]:bg-customNavyBlue data-[state=open]:rounded-b-none data-[state=open]:text-white">
-              <div className="text-left font-semibold text-lg border-none">{faq.question}</div>
+              <div className="text-left font-semibold text-base border-none">{faq.question}</div>
             
             </AccordionTrigger>
-            <AccordionContent className=" px-6 pb-6 pt-2 border-customNavyBlue rounded-b-3xl bg-customNavyBlue ">
+            <AccordionContent className=" px-6 pb-6 w-full   border-none rounded-b-3xl bg-customNavyBlue ">
               <div className=" w-full h-[1px] mb-4 bg-white"></div>
-              <p className=" bg-customNavyBlue h-32 text-white">{faq.answer}</p>
+              <p className=" bg-customNavyBlue h-fit md:h-32 text-white">{faq.answer}</p>
             </AccordionContent>
           </AccordionItem>
         ))}

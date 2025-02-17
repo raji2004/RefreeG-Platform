@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import * as AccordionPrimitive from "@radix-ui/react-accordion"
-import { ChevronDown,Plus,Minus } from "lucide-react"
+import { ChevronDown, Plus, Minus } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
@@ -23,30 +23,33 @@ AccordionItem.displayName = "AccordionItem"
 const AccordionTrigger = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Trigger>
->(({ className, children, ...props }, ref) =>{
-  
+>(({ className, children, ...props }, ref) => {
+
   const [isOpen, setIsOpen] = React.useState(false);
 
-const handleToggle = () => {
-  setIsOpen((prevIsOpen) => !prevIsOpen);
-};
+  const handleToggle = () => {
+    setIsOpen((prevIsOpen) => !prevIsOpen);
+  };
 
   return (
-  <AccordionPrimitive.Header className="flex">
-    <AccordionPrimitive.Trigger
-      ref={ref}
-      className={cn(
-        "flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline [&[data-state=open]>svg]:rotate-180",
-        className
-      )}
-      onClick={handleToggle}
-      {...props}
-    >
-      {children}
-      {isOpen ? <Minus size={24} /> : <Plus size={24} />}
-    </AccordionPrimitive.Trigger>
-  </AccordionPrimitive.Header>
-)})
+    <AccordionPrimitive.Header className="flex">
+      <AccordionPrimitive.Trigger
+        ref={ref}
+        className={cn(
+          "flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline [&[data-state=open]>svg]:rotate-180",
+          className
+        )}
+        onClick={handleToggle}
+        {...props}
+      >
+        {children}
+        <div className="w-6 h-6 flex items-center justify-center">
+          {isOpen ? <Minus className="w-5 h-5" /> : <Plus className="w-5 h-5" />}
+        </div>
+      </AccordionPrimitive.Trigger>
+    </AccordionPrimitive.Header>
+  )
+})
 AccordionTrigger.displayName = AccordionPrimitive.Trigger.displayName
 
 const AccordionContent = React.forwardRef<
