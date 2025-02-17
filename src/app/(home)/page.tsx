@@ -61,7 +61,7 @@ export default function Home() {
       <div className="w-full justify-center pt-20 pb-12 lg:pb-20 px-10 mb-20 space-y-5 text-white bg-customBlueGray">
         <H2>How do we ensure transparency?</H2>
         <Ol className="mb-16">
-          <P>At RefreeG, transparency is at the core of our operations. We utilize blockchain technology to provide an immutable and transparent record of all transactions. Here's how we ensure transparency:</P>
+          <P>At RefreeG, transparency is at the core of our operations. We utilize blockchain technology to provide an immutable and transparent record of all transactions. {"Here's"} how we ensure transparency:</P>
           <li className="mb-4 text-lg">
             Blockchain Integration: Every donation and disbursement is recorded on the blockchain, creating a public ledger accessible to all stakeholders. This ensures that funds are tracked and cannot be altered retroactively.
           </li>
