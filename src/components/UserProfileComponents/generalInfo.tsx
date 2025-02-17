@@ -67,11 +67,12 @@ export default function GeneralInfo({ profileImage, setProfileImage }: GeneralIn
             </label>
           ) : (
             <Image
-              src={profileImage || "/UserProfile/defaultProfile.svg"}
+              src={previewImage ? URL.createObjectURL(previewImage) : "/UserProfile/editPhoto.svg"}
               className="w-full h-full rounded-full object-cover"
               alt="Profile Picture"
               width={160}
               height={160}
+              unoptimized // 🔹 Disable Next.js optimization
             />
           )}
           <input type="file" id="fileInput" accept="image/*" className="hidden" onChange={handleImageChange} />
