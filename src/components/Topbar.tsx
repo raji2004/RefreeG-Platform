@@ -4,6 +4,7 @@ import Image from "next/image";
 
 interface TopbarProps {
   profileImage?: string;
+
 }
 
 const Topbar: React.FC<TopbarProps> = ({ profileImage }) => {
@@ -32,7 +33,7 @@ const Topbar: React.FC<TopbarProps> = ({ profileImage }) => {
         </div>
 
         {/* Right Section: Notifications & Profile */}
-        <div className="flex items-center">
+       {profileImage && <div className="flex items-center">
           <BellIcon className="w-6 h-6 text-gray-500 mr-4 cursor-pointer" />
           <Image
             src={profileImage || "/UserProfile/defaultProfile.svg"}
@@ -41,7 +42,7 @@ const Topbar: React.FC<TopbarProps> = ({ profileImage }) => {
             height={40}
             className="rounded-full"
           />
-        </div>
+        </div>}
       </div>
     </div>
   );
