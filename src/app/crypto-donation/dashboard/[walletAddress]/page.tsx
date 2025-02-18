@@ -1,7 +1,7 @@
 "use client";
 import { client } from "../../../../lib/client";
 import { CROWDFUNDING_FACTORY } from "../../../../lib/constants/contracts";
-import { MyCampaignCard } from "../../../../components/MyCampaignCard";
+import { CampaignCard } from "../../../../components/CampaignCard";
 import { useState } from "react";
 import { getContract } from "thirdweb";
 import { polygonAmoy } from "thirdweb/chains";
@@ -10,7 +10,6 @@ import { useActiveAccount, useReadContract } from "thirdweb/react";
 
 export default function DashboardPage() {
   const account = useActiveAccount();
-
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const contract = getContract({
@@ -49,9 +48,10 @@ export default function DashboardPage() {
         {!isLoadingMyCampaigns &&
           (myCampaigns && myCampaigns.length > 0 ? (
             myCampaigns.map((campaign, index) => (
-              <MyCampaignCard
+              <CampaignCard
                 key={index}
                 contractAddress={campaign.campaignAddress}
+                showProgress={true} // Disable progress bar for my campaigns
               />
             ))
           ) : (
@@ -115,7 +115,7 @@ const CreateCampaignModal = ({
     } finally {
       setIsDeployingContract(false);
       setIsModalOpen(false);
-      refetch;
+      refetch();
     }
   };
 

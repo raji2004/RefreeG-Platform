@@ -13,6 +13,7 @@ export default function Home() {
     chain: polygonAmoy,
     address: CROWDFUNDING_FACTORY,
   });
+
   // Get all campaigns deployed with CrowdfundingFactory
   const {
     data: campaigns,
@@ -36,7 +37,8 @@ export default function Home() {
               campaigns.map((campaign) => (
                 <CampaignCard
                   key={campaign.campaignAddress}
-                  campaignAddress={campaign.campaignAddress}
+                  contractAddress={campaign.campaignAddress}
+                  showProgress={true} // Enable progress bar for all campaigns
                 />
               ))
             ) : (
