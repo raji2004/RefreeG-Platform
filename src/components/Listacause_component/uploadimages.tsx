@@ -110,7 +110,7 @@ export default function UploadImage() {
       {image && (
         <div className="mt-4">
           {/* Display image name and size */}
-          <div className="border border-[#b5b3b3] py-3 px-2">
+          <div className="border block w-full border-[#b5b3b3] py-3 px-2">
             <div className="flex items-center justify-between">
               <div className="flex gap-2">
                 <Image
@@ -120,7 +120,7 @@ export default function UploadImage() {
                   height={30}
                 />
                 <span>
-                  <p className="text-[#363939] text-lg font-normal font-montserrat">{image.name}</p>
+                  <p className="text-[#363939] text-md md:text-lg font-normal font-montserrat">{image.name}</p>
                   <p className="text-[#b5b3b3] text-xs font-normal font-montserrat">{image.size} KB</p>
                 </span>
               </div>

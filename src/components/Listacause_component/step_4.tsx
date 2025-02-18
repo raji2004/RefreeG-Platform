@@ -60,7 +60,7 @@ export const Step4Form = () => {
   };
 
   return (
-    <form className="flex flex-col h-screen">
+    <form className="flex flex-col h-screen mt-10">
       <div className="text-base font-semibold">Tell your story</div>
       <div className="mt-2 text-xs">
         Your story is what connects donors to your cause. Share the inspiration behind it, 

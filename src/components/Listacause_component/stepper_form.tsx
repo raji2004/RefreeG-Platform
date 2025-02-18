@@ -51,21 +51,21 @@ export default function StepperForm() {
   const handleBack = () => setStep((prev) => Math.max(prev - 1, 1));
 
   return (
-    <div className="mx-auto">
+    <div className="mx-auto ">
       {/* Stepper Tabs */}
       <Tabs value={`step-${step}`}>
         <TabsList className="flex justify-between my-20 mb-10">
           <TabsTrigger value="step-1" disabled={step < 1}>
-            Step 1
+            
           </TabsTrigger>
           <TabsTrigger value="step-2" disabled={step < 2}>
-            Step 2
+            
           </TabsTrigger>
           <TabsTrigger value="step-3" disabled={step < 3}>
-            Step 3
+            
           </TabsTrigger>
           <TabsTrigger value="step-4" disabled={step < 4}>
-            Step 4
+           
           </TabsTrigger>
         </TabsList>
 
