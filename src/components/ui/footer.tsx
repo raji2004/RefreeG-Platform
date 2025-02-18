@@ -1,4 +1,4 @@
-import GetMail from "../../components/ui/GetMail";
+import GetMail from "./GetMail";
 import {
   contactLinks,
   legalLinks,
@@ -7,10 +7,10 @@ import {
 } from "../../constants/index";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { ReactNode } from "react";
 import { Linkedin, Youtube } from "lucide-react";
 
-const Icon = ({ href, children }) => {
+const Icon = ({ href, children }: { href: string; children: ReactNode }) => {
   return (
     <Link
       href={href}
@@ -20,6 +20,7 @@ const Icon = ({ href, children }) => {
     </Link>
   );
 };
+
 const Footer = () => {
   return (
     <section className="w-full h-full px-[10px] md:px-[50px] py-[25px] mt-[30px] bg-footer">
@@ -96,7 +97,6 @@ const Footer = () => {
 
         <div className="mx-auto md:mx-0 flex space-x-3 items-center w-fit md:justify-normal">
           <Link href={socialLinks.Facebook}>
-            {" "}
             <Image
               src={"/facebook.png"}
               className="size-[30px]"
@@ -106,7 +106,6 @@ const Footer = () => {
             />
           </Link>
           <Link href={socialLinks.instagram}>
-            {" "}
             <Image
               src={"/ig.png"}
               className="size-[30px]"
@@ -116,7 +115,6 @@ const Footer = () => {
             />
           </Link>
           <Link href={socialLinks.twitter}>
-            {" "}
             <Image
               src={"/x.png"}
               className="size-[30px]"

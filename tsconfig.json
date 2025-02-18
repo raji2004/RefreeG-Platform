@@ -30,7 +30,9 @@
     ".next/types/**/*.ts",
     "tests/**/*.ts",
     "jest.config.js",
-    "src/lib/formActions.js"
-, "src/components/ui/footer.jsx", "src/components/ui/GetMail.jsx"  ],
+    "src/lib/formActions.js",
+    "src/components/ui/footer.tsx",
+    "src/components/ui/GetMail.tsx"
+  ],
   "exclude": ["node_modules"]
 }
