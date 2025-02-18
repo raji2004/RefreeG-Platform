@@ -1,11 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { FaHeartbeat, FaMapMarkerAlt } from "react-icons/fa";
 import DonationProgress from "../components/ui/donationProgress";
-import { Bookmark } from "lucide-react"
-
-
-
+import { Bookmark } from "lucide-react";
 
 interface MainCauseCardProps {
   imageSrc: string;
@@ -38,6 +35,14 @@ export const MainCauseCard: React.FC<MainCauseCardProps> = ({
   hideTags,
   hideButton,
 }) => {
+  // State to track bookmark status
+  const [isBookmarked, setIsBookmarked] = useState(false);
+
+  // Toggle bookmark function
+  const toggleBookmark = () => {
+    setIsBookmarked((prev) => !prev);
+  };
+
   return (
     <div className="bg-white w-full rounded-lg">
       {/* Image */}
@@ -78,39 +83,45 @@ export const MainCauseCard: React.FC<MainCauseCardProps> = ({
           </div>
         </div>
         {/* Bookmark Icon */}
-        <div>
-          <Bookmark size={30} />
+        <div onClick={toggleBookmark} className="cursor-pointer">
+          <Bookmark
+            size={30}
+            className={`transition-colors duration-300 ${
+              isBookmarked ? "text-blue-600 fill-blue-600" : "text-gray-500"
+            }`}
+          />
         </div>
       </div>
 
       {/* Tags (Hidden on Mobile) */}
-      {!hideTags && <div className="hidden md:flex space-x-2 mt-9">
-        {tags?.map((tag, index) => (
-          <span
-            key={index}
-            className="text-sm bg-gray-200 rounded-full px-3 py-1 flex items-center hover:bg-gray-300 transition-colors duration-300"
-          >
-            {tag.icon} {tag.text}
-          </span>
-        ))}
-      </div>}
+      {!hideTags && (
+        <div className="hidden md:flex space-x-2 mt-9">
+          {tags?.map((tag, index) => (
+            <span
+              key={index}
+              className="text-sm bg-gray-200 rounded-full px-3 py-1 flex items-center hover:bg-gray-300 transition-colors duration-300"
+            >
+              {tag.icon} {tag.text}
+            </span>
+          ))}
+        </div>
+      )}
 
       {/* Donation Progress */}
       <div className="mt-6">
-        <DonationProgress
-          currentAmount={donationAmount}
-          goalAmount={goalAmount}
-        />
+        <DonationProgress currentAmount={donationAmount} goalAmount={goalAmount} />
         <div className="font-bold text-gray-800 mt-2">₦{donationAmount} raised</div>
         <div className="text-gray-800">Goal: ₦{goalAmount}</div>
       </div>
 
       {/* Donate Button */}
-     {!hideButton && <div className="flex justify-center mt-4">
-        <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
-          Donate now
-        </button>
-      </div>}
+      {!hideButton && (
+        <div className="flex justify-center mt-4">
+          <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+            Donate now
+          </button>
+        </div>
+      )}
     </div>
   );
 };
