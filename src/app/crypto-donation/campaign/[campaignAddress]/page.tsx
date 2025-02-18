@@ -11,6 +11,8 @@ import {
   useActiveAccount,
   useReadContract,
 } from "thirdweb/react";
+import { CampaignHeader } from "@/components/CampaignHeader";
+import { CampaignProgress } from "@/components/CampaignProgress";
 
 export default function CampaignPage() {
   const account = useActiveAccount();
@@ -100,31 +102,14 @@ export default function CampaignPage() {
 
   return (
     <div className="mx-auto max-w-7xl px-2 mt-4 sm:px-6 lg:px-8">
-      <div className="flex flex-row justify-between items-center">
-        {!isLoadingName && <p className="text-4xl font-semibold">{name}</p>}
-        {owner === account?.address && (
-          <div className="flex flex-row">
-            {isEditing && (
-              <p className="px-4 py-2 bg-gray-500 text-white rounded-md mr-2">
-                Status:
-                {status === 0
-                  ? " Active"
-                  : status === 1
-                  ? " Successful"
-                  : status === 2
-                  ? " Failed"
-                  : "Unknown"}
-              </p>
-            )}
-            <button
-              className="px-4 py-2 bg-blue-500 text-white rounded-md"
-              onClick={() => setIsEditing(!isEditing)}
-            >
-              {isEditing ? "Done" : "Edit"}
-            </button>
-          </div>
-        )}
-      </div>
+      <CampaignHeader
+        name={name as string}
+        owner={owner as string}
+        account={account}
+        status={status as number}
+        isEditing={isEditing}
+        setIsEditing={setIsEditing}
+      />
       <div className="my-4">
         <p className="text-lg font-semibold">Description:</p>
         <p>{description}</p>
@@ -134,26 +119,11 @@ export default function CampaignPage() {
         {!isLoadingDeadline && <p>{deadlineDate.toDateString()}</p>}
       </div>
       {!isLoadingBalance && (
-        <div className="mb-4">
-          <p className="text-lg font-semibold">
-            Campaign Goal: ${goal?.toString()}
-          </p>
-          <div className="relative w-full h-6 bg-gray-200 rounded-full dark:bg-gray-700">
-            <div
-              className="h-6 bg-blue-600 rounded-full dark:bg-blue-500 text-right"
-              style={{ width: `${balancePercentage?.toString()}%` }}
-            >
-              <p className="text-white dark:text-white text-xs p-1">
-                ${balance?.toString()}
-              </p>
-            </div>
-            <p className="absolute top-0 right-0 text-white dark:text-white text-xs p-1">
-              {balancePercentage >= 100
-                ? ""
-                : `${balancePercentage?.toString()}%`}
-            </p>
-          </div>
-        </div>
+        <CampaignProgress
+          goal={goal?.toString() as string}
+          balance={balance?.toString() as string}
+          balancePercentage={balancePercentage}
+        />
       )}
       <div>
         <p className="text-lg font-semibold">Tiers:</p>
