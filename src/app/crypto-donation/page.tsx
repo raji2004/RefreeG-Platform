@@ -3,7 +3,7 @@
 import { getContract } from "thirdweb";
 import { client } from "./client";
 import { polygonAmoy } from "thirdweb/chains";
-import { CROWDFUNDING_FACTORY } from "../../constants/contracts";
+import { CROWDFUNDING_FACTORY } from "../../lib/constants/contracts";
 import { useReadContract } from "thirdweb/react";
 import { CampaignCard } from "../../components/CampaignCard";
 

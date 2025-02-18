@@ -1,6 +1,6 @@
 "use client";
 import { client } from "../../client";
-import { CROWDFUNDING_FACTORY } from "../../../../constants/contracts";
+import { CROWDFUNDING_FACTORY } from "../../../../lib/constants/contracts";
 import { MyCampaignCard } from "../../../../components/MyCampaignCard";
 import { useState } from "react";
 import { getContract } from "thirdweb";
