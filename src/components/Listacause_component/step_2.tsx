@@ -23,8 +23,8 @@ export default function Step2Form({ formData = {}, handleChange }) {
   };
 
   return (
-    <div>
-      <form className="flex flex-col gap-5">
+    <div className="space-x-3">
+      <form action="" className="flex flex-col space-y-4 gap-5">
         <div>
           <input
             type="text"
