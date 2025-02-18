@@ -33,7 +33,7 @@ const CrowdfundingFeatures: React.FC = () => {
   return (
     <section className="py-12 px-6 md:px-20 lg:px-32 bg-white text-center">
       <h2 className="text-2xl md:text-3xl font-semibold mb-8">
-        We are crowdfunding at it’s best!
+        We are crowdfunding at {"it’s"} best!
       </h2>
       <div className="grid gap-8 md:grid-cols-3">
         {features.map((feature, index) => (
