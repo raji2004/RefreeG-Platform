@@ -27,34 +27,22 @@ const Sidebar: React.FC = () => {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
   useEffect(() => {
-    if (
-      ["/my-causes", "/donation-history", "/signed-petitions"].includes(
-        pathname
-      )
-    ) {
+    if (["/UserFlow/MyCauses", "/UserFlow/DonationHistory", "/signed-petitions"].includes(pathname)) {
       setIsActivityOpen(true);
     }
   }, [pathname]);
 
   const navItems = [
-    { name: "Profile", path: "/profile", icon: UserIcon },
+    { name: "Profile", path: "/UserFlow/UserProfile", icon: UserIcon },
     {
       name: "Activity Overflow",
       path: "#",
       icon: ActivityIcon,
       hasDropdown: true,
       subItems: [
-        { name: "My Causes", path: "/my-causes", icon: CausesIcon },
-        {
-          name: "Donation History",
-          path: "/donation-history",
-          icon: DonationHistoryIcon,
-        },
-        {
-          name: "Signed Petitions",
-          path: "/signed-petitions",
-          icon: PetitionsIcon,
-        },
+        { name: "My Causes", path: "/UserFlow/MyCauses", icon: CausesIcon },
+        { name: "Donation History", path: "/UserFlow/DonationHistory", icon: DonationHistoryIcon },
+        { name: "Signed Petitions", path: "/UserFlow/SignedPetitions", icon: PetitionsIcon },
       ],
     },
     {
