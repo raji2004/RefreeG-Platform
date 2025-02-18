@@ -68,7 +68,7 @@ export default function Causes() {
 
   return (
     <div className="px-6 py-4 w-full bg-[#FAFCFF]">
-      <div className="text-2xl font-semibold">
+      {/* <div className="text-2xl font-semibold">
         <span className="text-gray-500 pr-10">Activity Overview</span>
         <span className="text-black"> &gt; <span className='pl-6'> My Causes</span></span>
       </div>
@@ -233,7 +233,7 @@ export default function Causes() {
         >
           &gt;
         </button>
-      </div>
+      </div> 
 
     </div>
   );
