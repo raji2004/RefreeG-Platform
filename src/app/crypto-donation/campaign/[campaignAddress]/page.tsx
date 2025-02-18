@@ -3,16 +3,12 @@ import { client } from "../../client";
 import { TierCard } from "../../../../components/TierCard";
 import { useParams } from "next/navigation";
 import { useState } from "react";
-import { getContract, prepareContractCall, ThirdwebContract } from "thirdweb";
+import { getContract, ThirdwebContract } from "thirdweb";
 import { polygonAmoy } from "thirdweb/chains";
-import {
-  lightTheme,
-  TransactionButton,
-  useActiveAccount,
-  useReadContract,
-} from "thirdweb/react";
+import { useActiveAccount, useReadContract } from "thirdweb/react";
 import { CampaignHeader } from "@/components/CampaignHeader";
 import { CampaignProgress } from "@/components/CampaignProgress";
+import { CreateCampaignModal } from "@/components/CreateCampaignModal"; // Import the new component
 
 export default function CampaignPage() {
   const account = useActiveAccount();
@@ -144,7 +140,6 @@ export default function CampaignPage() {
             !isEditing && <p>No tiers available</p>
           )}
           {isEditing && (
-            // Add a button card with text centered in the middle
             <button
               className="max-w-sm flex flex-col text-center justify-center items-center font-semibold p-6 bg-blue-500 text-white border border-slate-100 rounded-lg shadow"
               onClick={() => setIsModalOpen(true)}
@@ -164,66 +159,3 @@ export default function CampaignPage() {
     </div>
   );
 }
-
-type CreateTierModalProps = {
-  setIsModalOpen: (value: boolean) => void;
-  contract: ThirdwebContract;
-};
-
-const CreateCampaignModal = ({
-  setIsModalOpen,
-  contract,
-}: CreateTierModalProps) => {
-  const [tierName, setTierName] = useState<string>("");
-  const [tierAmount, setTierAmount] = useState<bigint>(1n);
-
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center backdrop-blur-md">
-      <div className="w-1/2 bg-slate-100 p-6 rounded-md">
-        <div className="flex justify-between items-center mb-4">
-          <p className="text-lg font-semibold">Create a Funding Tier</p>
-          <button
-            className="text-sm px-4 py-2 bg-slate-600 text-white rounded-md"
-            onClick={() => setIsModalOpen(false)}
-          >
-            Close
-          </button>
-        </div>
-        <div className="flex flex-col">
-          <label>Tier Name:</label>
-          <input
-            type="text"
-            value={tierName}
-            onChange={(e) => setTierName(e.target.value)}
-            placeholder="Tier Name"
-            className="mb-4 px-4 py-2 bg-slate-200 rounded-md"
-          />
-          <label>Tier Cost:</label>
-          <input
-            type="number"
-            value={parseInt(tierAmount.toString())}
-            onChange={(e) => setTierAmount(BigInt(e.target.value))}
-            className="mb-4 px-4 py-2 bg-slate-200 rounded-md"
-          />
-          <TransactionButton
-            transaction={() =>
-              prepareContractCall({
-                contract: contract,
-                method: "function addTier(string _name, uint256 _amount)",
-                params: [tierName, tierAmount],
-              })
-            }
-            onTransactionConfirmed={async () => {
-              alert("Tier added successfully!");
-              setIsModalOpen(false);
-            }}
-            onError={(error) => alert(`Error: ${error.message}`)}
-            theme={lightTheme()}
-          >
-            Add Tier
-          </TransactionButton>
-        </div>
-      </div>
-    </div>
-  );
-};
