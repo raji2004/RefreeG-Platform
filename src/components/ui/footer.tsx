@@ -1,9 +1,25 @@
 import Link from "next/link";
-import Image from "next/image";
-import Mail from "../../../public/images/mail.svg";
-import Facebook from "../../../public/images/facebook.svg";
-import Instagram from "../../../public/images/instagram.svg";
-import X from "../../../public/images/x.svg";
+import { FaFacebookF, FaInstagram, FaXTwitter } from "react-icons/fa6";
+import { Linkedin, Youtube } from "lucide-react";
+import React, { ReactNode } from "react";
+import GetMail from "./GetMail";
+import {
+  contactLinks,
+  legalLinks,
+  quickLinks,
+  socialLinks,
+} from "../../constants/index";
+
+const Icon = ({ href, children }: { href: string; children: ReactNode }) => {
+  return (
+    <Link
+      href={href}
+      className="bg-secondary-9 rounded-full flex items-center justify-center size-[30px] text-black transition-all duration-300 transform hover:scale-110 hover:bg-secondary-7"
+    >
+      {children}
+    </Link>
+  );
+};
 
 export function Footer() {
   return (
@@ -21,108 +37,99 @@ export function Footer() {
         </div>
         <button className="flex border-1 rounded-md bg-white px-3 py-3 text-blue-900 font-semibold hover:bg-gray-300 transition delay-150">
           Join our community
-          <Image
-            src="/images/arrowRightBlue.svg"
-            alt="right arrow"
-            height={20}
-            width={20}
-          />
         </button>
       </div>
-      <footer className="bg-blue-50">
-        <div className="lg:flex ml-10 mr-10 pt-8 border-b border-gray-500">
-          <div className="md:flex md:justify-between lg:justify-between lg:w-6/12 ">
-            <div className="flex flex-col w-full mb-16 md:w-1/2 lg:w-8/12 md:mr-16">
-              <div className="text-blue-950 text-2xl font-semibold pb-3">
-                Subscribe
-              </div>
-              <div className="text-lg pb-3">
-                Join our newsletter to stay up to date on features and releases.
-              </div>
-              <form className="flex justify-between bg-white px-3 py-3 mb-3 w-full rounded-full">
-                <Image src={Mail} alt="mail" className="" />
-                <input
-                  type="email"
-                  required
-                  className="w-3/6 text-blue-900 outline-none"
-                  placeholder="Enter your email"
-                />
-                <button className="bg-customNavyBlue2 text-white px-3 py-3 rounded-full">
-                  Subscribe
-                </button>
-              </form>
-              <div className="text-lg">
-                By Subscribing you agree with our{" "}
-                <Link
-                  href="#"
-                  className="underline text-blue-950 font-semibold"
-                >
-                  Privacy policy
-                </Link>
-              </div>
-            </div>
-            <div className="flex flex-col w-full md:w-1/2 md:pl-16">
-              <div className="text-blue-950 text-2xl pb-3 font-semibold">
-                Quick Links
-              </div>
-              <Link href="#" className="underline text-lg mb-3">
-                Home
-              </Link>
-              <Link href="#" className="underline text-lg mb-3">
-                About Us
-              </Link>
-              <Link href="#" className="underline text-lg mb-3">
-                Who we are
-              </Link>
-            </div>
+      <section className="w-full h-full px-[10px] md:px-[50px] py-[25px] mt-[30px] bg-footer">
+        <div className="md:flex md:space-x-3 space-y-4 md:space-y-0">
+          <div className="w-full md:w-3/6">
+            <p className="font-semibold text-[18px] mb-2">Subscribe</p>
+            <p className="text-[15px] font-light">
+              Join our newsletter to stay up to date on features <br />
+              and releases
+            </p>
+            <GetMail />
+            <p className="text-[10px] mt-3">
+              By Subscribing you agree with our{" "}
+              <span className="text-bold font-medium underline">
+                Privacy policy
+              </span>
+            </p>
           </div>
-          <div className="md:flex md:justify-between lg:justify-between lg:w-6/12">
-            <div className="flex flex-col w-full mb-12 md:w-1/2">
-              <div className="text-blue-950 text-2xl pb-3 font-semibold">
-                Contact Us
-              </div>
-              <Link
-                href="#"
-                className="underline hidden md:text-lg md:block mb-3"
-              >
-                refreegcorrespondence@gmail.com
-              </Link>
-              <Link href="#" className="underline text-lg mb-3">
-                Phone: +234-090-174-6760
-              </Link>
-              <Link href="#" className="underline text-lg mb-3">
-                Abuja, Nigeria
-              </Link>
-            </div>
-            <div className="flex flex-col w-full md:w-2/5">
-              <div className="text-blue-950 text-2xl pb-3 font-semibold">
-                Legal
-              </div>
-              <Link href="#" className="underline text-lg mb-3">
-                Privacy Policy
-              </Link>
-              <Link href="#" className="underline text-lg mb-3">
-                Terms of Service
-              </Link>
-            </div>
-          </div>
-        </div>
 
-        <div className="md:flex justify-between mr-10 ml-10 pt-5 pb-10">
-          <div>
-            Copyright © 2024{" "}
-            <Link href="#" className="underline font-semibold">
-              Eiza Innovations.
-            </Link>{" "}
-            All Rights Reserved.
+          <div className="w-full md:w-1/6">
+            <p className="font-medium text-[15px]">Quick Links</p>
+            <div className="flex flex-col space-y-3 pt-4">
+              {quickLinks.map((link) => (
+                <a
+                  className="underline font-light text-[15px] text-dark cursor-pointer hover:text-secondary-7 transition-colors duration-300"
+                  href={link.route}
+                  key={link.key}
+                >
+                  {link.label}
+                </a>
+              ))}
+            </div>
           </div>
-          <div className="flex">
-            <Image src={Facebook} alt="facebook.com" />
-            <Image src={Instagram} alt="instagram.com" className="ml-3" />
-            <Image src={X} alt="x.com" className="ml-3" />
+
+          <div className="w-full md:w-2/6">
+            <p className="font-medium text-[15px]">Contact Us</p>
+            <div className="flex flex-col space-y-3 pt-4">
+              {contactLinks.map((link) => (
+                <a
+                  className="underline font-light text-[15px] text-dark cursor-pointer hover:text-secondary-7 transition-colors duration-300"
+                  href={link.route}
+                  key={link.key}
+                >
+                  {link.label}
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <div className="w-full md:w-1/6">
+            <p className="font-medium text-[15px]">Legal</p>
+            <div className="flex flex-col space-y-3 pt-4">
+              {legalLinks.map((link) => (
+                <a
+                  className="underline font-light text-[15px] text-dark cursor-pointer hover:text-secondary-7 transition-colors duration-300"
+                  href={link.route}
+                  key={link.key}
+                >
+                  {link.label}
+                </a>
+              ))}
+            </div>
           </div>
         </div>
-      </footer>
+        <hr className="border-[#A6A6A6] my-[30px]" />
+        <div className="md:flex md:justify-between w-full">
+          <p className="text-[13px] text-center md:text-left mb-2 md:mb-0">
+            Copyright © 2024{" "}
+            <span className="text-bold font-medium underline">
+              Eiza Innovations.
+            </span>{" "}
+            All Rights Reserved.
+          </p>
+
+          <div className="mx-auto md:mx-0 flex space-x-3 items-center w-fit md:justify-normal">
+            <Icon href={socialLinks.Facebook}>
+              <FaFacebookF size={15} />
+            </Icon>
+            <Icon href={socialLinks.instagram}>
+              <FaInstagram size={15} />
+            </Icon>
+            <Icon href={socialLinks.twitter}>
+              <FaXTwitter size={15} />
+            </Icon>
+            <Icon href={socialLinks.linkedin}>
+              <Linkedin width={15} height={15} />
+            </Icon>
+            <Icon href={socialLinks.Youtube}>
+              <Youtube width={15} height={15} />
+            </Icon>
+          </div>
+        </div>
+      </section>
     </>
   );
 }
