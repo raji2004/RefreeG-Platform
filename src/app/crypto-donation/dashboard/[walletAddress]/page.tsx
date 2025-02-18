@@ -1,5 +1,5 @@
 "use client";
-import { client } from "../../client";
+import { client } from "../../../../lib/client";
 import { CROWDFUNDING_FACTORY } from "../../../../lib/constants/contracts";
 import { MyCampaignCard } from "../../../../components/MyCampaignCard";
 import { useState } from "react";

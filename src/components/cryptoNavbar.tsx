@@ -1,5 +1,5 @@
 "use client";
-import { client } from "../app/crypto-donation/client";
+import { client } from "../lib/client";
 import Link from "next/link";
 import { ConnectButton, lightTheme, useActiveAccount } from "thirdweb/react";
 import Image from "next/image";

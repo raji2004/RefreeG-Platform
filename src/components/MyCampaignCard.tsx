@@ -1,4 +1,4 @@
-import { client } from "../app/crypto-donation/client";
+import { client } from "../lib/client";
 import Link from "next/link";
 import { getContract } from "thirdweb";
 import { polygonAmoy } from "thirdweb/chains";

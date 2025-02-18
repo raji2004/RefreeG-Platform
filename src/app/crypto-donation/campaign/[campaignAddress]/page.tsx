@@ -1,5 +1,5 @@
 "use client";
-import { client } from "../../client";
+import { client } from "../../../../lib/client";
 import { TierCard } from "../../../../components/TierCard";
 import { useParams } from "next/navigation";
 import { useState } from "react";

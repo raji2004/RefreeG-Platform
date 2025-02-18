@@ -1,7 +1,7 @@
 "use client";
 
 import { getContract } from "thirdweb";
-import { client } from "./client";
+import { client } from "../../lib/client";
 import { polygonAmoy } from "thirdweb/chains";
 import { CROWDFUNDING_FACTORY } from "../../lib/constants/contracts";
 import { useReadContract } from "thirdweb/react";
