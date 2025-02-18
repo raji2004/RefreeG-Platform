@@ -7,7 +7,7 @@ import { Button } from "./ui/button";
 import { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
-export const FormWrapper = ({
+export default function FormWrapper({
   step,
   children,
   hideProgressBar,
@@ -19,7 +19,7 @@ export const FormWrapper = ({
   hideProgressBar?: boolean;
   login?: boolean;
   hideSidebar?:boolean;
-}) => {
+}) {
   const router = useRouter(); // Initialize useRouter for navigation
 
   const handleLoginClick = () => {
