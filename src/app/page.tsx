@@ -27,7 +27,7 @@ import ArrowRightBlue from "../../public/images/arrowRightBlue.svg";
 import Clock from "../../public/images/clock.svg";
 import Video from "../../public/images/video.svg";
 import { Progress } from "../components/ui/progress";
-import { Footer } from "../components/ui/footer";
+import Footer from "@/components/ui/footer";
 import CausesAboutSocioEconomicGrowth from "@/components/ui/causesAboutSocioEconomicGrowth";
 import HappeningNearYou from "@/components/ui/happeningNearYou";
 import CausesSupported from "@/components/ui/causesWeSupport";
