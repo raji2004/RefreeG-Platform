@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 
-export default function Step2Form({ formData, handleChange }) {
+export default function Step2Form({ formData = {}, handleChange }) {
   const [dateValue, setDateValue] = useState(formData.deadline || "");
   const [goalAmount, setGoalAmount] = useState(formData.goalAmount || "0");
 
@@ -11,13 +11,13 @@ export default function Step2Form({ formData, handleChange }) {
   };
 
   const incrementGoal = () => {
-    const newValue = (parseInt(goalAmount, 10) + 1).toString();
+    const newValue = (parseInt(goalAmount, 10) + 1000).toString();
     setGoalAmount(newValue);
     handleChange({ target: { name: "goalAmount", value: newValue } });
   };
 
   const decrementGoal = () => {
-    const newValue = Math.max(parseInt(goalAmount, 10) - 1, 0).toString();
+    const newValue = Math.max(parseInt(goalAmount, 10) - 1000, 0).toString();
     setGoalAmount(newValue);
     handleChange({ target: { name: "goalAmount", value: newValue } });
   };

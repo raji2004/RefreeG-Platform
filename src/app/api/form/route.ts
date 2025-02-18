@@ -1,28 +1,35 @@
+import { NextRequest, NextResponse } from "next/server";
 import { db } from "@/lib/firebase/config";
-import { collection, addDoc, getDocs } from "firebase/firestore";
-import { NextResponse } from "next/server";
+import { collection, addDoc, doc, deleteDoc, getDoc } from "firebase/firestore";
 
-// Handle POST request (save form data)
-export async function POST(req) {
+export async function POST(req: NextRequest) {
   try {
-    const data = await req.json();
-    const docRef = await addDoc(collection(db, "formResponses"), data);
-    return NextResponse.json({ success: true, id: docRef.id });
-  } catch (error) {
-    return NextResponse.json({ success: false, error: error.message });
-  }
-}
+    const { formData, previewOnly, previewId } = await req.json();
 
-// Handle GET request (retrieve form data)
-export async function GET() {
-  try {
-    const querySnapshot = await getDocs(collection(db, "formResponses"));
-    const responses = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
-    return NextResponse.json(responses);
+    if (previewOnly) {
+      // Save as a temporary preview
+      const docRef = await addDoc(collection(db, "formPreviews"), formData);
+      return NextResponse.json({ id: docRef.id, message: "Preview saved" });
+    } else if (previewId) {
+      // Move from previews to submissions
+      const previewRef = doc(db, "formPreviews", previewId);
+      const previewSnapshot = await getDoc(previewRef);
+
+      if (!previewSnapshot.exists()) {
+        return NextResponse.json({ error: "Preview not found" }, { status: 404 });
+      }
+
+      // Save the final data
+      const finalDocRef = await addDoc(collection(db, "formSubmissions"), previewSnapshot.data());
+
+      // Delete from preview collection
+      await deleteDoc(previewRef);
+
+      return NextResponse.json({ id: finalDocRef.id, message: "Form submitted successfully" });
+    }
+
+    return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   } catch (error) {
-    return NextResponse.json({ success: false, error: error.message });
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
