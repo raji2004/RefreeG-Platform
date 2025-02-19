@@ -86,34 +86,35 @@ export default function PaymentMethods() {
   return (
     <div className="w-full p-4">
       <h2 className="text-lg font-semibold mb-4">Payment Methods</h2>
-      <div className="flex justify-between items-center mb-4">
-        <div className="flex gap-4 paymentfilter">
-          {['All', 'Credit Card', 'Crypto Wallet'].map((type) => (
+      <div className="flex flex-col-reverse md:flex md:flex-col-reverse lg:flex lg:flex-row justify-between items-center mb-4">
+        <div className="flex text-xs md:text-base gap-4 paymentfilter">
+            {['All', 'Credit Card', 'Crypto Wallet'].map((type) => (
             <button
-              key={type}
-              onClick={() => setFilter(type)}
-              className={`px-4 py-2 rounded ${
+                key={type}
+                onClick={() => setFilter(type)}
+                className={`px-4 py-2 rounded ${
                 filter === type ? 'border-b-4 border-blue-700' : 'bg-gray-100'
-              }`}
+                }`}
             >
-              {type === 'All' ? 'All Payment Methods' : `${type}(s)`}
+                {type === 'All' ? 'All Payment Methods' : `${type}(s)`}
             </button>
-          ))}
+            ))}
         </div>
 
-        {/* Dropdown */}
-        <div className="flex gap-2 items-center">
-          <select
+        {/* Dropdown aligned to the right */}
+        <div className="flex text-xs md:text-lg py-2 gap-2 items-center ml-auto">
+            <select
             value={selectedMethod}
             onChange={(e) => handleMethodChange(e.target.value)}
             className="border rounded p-2"
-          >
+            >
             <option value="">Add Payment Method</option>
             <option value="Credit Card">Credit Card</option>
             <option value="Crypto Wallet">Crypto Wallet</option>
-          </select>
+            </select>
         </div>
       </div>
+
 
       {/* Dynamic Form */}
       {selectedMethod && (

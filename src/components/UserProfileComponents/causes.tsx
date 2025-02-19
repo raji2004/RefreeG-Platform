@@ -67,18 +67,18 @@ export default function Causes() {
   const totalPages = Math.ceil(filteredCauses.length / causesPerPage);
 
   return (
-    <div className="px-6 py-4 w-full bg-[#FAFCFF]">
-      <div className="text-2xl font-semibold">
+    <div className="mt-1 md:mt-0 px-6 py-4 w-full bg-[#FAFCFF]">
+      <div className="text-base md:text-2xl font-semibold">
         <span className="text-gray-500 pr-10">Activity Overview</span>
         <span className="text-black"> &gt; <span className='pl-6'> My Causes</span></span>
       </div>
 
-      <div className="lg:flex justify-between mt-4">
-        <div className="flex gap-6 lg:text-base md:text-sm sm:text-xs MajorLinker">
+      <div className="flex flex-col-reverse lg:flex justify-between mt-4">
+        <div className="flex gap-6 text-xs lg:text-base md:text-sm  MajorLinker">
           {["All", "Pending", "Approved", "Completed"].map((status) => (
             <div
               key={status}
-              className={`cursor-pointer ${selectedStatus === status ? "font-semibold pb-2 text-blue-600 border-b-4 border-blue-600" : "text-gray-500"}`}
+              className={`cursor-pointer ${selectedStatus === status ? "text-xs lg:text-base md:text-sm font-semibold pb-2 text-blue-600 border-b-4 border-blue-600" : "text-xs lg:text-base md:text-sm text-gray-500"}`}
               onClick={() => setSelectedStatus(status)}
             >
               {status === "All" ? "All Causes" : status}
@@ -86,9 +86,9 @@ export default function Causes() {
           ))}
         </div>
 
-        <div className="flex gap-4 items-center">
+        <div className="flex gap-4 items-center ml-auto text-xs md:text-sm lg:text-base">
           <div className="flex items-center gap-2 cursor-pointer lg:text-base md:text-sm sm:text-xs">
-            <PlusIcon /> Add Cause
+            <PlusIcon className='w-4 h-8' /> Add Cause
           </div>
           <div
             className={`cursor-pointer p-2 rounded ${selectedCauses.some((isSelected) => isSelected) ? "text-red-600 hover:text-red-800" : "text-gray-400 cursor-not-allowed"}`}
@@ -101,7 +101,7 @@ export default function Causes() {
 
       {/* Causes Table */}
       <div className="w-full">
-        <table className="w-full bg-[#FAFCFF] border-collapse">
+        <table className="text-xs lg:text-base md:text-sm w-full bg-[#FAFCFF] border-collapse">
           <thead>
             <tr className="border-b bg-[#E7EBEF]">
               <th className="p-3 py-4 text-left w-1/12">
