@@ -13,7 +13,9 @@ export default function Donations() {
       <Topbar profileImage={profileImage} />
       <div className="flex w-full">
         <Sidebar />
-        <PaymentMethods />
+        <div className="w-full lg:pr-8 ">
+          <PaymentMethods />
+        </div>
       </div>
     </div>
   );
