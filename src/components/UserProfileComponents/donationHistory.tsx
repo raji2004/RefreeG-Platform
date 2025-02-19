@@ -110,15 +110,15 @@ export default function DonationHistory() {
 
   return (
     <div className="px-6 py-4 w-full lg:bg-[#FAFCFF]">
-      <div className="flex justify-between text-2xl font-semibold">
-        <div>
-          <span className="text-gray-500 pr-10">Activity Overview</span>
-          <span className="text-black"> &gt; <span className='pl-6'> Donation History</span></span>
+      <div className="flex justify-between">
+        <div className="text-base md:text-xl font-semibold">
+          <span className="text-gray-500 pr-2 md:pr-6">Activity Overview</span>
+          <span className="text-black"> &gt; <span className='pl-3 md:pl-6'> Donation History</span></span>
         </div>
         <div>
             <Image 
                 src="/UserProfile/refresh.svg" 
-                className='w-6 h-6 cursor-pointer' 
+                className='hidden md:block w-6 h-6 cursor-pointer' 
                 alt='refresh' 
                 width={20} 
                 height={20} 
@@ -140,8 +140,8 @@ export default function DonationHistory() {
           </form>
         </div>
 
-        <div className='flex items-center gap-4'>
-          <div className="flex items-center border border-gray-300 px-3 py-2 rounded-md">
+        <div className='w-full flex items-center gap-4'>
+          <div className="w-2/3 md:flex items-center border border-gray-300 px-3 py-2 rounded-md">
             <DatePicker
               selected={startDate}
               onChange={(date: Date | null) => setStartDate(date)}
@@ -149,7 +149,7 @@ export default function DonationHistory() {
               startDate={startDate}
               endDate={endDate}
               placeholderText="Start Date"
-              className="outline-none"
+              className="outline-none w-30"
             />
             <span className="mx-2">-</span>
             <DatePicker
@@ -160,7 +160,7 @@ export default function DonationHistory() {
               endDate={endDate}
               minDate={startDate || undefined}
               placeholderText="End Date"
-              className="outline-none"
+              className="outline-none w-30"
             />
           </div>
 
@@ -170,8 +170,8 @@ export default function DonationHistory() {
         </div>
       </div>
 
-      <div className='mt-6'>
-        <table className='w-full'>
+      <div className='mt-6 w-full'>
+        <table className='w-11/12 text-xs lg:text-base md:text-sm'>
           <thead className='bg-gray-200'>
             <tr>
               <th className='p-5'>
@@ -181,7 +181,7 @@ export default function DonationHistory() {
               <th className='p-3 text-left'>Amount Donated</th>
               <th className='p-3 text-left'>Date & Time</th>
               <th className='p-3 text-left'>Transaction ID</th>
-              <th className='p-3 text-left'>Payment Method</th>
+              <th className='hidden lg:block p-3 text-left'>Payment Method</th>
             </tr>
           </thead>
           <tbody>
@@ -198,7 +198,7 @@ export default function DonationHistory() {
                 <td className='p-3'>{donation.amount}</td>
                 <td className='p-3'>{donation.dateTime}</td>
                 <td className='p-3'>{donation.transactionId}</td>
-                <td className='p-3'>{donation.paymentMethod}</td>
+                <td className='hidden lg:block p-3'>{donation.paymentMethod}</td>
               </tr>
             ))}
           </tbody>

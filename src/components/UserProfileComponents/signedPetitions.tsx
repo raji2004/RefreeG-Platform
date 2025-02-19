@@ -112,8 +112,8 @@ export default function SignedPetitions() {
 
   return (
     <div className="px-6 py-4 w-full lg:bg-[#FAFCFF]">
-          <div className="flex justify-between text-2xl font-semibold">
-            <div>
+          <div className="flex justify-between">
+            <div className='text-base md:text-xl font-semibold'>
               <span className="text-gray-500 pr-10">Activity Overview</span>
               <span className="text-black"> &gt; <span className='pl-6'> Signed Petitions</span></span>
             </div>
@@ -143,7 +143,7 @@ export default function SignedPetitions() {
             </div>
     
             <div className='flex items-center gap-4'>
-              <div className="lg:flex items-center border border-gray-300 px-3 py-2 rounded-md">
+              <div className="w-65 md:flex items-center border border-gray-300 px-3 py-2 rounded-md">
                 <DatePicker
                   selected={startDate}
                   onChange={(date: Date | null) => setStartDate(date)}
