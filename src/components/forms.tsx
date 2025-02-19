@@ -48,7 +48,7 @@ interface LoginFormProps {
 }
 
 // Login Form
-export const LoginForm = () => {
+export default function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const loginForm = useForm({
     resolver: zodResolver(loginSchema),

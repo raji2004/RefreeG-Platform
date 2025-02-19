@@ -39,7 +39,7 @@ export const FeatureCard: FC<FeatureCardProps> = ({ imageSrc, title, description
 
 export const WhyUseUs: FC = () => {
   return (
-    <div className="w-full border-b">
+    <div className="w-full pr-10 pl-10 border-b">
       <div className="bg-white w-full mt-8 mb-12 px-4 z-10">
         <div className="text-2xl w-full md:text-4xl">Why you should use us!</div>
         <div className="text-lg md:text-xl">Reasons why your donation will be used right!</div>
