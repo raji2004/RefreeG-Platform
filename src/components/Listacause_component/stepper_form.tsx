@@ -19,7 +19,6 @@ export interface UploadedImage {
 }
 
 export default function StepperForm() {
-  const [step, setStep] = useState(1);
   const router = useRouter();
 
   interface FormData {
@@ -33,62 +32,57 @@ export default function StepperForm() {
     uploadedImage: UploadedImage | null;
   }
 
-  const [formData, setFormData] = useState<FormData>({
-    state: "",
-    zipCode: "",
-    currency: "",
-    causeTitle: "",
-    causeCategory: "",
-    deadline: "",
-    goalAmount: "",
-    uploadedImage: null,
+  // Initialize formData from localStorage if available
+  const [formData, setFormData] = useState<FormData>(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("formData");
+      if (saved) return JSON.parse(saved);
+    }
+    return {
+      state: "",
+      zipCode: "",
+      currency: "",
+      causeTitle: "",
+      causeCategory: "",
+      deadline: "",
+      goalAmount: "",
+      uploadedImage: null,
+    };
   });
 
-  const [errors, setErrors] = useState<Partial<FormData>>({});
+  // Use a separate errors state with string error messages
+  const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
 
-  useEffect(() => {
-    const savedData = localStorage.getItem("formData");
-    if (savedData) {
-      setFormData(JSON.parse(savedData));
-    }
-  }, []);
-
+  // Save formData to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem("formData", JSON.stringify(formData));
   }, [formData]);
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    // Clear error when user starts typing
+    // Clear error for this field
     setErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
-  // Now handleImageUpload receives an UploadedImage object
+  // handleImageUpload now accepts an UploadedImage
   const handleImageUpload = (image: UploadedImage) => {
     setFormData((prev) => ({ ...prev, uploadedImage: image }));
     setErrors((prev) => ({ ...prev, uploadedImage: "" }));
   };
 
   const validateFields = (step: number) => {
-    const newErrors: Partial<FormData> = {};
+    const newErrors: Partial<Record<keyof FormData, string>> = {};
 
     if (step === 1) {
       if (!formData.state.trim()) newErrors.state = "State is required";
       if (!formData.zipCode.trim()) newErrors.zipCode = "ZIP Code is required";
-      if (!formData.currency.trim())
-        newErrors.currency = "Currency type is required";
+      if (!formData.currency.trim()) newErrors.currency = "Currency type is required";
     }
-
     if (step === 2) {
-      if (!formData.causeTitle.trim())
-        newErrors.causeTitle = "Cause title is required";
-      if (!formData.causeCategory.trim())
-        newErrors.causeCategory = "Cause category is required";
+      if (!formData.causeTitle.trim()) newErrors.causeTitle = "Cause title is required";
+      if (!formData.causeCategory.trim()) newErrors.causeCategory = "Cause category is required";
     }
-
     if (step === 3) {
       if (!formData.uploadedImage) {
         newErrors.uploadedImage = "Image is required";
@@ -96,37 +90,38 @@ export default function StepperForm() {
         newErrors.uploadedImage = "Image upload is incomplete";
       }
     }
-
     if (step === 4) {
-      if (!formData.deadline.trim())
-        newErrors.deadline = "Deadline is required";
-      if (!formData.goalAmount.trim())
-        newErrors.goalAmount = "Goal amount is required";
+      if (!formData.deadline.trim()) newErrors.deadline = "Deadline is required";
+      if (!formData.goalAmount.trim()) newErrors.goalAmount = "Goal amount is required";
     }
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
+  const [step, setStep] = useState(1);
+
   const handleNext = () => {
-    const valid = validateFields(step);
-    console.log("Step", step, "validation:", valid, "Errors:", errors);
-    if (valid) {
+    if (validateFields(step)) {
       setStep(step + 1);
     }
   };
 
+  // When the form is submitted, data is saved to Firestore.
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateFields(4)) return;
 
     try {
+      // Save the latest form data to localStorage
       localStorage.setItem("formData", JSON.stringify(formData));
+      // Submit the form data to Firestore (Firebase)
       const docRef = await addDoc(collection(db, "formSubmissions"), formData);
       console.log("Document written with ID: ", docRef.id);
-      router.push("/preview");
-    } catch (error) {
-      console.error("Error adding document: ", error);
+      // After successful submission, navigate to the preview page
+      router.push("/List_a_cause/See_Preview/Success");
+    } catch (error: any) {
+      console.error("Error adding document: ", error.message);
     }
   };
 
@@ -155,11 +150,9 @@ export default function StepperForm() {
         </TabsList>
 
         <TabsContent value="step-1">
-          {/* Step 1 content */}
+          {/* Replace with your Step 1 form content */}
           <div className="p-4">
-            <h2 className="text-2xl font-semibold">
-              Where are the donations going?
-            </h2>
+            <h2 className="text-2xl font-semibold">Where are the donations going?</h2>
             <p className="text-sm">
               Choose the location where you plan to receive your funds.
             </p>
@@ -178,9 +171,7 @@ export default function StepperForm() {
                     <option value="Lagos">Lagos</option>
                     <option value="Kano">Kano</option>
                   </select>
-                  {errors.state && (
-                    <p className="text-red-500 text-sm">{errors.state}</p>
-                  )}
+                  {errors.state && <p className="text-red-500 text-sm">{errors.state}</p>}
                 </span>
                 <span>
                   <label className="block text-sm font-medium">ZIP Code</label>
@@ -192,20 +183,12 @@ export default function StepperForm() {
                     className="mt-1 px-5 py-3.5 w-[200px] block rounded-md"
                     placeholder="Enter ZIP Code"
                   />
-                  {errors.zipCode && (
-                    <p className="text-red-500 text-sm">{errors.zipCode}</p>
-                  )}
+                  {errors.zipCode && <p className="text-red-500 text-sm">{errors.zipCode}</p>}
                 </span>
               </div>
-              <h2 className="text-xl font-semibold mt-16">
-                How would you like to collect your donation?
-              </h2>
-              <p className="text-sm">
-                Choose the currency you want to receive donations in.
-              </p>
-              <label className="block text-sm font-medium mt-4">
-                Currency type
-              </label>
+              <h2 className="text-xl font-semibold mt-16">How would you like to collect your donation?</h2>
+              <p className="text-sm">Choose the currency you want to receive donations in.</p>
+              <label className="block text-sm font-medium mt-4">Currency type</label>
               <select
                 name="currency"
                 value={formData.currency}
@@ -216,37 +199,22 @@ export default function StepperForm() {
                 <option value="Flat Currency">Flat Currency</option>
                 <option value="Crypto Currency">Crypto Currency</option>
               </select>
-              {errors.currency && (
-                <p className="text-red-500 text-sm">{errors.currency}</p>
-              )}
+              {errors.currency && <p className="text-red-500 text-sm">{errors.currency}</p>}
             </form>
           </div>
         </TabsContent>
 
         <TabsContent value="step-2">
-          <Step2Form
-            formData={formData}
-            handleChange={handleChange}
-            errors={errors}
-          />
+          <Step2Form formData={formData} handleChange={handleChange} errors={errors} />
         </TabsContent>
 
         <TabsContent value="step-3">
-          <UploadImage
-            formData={formData}
-            handleImageUpload={handleImageUpload}
-          />
-          {errors.uploadedImage && (
-            <p className="text-red-500 text-sm">{errors.uploadedImage}</p>
-          )}
+          <UploadImage formData={formData} handleImageUpload={handleImageUpload} />
+          {errors.uploadedImage && <p className="text-red-500 text-sm">{errors.uploadedImage}</p>}
         </TabsContent>
 
         <TabsContent value="step-4">
-          <Step4Form
-            formData={formData}
-            setFormData={setFormData}
-            errors={errors}
-          />
+          <Step4Form formData={formData} setFormData={setFormData} errors={errors} />
         </TabsContent>
       </Tabs>
 
