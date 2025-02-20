@@ -51,14 +51,18 @@ export default function StepperForm() {
   });
 
   // Use a separate errors state with string error messages
-  const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
+  const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>(
+    {}
+  );
 
   // Save formData to localStorage whenever it changes
   useEffect(() => {
     localStorage.setItem("formData", JSON.stringify(formData));
   }, [formData]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
     // Clear error for this field
@@ -77,11 +81,14 @@ export default function StepperForm() {
     if (step === 1) {
       if (!formData.state.trim()) newErrors.state = "State is required";
       if (!formData.zipCode.trim()) newErrors.zipCode = "ZIP Code is required";
-      if (!formData.currency.trim()) newErrors.currency = "Currency type is required";
+      if (!formData.currency.trim())
+        newErrors.currency = "Currency type is required";
     }
     if (step === 2) {
-      if (!formData.causeTitle.trim()) newErrors.causeTitle = "Cause title is required";
-      if (!formData.causeCategory.trim()) newErrors.causeCategory = "Cause category is required";
+      if (!formData.causeTitle.trim())
+        newErrors.causeTitle = "Cause title is required";
+      if (!formData.causeCategory.trim())
+        newErrors.causeCategory = "Cause category is required";
     }
     if (step === 3) {
       if (!formData.uploadedImage) {
@@ -91,8 +98,10 @@ export default function StepperForm() {
       }
     }
     if (step === 4) {
-      if (!formData.deadline.trim()) newErrors.deadline = "Deadline is required";
-      if (!formData.goalAmount.trim()) newErrors.goalAmount = "Goal amount is required";
+      if (!formData.deadline.trim())
+        newErrors.deadline = "Deadline is required";
+      if (!formData.goalAmount.trim())
+        newErrors.goalAmount = "Goal amount is required";
     }
 
     setErrors(newErrors);
@@ -100,6 +109,12 @@ export default function StepperForm() {
   };
 
   const [step, setStep] = useState(1);
+  const [mounted, setMounted] = useState(false);
+
+  // Mark component as mounted so client-only content can be rendered
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const handleNext = () => {
     if (validateFields(step)) {
@@ -134,26 +149,20 @@ export default function StepperForm() {
           setStep(newStep);
         }}
       >
-        <TabsList className="flex justify-between my-20 mb-10">
-          <TabsTrigger value="step-1" disabled={step < 1}>
-            <span className="invisible">Step 1</span>
-          </TabsTrigger>
-          <TabsTrigger value="step-2" disabled={step < 2}>
-            <span className="invisible">Step 2</span>
-          </TabsTrigger>
-          <TabsTrigger value="step-3" disabled={step < 3}>
-            <span className="invisible">Step 3</span>
-          </TabsTrigger>
-          <TabsTrigger value="step-4" disabled={step < 4}>
-            <span className="invisible">Step 4</span>
-          </TabsTrigger>
+        <TabsList className="flex gap-8 my-8 mb-8">
+          <TabsTrigger value="step-1" disabled={step < 1}></TabsTrigger>
+          <TabsTrigger value="step-2" disabled={step < 2}></TabsTrigger>
+          <TabsTrigger value="step-3" disabled={step < 3}></TabsTrigger>
+          <TabsTrigger value="step-4" disabled={step < 4}></TabsTrigger>
         </TabsList>
 
         <TabsContent value="step-1">
-          {/* Replace with your Step 1 form content */}
+          {/* Step 1 form content */}
           <div className="p-4">
-            <h2 className="text-2xl font-semibold">Where are the donations going?</h2>
-            <p className="text-sm">
+            <h2 className="text-[#2b2829] text-xl font-medium font-montserrat ">
+              Where are the donations going?
+            </h2>
+            <p className="pl-4 text-[#2b2829] text-sm font-normal font-montserrat">
               Choose the location where you plan to receive your funds.
             </p>
             <form className="mt-4">
@@ -164,31 +173,79 @@ export default function StepperForm() {
                     name="state"
                     value={formData.state}
                     onChange={handleChange}
-                    className="mt-1 px-5 py-3.5 w-24 block rounded-md"
+                    className="mt-1 px-5 py-3.5 w-60 block rounded-md"
                   >
                     <option value="">Select State</option>
+                    <option value="Abia">Abia</option>
+                    <option value="Adamawa">Adamawa</option>
+                    <option value="Akwa Ibom">Akwa Ibom</option>
+                    <option value="Anambra">Anambra</option>
+                    <option value="Bauchi">Bauchi</option>
+                    <option value="Bayelsa">Bayelsa</option>
+                    <option value="Benue">Benue</option>
+                    <option value="Borno">Borno</option>
+                    <option value="Cross River">Cross River</option>
+                    <option value="Delta">Delta</option>
+                    <option value="Ebonyi">Ebonyi</option>
+                    <option value="Edo">Edo</option>
+                    <option value="Ekiti">Ekiti</option>
+                    <option value="Enugu">Enugu</option>
                     <option value="F.C.T Abuja">F.C.T Abuja</option>
-                    <option value="Lagos">Lagos</option>
+                    <option value="Gombe">Gombe</option>
+                    <option value="Imo">Imo</option>
+                    <option value="Jigawa">Jigawa</option>
+                    <option value="Kaduna">Kaduna</option>
                     <option value="Kano">Kano</option>
+                    <option value="Katsina">Katsina</option>
+                    <option value="Kebbi">Kebbi</option>
+                    <option value="Kogi">Kogi</option>
+                    <option value="Kwara">Kwara</option>
+                    <option value="Lagos">Lagos</option>
+                    <option value="Nasarawa">Nasarawa</option>
+                    <option value="Niger">Niger</option>
+                    <option value="Ogun">Ogun</option>
+                    <option value="Ondo">Ondo</option>
+                    <option value="Osun">Osun</option>
+                    <option value="Oyo">Oyo</option>
+                    <option value="Plateau">Plateau</option>
+                    <option value="Rivers">Rivers</option>
+                    <option value="Sokoto">Sokoto</option>
+                    <option value="Taraba">Taraba</option>
+                    <option value="Yobe">Yobe</option>
+                    <option value="Zamfara">Zamfara</option>
                   </select>
-                  {errors.state && <p className="text-red-500 text-sm">{errors.state}</p>}
+                  {errors.state && (
+                    <p className="text-red-500 text-sm">{errors.state}</p>
+                  )}
                 </span>
+
                 <span>
                   <label className="block text-sm font-medium">ZIP Code</label>
                   <input
-                    type="text"
+                    type="number"
                     name="zipCode"
                     value={formData.zipCode}
                     onChange={handleChange}
-                    className="mt-1 px-5 py-3.5 w-[200px] block rounded-md"
+                    className="mt-1 px-5 py-3.5 w-60 block rounded-md no-spinners"
                     placeholder="Enter ZIP Code"
+                    inputMode="numeric"
+                    pattern="[0-9]*"
                   />
-                  {errors.zipCode && <p className="text-red-500 text-sm">{errors.zipCode}</p>}
+                  {errors.zipCode && (
+                    <p className="text-red-500 text-sm">{errors.zipCode}</p>
+                  )}
                 </span>
               </div>
-              <h2 className="text-xl font-semibold mt-16">How would you like to collect your donation?</h2>
-              <p className="text-sm">Choose the currency you want to receive donations in.</p>
-              <label className="block text-sm font-medium mt-4">Currency type</label>
+
+              <h2 className="text-[#2b2829] text-xl font-medium font-montserrat mt-16">
+                How would you like to collect your donation?
+              </h2>
+              <p className="pl-4 text-[#2b2829] text-sm font-normal font-montserrat">
+                Choose the currency you want to receive donations in.
+              </p>
+              <label className="block text-sm font-medium mt-4">
+                Currency type
+              </label>
               <select
                 name="currency"
                 value={formData.currency}
@@ -199,22 +256,47 @@ export default function StepperForm() {
                 <option value="Flat Currency">Flat Currency</option>
                 <option value="Crypto Currency">Crypto Currency</option>
               </select>
-              {errors.currency && <p className="text-red-500 text-sm">{errors.currency}</p>}
+              {errors.currency && (
+                <p className="text-red-500 text-sm">{errors.currency}</p>
+              )}
+
+              {mounted && formData.currency === "Crypto Currency" && (
+                <button
+                  type="button"
+                  className="mt-4 px-5 py-3.5 bg-blue-500 text-white rounded-md"
+                  onClick={() => (window.location.href = "/crypto-setup")}
+                >
+                  Setup Crypto Payment
+                </button>
+              )}
             </form>
           </div>
         </TabsContent>
 
         <TabsContent value="step-2">
-          <Step2Form formData={formData} handleChange={handleChange} errors={errors} />
+          <Step2Form
+            formData={formData}
+            handleChange={handleChange}
+            errors={errors}
+          />
         </TabsContent>
 
         <TabsContent value="step-3">
-          <UploadImage formData={formData} handleImageUpload={handleImageUpload} />
-          {errors.uploadedImage && <p className="text-red-500 text-sm">{errors.uploadedImage}</p>}
+          <UploadImage
+            formData={formData}
+            handleImageUpload={handleImageUpload}
+          />
+          {errors.uploadedImage && (
+            <p className="text-red-500 text-sm">{errors.uploadedImage}</p>
+          )}
         </TabsContent>
 
         <TabsContent value="step-4">
-          <Step4Form formData={formData} setFormData={setFormData} errors={errors} />
+          <Step4Form
+            formData={formData}
+            setFormData={setFormData}
+            errors={errors}
+          />
         </TabsContent>
       </Tabs>
 

@@ -1,13 +1,20 @@
 import React, { useState } from "react";
 import Image from "next/image";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 export default function Step2Form({ formData = {}, handleChange }) {
-  const [dateValue, setDateValue] = useState(formData.deadline || "");
+  // Initialize dateValue as a Date object if provided, or null
+  const initialDate = formData.deadline ? new Date(formData.deadline) : null;
+  const [dateValue, setDateValue] = useState(initialDate);
   const [goalAmount, setGoalAmount] = useState(formData.goalAmount || "0");
 
-  const handleDateChange = (e) => {
-    setDateValue(e.target.value);
-    handleChange(e);
+  const handleDateChange = (date) => {
+    setDateValue(date);
+    // Convert date to ISO string for consistency; adjust if needed
+    handleChange({
+      target: { name: "deadline", value: date ? date.toISOString() : "" },
+    });
   };
 
   const incrementGoal = () => {
@@ -24,6 +31,14 @@ export default function Step2Form({ formData = {}, handleChange }) {
 
   return (
     <div className="space-x-3">
+      <div className="mb-4">
+        <h2 className="text-[#2b2829] text-xl font-medium font-montserrat">
+          Help us give people information about the cause
+        </h2>
+        <p className="text-[#2b2829] text-sm font-normal font-montserrat">
+          Choose the location where you plan to receive your funds.
+        </p>
+      </div>
       <form action="" className="flex flex-col space-y-4 gap-5">
         <div>
           <input
@@ -57,21 +72,16 @@ export default function Step2Form({ formData = {}, handleChange }) {
         </div>
 
         <div className="relative">
-          <input
-            type="text"
-            name="deadline"
-            value={dateValue}
-            onFocus={(e) => (e.target.type = "date")}
-            onBlur={(e) => {
-              if (!e.target.value) e.target.type = "text";
-            }}
+          <DatePicker
+            selected={dateValue}
             onChange={handleDateChange}
-            placeholder="Deadline"
+            dateFormat="MM/dd/yyyy"
+            placeholderText="Deadline"
             className="px-[9px] py-[13px] border-b border-[#898384] w-full focus:outline-none text-[#898384] text-base font-medium font-montserrat bg-transparent"
           />
           <p className="text-[#5a5555] text-sm font-normal font-montserrat">
-            *Note: This is when the cause will be delisted from the platform.
-            <span className="text-sm font-medium font-montserrat underline cursor-pointer">
+            *Note: This is when the cause will be delisted from the platform.{" "}
+            <span className="inline-flex gap-1 items-center text-sm font-medium font-montserrat underline cursor-pointer">
               Learn more
               <Image
                 src="/List_a_cause/BoxArrowUpRight.svg"
@@ -84,7 +94,7 @@ export default function Step2Form({ formData = {}, handleChange }) {
         </div>
 
         {/* Goal Amount Input */}
-        <div className="relative flex items-center">
+        <div className="relative">
           <input
             type="text"
             name="goalAmount"
@@ -94,22 +104,24 @@ export default function Step2Form({ formData = {}, handleChange }) {
               handleChange(e);
             }}
             placeholder="Goal Amount"
-            className="px-[9px] py-[13px] border-b border-[#898384] w-full focus:outline-none text-[#898384] text-base font-medium font-montserrat bg-transparent"
+            className="px-[9px] py-[13px] pr-20 border-b border-[#898384] w-full focus:outline-none text-[#898384] text-base font-medium font-montserrat bg-transparent"
           />
-          <button
-            type="button"
-            onClick={decrementGoal}
-            className="px-2 bg-white rounded-lg border-2 border-[#b5b3b3] mr-4"
-          >
-            -
-          </button>
-          <button
-            type="button"
-            onClick={incrementGoal}
-            className="px-2 bg-white rounded-lg border-2 border-[#b5b3b3]"
-          >
-            +
-          </button>
+          <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex gap-2 space-x-1">
+            <button
+              type="button"
+              onClick={decrementGoal}
+              className="w-7 px-2 bg-white rounded-lg border-2 border-[#b5b3b3]"
+            >
+              +
+            </button>
+            <button
+              type="button"
+              onClick={incrementGoal}
+              className="w-7 px-2 bg-white rounded-lg border-2 border-[#b5b3b3]"
+            >
+              -
+            </button>
+          </div>
         </div>
       </form>
     </div>
