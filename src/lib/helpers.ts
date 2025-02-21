@@ -1,4 +1,4 @@
-"user server";
+"use server";
 import { Country, SortedCountry } from "./type";
 import { cookies } from 'next/headers';
 
