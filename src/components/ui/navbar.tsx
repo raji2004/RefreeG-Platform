@@ -38,7 +38,7 @@ const MenuLink = ({ href, children, className, onClick, ...props }: MenuLinkProp
   </Link>
 );
 
-export function Navbar({ userSession }: { userSession: boolean }) {
+export function Navbar({ userSession }: { userSession?: boolean }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
 
