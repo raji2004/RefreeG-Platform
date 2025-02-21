@@ -10,14 +10,13 @@ import { redirect } from "next/navigation";
 import { H2, P, Ol } from "@/components/typograpy";
 import { DonationCarousel } from "@/components/donationCarousel";
 
-export default function Home() {
+export default async function Home() {
 
-  const cookieStore = cookies();
-  const userSession = cookieStore.get('userSession')?.value;
+  const cookieStore = await cookies();
+  const userSession = cookieStore.get("userSession")?.value;
   if (!userSession) {
-      redirect('/create-account');
+    redirect("/create-account");
   }
-
   return (
     <div>
 

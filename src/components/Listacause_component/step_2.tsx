@@ -14,12 +14,14 @@ interface FormData {
 
 interface Step2FormProps {
   formData: FormData;
-  // This union type covers both actual change events and our custom events
+  // Accept both a React change event and a custom event shape
   handleChange: (
     event:
       | React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
       | { target: { name: string; value: string } }
   ) => void;
+  // Optional errors prop, keyed by the FormData properties
+  errors?: Partial<Record<keyof FormData, string>>;
 }
 
 // A helper function to convert numbers (1-10) to words
@@ -56,6 +58,7 @@ function getTimeLeft(deadline: Date | null): string {
 export default function Step2Form({
   formData,
   handleChange,
+  errors = {},
 }: Step2FormProps) {
   // Initialize dateValue as a Date object if provided, or null
   const initialDate = formData.deadline ? new Date(formData.deadline) : null;
@@ -108,6 +111,9 @@ export default function Step2Form({
           <p className="text-[#5a5555] text-sm font-normal font-montserrat">
             *Note: Pick a short, attention-grabbing title.
           </p>
+          {errors.causeTitle && (
+            <p className="text-red-500 text-sm">{errors.causeTitle}</p>
+          )}
         </div>
 
         <div className="relative">
@@ -129,6 +135,9 @@ export default function Step2Form({
           <span className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none text-[#898384]">
             ▼
           </span>
+          {errors.causeCategory && (
+            <p className="text-red-500 text-sm">{errors.causeCategory}</p>
+          )}
         </div>
 
         <div className="relative">
@@ -153,6 +162,9 @@ export default function Step2Form({
               />
             </span>
           </p>
+          {errors.deadline && (
+            <p className="text-red-500 text-sm">{errors.deadline}</p>
+          )}
         </div>
 
         {/* Goal Amount Input */}
@@ -184,6 +196,9 @@ export default function Step2Form({
               +
             </button>
           </div>
+          {errors.goalAmount && (
+            <p className="text-red-500 text-sm">{errors.goalAmount}</p>
+          )}
         </div>
       </form>
     </div>

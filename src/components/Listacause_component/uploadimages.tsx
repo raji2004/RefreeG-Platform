@@ -44,8 +44,9 @@ export default function UploadImage({
       name: file.name,
       size: sizeInKB,
       progress: 0,
-      type: file.type,
+      type: file.type, // Now valid, because it's defined in the interface
     };
+
     setMedia(newMedia);
     localStorage.setItem("uploadedImage", JSON.stringify(newMedia));
 
@@ -58,7 +59,7 @@ export default function UploadImage({
         localStorage.setItem("uploadedImage", JSON.stringify(updatedMedia));
         if (updatedProgress === 100) {
           clearInterval(interval);
-          // Removed direct call to handleImageUpload here
+          // Removed direct call to handleImageUpload here; it's called via useEffect.
         }
         return updatedMedia;
       });
@@ -80,8 +81,9 @@ export default function UploadImage({
         Bring Your Cause to Life with Media
       </h2>
       <p className="text-[#2b2829] text-sm font-normal font-montserrat mb-2">
-        An image or video can be worth a thousand words. Add photos or videos that
-        showcase the real people, places, or situations your cause supports.
+        An image or video can be worth a thousand words. Add photos or videos
+        that showcase the real people, places, or situations your cause
+        supports.
       </p>
       <label
         htmlFor="media-upload"
@@ -128,7 +130,8 @@ export default function UploadImage({
       <div className="relative mt-4">
         <button onClick={toggleGuidelines} className="flex gap-1 items-center">
           <p className="text-[#2b2829] text-[12px] font-normal font-montserrat underline">
-            To ensure the best experience, please follow these guidelines when uploading images or videos
+            To ensure the best experience, please follow these guidelines when
+            uploading images or videos
           </p>
           <Image
             src="/List_a_cause/chevron-down-4.svg"
@@ -140,12 +143,19 @@ export default function UploadImage({
         {showGuidelines && (
           <div className="absolute left-0 mt-2 p-4 bg-white border border-gray-300 shadow-lg z-10">
             <p className="text-[12px] text-[#2b2829] font-montserrat">
-              <strong>Images:</strong> Maximum size of 5 MB each<br />
-              Recommended format: JPEG or PNG<br />
-              Ideal resolution: 1920 x 1080 pixels<br /><br />
-              <strong>Videos:</strong> Maximum size of 50 MB<br />
-              Recommended format: MP4<br />
-              Max resolution: 1080p (1920 x 1080)<br />
+              <strong>Images:</strong> Maximum size of 5 MB each
+              <br />
+              Recommended format: JPEG or PNG
+              <br />
+              Ideal resolution: 1920 x 1080 pixels
+              <br />
+              <br />
+              <strong>Videos:</strong> Maximum size of 50 MB
+              <br />
+              Recommended format: MP4
+              <br />
+              Max resolution: 1080p (1920 x 1080)
+              <br />
               Suggested length: 1-4 minutes
             </p>
           </div>

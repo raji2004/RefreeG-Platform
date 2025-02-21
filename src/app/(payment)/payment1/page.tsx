@@ -7,8 +7,8 @@ import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
 
 // import BackgroundCard from "/donation_flow/cause_background.svg"
-import { Navbar, NavbarMedium, NavbarSmall } from "@/components/ui/navbar";
-import ClientHome from "@/components/ui/windowSize";
+
+
 
 
 export default function Page() {
@@ -16,7 +16,7 @@ export default function Page() {
 
     return (
         <div className="">
-            <ClientHome></ClientHome>
+            
             <div className="max-w-7xl p-3 space-y-3 mx-auto my-20 ">
                 <Image className="w-full" src={"/donation_flow/cause_background.svg"} alt="Donation Cause Image" width={60} height={60}/>
                 <div className="p-7  space-y-5">

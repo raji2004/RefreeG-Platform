@@ -48,6 +48,7 @@
     "next": "^15.1.7",
     "next-auth": "^4.24.7",
     "paystack-api": "^2.0.6",
+    "pino-pretty": "^13.0.0",
     "react": "^18.0.0",
     "react-datepicker": "^8.1.0",
     "react-day-picker": "^8.10.1",

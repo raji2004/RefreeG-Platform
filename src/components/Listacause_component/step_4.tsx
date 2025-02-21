@@ -10,7 +10,24 @@ interface Section {
   description: string;
 }
 
-export const Step4Form = () => {
+export interface FormData {
+  state: string;
+  zipCode: string;
+  currency: string;
+  causeTitle: string;
+  causeCategory: string;
+  deadline: string;
+  goalAmount: string;
+  uploadedImage: any; // Use your UploadedImage interface if needed
+}
+
+interface Step4FormProps {
+  formData: FormData;
+  setFormData: React.Dispatch<React.SetStateAction<FormData>>;
+  errors: Partial<Record<keyof FormData, string>>;
+}
+
+export const Step4Form = ({ formData, setFormData, errors }: Step4FormProps) => {
   const router = useRouter();
 
   // Initialize sections from localStorage if available, otherwise use default
@@ -59,7 +76,7 @@ export const Step4Form = () => {
   };
 
   const handlePreview = () => {
-    // Save sections to localStorage before previewing (they are already synced, but this ensures it)
+    // Save sections to localStorage before previewing
     localStorage.setItem("formSections", JSON.stringify(sections));
     router.push(`/preview?data=${encodeURIComponent(JSON.stringify(sections))}`);
   };

@@ -34,8 +34,9 @@ export const checkEmailExists = async (email:string) => {
   };
 
   export const handleSignOut = async () => {
-    const cookieStore = cookies();
-   await signOut(auth);
-    cookieStore.delete('userSession')
+    const cookieStore = await cookies(); // Await the promise
+    await signOut(auth);
+    cookieStore.delete("userSession");
     redirect("/login"); // Redirect to login after sign out
   };
+  
