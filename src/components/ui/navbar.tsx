@@ -17,6 +17,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import SearchModal from './searchModal';
+import { LogOut } from 'lucide-react'
 
 interface MenuLinkProps {
   href: string;
@@ -37,7 +38,7 @@ const MenuLink = ({ href, children, className, onClick, ...props }: MenuLinkProp
   </Link>
 );
 
-export function Navbar() {
+export function Navbar({ userSession }: { userSession: boolean }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
 
@@ -106,9 +107,17 @@ export function Navbar() {
           List a cause
         </MenuLink>
 
-        <MenuLink href="/login" className="hover:underline">
+        {userSession ? <MenuLink href='/profile'> <Image
+          src="/images/logo.png"
+          alt="Profile"
+          width={40}
+          height={40}
+          className="rounded-full"
+        />
+        </MenuLink> : <MenuLink href="/login" className="hover:underline">
           Login
         </MenuLink>
+        }
       </nav>
 
       {/* Small Screen Menu and Search Button */}
@@ -128,18 +137,47 @@ export function Navbar() {
             </Button>
           </SheetTrigger>
 
-          <SheetContent side="left" className="bg-white">
+          <SheetContent side="left" className="bg-white flex flex-col h-full">
             <Link href="#" className="mr-6 hidden lg:flex" prefetch={false}>
-              <MountainIcon className="h-6 w-6" />
-              <span className="sr-only">Acme Inc</span>
+              <Image
+                src="/images/logo.png"
+                alt="logo"
+                width={40}
+                height={40}
+                className=""
+              />
             </Link>
             <div className="grid gap-2 py-6">
               <MenuLink href="#">Explore causes</MenuLink>
               <MenuLink href="#">About us</MenuLink>
               <MenuLink href="#">How it works</MenuLink>
               <MenuLink href="#">List a cause</MenuLink>
-              <MenuLink href="/login">Login</MenuLink>
+
             </div>
+
+            <div className='mt-auto flex justify-start items-center  '>
+              {userSession ? <MenuLink href='/profile'> <Image
+                src="/images/logo.png"
+                alt="Profile"
+                width={40}
+                height={40}
+                className="rounded-full"
+              />
+              </MenuLink> : <MenuLink href="/login" className="hover:underline">
+                Login
+              </MenuLink>
+              }
+
+              {userSession && <div className=' ml-auto'>
+                <Button variant='outline' size='icon' className='border-none'>
+                  <LogOut size={24} />
+                </Button>
+              </div>
+              }
+            </div>
+
+
+
           </SheetContent>
         </Sheet>
       </div>
@@ -156,7 +194,7 @@ export function Navbar() {
   );
 }
 
-interface IconProps extends React.SVGProps<SVGSVGElement> {}
+interface IconProps extends React.SVGProps<SVGSVGElement> { }
 
 function MenuIcon(props: IconProps) {
   return (

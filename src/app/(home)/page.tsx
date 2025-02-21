@@ -5,18 +5,15 @@ import HappeningNearYou from "./_components/happeningNearYou";
 import CausesSupported from "./_components/causesWeSupport";
 import FAQ from "./_components/frequentlyAskedQuestions";
 import WhyUseUs from "./_components/whyUseUs";
-import { cookies } from 'next/headers';
+import { checkUserSession } from "@/lib/helpers";
 import { redirect } from "next/navigation";
 import { H2, P, Ol } from "@/components/typograpy";
 import { DonationCarousel } from "@/components/donationCarousel";
 
 export default function Home() {
 
-  const cookieStore = cookies();
-  const userSession = cookieStore.get('userSession')?.value;
-  if (!userSession) {
-      redirect('/create-account');
-  }
+  
+ 
 
   return (
     <div>

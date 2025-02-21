@@ -1,4 +1,6 @@
 import { Country, SortedCountry } from "./type";
+import { cookies } from 'next/headers';
+
 
 function sortCountries(countries: Country[]) {
     return countries
@@ -25,3 +27,10 @@ export const fetchCountriesData = async (): Promise<SortedCountry[]> => {
         throw error;
     }
 };
+
+
+export const checkUserSession = () => {
+    const cookieStore = cookies();
+    const userSession = cookieStore.get('userSession')?.value;
+    return userSession? true : false;
+}
