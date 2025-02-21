@@ -43,7 +43,7 @@ export const WhyUseUs: FC = () => {
       <div className="bg-white w-full mt-8 mb-12 px-4 z-10">
         <div className="text-2xl w-full md:text-4xl">Why you should use us!</div>
         <div className="text-lg md:text-xl">Reasons why your donation will be used right!</div>
-        <div className="w-full py-6 flex overflow-x-auto justify-between items-center space-y-6 md:space-y-0">
+        <div className="w-full py-6 flex flex-col md:flex-row overflow-x-auto scrollbar-hide space-y-6 md:space-y-0 md:space-x-6">
           <FeatureCard
             imageSrc={"/images/blockchain.png"}
             title="Blockchain Transparency"

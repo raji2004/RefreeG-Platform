@@ -1,14 +1,17 @@
+"use server";
 import { Country, SortedCountry } from "./type";
+import { cookies } from 'next/headers';
+
 
 function sortCountries(countries: Country[]) {
     return countries
-      .sort((a, b) => a.name.common.localeCompare(b.name.common)) // Sort by common name
-      .map((country) => ({
-        name: country.name,
-        flags: country.flags,
-      })); // Return only name and flags
-  }
-  
+        .sort((a, b) => a.name.common.localeCompare(b.name.common)) // Sort by common name
+        .map((country) => ({
+            name: country.name,
+            flags: country.flags,
+        })); // Return only name and flags
+}
+
 
 export const fetchCountriesData = async (): Promise<SortedCountry[]> => {
     try {
@@ -25,3 +28,10 @@ export const fetchCountriesData = async (): Promise<SortedCountry[]> => {
         throw error;
     }
 };
+
+
+export const checkUserSession = () => {
+    const cookieStore = cookies();
+    const userSession = cookieStore.get('userSession')?.value;
+    return userSession ? true : false;
+}
