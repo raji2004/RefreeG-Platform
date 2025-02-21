@@ -122,7 +122,7 @@ export default function StepperForm() {
     }
   };
 
-  // When the form is submitted, data is saved to Firestore.
+  // Submission is now handled in the PreviewPage.
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateFields(4)) return;
@@ -176,43 +176,7 @@ export default function StepperForm() {
                     className="mt-1 px-5 py-3.5 w-60 block rounded-md"
                   >
                     <option value="">Select State</option>
-                    <option value="Abia">Abia</option>
-                    <option value="Adamawa">Adamawa</option>
-                    <option value="Akwa Ibom">Akwa Ibom</option>
-                    <option value="Anambra">Anambra</option>
-                    <option value="Bauchi">Bauchi</option>
-                    <option value="Bayelsa">Bayelsa</option>
-                    <option value="Benue">Benue</option>
-                    <option value="Borno">Borno</option>
-                    <option value="Cross River">Cross River</option>
-                    <option value="Delta">Delta</option>
-                    <option value="Ebonyi">Ebonyi</option>
-                    <option value="Edo">Edo</option>
-                    <option value="Ekiti">Ekiti</option>
-                    <option value="Enugu">Enugu</option>
-                    <option value="F.C.T Abuja">F.C.T Abuja</option>
-                    <option value="Gombe">Gombe</option>
-                    <option value="Imo">Imo</option>
-                    <option value="Jigawa">Jigawa</option>
-                    <option value="Kaduna">Kaduna</option>
-                    <option value="Kano">Kano</option>
-                    <option value="Katsina">Katsina</option>
-                    <option value="Kebbi">Kebbi</option>
-                    <option value="Kogi">Kogi</option>
-                    <option value="Kwara">Kwara</option>
-                    <option value="Lagos">Lagos</option>
-                    <option value="Nasarawa">Nasarawa</option>
-                    <option value="Niger">Niger</option>
-                    <option value="Ogun">Ogun</option>
-                    <option value="Ondo">Ondo</option>
-                    <option value="Osun">Osun</option>
-                    <option value="Oyo">Oyo</option>
-                    <option value="Plateau">Plateau</option>
-                    <option value="Rivers">Rivers</option>
-                    <option value="Sokoto">Sokoto</option>
-                    <option value="Taraba">Taraba</option>
-                    <option value="Yobe">Yobe</option>
-                    <option value="Zamfara">Zamfara</option>
+                    {/* State options */}
                   </select>
                   {errors.state && (
                     <p className="text-red-500 text-sm">{errors.state}</p>
@@ -264,7 +228,7 @@ export default function StepperForm() {
                 <button
                   type="button"
                   className="mt-4 px-5 py-3.5 bg-blue-500 text-white rounded-md"
-                  onClick={() => (window.location.href = "/crypto-setup")}
+                  onClick={() => (window.location.href = "/crypto-donation")}
                 >
                   Setup Crypto Payment
                 </button>
@@ -307,7 +271,7 @@ export default function StepperForm() {
           </Button>
         )}
         {step < 4 && <Button onClick={handleNext}>Next</Button>}
-        {step === 4 && <Button onClick={handleSubmit}>Submit</Button>}
+        {/* Removed the Submit button for step 4 */}
       </div>
     </div>
   );

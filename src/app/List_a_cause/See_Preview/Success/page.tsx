@@ -104,6 +104,31 @@ export default function SuccessPage() {
     }
   };
 
+  function getDaysLeft(deadline: string): string {
+    const deadlineDate = new Date(deadline);
+    const now = new Date();
+    const diffTime = deadlineDate.getTime() - now.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    if (diffDays <= 0) return "Past due";
+    // For numbers 10 or below, convert to words (optional)
+    const words = [
+      "zero",
+      "one",
+      "two",
+      "three",
+      "four",
+      "five",
+      "six",
+      "seven",
+      "eight",
+      "nine",
+      "ten",
+    ];
+    const dayWord = diffDays <= 10 ? words[diffDays] : diffDays.toString();
+    return `${dayWord} day${diffDays > 1 ? "s" : ""} left`;
+  }
+  
+
   return (
     <div>
       <div className="flex flex-col items-center justify-center text-center space-y-4">
@@ -164,6 +189,13 @@ export default function SuccessPage() {
                 <div className="text-xs">
                   Category: {formData ? formData.causeCategory : "N/A"}
                 </div>
+                <div className="text-xs">
+  Deadline:{" "}
+  {formData?.deadline
+    ? `${formData.deadline} | ${getDaysLeft(formData.deadline)}`
+    : "N/A"}
+</div>
+
               </div>
             </div>
             <div className="mb-2 underline">What&apos;s next?</div>

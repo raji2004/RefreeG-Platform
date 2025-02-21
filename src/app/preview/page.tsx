@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Navbar from "@/components/Listacause_component/navbar";
+import { collection, addDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase/config";
 import {
   FaExclamationTriangle,
   FaHeartbeat,
@@ -52,6 +54,45 @@ const PreviewPage = () => {
     router.push("/List_a_cause"); // Update with your actual form route if needed
   };
 
+  // Submit form data to Firestore and then navigate to success page
+  const handleSubmit = async () => {
+    if (!formData) return;
+    try {
+      // Save the latest form data to localStorage (if needed)
+      localStorage.setItem("formData", JSON.stringify(formData));
+      const docRef = await addDoc(collection(db, "formSubmissions"), formData);
+      console.log("Document written with ID: ", docRef.id);
+      router.push("/List_a_cause/See_Preview/Success");
+    } catch (error: any) {
+      console.error("Error adding document: ", error.message);
+    }
+  };
+
+  // Helper function to compute days left from the deadline.
+  function getDaysLeft(deadline: string): string {
+    const deadlineDate = new Date(deadline);
+    const now = new Date();
+    const diffTime = deadlineDate.getTime() - now.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    if (diffDays <= 0) return "Past due";
+    // For numbers 10 or below, convert to words (optional)
+    const words = [
+      "zero",
+      "one",
+      "two",
+      "three",
+      "four",
+      "five",
+      "six",
+      "seven",
+      "eight",
+      "nine",
+      "ten",
+    ];
+    const dayWord = diffDays <= 10 ? words[diffDays] : diffDays.toString();
+    return `${dayWord} day${diffDays > 1 ? "s" : ""} left`;
+  }
+
   return (
     <div>
       <Navbar />
@@ -60,10 +101,6 @@ const PreviewPage = () => {
           {formData ? (
             <>
               <h1 className="text-2xl font-bold mb-2">{formData.causeTitle}</h1>
-              <p className="text-red-600 font-medium flex items-center">
-                <FaExclamationTriangle className="mr-2" />
-                {formData.causeCategory}
-              </p>
               {uploadedImage ? (
                 <div className="mb-6 w-full">
                   <Image
@@ -79,10 +116,10 @@ const PreviewPage = () => {
               )}
               <div className="flex space-x-2 mt-9">
                 <span className="text-sm bg-gray-200 rounded-full px-3 py-1 flex items-center">
-                  <FaHeartbeat className="mr-1" /> Healthcare
+                  <FaHeartbeat className="mr-1" /> {formData.causeCategory}
                 </span>
                 <span className="text-sm bg-gray-200 rounded-full px-3 py-1 flex items-center">
-                  <FaMapMarkerAlt className="mr-1" /> {formData.state}
+                  <FaMapMarkerAlt className="mr-1" /> {formData.state} State
                 </span>
               </div>
               <p className="flex mt-4 font-semibold text-sm">
@@ -99,13 +136,22 @@ const PreviewPage = () => {
                     </p>
                   </div>
                 ))}
-              <button
-                className="mt-6 bg-blue-500 text-white px-4 py-2 rounded"
-                onClick={handleBackToForm}
-                aria-label="Back to Form"
-              >
-                Back to Form
-              </button>
+              <div className="flex mt-6 space-x-4">
+                <button
+                  className="bg-blue-500 text-white px-4 py-2 rounded"
+                  onClick={handleBackToForm}
+                  aria-label="Back to Form"
+                >
+                  Back to Form
+                </button>
+                <button
+                  className="bg-green-500 text-white px-4 py-2 rounded"
+                  onClick={handleSubmit}
+                  aria-label="Submit Form"
+                >
+                  Submit
+                </button>
+              </div>
             </>
           ) : (
             <p>Loading...</p>
@@ -117,10 +163,12 @@ const PreviewPage = () => {
             <p>of ₦{formData?.goalAmount} goal</p>
             <div className="flex mt-4 text-sm">
               <span className="bg-gray-200 rounded-full px-3 py-1 mr-1">
-                2.4k Donations
+                - Donations
               </span>
               <span className="bg-gray-200 rounded-full px-3 py-1 mr-1">
-                {formData?.deadline}
+                {formData?.deadline
+                  ? `${formData.deadline} | ${getDaysLeft(formData.deadline)}`
+                  : "N/A"}
               </span>
             </div>
           </div>

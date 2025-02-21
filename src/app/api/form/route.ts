@@ -30,6 +30,8 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ error: "Invalid request" }, { status: 400 });
   } catch (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    // Check if error is an instance of Error to safely access the message
+    const errorMessage = error instanceof Error ? error.message : "An unexpected error occurred";
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }

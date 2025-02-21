@@ -1,19 +1,75 @@
+"use client";
+
 import React, { useState } from "react";
 import Image from "next/image";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-export default function Step2Form({ formData = {}, handleChange }) {
+interface FormData {
+  causeTitle?: string;
+  causeCategory?: string;
+  deadline?: string;
+  goalAmount?: string;
+}
+
+interface Step2FormProps {
+  formData: FormData;
+  // This union type covers both actual change events and our custom events
+  handleChange: (
+    event:
+      | React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+      | { target: { name: string; value: string } }
+  ) => void;
+}
+
+// A helper function to convert numbers (1-10) to words
+function numberToWords(num: number): string {
+  const words = [
+    "zero",
+    "one",
+    "two",
+    "three",
+    "four",
+    "five",
+    "six",
+    "seven",
+    "eight",
+    "nine",
+    "ten",
+  ];
+  return num <= 10 ? words[num] : num.toString();
+}
+
+// Calculate the days left and return a string like "two days left"
+function getTimeLeft(deadline: Date | null): string {
+  if (!deadline) return "";
+  const now = new Date();
+  // Calculate difference in milliseconds
+  const diffTime = deadline.getTime() - now.getTime();
+  // Convert to days (rounding up so that even a fraction counts as a day)
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  if (diffDays <= 0) return "Today";
+  if (diffDays === 1) return "one day left";
+  return `${numberToWords(diffDays)} days left`;
+}
+
+export default function Step2Form({
+  formData,
+  handleChange,
+}: Step2FormProps) {
   // Initialize dateValue as a Date object if provided, or null
   const initialDate = formData.deadline ? new Date(formData.deadline) : null;
-  const [dateValue, setDateValue] = useState(initialDate);
+  const [dateValue, setDateValue] = useState<Date | null>(initialDate);
   const [goalAmount, setGoalAmount] = useState(formData.goalAmount || "0");
 
-  const handleDateChange = (date) => {
+  const handleDateChange = (date: Date | null) => {
     setDateValue(date);
-    // Convert date to ISO string for consistency; adjust if needed
+    // Store just the date portion (YYYY-MM-DD)
     handleChange({
-      target: { name: "deadline", value: date ? date.toISOString() : "" },
+      target: {
+        name: "deadline",
+        value: date ? date.toISOString().split("T")[0] : "",
+      },
     });
   };
 
@@ -44,7 +100,7 @@ export default function Step2Form({ formData = {}, handleChange }) {
           <input
             type="text"
             name="causeTitle"
-            value={formData.causeTitle}
+            value={formData.causeTitle || ""}
             onChange={handleChange}
             placeholder="Cause title"
             className="px-[9px] py-[13px] border-b border-[#898384] w-full focus:outline-none text-[#898384] text-base font-medium font-montserrat"
@@ -57,14 +113,18 @@ export default function Step2Form({ formData = {}, handleChange }) {
         <div className="relative">
           <select
             name="causeCategory"
-            value={formData.causeCategory}
+            value={formData.causeCategory || ""}
             onChange={handleChange}
             className="px-[9px] py-[13px] border-b border-[#898384] w-full focus:outline-none text-[#898384] text-base font-medium font-montserrat appearance-none bg-transparent"
           >
             <option value="">Cause Category</option>
-            <option value="option1">Option 1</option>
-            <option value="option2">Option 2</option>
-            <option value="option3">Option 3</option>
+            <option value="Education">Education</option>
+            <option value="Health Care">Health Care</option>
+            <option value="Women’s Empowerment">Women’s Empowerment</option>
+            <option value="Youth Development">Youth Development</option>
+            <option value="Economic Development">Economic Development</option>
+            <option value="Agriculture">Agriculture</option>
+            <option value="Environment">Environment</option>
           </select>
           <span className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none text-[#898384]">
             ▼
@@ -78,6 +138,8 @@ export default function Step2Form({ formData = {}, handleChange }) {
             dateFormat="MM/dd/yyyy"
             placeholderText="Deadline"
             className="px-[9px] py-[13px] border-b border-[#898384] w-full focus:outline-none text-[#898384] text-base font-medium font-montserrat bg-transparent"
+            // Disable dates before today
+            minDate={new Date()}
           />
           <p className="text-[#5a5555] text-sm font-normal font-montserrat">
             *Note: This is when the cause will be delisted from the platform.{" "}
@@ -112,14 +174,14 @@ export default function Step2Form({ formData = {}, handleChange }) {
               onClick={decrementGoal}
               className="w-7 px-2 bg-white rounded-lg border-2 border-[#b5b3b3]"
             >
-              +
+              -
             </button>
             <button
               type="button"
               onClick={incrementGoal}
               className="w-7 px-2 bg-white rounded-lg border-2 border-[#b5b3b3]"
             >
-              -
+              +
             </button>
           </div>
         </div>
