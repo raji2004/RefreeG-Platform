@@ -138,7 +138,7 @@ export function Navbar({ userSession }: { userSession: boolean }) {
           </SheetTrigger>
 
           <SheetContent side="left" className="bg-white flex flex-col h-full">
-            <Link href="#" className="mr-6 hidden lg:flex" prefetch={false}>
+            <Link href="#" className="mr-6  lg:flex" prefetch={false}>
               <Image
                 src="/images/logo.png"
                 alt="logo"
