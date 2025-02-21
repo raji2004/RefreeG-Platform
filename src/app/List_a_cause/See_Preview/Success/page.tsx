@@ -63,8 +63,6 @@ export default function SuccessPage() {
   };
 
   const handleInstagramShare = () => {
-    // Instagram doesn't offer a direct share URL.
-    // We'll try using the Web Share API if available.
     if (navigator.share && causeUrl) {
       navigator
         .share({
@@ -81,8 +79,6 @@ export default function SuccessPage() {
   };
 
   const handleYouTubeShare = () => {
-    // YouTube does not provide a share URL for external content.
-    // We'll open YouTube's homepage as a fallback.
     window.open("https://www.youtube.com/", "_blank", "noopener,noreferrer");
   };
 
@@ -117,7 +113,7 @@ export default function SuccessPage() {
         <div className="text-gray-600">
           Thank you for sharing your cause with RefreeG. Your cause is now live
           on our platform, <br />
-          ready to reach supporters who care about making a difference. Let's
+          ready to reach supporters who care about making a difference. Let&apos;s
           get the word out!
         </div>
         <Image
@@ -170,7 +166,7 @@ export default function SuccessPage() {
                 </div>
               </div>
             </div>
-            <div className="mb-2 underline">What's next?</div>
+            <div className="mb-2 underline">What&apos;s next?</div>
             <div className="mb-2 underline">Support and FAQs</div>
             <button
               className="flex items-center space-x-2 bg-white text-black py-2 px-8 mb-8 rounded-md"
