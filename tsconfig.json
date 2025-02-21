@@ -1,10 +1,6 @@
 {
   "compilerOptions": {
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -22,15 +18,10 @@
       }
     ],
     "paths": {
-      "@/*": [
-        "./src/*"
-      ]
+      "@/*": ["./src/*"]
     },
-    "types": [
-      "node",
-      "vitest"
-    ],
-    "target": "ES2017"
+    "types": ["node", "vitest"],
+    "target": "ES2020"
   },
   "include": [
     "next-env.d.ts",
@@ -38,9 +29,10 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "tests/**/*.ts",
-    "jest.config.js"
+    "jest.config.js",
+    "src/lib/formActions.js",
+    "src/components/ui/footer.tsx",
+    "src/components/ui/GetMail.tsx"
   ],
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules"]
 }
