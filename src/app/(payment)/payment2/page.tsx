@@ -27,12 +27,15 @@ export default function FormSwitcher() {
     formValues.country &&
     formValues.postalCode;
 
-  const handleChange = (e) => {
-    const { id, value } = e.target;
-    setFormValues((prev) => ({ ...prev, [id]: value }));
-  };
+    const handleChange = (
+      e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    ) => {
+      const { id, value } = e.target;
+      setFormValues((prev) => ({ ...prev, [id]: value }));
+    };
+    
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (isFormValid) {
       console.log("Form Submitted:", formValues);
@@ -242,7 +245,9 @@ export default function FormSwitcher() {
 
                 {/* Submit Button */}
                 <div
-                  className={`w-full ${isFormValid ? "" : "cursor-not-allowed"}`}
+                  className={`w-full ${
+                    isFormValid ? "" : "cursor-not-allowed"
+                  }`}
                 >
                   <Button
                     type="submit"
@@ -270,10 +275,7 @@ export default function FormSwitcher() {
             <CardContent>
               <form>
                 <div className="mb-4">
-                  <label
-                    htmlFor="email"
-                    className="block text-sm font-medium"
-                  >
+                  <label htmlFor="email" className="block text-sm font-medium">
                     Email
                   </label>
                   <input
