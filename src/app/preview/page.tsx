@@ -50,15 +50,13 @@ const PreviewPage = () => {
   }, []);
 
   const handleBackToForm = () => {
-    // Simply navigate back without overwriting localStorage
-    router.push("/List_a_cause"); // Update with your actual form route if needed
+    router.push("/List_a_cause");
   };
 
   // Submit form data to Firestore and then navigate to success page
   const handleSubmit = async () => {
     if (!formData) return;
     try {
-      // Save the latest form data to localStorage (if needed)
       localStorage.setItem("formData", JSON.stringify(formData));
       const docRef = await addDoc(collection(db, "formSubmissions"), formData);
       console.log("Document written with ID: ", docRef.id);
@@ -75,7 +73,6 @@ const PreviewPage = () => {
     const diffTime = deadlineDate.getTime() - now.getTime();
     const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
     if (diffDays <= 0) return "Past due";
-    // For numbers 10 or below, convert to words (optional)
     const words = [
       "zero",
       "one",
@@ -96,17 +93,20 @@ const PreviewPage = () => {
   return (
     <div>
       <Navbar />
-      <div className="p-4 flex flex-row justify-between">
-        <div className="mt-16 w-full md:w-2/4">
+      <div className="p-4 flex flex-col md:flex-row justify-between">
+        {/* Left Column */}
+        <div className="mt-16 w-full md:w-1/2">
           {formData ? (
             <>
-              <h1 className="text-2xl font-bold mb-2">{formData.causeTitle}</h1>
+              <h1 className="text-2xl font-bold mb-2 text-center md:text-left">
+                {formData.causeTitle}
+              </h1>
               {uploadedImage ? (
                 <div className="mb-6 w-full">
                   <Image
                     src={uploadedImage.src}
                     alt={uploadedImage.name}
-                    className="ml-[70px] md:ml-[100px] w-[68%] h-[65%] object-cover rounded-lg"
+                    className="mx-auto md:ml-[100px] w-[90%] md:w-[68%] h-auto object-cover rounded-lg"
                     width={867}
                     height={732}
                   />
@@ -114,7 +114,7 @@ const PreviewPage = () => {
               ) : (
                 <div className="mb-6 text-center">No image uploaded</div>
               )}
-              <div className="flex space-x-2 mt-9">
+              <div className="flex flex-col md:flex-row gap-2 mt-9 items-center justify-center md:justify-start">
                 <span className="text-sm bg-gray-200 rounded-full px-3 py-1 flex items-center">
                   <FaHeartbeat className="mr-1" /> {formData.causeCategory}
                 </span>
@@ -122,7 +122,7 @@ const PreviewPage = () => {
                   <FaMapMarkerAlt className="mr-1" /> {formData.state} State
                 </span>
               </div>
-              <p className="flex mt-4 font-semibold text-sm">
+              <p className="flex mt-4 font-semibold text-sm justify-center md:justify-start">
                 <FaGlobe className="mr-1" /> United Nations International Children&apos;s Emergency Fund
               </p>
               {sections.length > 0 &&
@@ -131,12 +131,48 @@ const PreviewPage = () => {
                     <h2 className="text-base font-medium mb-2">
                       {section.header || `Section ${section.id}`}
                     </h2>
-                    <p className="w-11/12 text-sm">
+                    <p className="w-full md:w-11/12 text-sm">
                       {section.description || "No description provided."}
                     </p>
                   </div>
                 ))}
-              <div className="flex mt-6 space-x-4">
+              
+            </>
+          ) : (
+            <p className="text-center">Loading...</p>
+          )}
+        </div>
+        {/* Right Column */}
+        <div className="mt-16 w-full md:w-[40%] flex flex-col items-center md:items-end">
+          <div className="bg-gray-100 p-4 rounded-md shadow-md w-full md:max-w-sm">
+            <h2 className="text-xl font-bold">₦0 raised</h2>
+            <p>of ₦{formData?.goalAmount} goal</p>
+            <div className="flex flex-col md:flex-row mt-4 text-sm items-center justify-center">
+              <span className="bg-gray-200 rounded-full px-3 py-1 mb-2 md:mb-0 md:mr-1">
+                - Donations
+              </span>
+              <span className="bg-gray-200 rounded-full px-3 py-1">
+                {formData?.deadline
+                  ? `${formData.deadline} | ${getDaysLeft(formData.deadline)}`
+                  : "N/A"}
+              </span>
+            </div>
+          </div>
+          <div className="mt-4 flex flex-col md:flex-row gap-2 w-full md:max-w-sm">
+            <button
+              className="flex-grow bg-gray-300 text-blue py-2 rounded-md hover:bg-gray-400 transition-colors duration-300"
+              aria-label="Share the cause"
+            >
+              Share
+            </button>
+            <button
+              className="flex-grow bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition-colors duration-300"
+              aria-label="Donate now"
+            >
+              Donate ₦{formData?.goalAmount}
+            </button>
+          </div>
+          <div className="flex flex-col md:flex-row mt-6 gap-4 justify-center md:justify-start">
                 <button
                   className="bg-blue-500 text-white px-4 py-2 rounded"
                   onClick={handleBackToForm}
@@ -152,40 +188,6 @@ const PreviewPage = () => {
                   Submit
                 </button>
               </div>
-            </>
-          ) : (
-            <p>Loading...</p>
-          )}
-        </div>
-        <div className="mt-16 md:w-[40%] mr-10 flex flex-col">
-          <div className="bg-gray-100 p-4 rounded-md shadow-md">
-            <h2 className="text-xl font-bold">₦0 raised</h2>
-            <p>of ₦{formData?.goalAmount} goal</p>
-            <div className="flex mt-4 text-sm">
-              <span className="bg-gray-200 rounded-full px-3 py-1 mr-1">
-                - Donations
-              </span>
-              <span className="bg-gray-200 rounded-full px-3 py-1 mr-1">
-                {formData?.deadline
-                  ? `${formData.deadline} | ${getDaysLeft(formData.deadline)}`
-                  : "N/A"}
-              </span>
-            </div>
-          </div>
-          <div className="mt-4 flex space-x-2">
-            <button
-              className="flex-grow bg-gray-300 text-blue py-2 rounded-md hover:bg-gray-400 transition-colors duration-300"
-              aria-label="Share the cause"
-            >
-              Share
-            </button>
-            <button
-              className="flex-grow bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition-colors duration-300"
-              aria-label="Donate now"
-            >
-              Donate ₦{formData?.goalAmount}
-            </button>
-          </div>
         </div>
       </div>
     </div>

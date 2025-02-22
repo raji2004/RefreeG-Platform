@@ -19,7 +19,6 @@ export interface UploadedImage {
   type: string; // Added file type property
 }
 
-
 interface FormData {
   state: string;
   zipCode: string;
@@ -53,7 +52,9 @@ export default function StepperForm() {
   });
 
   // Use a separate errors state with string error messages
-  const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>({});
+  const [errors, setErrors] = useState<Partial<Record<keyof FormData, string>>>(
+    {}
+  );
 
   // Save formData to localStorage whenever it changes
   useEffect(() => {
@@ -82,11 +83,14 @@ export default function StepperForm() {
     if (step === 1) {
       if (!formData.state.trim()) newErrors.state = "State is required";
       if (!formData.zipCode.trim()) newErrors.zipCode = "ZIP Code is required";
-      if (!formData.currency.trim()) newErrors.currency = "Currency type is required";
+      if (!formData.currency.trim())
+        newErrors.currency = "Currency type is required";
     }
     if (step === 2) {
-      if (!formData.causeTitle.trim()) newErrors.causeTitle = "Cause title is required";
-      if (!formData.causeCategory.trim()) newErrors.causeCategory = "Cause category is required";
+      if (!formData.causeTitle.trim())
+        newErrors.causeTitle = "Cause title is required";
+      if (!formData.causeCategory.trim())
+        newErrors.causeCategory = "Cause category is required";
     }
     if (step === 3) {
       if (!formData.uploadedImage) {
@@ -96,8 +100,10 @@ export default function StepperForm() {
       }
     }
     if (step === 4) {
-      if (!formData.deadline.trim()) newErrors.deadline = "Deadline is required";
-      if (!formData.goalAmount.trim()) newErrors.goalAmount = "Goal amount is required";
+      if (!formData.deadline.trim())
+        newErrors.deadline = "Deadline is required";
+      if (!formData.goalAmount.trim())
+        newErrors.goalAmount = "Goal amount is required";
     }
 
     setErrors(newErrors);
@@ -141,7 +147,7 @@ export default function StepperForm() {
           setStep(newStep);
         }}
       >
-        <TabsList className="flex gap-8 my-8 mb-8">
+        <TabsList className="flex gap-8 my-20 md:my-8 mb-8">
           <TabsTrigger value="step-1" disabled={step < 1} />
           <TabsTrigger value="step-2" disabled={step < 2} />
           <TabsTrigger value="step-3" disabled={step < 3} />
@@ -168,9 +174,48 @@ export default function StepperForm() {
                     className="mt-1 px-5 py-3.5 w-60 block rounded-md"
                   >
                     <option value="">Select State</option>
-                    {/* Add your state options here */}
+                    <option value="Abia">Abia</option>
+                    <option value="Adamawa">Adamawa</option>
+                    <option value="Akwa Ibom">Akwa Ibom</option>
+                    <option value="Anambra">Anambra</option>
+                    <option value="Bauchi">Bauchi</option>
+                    <option value="Bayelsa">Bayelsa</option>
+                    <option value="Benue">Benue</option>
+                    <option value="Borno">Borno</option>
+                    <option value="Cross River">Cross River</option>
+                    <option value="Delta">Delta</option>
+                    <option value="Ebonyi">Ebonyi</option>
+                    <option value="Edo">Edo</option>
+                    <option value="Ekiti">Ekiti</option>
+                    <option value="Enugu">Enugu</option>
+                    <option value="FCT">FCT (Federal Capital Territory)</option>
+                    <option value="Gombe">Gombe</option>
+                    <option value="Imo">Imo</option>
+                    <option value="Jigawa">Jigawa</option>
+                    <option value="Kaduna">Kaduna</option>
+                    <option value="Kano">Kano</option>
+                    <option value="Katsina">Katsina</option>
+                    <option value="Kebbi">Kebbi</option>
+                    <option value="Kogi">Kogi</option>
+                    <option value="Kwara">Kwara</option>
+                    <option value="Lagos">Lagos</option>
+                    <option value="Nasarawa">Nasarawa</option>
+                    <option value="Niger">Niger</option>
+                    <option value="Ogun">Ogun</option>
+                    <option value="Ondo">Ondo</option>
+                    <option value="Osun">Osun</option>
+                    <option value="Oyo">Oyo</option>
+                    <option value="Plateau">Plateau</option>
+                    <option value="Rivers">Rivers</option>
+                    <option value="Sokoto">Sokoto</option>
+                    <option value="Taraba">Taraba</option>
+                    <option value="Yobe">Yobe</option>
+                    <option value="Zamfara">Zamfara</option>
                   </select>
-                  {errors.state && <p className="text-red-500 text-sm">{errors.state}</p>}
+
+                  {errors.state && (
+                    <p className="text-red-500 text-sm">{errors.state}</p>
+                  )}
                 </span>
 
                 <span>
@@ -185,7 +230,9 @@ export default function StepperForm() {
                     inputMode="numeric"
                     pattern="[0-9]*"
                   />
-                  {errors.zipCode && <p className="text-red-500 text-sm">{errors.zipCode}</p>}
+                  {errors.zipCode && (
+                    <p className="text-red-500 text-sm">{errors.zipCode}</p>
+                  )}
                 </span>
               </div>
 
@@ -195,7 +242,9 @@ export default function StepperForm() {
               <p className="pl-4 text-[#2b2829] text-sm font-normal font-montserrat">
                 Choose the currency you want to receive donations in.
               </p>
-              <label className="block text-sm font-medium mt-4">Currency type</label>
+              <label className="block text-sm font-medium mt-4">
+                Currency type
+              </label>
               <select
                 name="currency"
                 value={formData.currency}
@@ -206,7 +255,9 @@ export default function StepperForm() {
                 <option value="Flat Currency">Flat Currency</option>
                 <option value="Crypto Currency">Crypto Currency</option>
               </select>
-              {errors.currency && <p className="text-red-500 text-sm">{errors.currency}</p>}
+              {errors.currency && (
+                <p className="text-red-500 text-sm">{errors.currency}</p>
+              )}
 
               {mounted && formData.currency === "Crypto Currency" && (
                 <button
@@ -230,7 +281,10 @@ export default function StepperForm() {
         </TabsContent>
 
         <TabsContent value="step-3">
-          <UploadImage formData={formData} handleImageUpload={handleImageUpload} />
+          <UploadImage
+            formData={formData}
+            handleImageUpload={handleImageUpload}
+          />
           {errors.uploadedImage && (
             <p className="text-red-500 text-sm">{errors.uploadedImage}</p>
           )}
@@ -246,7 +300,11 @@ export default function StepperForm() {
       </Tabs>
 
       <div className="flex justify-between mt-6">
-        {step > 1 && <Button variant="secondary" onClick={() => setStep(step - 1)}>Back</Button>}
+        {step > 1 && (
+          <Button variant="secondary" onClick={() => setStep(step - 1)}>
+            Back
+          </Button>
+        )}
         {step < 4 && <Button onClick={handleNext}>Next</Button>}
         {/* Submit button removed from step 4; submission is handled in the PreviewPage */}
       </div>
