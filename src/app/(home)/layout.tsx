@@ -6,7 +6,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const session = checkUserSession();
   return (
     <div className="mr-10 ml-10 mb-16">
-      <Navbar userSession={true} />
+      <Navbar userSession={session} />
       {children}
       <Footer />
     </div>
