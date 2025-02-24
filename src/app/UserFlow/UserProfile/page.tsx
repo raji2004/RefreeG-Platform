@@ -1,19 +1,17 @@
-"use client"
+// "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Sidebar from "@/components/Sidebar";
 import Topbar from "@/components/Topbar";
 import GeneralInfo from "@/components/UserProfileComponents/generalInfo";
 
 export default function UserProfile() {
-  const [profileImage, setProfileImage] = useState("/UserProfile/defaultProfile.svg");
-
   return (
     <div>
-      <Topbar profileImage={profileImage} />
+      <Topbar profileImage="/UserProfile/defaultProfile.svg" />
       <div className="flex w-full">
         <Sidebar />
-        <GeneralInfo profileImage={profileImage} setProfileImage={setProfileImage} />
+        <GeneralInfo profileImage="/UserProfile/defaultProfile.svg" />
       </div>
     </div>
   );

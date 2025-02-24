@@ -138,9 +138,9 @@ const Sidebar: React.FC = () => {
   return (
     <>
       {/* Mobile toggle button */}
-      <div className="md:hidden p-4">
+      <div className="md:hidden p-3">
         <button onClick={() => setIsMobileSidebarOpen(true)}>
-          <Bars3Icon className="w-6 h-6" />
+          <Bars3Icon className="w-4 h-4" />
         </button>
       </div>
 

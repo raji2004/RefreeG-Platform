@@ -1,5 +1,6 @@
+"use client"
+
 import { PlusIcon, LucideTrash } from 'lucide-react';
-import Image from 'next/image';
 import React, { useState } from 'react';
 
 export default function Causes() {
@@ -67,7 +68,7 @@ export default function Causes() {
   const totalPages = Math.ceil(filteredCauses.length / causesPerPage);
 
   return (
-    <div className="mt-1 md:mt-0 px-6 py-4 w-full bg-[#FAFCFF]">
+    <div className="mt-1 md:mt-0 px-3 md:px-6 py-4 w-full bg-[#FAFCFF]">
       <div className="text-base md:text-2xl font-semibold">
         <span className="text-gray-500 pr-10">Activity Overview</span>
         <span className="text-black"> &gt; <span className='pl-6'> My Causes</span></span>
