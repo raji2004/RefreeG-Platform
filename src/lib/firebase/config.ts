@@ -5,7 +5,7 @@ import { getStorage } from "firebase/storage";
 
 // Firebase config settings
 const firebaseConfig = {
-  apiKey: "AIzaSyBhhG9B1OilB6sWri-YO-TSDf_K5nOMLAU",
+  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
   projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID,
   storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET,
