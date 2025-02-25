@@ -35,9 +35,15 @@ export function Footer() {
           growth, and promoting sustainable development. Together, we can make a
           significant impact and create a brighter future for all.
         </div>
-        <button className="flex border-1 rounded-md bg-white px-3 py-3 text-blue-900 font-semibold hover:bg-gray-300 transition delay-150">
-          Join our community
-        </button>
+        <Link
+          href="https://t.me/+d67UCIer8c01ODhk"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <button className="flex border rounded-md bg-white px-3 py-3 text-blue-900 font-semibold hover:bg-gray-300 transition delay-150">
+            Join our community
+          </button>
+        </Link>
       </div>
       <section className="w-full h-full px-[10px] md:px-[50px] py-[25px] mt-[30px] bg-footer">
         <div className="md:flex md:space-x-3 space-y-4 md:space-y-0">
