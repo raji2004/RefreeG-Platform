@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+
 export default function TransparencyPage() {
   return (
     <div className="w-full px-4 md:px-16 lg:px-32 py-12 bg-white">
@@ -25,7 +26,7 @@ export default function TransparencyPage() {
           contribute to meaningful causes, no matter their location. With
           support for both traditional and cryptocurrency donations, RefreeG
           allows individuals and organizations across the globe to donate
-          seamlessly. Whether you're contributing in Naira or using
+          seamlessly. Whether you&apos;re contributing in Naira or using
           blockchain-based payments, our system ensures that funds reach the
           intended recipients securely and efficiently.
           <br />

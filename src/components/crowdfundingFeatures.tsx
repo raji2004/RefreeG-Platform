@@ -1,6 +1,5 @@
-// components/CrowdfundingFeatures.tsx
-
 import React from "react";
+import Image from "next/image";
 
 interface Feature {
   title: string;
@@ -41,10 +40,12 @@ const CrowdfundingFeatures: React.FC = () => {
             key={index}
             className="flex flex-col items-center text-left md:text-center p-4 bg-gray-100 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300"
           >
-            <img
+            <Image
               src={feature.imageSrc}
               alt={feature.title}
-              className="h-24 w-24 mb-4"  // Increased size here
+              width={96} // Adjusted size (24 * 4 for consistency)
+              height={96}
+              className="mb-4"
             />
             <h3 className="text-lg font-semibold mb-3">{feature.title}</h3>
             <p className="text-sm md:text-base text-gray-700 mb-4">
