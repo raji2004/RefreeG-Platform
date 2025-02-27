@@ -24,7 +24,7 @@ const Icon = ({ href, children }: { href: string; children: ReactNode }) => {
 export function Footer() {
   return (
     <>
-      <div className="flex flex-col items-center w-10/12 lg:w-8/12 mx-auto rounded-3xl text-white bg-customNavyBlue2 px-10 py-10 mb-16">
+      {/* <div className="flex flex-col items-center w-10/12 lg:w-8/12 mx-auto rounded-3xl text-white bg-customNavyBlue2 px-10 py-10 mb-16">
         <div className="text-lg lg:text-3xl font-semibold mb-6">
           Ready to be part of the solution?
         </div>
@@ -44,11 +44,11 @@ export function Footer() {
             Join our community
           </button>
         </Link>
-      </div>
+      </div> */}
       <section className="w-full h-full px-[10px] md:px-[50px] py-[25px] mt-[30px] bg-footer">
         <div className="md:flex md:space-x-3 space-y-4 md:space-y-0">
           <div className="w-full md:w-3/6">
-            <p className="font-semibold text-[18px] mb-2">Subscribe</p>
+            <p className="font-semibold text-[18px] mb-2 ">Subscribe</p>
             <p className="text-[15px] font-light">
               Join our newsletter to stay up to date on features <br />
               and releases

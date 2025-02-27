@@ -1,11 +1,6 @@
 import Link from "next/link";
 import Image, { StaticImageData } from "next/image";
 import { FC } from "react";
-import BlockChain from "../../../public/images/blockchain.png";
-import VettedImage from "../../../public/images/vetted.png";
-import EasyDonations from "../../../public/images/easyDonation.png";
-import GlobalAccesImage from "../../../public/images/globalAccess.png";
-import ArrowRight from "../../../public/images/arrow-right.png";
 
 interface FeatureCardProps {
   imageSrc: string;
@@ -59,25 +54,25 @@ export const WhyUseUs: FC = () => {
             imageSrc={"/images/blockchain.png"}
             title="Blockchain Transparency"
             description="Track your donations in real-time using blockchain technology for complete transparency."
-            linkHref="/articles/blockchain-transparency"
+            linkHref="/blog?slug=Blockchain Transparency" // Use query parameter
           />
           <FeatureCard
             imageSrc={"/images/vetted.png"}
             title="Vetted Causes"
             description="Every cause is carefully vetted to ensure your contributions make a genuine impact."
-            linkHref="/articles/vetted-causes"
+            linkHref="/blog?slug=Vetted Causes" // Use query parameter
           />
           <FeatureCard
             imageSrc={"/images/easyDonation.png"}
             title="Easy Donation Process"
             description="Donate to causes with just a few clicks and track progress every step of the way."
-            linkHref="/articles/easy-donation"
+            linkHref="/blog?slug=Easy Donation Process" // Use query parameter
           />
           <FeatureCard
             imageSrc={"/images/globalAccess.png"}
             title="Global Access"
             description="Support causes from anywhere in the world with our secure, web-based platform."
-            linkHref="/articles/global-access"
+            linkHref="/blog?slug=Global Access" // Use query parameter
           />
         </div>
       </div>
