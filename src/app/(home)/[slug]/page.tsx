@@ -4,15 +4,15 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function BlogPage({
-  searchParams,
+  params,
 }: {
-  searchParams: { [key: string]: string | string[] | undefined };
+params: { [key: string]: string  };
 }) {
   // Extract the slug from searchParams
-  const slug = searchParams.slug as string;
+  const slug = params.slug as string;
 
   // Find the blog with the matching title
-  const blog = blogs.find((blog) => blog.title === slug);
+  const blog = blogs.find((blog) => blog.slug === slug);
 
   // If the blog is not found, show a 404 message
   if (!blog) {

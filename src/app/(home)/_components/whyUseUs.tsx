@@ -54,25 +54,25 @@ export const WhyUseUs: FC = () => {
             imageSrc={"/images/blockchain.png"}
             title="Blockchain Transparency"
             description="Track your donations in real-time using blockchain technology for complete transparency."
-            linkHref="/blog?slug=Blockchain Transparency" // Use query parameter
+            linkHref="/blockchain-transparency" // Use query parameter
           />
           <FeatureCard
             imageSrc={"/images/vetted.png"}
             title="Vetted Causes"
             description="Every cause is carefully vetted to ensure your contributions make a genuine impact."
-            linkHref="/blog?slug=Vetted Causes" // Use query parameter
+            linkHref="/vetted-causes" // Use query parameter
           />
           <FeatureCard
             imageSrc={"/images/easyDonation.png"}
             title="Easy Donation Process"
             description="Donate to causes with just a few clicks and track progress every step of the way."
-            linkHref="/blog?slug=Easy Donation Process" // Use query parameter
+            linkHref="/easy-donation-process" // Use query parameter
           />
           <FeatureCard
             imageSrc={"/images/globalAccess.png"}
             title="Global Access"
             description="Support causes from anywhere in the world with our secure, web-based platform."
-            linkHref="/blog?slug=Global Access" // Use query parameter
+            linkHref="/global-access" // Use query parameter
           />
         </div>
       </div>

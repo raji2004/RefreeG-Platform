@@ -2,6 +2,7 @@
 export const blogs = [
   {
     title: "Blockchain Transparency",
+    slug: "blockchain-transparency",
     img: "/polygon.jpg",
     content: `
       At RefreeG, transparency is our top priority, and we achieve this
@@ -29,6 +30,7 @@ export const blogs = [
     `,
     realTimeTracking: {
       title: "Real-Time Tracking",
+      slug: "real-time-tracking",
       img: "/tracking.svg",
       content: `
         At RefreeG, transparency is the core of our mission. We’ve integrated
@@ -64,6 +66,7 @@ export const blogs = [
   },
   {
     title: "Easy Donation Process",
+    slug: "easy-donation-process",
     img: "/easy-donation.svg",
     content: `
       At RefreeG, we make donating simple, secure, and transparent. Our
@@ -87,6 +90,7 @@ export const blogs = [
   },
   {
     title: "Global Access",
+    slug: "global-access",
     img: "/global-access.svg",
     content: `
       At RefreeG, we believe that financial support for education should
@@ -110,6 +114,7 @@ export const blogs = [
   },
   {
     title: "Vetted Causes",
+    slug: "vetted-causes",
     img: "/vetted.svg",
     content: `
       At RefreeG, we prioritize trust and accountability. Every cause
