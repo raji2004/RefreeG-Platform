@@ -24,7 +24,7 @@ const GetMail = () => {
           placeholder="Enter your Email"
         />
         <Mail className="text-bold size-4 absolute top-[15px] left-6" />
-        <button className="bg-bold text-white font-medium flex items-center justify-center text-[12px] h-[80%] absolute top-1 right-2 px-5 rounded-3xl cursor-pointer">
+        <button className="bg-bold bg-blue-600 text-white font-medium flex items-center justify-center text-[12px] h-[80%] absolute top-1 right-2 px-5 rounded-3xl cursor-pointer  hover:bg-blue-700 transition">
           Subscribe
         </button>
       </form>
