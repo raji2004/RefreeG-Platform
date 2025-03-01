@@ -3,7 +3,7 @@
 import React from "react";
 import Sidebar from "@/components/Sidebar";
 import Topbar from "@/components/Topbar";
-import GeneralInfo from "@/components/UserProfileComponents/generalInfo";
+import GeneralInfo from "./_components/GeneralInfo";
 
 export default function UserProfile() {
   return (
