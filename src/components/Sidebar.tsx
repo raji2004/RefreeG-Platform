@@ -27,34 +27,22 @@ const Sidebar: React.FC = () => {
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
 
   useEffect(() => {
-    if (
-      ["/my-causes", "/donation-history", "/signed-petitions"].includes(
-        pathname
-      )
-    ) {
+    if (["/dashboard/MyCauses", "/dashboard/DonationHistory", "/signed-petitions"].includes(pathname)) {
       setIsActivityOpen(true);
     }
   }, [pathname]);
 
   const navItems = [
-    { name: "Profile", path: "/profile", icon: UserIcon },
+    { name: "Profile", path: "/dashboard/UserProfile", icon: UserIcon },
     {
       name: "Activity Overflow",
       path: "#",
       icon: ActivityIcon,
       hasDropdown: true,
       subItems: [
-        { name: "My Causes", path: "/my-causes", icon: CausesIcon },
-        {
-          name: "Donation History",
-          path: "/donation-history",
-          icon: DonationHistoryIcon,
-        },
-        {
-          name: "Signed Petitions",
-          path: "/signed-petitions",
-          icon: PetitionsIcon,
-        },
+        { name: "My Causes", path: "/dashboard/MyCauses", icon: CausesIcon },
+        { name: "Donation History", path: "/dashboard/DonationHistory", icon: DonationHistoryIcon },
+        { name: "Signed Petitions", path: "/dashboard/SignedPetitions", icon: PetitionsIcon },
       ],
     },
     {
@@ -67,7 +55,7 @@ const Sidebar: React.FC = () => {
       path: "/admin/dashboard/notifications",
       icon: NotificationIcon,
     },
-    { name: "Account", path: "/account", icon: AccountIcon },
+    { name: "Account", path: "/dashboard/Account", icon: AccountIcon },
     { name: "Security", path: "/admin/dashboard/security", icon: SecurityIcon },
     {
       name: "Support & Help Center",
@@ -79,7 +67,8 @@ const Sidebar: React.FC = () => {
 
   // Extract the common sidebar content into a function
   const renderSidebarContent = () => (
-    <div className="w-64 bg-white text-black min-h-screen p-4 border-r relative">
+    // relative
+    <div className="w-64 bg-white text-black min-h-screen p-4 border-r overflow-auto pb-24  sticky top-0 h-screen">
       <h1 className="text-2xl font-bold flex items-center mb-6">
         <DashboardIcon className="w-6 h-6 mr-2" /> Dashboard
       </h1>
@@ -96,38 +85,34 @@ const Sidebar: React.FC = () => {
                     setIsMobileSidebarOpen(false);
                   }
                 }}
-                className={`flex items-center justify-between p-2 rounded w-full text-left transition duration-300 ${
-                  pathname === path || (hasDropdown && isActivityOpen)
+                className={`flex items-center justify-between p-2 rounded w-full text-left transition duration-300 ${pathname === path || (hasDropdown && isActivityOpen)
                     ? "bg-gray-200 font-semibold"
                     : "hover:bg-gray-100"
-                }`}
+                  }`}
               >
                 <span className="flex items-center">
                   <Icon className="w-5 h-5 mr-2" /> {name}
                 </span>
                 {hasDropdown && (
                   <ChevronDownIcon
-                    className={`w-4 h-4 transition-transform duration-300 ${
-                      isActivityOpen ? "rotate-180" : "rotate-0"
-                    }`}
+                    className={`w-4 h-4 transition-transform duration-300 ${isActivityOpen ? "rotate-180" : "rotate-0"
+                      }`}
                   />
                 )}
               </button>
               {hasDropdown && (
                 <div
-                  className={`overflow-hidden transition-[max-height] duration-300 ease-in-out ${
-                    isActivityOpen ? "max-h-60" : "max-h-0"
-                  }`}
+                  className={`overflow-hidden transition-[max-height] duration-300 ease-in-out ${isActivityOpen ? "max-h-60" : "max-h-0"
+                    }`}
                 >
                   <ul className="ml-6 mt-2 space-y-2">
                     {subItems.map(({ name, path, icon: SubIcon }) => (
                       <li key={name}>
                         <button
-                          className={`flex items-center p-2 rounded w-full text-left transition duration-300 ${
-                            pathname === path
+                          className={`flex items-center p-2 rounded w-full text-left transition duration-300 ${pathname === path
                               ? "bg-gray-300 font-semibold"
                               : "hover:bg-gray-100"
-                          }`}
+                            }`}
                           onClick={() => {
                             router.push(path);
                             setIsMobileSidebarOpen(false);
@@ -150,9 +135,9 @@ const Sidebar: React.FC = () => {
   return (
     <>
       {/* Mobile toggle button */}
-      <div className="md:hidden p-4">
+      <div className="md:hidden p-3">
         <button onClick={() => setIsMobileSidebarOpen(true)}>
-          <Bars3Icon className="w-6 h-6" />
+          <Bars3Icon className="w-4 h-4" />
         </button>
       </div>
 
@@ -161,9 +146,8 @@ const Sidebar: React.FC = () => {
 
       {/* Mobile Sidebar */}
       <div
-        className={`fixed inset-0 z-50 transition-transform transform ${
-          isMobileSidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } md:hidden`}
+        className={`fixed inset-0 z-50 transition-transform transform ${isMobileSidebarOpen ? "translate-x-0" : "-translate-x-full"
+          } md:hidden`}
       >
         {/* Sidebar panel */}
         <div className="relative">
