@@ -1,9 +1,5 @@
-import React from 'react'
-
-
 import Sidebar from "@/components/Sidebar";
 import Topbar from "@/components/Topbar";
-import SignedPetitions from '@/components/UserProfileComponents/signedPetitions';
 import { SignedPetitionsColumn } from '@/components/columns';
 import { SignedPetitionsData } from '@/lib/dummyData';
 import { DataTable } from '@/components/ui/data-table';
