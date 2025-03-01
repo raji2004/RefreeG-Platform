@@ -1,7 +1,7 @@
 import React from 'react'
 import Sidebar from "@/components/Sidebar";
 import Topbar from "@/components/Topbar";
-import Causes from '@/components/UserProfileComponents/causes';
+import Causes from './_components/causes';
 
 export default function MyCauses() {
 

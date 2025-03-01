@@ -20,12 +20,16 @@ import {
 } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Trash, Plus } from "lucide-react"
+import Link from "next/link"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
     data: TData[],
     filterColumn?: string,
     filterColumnPlaceholder?: string,
+    nofilter?: boolean,
+    addCause?: boolean
 }
 
 export function DataTable<TData, TValue>({
@@ -33,6 +37,8 @@ export function DataTable<TData, TValue>({
     data,
     filterColumn,
     filterColumnPlaceholder,
+    nofilter,
+    addCause
 }: DataTableProps<TData, TValue>) {
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
         []
@@ -54,15 +60,35 @@ export function DataTable<TData, TValue>({
 
     return (
         <div>
-            <div className="flex items-center py-4">
-                <Input
+            <div className="flex items-end justify-between w-full py-4">
+                {!nofilter && <Input
                     placeholder={filterColumnPlaceholder ?? "Search..."}
-                    value={(table.getColumn(filterColumn?? "")?.getFilterValue() as string) ?? ""}
+                    value={(table.getColumn(filterColumn ?? "")?.getFilterValue() as string) ?? ""}
                     onChange={(event) =>
-                        table.getColumn(filterColumn?? "")?.setFilterValue(event.target.value)
+                        table.getColumn(filterColumn ?? "")?.setFilterValue(event.target.value)
                     }
                     className="max-w-sm"
-                />
+                />}
+
+                <div className={`${!nofilter ? "" : " ml-auto"} `}>
+                    {addCause && <Link href={'/list_a_cause'} className=" inline-flex items-center gap-1 text-primaryShades-800">
+                        <Plus size={19} />
+                        Add cause
+                    </Link>}
+
+                    <Button
+                        variant="secondary"
+                        size="sm"
+                        className=" bg-white"
+                        onClick={() => {
+                            console.log(table.getFilteredSelectedRowModel().rowsById)
+                        }}
+                    >
+                        <Trash size={20} />
+
+                    </Button>
+                </div>
+
             </div>
             <div className="flex-1 text-sm text-muted-foreground">
                 {table.getFilteredSelectedRowModel().rows.length} of{" "}

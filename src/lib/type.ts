@@ -118,3 +118,17 @@ export type DonationHistory = {
     paymentMethod: string;
   };
   
+
+export type CauseTable = {
+  id: number;
+  name: string;
+  metrics: string;
+  status: "Pending" | "Approved" | "Completed";
+};
+export type SignedPetitions = {
+    id: number
+    cause: string
+    dates: string,
+    times: string,
+  }
+
