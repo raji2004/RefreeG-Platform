@@ -105,7 +105,7 @@ export default function Form3({ formData, handleImageUpload }: UploadImageProps)
         ) : (
           <Image
             src="/List_a_cause/Upload_to_Cloud.png"
-            alt="Upload"
+            alt="Upload "
             width={70}
             height={70}
           />
