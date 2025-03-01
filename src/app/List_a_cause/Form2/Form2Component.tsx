@@ -55,7 +55,7 @@ function getTimeLeft(deadline: Date | null): string {
   return `${numberToWords(diffDays)} days left`;
 }
 
-export default function Step2Form({
+export default function Form2({
   formData,
   handleChange,
   errors = {},
@@ -140,15 +140,17 @@ export default function Step2Form({
           )}
         </div>
 
-        <div className="relative">
+         {/* Deadline with DatePicker */}
+         <div className="relative w-full">
           <DatePicker
             selected={dateValue}
             onChange={handleDateChange}
             dateFormat="MM/dd/yyyy"
             placeholderText="Deadline"
-            className="px-[9px] py-[13px] border-b border-[#898384] w-full focus:outline-none text-[#898384] text-base font-medium font-montserrat bg-transparent"
-            // Disable dates before today
             minDate={new Date()}
+            // Make the input and wrapper full width:
+            wrapperClassName="w-full"
+            className="px-2 py-3 border-b border-[#898384] w-full focus:outline-none text-[#898384] text-base font-medium font-montserrat bg-transparent"
           />
           <p className="text-[#5a5555] text-sm font-normal font-montserrat">
             *Note: This is when the cause will be delisted from the platform.{" "}
@@ -166,6 +168,7 @@ export default function Step2Form({
             <p className="text-red-500 text-sm">{errors.deadline}</p>
           )}
         </div>
+
 
         {/* Goal Amount Input */}
         <div className="relative">

@@ -1,7 +1,9 @@
+"use client";
+
 import React from "react";
 import Image from "next/image";
-import StepperForm from "@/components/Listacause_component/stepper_form";
-import Navbar from "@/components/Listacause_component/navbar";
+import ListacauseForm from "./component/ListacauseForm";
+import Navbar from "./component/navbar";
 
 export default function Listacause() {
   return (
@@ -39,7 +41,7 @@ export default function Listacause() {
         </div>
 
         <div className="mx-auto lg:w-7/12 md:px-14 md:py-20 px-4 py-4">
-          <StepperForm />
+          <ListacauseForm />
         </div>
       </div>
     </div>

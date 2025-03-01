@@ -27,7 +27,7 @@ interface Step4FormProps {
   errors: Partial<Record<keyof FormData, string>>;
 }
 
-export const Step4Form = ({ formData, setFormData, errors }: Step4FormProps) => {
+export const Form4 = ({ formData, setFormData, errors }: Step4FormProps) => {
   const router = useRouter();
 
   // Initialize sections from localStorage if available, otherwise use default
@@ -62,7 +62,6 @@ export const Step4Form = ({ formData, setFormData, errors }: Step4FormProps) => 
       setSections((prevSections) => prevSections.slice(0, -1));
     }
   };
-
   const handleInputChange = (
     id: number,
     field: "header" | "description",
@@ -78,18 +77,19 @@ export const Step4Form = ({ formData, setFormData, errors }: Step4FormProps) => 
   const handlePreview = () => {
     // Save sections to localStorage before previewing
     localStorage.setItem("formSections", JSON.stringify(sections));
-    router.push(`/preview?data=${encodeURIComponent(JSON.stringify(sections))}`);
+    router.push(`/List_a_cause/See_Preview?data=${encodeURIComponent(JSON.stringify(sections))}`);
   };
 
   return (
-    <form className="flex flex-col h-screen mt-10">
-      <div className="text-base font-semibold">Tell your story</div>
-      <div className="mt-2 text-xs">
+    <form className="flex flex-col mt-10">
+      {/* Heaader */}
+      <div className="text-[#2b2829] text-xl font-medium font-montserrat">Tell your story</div>
+      <div className="mt-2 text-[#2b2829] text-sm font-normal font-montserrat">
         Your story is what connects donors to your cause. Share the inspiration
         behind it, the people it impacts, and the difference every donation will
         make.
       </div>
-      <div className="mt-2 text-xs border py-2 px-1 rounded bg-[#FAFAFA] border-[#CCCBCB]">
+      <div className="mt-2 text-xs text-white border py-2 px-1 rounded bg-[#433e3f] border-[#CCCBCB]">
         In this section, try sharing what inspired you to start this cause? Share
         the personal journey or experience that led you to create it.
       </div>

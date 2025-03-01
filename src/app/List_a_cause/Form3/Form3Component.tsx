@@ -1,18 +1,15 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { UploadedImage } from "./stepper_form";
+import { UploadedImage } from "../component/ListacauseForm";
 
 interface UploadImageProps {
   formData: any;
   handleImageUpload: (image: UploadedImage) => void;
 }
 
-export default function UploadImage({
-  formData,
-  handleImageUpload,
-}: UploadImageProps) {
+export default function Form3({ formData, handleImageUpload }: UploadImageProps) {
   const [media, setMedia] = useState<UploadedImage | null>(null);
   const [showGuidelines, setShowGuidelines] = useState(false);
 
@@ -25,13 +22,10 @@ export default function UploadImage({
     }
   }, []);
 
-  // When media upload reaches 100% progress, schedule parent's update after rendering
+  // Update parent's uploadedImage on every media change
   useEffect(() => {
-    if (media && media.progress === 100) {
-      // Using setTimeout defers the call until after rendering completes
-      setTimeout(() => {
-        handleImageUpload(media);
-      }, 0);
+    if (media) {
+      handleImageUpload(media);
     }
   }, [media, handleImageUpload]);
 
@@ -44,7 +38,7 @@ export default function UploadImage({
       name: file.name,
       size: sizeInKB,
       progress: 0,
-      type: file.type, // Now valid, because it's defined in the interface
+      type: file.type,
     };
 
     setMedia(newMedia);
@@ -59,7 +53,6 @@ export default function UploadImage({
         localStorage.setItem("uploadedImage", JSON.stringify(updatedMedia));
         if (updatedProgress === 100) {
           clearInterval(interval);
-          // Removed direct call to handleImageUpload here; it's called via useEffect.
         }
         return updatedMedia;
       });
@@ -81,22 +74,15 @@ export default function UploadImage({
         Bring Your Cause to Life with Media
       </h2>
       <p className="text-[#2b2829] text-sm font-normal font-montserrat mb-2">
-        An image or video can be worth a thousand words. Add photos or videos
-        that showcase the real people, places, or situations your cause
-        supports.
+        An image or video can be worth a thousand words. Add photos or videos that showcase the real people, places, or situations your cause supports.
       </p>
-      <label
-        htmlFor="media-upload"
-        className="block text-sm font-medium text-gray-700 mb-2"
-      >
+      <label htmlFor="media-upload" className="block text-sm font-medium text-gray-700 mb-2">
         Upload Media
       </label>
       <button
         type="button"
         onClick={() => document.getElementById("media-upload")?.click()}
-        className={`border-dashed border-2 border-gray-300 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:bg-gray-100 ${
-          media ? "p-0" : "py-10 px-48"
-        }`}
+        className={`border-dashed border-2 border-gray-300 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:bg-gray-100 ${media ? "p-0" : "py-10 px-48"}`}
       >
         {media ? (
           media.type && media.type.startsWith("video/") ? (
@@ -130,8 +116,7 @@ export default function UploadImage({
       <div className="relative mt-4">
         <button onClick={toggleGuidelines} className="flex gap-1 items-center">
           <p className="text-[#2b2829] text-[12px] font-normal font-montserrat underline">
-            To ensure the best experience, please follow these guidelines when
-            uploading images or videos
+            To ensure the best experience, please follow these guidelines when uploading images or videos
           </p>
           <Image
             src="/List_a_cause/chevron-down-4.svg"
@@ -140,6 +125,10 @@ export default function UploadImage({
             height={24}
           />
         </button>
+        <p className="text-[#2b2829] text-sm font-normal font-montserrat mt-10">
+          Note: Upload images that capture the spirit of your cause—a smile, a community, a place in need.
+          Add a short video to show the heart of your cause. Let donors see and feel its impact.
+        </p>
         {showGuidelines && (
           <div className="absolute left-0 mt-2 p-4 bg-white border border-gray-300 shadow-lg z-10">
             <p className="text-[12px] text-[#2b2829] font-montserrat">
@@ -172,7 +161,7 @@ export default function UploadImage({
 
       {media && (
         <div className="mt-4">
-          <div className="border block w-full border-[#b5b3b3] py-3 px-2">
+          <div className="border block w-2/4 border-[#b5b3b3] py-3 px-2">
             <div className="flex items-center justify-between">
               <div className="flex gap-2">
                 <Image
@@ -182,9 +171,7 @@ export default function UploadImage({
                   height={30}
                 />
                 <span>
-                  <p className="text-[#363939] text-md md:text-lg font-normal">
-                    {media.name}
-                  </p>
+                  <p className="text-[#363939] text-md md:text-lg font-normal">{media.name}</p>
                   <p className="text-[#b5b3b3] text-xs">{media.size} KB</p>
                 </span>
               </div>
@@ -193,8 +180,8 @@ export default function UploadImage({
                   <Image
                     src="/List_a_cause/check.svg"
                     alt="Check"
-                    width={20}
-                    height={20}
+                    width={30}
+                    height={30}
                   />
                 </span>
               )}
@@ -208,12 +195,32 @@ export default function UploadImage({
               </div>
             </div>
           </div>
-          <button
-            onClick={handleRemoveMedia}
-            className="text-red-500 text-sm underline mt-6"
-          >
-            Remove
-          </button>
+          <div>
+            <div className="border block w-2/4 border-[#b5b3b3] py-3 px-2">
+              <div className="flex items-center justify-between">
+                <div className="flex gap-2">
+                  <Image
+                    src="/List_a_cause/file.svg"
+                    alt="File icon"
+                    width={30}
+                    height={30}
+                  />
+                  <span>
+                    <p className="text-[#363939] text-md md:text-lg font-normal">{media.name}</p>
+                    <p className="text-[#b5b3b3] text-xs">{media.size} KB</p>
+                  </span>
+                </div>
+                <button onClick={handleRemoveMedia}>
+                  <Image
+                    src="/List_a_cause/trash-2.svg"
+                    alt="Delete icon"
+                    width={30}
+                    height={30}
+                  />
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
