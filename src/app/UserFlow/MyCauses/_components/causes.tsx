@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { DataTable } from "@/components/ui/data-table";
-import { CauseTable } from "@/lib/type";
 import { CauseColumns } from "@/components/columns";
 import { CausesData } from "@/lib/dummyData";
 
