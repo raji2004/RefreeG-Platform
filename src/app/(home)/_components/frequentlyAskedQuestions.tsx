@@ -36,7 +36,7 @@ export default function FAQ  ()  {
   };
 
   return (
-    <div className="container mx-auto px-10 py-16">
+    <div className="container mx-auto px-4 py-16">
       <h1 className="text-4xl font-semibold mb-3">FAQS</h1>
       <p className="text-xl mb-6">Here are some popular questions our users can’t stop asking.</p>
       

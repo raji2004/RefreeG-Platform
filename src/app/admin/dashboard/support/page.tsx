@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import AccordionSection from "@/components/AccordionSection";
+import AccordionSection from "../../../../components/AccordionSection";
 
 const Support: React.FC = () => {
   const [openItems, setOpenItems] = useState<Record<string, boolean>>({});
@@ -134,7 +134,7 @@ const Support: React.FC = () => {
   ];
 
   return (
-    <div className="p-8 ">
+    <div className="p-8 bg-gray-100">
       <h1 className="text-3xl font-bold text-gray-900 mb-6">
         Support & Help Center
       </h1>

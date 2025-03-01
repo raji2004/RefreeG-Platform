@@ -1,6 +1,5 @@
 import React from "react";
 import { FaHeartbeat, FaMapMarkerAlt } from "react-icons/fa";
-import { CauseTable, DonationHistory, SignedPetitions } from "@/lib/type";
 export const causesData = [
   {
     id: 1,
@@ -228,79 +227,3 @@ export const faqs = [
   },
   // Additional FAQs...
 ];
-
-
-export const DonationHistoryData: DonationHistory[] = [
-    { id: 1, cause: "Send Children to School", amount: 100000, dateTime: "2025-05-01 10:00:00", transactionId: "#873882", paymentMethod: "Card" },
-    { id: 2, cause: "Provide Books for Students", amount: 50000, dateTime: "2025-05-02 11:00:00", transactionId: "#873883", paymentMethod: "Crypto" },
-    { id: 3, cause: "Build a New School", amount: 250000, dateTime: "2025-05-03 12:00:00", transactionId: "#873884", paymentMethod: "Card" },
-    { id: 4, cause: "Scholarships for Girls", amount: 150000, dateTime: "2025-05-04 10:00:00", transactionId: "#873885", paymentMethod: "Crypto" },
-    { id: 5, cause: "Donate to the Homeless Shelter", amount: 200000, dateTime: "2025-05-05 11:00:00", transactionId: "#873886", paymentMethod: "Card" },
-    { id: 6, cause: "Food for Orphanages", amount: 180000, dateTime: "2025-05-06 12:00:00", transactionId: "#873887", paymentMethod: "Crypto" },
-    { id: 7, cause: "Support Local Farmers", amount: 50000, dateTime: "2025-05-07 10:00:00", transactionId: "#873888", paymentMethod: "Card" },
-    { id: 8, cause: "Clean Water for Rural Areas", amount: 300000, dateTime: "2025-05-08 11:00:00", transactionId: "#873889", paymentMethod: "Crypto" },
-    { id: 9, cause: "Empower Women in Tech", amount: 120000, dateTime: "2025-05-09 12:00:00", transactionId: "#873890", paymentMethod: "Card" },
-    { id: 10, cause: "Medical Aid for Children", amount: 180000, dateTime: "2025-05-10 10:00:00", transactionId: "#873891", paymentMethod: "Crypto" }
-]
-
-
-export const CausesData:CauseTable[] = [
-  { id: 1, name: "Send Children to School", metrics: "₦100,000", status: "Pending" },
-  { id: 2, name: "Provide Books for Students", metrics: "Books", status: "Approved" },
-  { id: 3, name: "Build a New School", metrics: "₦250,000", status: "Completed" },
-  { id: 4, name: "Scholarships for Girls", metrics: "₦150,000", status: "Pending" },
-  { id: 5, name: "Donate to the Homeless Shelter", metrics: "₦200,000", status: "Approved" },
-  { id: 6, name: "Food for Orphanages", metrics: "Food", status: "Completed" },
-  { id: 7, name: "Support Local Farmers", metrics: "₦50,000", status: "Pending" },
-  { id: 8, name: "Clean Water for Rural Areas", metrics: "₦300,000", status: "Approved" },
-  { id: 9, name: "Empower Women in Tech", metrics: "₦120,000", status: "Pending" },
-  { id: 10, name: "Medical Aid for Children", metrics: "₦180,000", status: "Completed" },
-  { id: 11, name: "New Classroom Desks", metrics: "₦80,000", status: "Approved" },
-  { id: 12, name: "Solar Panels for Schools", metrics: "₦400,000", status: "Pending" },
-  { id: 13, name: "Build a New School", metrics: "₦250,000", status: "Completed" },
-  { id: 14, name: "Scholarships for Girls", metrics: "₦150,000", status: "Pending" },
-  { id: 15, name: "Donate to the Homeless Shelter", metrics: "₦200,000", status: "Approved" },
-  { id: 16, name: "Food for Orphanages", metrics: "Food", status: "Completed" },
-  { id: 17, name: "Support Local Farmers", metrics: "₦50,000", status: "Pending" },
-  { id: 18, name: "Clean Water for Rural Areas", metrics: "₦300,000", status: "Approved" },
-  { id: 19, name: "Empower Women in Tech", metrics: "₦120,000", status: "Pending" },
-  { id: 20, name: "Medical Aid for Children", metrics: "₦180,000", status: "Completed" },
-  { id: 21, name: "New Classroom Desks", metrics: "₦80,000", status: "Approved" },
-  { id: 22, name: "Solar Panels for Schools", metrics: "₦400,000", status: "Pending" },
-
-]
-
-export const SignedPetitionsData: SignedPetitions[] = [
-    { id: 1, cause: "Send Children to School", dates: "2025-05-01", times: "10:00 AM" },
-    { id: 2, cause: "Provide Books for Students", dates: "2025-05-02", times: "10:00 AM" },
-    { id: 3, cause: "Build a New School", dates: "2025-05-03", times: "10:00 AM" },
-    { id: 4, cause: "Scholarships for Girls", dates: "2025-05-04", times: "10:00 AM" },
-    { id: 5, cause: "Donate to the Homeless Shelter", dates: "2025-05-05", times: "10:00 AM" },
-    { id: 6, cause: "Food for Orphanages", dates: "2025-05-06", times: "10:00 AM" },
-    { id: 7, cause: "Support Local Farmers", dates: "2025-05-07", times: "10:00 AM" },
-    { id: 8, cause: "Clean Water for Rural Areas", dates: "2025-05-08", times: "10:00 AM" },
-    { id: 9, cause: "Empower Women in Tech", dates: "2025-05-09", times: "10:00 AM" },
-    { id: 10, cause: "Medical Aid for Children", dates: "2025-05-10", times: "10:00 AM" },
-    { id: 11, cause: "New Classroom Desks", dates: "2025-05-11", times: "10:00 AM" },
-    { id: 12, cause: "Solar Panels for Schools", dates: "2025-05-12", times: "10:00 AM" },
-    { id: 13, cause: "University Scholarships", dates: "2025-05-13", times: "10:00 AM" },
-    { id: 14, cause: "Rural Teacher Salaries", dates: "2025-05-14", times: "10:00 AM" },
-    { id: 15, cause: "School Lunch Program", dates: "2025-05-15", times: "10:00 AM" },
-    { id: 16, cause: "Library Renovation", dates: "2025-05-16", times: "10:00 AM" },
-    { id: 17, cause: "STEM Programs for Girls", dates: "2025-05-17", times: "10:00 AM" },
-    { id: 18, cause: "Tech Equipment for Schools", dates: "2025-05-18", times: "10:00 AM" },
-    { id: 19, cause: "Support for Disabled Students", dates: "2025-05-19", times: "10:00 AM" },
-    { id: 20, cause: "School Bus for Rural Kids", dates: "2025-05-20", times: "10:00 AM" },
-    { id: 21, cause: "After-School Programs", dates: "2025-05-21", times: "10:00 AM" },
-    { id: 22, cause: "Refurbish Old Schools", dates: "2025-05-22", times: "10:00 AM" },
-    { id: 23, cause: "Educational Workshops", dates: "2025-05-23", times: "10:00 AM" },
-    { id: 24, cause: "Literacy Program for Adults", dates: "2025-05-24", times: "10:00 AM" },
-    { id: 25, cause: "Donate School Uniforms", dates: "2025-05-25", times: "10:00 AM" },
-    { id: 26, cause: "Science Lab for Schools", dates: "2025-05-26", times: "10:00 AM" },
-    { id: 27, cause: "Digital Learning Materials", dates: "2025-05-27", times: "10:00 AM" },
-    { id: 28, cause: "Mobile Libraries", dates: "2025-05-28", times: "10:00 AM" },
-    { id: 29, cause: "Coding Bootcamp for Kids", dates: "2025-05-29", times: "10:00 AM" },
-    { id: 30, cause: "Eco-Friendly Schools", dates: "2025-05-30", times: "10:00 AM" },
-    { id: 31, cause: "Tutoring for Orphans", dates: "2025-05-31", times: "10:00 AM" },
-    { id: 32, cause: "Mental Health Support for Students", dates: "2025-06-01", times: "10:00 AM" },
-  ];

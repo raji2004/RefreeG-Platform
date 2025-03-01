@@ -33,7 +33,7 @@ export default function HappeningNearYou() {
 
   };
   return (
-    <div className="px-10 my-10 space-y-5">
+    <div className=" my-10 space-y-5">
       <div>
         <H2 className=" font-medium">Happening near you</H2>
         <P className=" mt-1 text-gray-400">These causes are happening close to your current location.</P>

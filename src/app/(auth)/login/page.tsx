@@ -1,7 +1,7 @@
-import {FormWrapper} from "@/components/formWrapper";
-import LoginForm from "@/components/forms"; // LoginForm is in forms
+import { FormWrapper } from "@/components/formWrapper";
+import { LoginForm } from "@/components/forms"; // LoginForm is in forms
 import Particles from "@/components/ui/particles";
- 
+
 
 export default function Page() {
 

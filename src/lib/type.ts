@@ -108,27 +108,3 @@ export interface SortedCountry{
         svg: string;
     };
 }
-
-export type DonationHistory = {
-    id: number;
-    amount: number;
-    cause: string;
-    dateTime: string;
-    transactionId: string;
-    paymentMethod: string;
-  };
-  
-
-export type CauseTable = {
-  id: number;
-  name: string;
-  metrics: string;
-  status: "Pending" | "Approved" | "Completed";
-};
-export type SignedPetitions = {
-    id: number
-    cause: string
-    dates: string,
-    times: string,
-  }
-

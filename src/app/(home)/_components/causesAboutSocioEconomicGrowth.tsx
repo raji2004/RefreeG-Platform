@@ -33,7 +33,7 @@ export default function CausesAboutSocioEconomicGrowth() {
 
   };
   return (
-    <div className=" my-10 px-10 space-y-5">
+    <div className=" my-10 space-y-5">
       <div>
         <H2 className=" font-medium">Causes about socio-economic growth</H2>
         <P className=" mt-1 text-gray-400">These causes contribute to socio-economic growth of the community</P>

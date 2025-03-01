@@ -1,6 +1,6 @@
 "use client";
 
-import SecurityOption from "@/components/SecurityOption";
+import SecurityOption from "../../../../components/SecurityOption";
 
 const Security = () => {
   const securityOptions = [
@@ -17,7 +17,7 @@ const Security = () => {
   ];
 
   return (
-    <div className="p-6">
+    <div className="p-6 bg-gray-100">
       <h2 className="text-2xl font-semibold mb-4">Security Settings</h2>
       <div className="bg-white rounded-lg shadow p-4">
         {securityOptions.map((option, index) => (

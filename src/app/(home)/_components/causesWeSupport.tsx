@@ -27,7 +27,7 @@ export function CausesSupported() {
 
 
   return (
-    <div className="px-10">
+    <div className="mr-10 ml-10">
       <SectionHeader title="What kind of causes do we support?" buttonLabel="Join us today!" buttonHref="#" />
       <div className="w-11/12 lg:w-8/12 md:mx-auto lg:mx-auto text-base md:text-xl md:text-center lg:text-center mt-10 mb-10">
         At RefreeG, we support a wide range of causes that align with our mission to empower less privileged individuals in the community and foster socio-economic growth. Here are some of the key areas we focus on:
