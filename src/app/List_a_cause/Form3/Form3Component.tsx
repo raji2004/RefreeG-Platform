@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { UploadedImage } from "../component/ListacauseForm";
+import { UploadedImage } from "../_components/ListacauseForm";
 
 interface UploadImageProps {
   formData: any;
