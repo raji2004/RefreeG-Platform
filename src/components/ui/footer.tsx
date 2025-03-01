@@ -24,7 +24,7 @@ const Icon = ({ href, children }: { href: string; children: ReactNode }) => {
 export function Footer() {
   return (
     <>
-      <div className="flex flex-col items-center w-10/12 lg:w-8/12 mx-auto rounded-3xl text-white bg-customNavyBlue2 px-10 py-10 mb-16">
+      {/* <div className="flex flex-col items-center w-10/12 lg:w-8/12 mx-auto rounded-3xl text-white bg-customNavyBlue2 px-10 py-10 mb-16">
         <div className="text-lg lg:text-3xl font-semibold mb-6">
           Ready to be part of the solution?
         </div>
@@ -35,14 +35,20 @@ export function Footer() {
           growth, and promoting sustainable development. Together, we can make a
           significant impact and create a brighter future for all.
         </div>
-        <button className="flex border-1 rounded-md bg-white px-3 py-3 text-blue-900 font-semibold hover:bg-gray-300 transition delay-150">
-          Join our community
-        </button>
-      </div>
+        <Link
+          href="https://t.me/+d67UCIer8c01ODhk"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <button className="flex border rounded-md bg-white px-3 py-3 text-blue-900 font-semibold hover:bg-gray-300 transition delay-150">
+            Join our community
+          </button>
+        </Link>
+      </div> */}
       <section className="w-full h-full px-[10px] md:px-[50px] py-[25px] mt-[30px] bg-footer">
         <div className="md:flex md:space-x-3 space-y-4 md:space-y-0">
           <div className="w-full md:w-3/6">
-            <p className="font-semibold text-[18px]  mb-2">Subscribe</p>
+            <p className="font-semibold text-[18px] mb-2 ">Subscribe</p>
             <p className="text-[15px] font-light">
               Join our newsletter to stay up to date on features <br />
               and releases
