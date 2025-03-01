@@ -108,3 +108,13 @@ export interface SortedCountry{
         svg: string;
     };
 }
+
+export type DonationHistory = {
+    id: number;
+    amount: number;
+    cause: string;
+    dateTime: string;
+    transactionId: string;
+    paymentMethod: string;
+  };
+  

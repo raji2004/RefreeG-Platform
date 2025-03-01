@@ -67,7 +67,8 @@ const Sidebar: React.FC = () => {
 
   // Extract the common sidebar content into a function
   const renderSidebarContent = () => (
-    <div className="w-64 bg-white text-black min-h-screen p-4 border-r relative">
+    // relative
+    <div className="w-64 bg-white text-black min-h-screen p-4 border-r overflow-auto pb-24  sticky top-0 h-screen">
       <h1 className="text-2xl font-bold flex items-center mb-6">
         <DashboardIcon className="w-6 h-6 mr-2" /> Dashboard
       </h1>

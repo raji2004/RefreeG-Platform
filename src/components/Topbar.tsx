@@ -8,7 +8,7 @@ interface TopbarProps {
 
 const Topbar: React.FC<TopbarProps> = ({ profileImage }) => {
   return (
-    <div className="bg-white shadow-md p-4 w-full">
+    <div className="bg-white shadow-md p-4 w-full sticky top-0 z-10">
       <div className="container mx-auto flex justify-between items-center">
         {/* Left Section: Logo */}
         <div className="flex items-center">

@@ -1,19 +1,32 @@
 // "use client"
-
 import React from "react";
 import Sidebar from "@/components/Sidebar";
 import Topbar from "@/components/Topbar";
-import DonationHistory from "@/components/UserProfileComponents/donationHistory";
+import { DonationHistoryData } from "@/lib/dummyData";
+import { donationHistoryColumn } from "@/components/columns";
+import { DataTable } from "@/components/ui/data-table";
 
 export default function Donations() {
-  // const [profileImage, setProfileImage] = useState<string>("/UserProfile/defaultProfile.svg");
-
   return (
-    <div className="w-full lg:bg-[#FAFCFF]">
+    <div className="flex flex-col h-screen w-full lg:bg-[#FAFCFF]">
+      {/* Fixed topbar */}
       <Topbar profileImage="/UserProfile/defaultProfile.svg" />
-      <div className="flex w-11/12 lg:w-full">
-        <Sidebar />
-        <DonationHistory />
+      
+      <div className="flex flex-1 w-11/12 lg:w-full overflow-hidden">
+        {/* Fixed sidebar */}
+        <Sidebar  />
+        
+        {/* Scrollable table container */}
+        <div className="flex-1 overflow-auto">
+          <div className="container  p-5 w-full">
+            <DataTable
+              columns={donationHistoryColumn}
+              data={DonationHistoryData}
+              filterColumn="cause"
+              filterColumnPlaceholder="Search Cause"
+            />
+          </div>
+        </div>
       </div>
     </div>
   );

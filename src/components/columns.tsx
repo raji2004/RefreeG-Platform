@@ -1,17 +1,12 @@
 // donationHistoryColumn.tsx
+"use client";
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
+import { DonationHistory } from "@/lib/type";
 
-export type DonationHistory = {
-  id: number;
-  amount: number;
-  cause: string;
-  dateTime: string;
-  transactionId: string;
-  paymentMethod: string;
-};
 
-export const columns: ColumnDef<DonationHistory>[] = [
+
+export const donationHistoryColumn: ColumnDef<DonationHistory>[] = [
   {
     id: "select",
     header: ({ table }) => (

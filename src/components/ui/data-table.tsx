@@ -23,12 +23,16 @@ import { Input } from "@/components/ui/input"
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[]
-    data: TData[]
+    data: TData[],
+    filterColumn?: string,
+    filterColumnPlaceholder?: string,
 }
 
 export function DataTable<TData, TValue>({
     columns,
     data,
+    filterColumn,
+    filterColumnPlaceholder,
 }: DataTableProps<TData, TValue>) {
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
         []
@@ -52,10 +56,10 @@ export function DataTable<TData, TValue>({
         <div>
             <div className="flex items-center py-4">
                 <Input
-                    placeholder="Filter emails..."
-                    value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+                    placeholder={filterColumnPlaceholder ?? "Search..."}
+                    value={(table.getColumn(filterColumn?? "")?.getFilterValue() as string) ?? ""}
                     onChange={(event) =>
-                        table.getColumn("email")?.setFilterValue(event.target.value)
+                        table.getColumn(filterColumn?? "")?.setFilterValue(event.target.value)
                     }
                     className="max-w-sm"
                 />
@@ -109,7 +113,7 @@ export function DataTable<TData, TValue>({
                     </TableBody>
                 </Table>
             </div>
-            <div className="flex items-center justify-end space-x-2 py-4">
+            <div className="flex items-center justify-end space-x-2 py-4 ">
                 <Button
                     variant="outline"
                     size="sm"
