@@ -10,11 +10,11 @@ import { CausesData } from "@/lib/dummyData";
 export default function Causes() {
     const [selectedStatus, setSelectedStatus] = useState<string>("All");
     return (
-        <div className="w-full  p-8">
+        <div className="w-full mt-8 md:p-8">
             <Tabs value={selectedStatus} onValueChange={setSelectedStatus}>
                 <TabsList>
                     {["All", "Pending", "Approved", "Completed"].map((status) => (
-                        <TabsTrigger key={status} value={status}>
+                        <TabsTrigger  key={status} value={status}  className="flex-1 sm:flex-none text-xs sm:text-sm lg:text-base px-2 sm:px-4 py-1 sm:py-2">
                             {status === "All" ? "All Causes" : status}
                         </TabsTrigger>
                     ))}
