@@ -85,7 +85,7 @@ export default function GeneralInfo({ profileImage }: GeneralInfoProps) {
                 <Button
                     onClick={() => (isEditing ? handleSaveChanges() : setIsEditing(true))}
                     variant={isEditing ? "default" : "outline"}
-                    className="text-xs sm:text-sm lg:text-lg"
+                    className="text-xs sm:text-sm lg:text-lg hidden md:block"
                 >
                     {isEditing ? "Save Changes" : "Edit Profile"}
                 </Button>
@@ -166,6 +166,13 @@ export default function GeneralInfo({ profileImage }: GeneralInfoProps) {
                         className={`w-full ${isEditing ? "bg-white" : "bg-gray-100"}`}
                     />
                 </form>
+                <Button
+                    onClick={() => (isEditing ? handleSaveChanges() : setIsEditing(true))}
+                    variant={isEditing ? "default" : "outline"}
+                    className="text-xs sm:text-sm lg:text-lg md:hidden mt-10"
+                >
+                    {isEditing ? "Save Changes" : "Edit Profile"}
+                </Button>
             </div>
         </div>
     );

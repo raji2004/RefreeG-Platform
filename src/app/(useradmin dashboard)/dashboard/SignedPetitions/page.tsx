@@ -9,7 +9,7 @@ export default function Petitions() {
             columns={SignedPetitionsColumn}
             data={SignedPetitionsData}
             filterColumn="cause"
-           filterColumnPlaceholder="Search for a cause"
+           filterColumnPlaceholder="Search for a pettition"
 
           />
   )
