@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import { useFormContext, useFieldArray } from "react-hook-form";
 
 interface Section {
   id: number;
@@ -19,71 +20,103 @@ export interface FormData {
   deadline: string;
   goalAmount: string;
   uploadedImage: any; // Use your UploadedImage interface if needed
+  sections: Section[];
 }
 
-interface Step4FormProps {
-  formData: FormData;
-  setFormData: React.Dispatch<React.SetStateAction<FormData>>;
-  errors: Partial<Record<keyof FormData, string>>;
-}
+// Custom auto-resizing textarea component.
+const AutoResizeTextarea = React.forwardRef<
+  HTMLTextAreaElement,
+  React.TextareaHTMLAttributes<HTMLTextAreaElement>
+>(({ value, onChange, ...props }, ref) => {
+  const internalRef = useRef<HTMLTextAreaElement>(null);
+  // Use external ref if provided, otherwise internal
+  const textareaRef = (ref as React.MutableRefObject<HTMLTextAreaElement>) || internalRef;
 
-export const Form4 = ({ formData, setFormData, errors }: Step4FormProps) => {
-  const router = useRouter();
-
-  // Initialize sections from localStorage if available, otherwise use default
-  const [sections, setSections] = useState<Section[]>(() => {
-    if (typeof window !== "undefined") {
-      const savedSections = localStorage.getItem("formSections");
-      if (savedSections) {
-        return JSON.parse(savedSections);
-      }
+  const adjustHeight = () => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     }
-    return [{ id: 1, header: "", description: "" }];
+  };
+
+  const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    adjustHeight();
+    if (onChange) onChange(e);
+  };
+
+  useEffect(() => {
+    adjustHeight();
+  }, [value]);
+
+  return (
+    <textarea
+      {...props}
+      ref={textareaRef}
+      value={value}
+      onChange={handleInput}
+    />
+  );
+});
+
+AutoResizeTextarea.displayName = "AutoResizeTextarea";
+
+export const Form4 = () => {
+  const router = useRouter();
+  const { control, register, watch } = useFormContext<FormData>();
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "sections",
   });
 
-  const maxLength = 2000;
+  // On mount, if no sections exist, initialize with a default section.
+  useEffect(() => {
+    if (fields.length === 0) {
+      append({ id: 1, header: "", description: "" });
+    }
+  }, [fields, append]);
 
-  // Sync sections to localStorage on every change
+  const maxLength = 2000;
+  const sections = (watch("sections") as Section[]) || [];
+
+  // Sync sections to localStorage whenever sections change.
   useEffect(() => {
     localStorage.setItem("formSections", JSON.stringify(sections));
   }, [sections]);
 
-  const addSection = (event: React.MouseEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    if (sections.length >= 4) return;
-    setSections((prevSections) => [
-      ...prevSections,
-      { id: prevSections.length + 1, header: "", description: "" },
-    ]);
-  };
+  // Check that every section has a non-empty header and description.
+  const isSectionsValid =
+    sections.length > 0 &&
+    sections.every(
+      (section) =>
+        section.header.trim() !== "" && section.description.trim() !== ""
+    );
 
-  const deleteLastSection = () => {
-    if (sections.length > 1) {
-      setSections((prevSections) => prevSections.slice(0, -1));
-    }
-  };
-  const handleInputChange = (
-    id: number,
-    field: "header" | "description",
-    value: string
-  ) => {
-    setSections((prevSections) =>
-      prevSections.map((section) =>
-        section.id === id ? { ...section, [field]: value } : section
-      )
+  const handlePreview = () => {
+    if (!isSectionsValid) return; // Extra guard.
+    router.push(
+      `/See_Preview?data=${encodeURIComponent(JSON.stringify(sections))}`
     );
   };
 
-  const handlePreview = () => {
-    // Save sections to localStorage before previewing
-    localStorage.setItem("formSections", JSON.stringify(sections));
-    router.push(`/List_a_cause/See_Preview?data=${encodeURIComponent(JSON.stringify(sections))}`);
+  const addSection = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    if (fields.length >= 4) return;
+    append({ id: fields.length + 1, header: "", description: "" });
+  };
+
+  const deleteLastSection = () => {
+    if (fields.length > 1) {
+      remove(fields.length - 1);
+    }
   };
 
   return (
     <form className="flex flex-col mt-10">
-      {/* Heaader */}
-      <div className="text-[#2b2829] text-xl font-medium font-montserrat">Tell your story</div>
+      {/* Header */}
+      <div className="text-[#2b2829] text-xl font-medium font-montserrat">
+        Tell your story
+      </div>
       <div className="mt-2 text-[#2b2829] text-sm font-normal font-montserrat">
         Your story is what connects donors to your cause. Share the inspiration
         behind it, the people it impacts, and the difference every donation will
@@ -94,53 +127,55 @@ export const Form4 = ({ formData, setFormData, errors }: Step4FormProps) => {
         the personal journey or experience that led you to create it.
       </div>
 
-      {/* Scrollable Form Content */}
-      <div className="flex-1 overflow-y-auto p-4 scrollbar-hide">
-        {sections.map((section, index) => (
-          <div key={section.id} className="mt-2">
-            <div className="text-sm font-medium">Section {section.id}</div>
-            <div className="mt-2 border rounded px-2 py-4">
-              <div>
-                <input
-                  className="border-b h-14 text-xs p-2 w-full outline-none"
-                  placeholder={`Header ${index + 1}`}
-                  value={section.header}
-                  onChange={(e) =>
-                    handleInputChange(section.id, "header", e.target.value)
-                  }
-                />
-                <div className="text-xs text-gray-500">
-                  Hint: pick a short, attention-grabbing header.
+      {/* Form Content */}
+      <div className="flex-1 p-4">
+        {fields.map((field, index) => {
+          const descriptionValue = watch(`sections.${index}.description`) || "";
+          return (
+            <div key={field.id} className="mt-2">
+              <div className="text-sm font-medium">Section {index + 1}</div>
+              <div className="mt-2 border rounded px-2 py-4">
+                <div>
+                  <input
+                    className="border-b h-14 text-xs p-2 w-full outline-none"
+                    placeholder={`Header ${index + 1}`}
+                    defaultValue={field.header}
+                    {...register(`sections.${index}.header`)}
+                  />
+                  <div className="text-xs text-gray-500">
+                    Hint: pick a short, attention-grabbing header.
+                  </div>
                 </div>
-              </div>
-              <div className="mt-4 relative">
-                <textarea
-                  className="border-b h-14 text-xs p-3 w-full outline-none resize-none pr-10 pb-6"
-                  placeholder="Cause Description"
-                  maxLength={maxLength}
-                  value={section.description}
-                  onChange={(e) =>
-                    handleInputChange(section.id, "description", e.target.value)
-                  }
-                />
-                <div className="absolute bottom-2 right-3 text-xs text-gray-500 pointer-events-none">
-                  {section.description.length}/{maxLength}
-                </div>
-                <div className="text-xs text-gray-500 mt-1">
-                  Hint: Try sharing what inspired you to start this cause.
+                <div className="mt-4 relative">
+                  <AutoResizeTextarea
+                    className="border-b text-xs p-3 w-full outline-none pr-10 pb-6"
+                    placeholder="Cause Description"
+                    maxLength={maxLength}
+                    defaultValue={field.description}
+                    {...register(`sections.${index}.description`)}
+                  />
+                  <div className="absolute bottom-2 right-3 text-xs text-gray-500 pointer-events-none">
+                    {descriptionValue.length}/{maxLength}
+                  </div>
+                  <div className="text-xs text-gray-500 mt-1">
+                    Hint: Try sharing what inspired you to start this cause.
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
 
         {/* Buttons for Adding Section & Preview */}
         <div className="mt-4 flex justify-between gap-2">
           <div className="flex">
             <button
               type="button"
-              className="bg-[#433E3F] flex items-center space-x-1 text-white p-2 mr-2 rounded"
               onClick={handlePreview}
+              disabled={!isSectionsValid}
+              className={`bg-[#433E3F] flex items-center space-x-1 text-white p-2 mr-2 rounded ${
+                !isSectionsValid ? "opacity-50 cursor-not-allowed" : ""
+              }`}
             >
               <span className="text-xs">See preview</span>
               <Image
@@ -152,13 +187,13 @@ export const Form4 = ({ formData, setFormData, errors }: Step4FormProps) => {
             </button>
             <button
               type="button"
+              onClick={addSection}
+              disabled={fields.length >= 4}
               className={`p-2 rounded flex items-center ${
-                sections.length >= 4
+                fields.length >= 4
                   ? "bg-white cursor-not-allowed"
                   : "bg-white text-black"
               }`}
-              onClick={addSection}
-              disabled={sections.length >= 4}
             >
               <span className="flex items-center">
                 <Image
@@ -171,14 +206,12 @@ export const Form4 = ({ formData, setFormData, errors }: Step4FormProps) => {
               </span>
             </button>
           </div>
-
           <div>
-            {/* Conditionally Show Delete Button */}
-            {sections.length > 1 && (
+            {fields.length > 1 && (
               <button
                 type="button"
-                className="bg-red-500 text-white p-2 text-xs rounded"
                 onClick={deleteLastSection}
+                className="bg-red-500 text-white p-2 text-xs rounded"
               >
                 <span className="flex items-center gap-1">
                   <Image

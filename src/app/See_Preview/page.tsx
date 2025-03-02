@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import Navbar from "../_components/navbar";
+import Navbar from "../List_a_cause/_components/navbar";
 import { collection, addDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
 import {
@@ -33,12 +33,12 @@ const PreviewPage = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    // Retrieve form data (Steps 1 and 2)
+    // Retrieve form data
     const savedFormData = localStorage.getItem("formData");
     if (savedFormData) {
       setFormData(JSON.parse(savedFormData));
     }
-    // Retrieve sections (Steps 3 or 4 data)
+    // Retrieve sections
     const savedSections = localStorage.getItem("formSections");
     if (savedSections) {
       setSections(JSON.parse(savedSections));
@@ -76,7 +76,7 @@ const PreviewPage = () => {
     router.push("/List_a_cause");
   };
 
-  // Submit form data to Firestore and then navigate to success page.
+  // Final submission handled on the preview page.
   const handleSubmit = async () => {
     if (!isFormValid()) {
       setErrorMessage("Please fill out all required fields before submitting.");
@@ -84,10 +84,11 @@ const PreviewPage = () => {
     }
     setErrorMessage("");
     try {
-      localStorage.setItem("formData", JSON.stringify(formData));
-      const docRef = await addDoc(collection(db, "formSubmissions"), formData);
+      // Combine the formData, sections, and uploadedImage into one object.
+      const finalData = { ...formData, sections, uploadedImage };
+      const docRef = await addDoc(collection(db, "formSubmissions"), finalData);
       console.log("Document written with ID: ", docRef.id);
-      router.push("/List_a_cause/See_Preview/Success");
+      router.push(`/See_Preview/Success?id=${docRef.id}`);
     } catch (error: any) {
       console.error("Error adding document: ", error.message);
       setErrorMessage("There was an error submitting the form. Please try again.");

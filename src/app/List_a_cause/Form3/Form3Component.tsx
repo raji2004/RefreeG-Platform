@@ -2,14 +2,17 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { UploadedImage } from "../_components/ListacauseForm";
+import { useFormContext } from "react-hook-form";
+import {
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form"; // Adjust the path as needed
+import { UploadedImage } from "../../../components/ListacauseForm";
 
-interface UploadImageProps {
-  formData: any;
-  handleImageUpload: (image: UploadedImage) => void;
-}
-
-export default function Form3({ formData, handleImageUpload }: UploadImageProps) {
+export const Form3 = () => {
+  const { setValue } = useFormContext();
   const [media, setMedia] = useState<UploadedImage | null>(null);
   const [showGuidelines, setShowGuidelines] = useState(false);
 
@@ -19,15 +22,14 @@ export default function Form3({ formData, handleImageUpload }: UploadImageProps)
     if (savedMedia) {
       const parsedMedia = JSON.parse(savedMedia);
       setMedia(parsedMedia);
+      setValue("uploadedImage", parsedMedia);
     }
-  }, []);
+  }, [setValue]);
 
-  // Update parent's uploadedImage on every media change
+  // Update react-hook-form field when media changes
   useEffect(() => {
-    if (media) {
-      handleImageUpload(media);
-    }
-  }, [media, handleImageUpload]);
+    setValue("uploadedImage", media);
+  }, [media, setValue]);
 
   const handleMediaChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (!event.target.files || event.target.files.length === 0) return;
@@ -62,6 +64,7 @@ export default function Form3({ formData, handleImageUpload }: UploadImageProps)
   const handleRemoveMedia = () => {
     setMedia(null);
     localStorage.removeItem("uploadedImage");
+    setValue("uploadedImage", null);
   };
 
   const toggleGuidelines = () => {
@@ -74,49 +77,65 @@ export default function Form3({ formData, handleImageUpload }: UploadImageProps)
         Bring Your Cause to Life with Media
       </h2>
       <p className="text-[#2b2829] text-sm font-normal font-montserrat mb-2">
-        An image or video can be worth a thousand words. Add photos or videos that showcase the real people, places, or situations your cause supports.
+        An image or video can be worth a thousand words. Add photos or videos
+        that showcase the real people, places, or situations your cause
+        supports.
       </p>
-      <label htmlFor="media-upload" className="block text-sm font-medium text-gray-700 mb-2">
-        Upload Media
-      </label>
-      <button
-        type="button"
-        onClick={() => document.getElementById("media-upload")?.click()}
-        className={`border-dashed border-2 border-gray-300 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:bg-gray-100 ${media ? "p-0" : "py-10 px-48"}`}
-      >
-        {media ? (
-          media.type && media.type.startsWith("video/") ? (
-            <video
-              src={media.src}
-              controls
-              className="object-cover rounded-lg"
-              width={200}
-              height={200}
+      <FormItem>
+        <FormLabel>Upload Media</FormLabel>
+        <FormControl>
+          <>
+            <button
+              type="button"
+              onClick={() => document.getElementById("media-upload")?.click()}
+              className={`border-dashed border-2 border-gray-300 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:bg-gray-100 ${
+                media ? "p-0" : "py-10 px-48"
+              }`}
+            >
+              {media ? (
+                media.type && media.type.startsWith("video/") ? (
+                  <video
+                    src={media.src}
+                    controls
+                    className="object-cover rounded-lg"
+                    width={200}
+                    height={200}
+                  />
+                ) : (
+                  <Image
+                    src={media.src}
+                    alt="Uploaded preview"
+                    width={200}
+                    height={200}
+                    className="object-cover rounded-lg"
+                  />
+                )
+              ) : (
+                <Image
+                  src="/List_a_cause/Upload_to_Cloud.png"
+                  alt="Upload"
+                  width={70}
+                  height={70}
+                />
+              )}
+            </button>
+            <input
+              id="media-upload"
+              type="file"
+              accept="image/*,video/*"
+              onChange={handleMediaChange}
+              className="hidden"
             />
-          ) : (
-            <Image
-              src={media.src}
-              alt="Uploaded preview"
-              width={200}
-              height={200}
-              className="object-cover rounded-lg"
-            />
-          )
-        ) : (
-          <Image
-            src="/List_a_cause/Upload_to_Cloud.png"
-            alt="Upload "
-            width={70}
-            height={70}
-          />
-        )}
-      </button>
+          </>
+        </FormControl>
+        <FormMessage />
+      </FormItem>
 
-      {/* Guidelines button with dropdown */}
       <div className="relative mt-4">
         <button onClick={toggleGuidelines} className="flex gap-1 items-center">
           <p className="text-[#2b2829] text-[12px] font-normal font-montserrat underline">
-            To ensure the best experience, please follow these guidelines when uploading images or videos
+            To ensure the best experience, please follow these guidelines when
+            uploading images or videos
           </p>
           <Image
             src="/List_a_cause/chevron-down-4.svg"
@@ -126,8 +145,9 @@ export default function Form3({ formData, handleImageUpload }: UploadImageProps)
           />
         </button>
         <p className="text-[#2b2829] text-sm font-normal font-montserrat mt-10">
-          Note: Upload images that capture the spirit of your cause—a smile, a community, a place in need.
-          Add a short video to show the heart of your cause. Let donors see and feel its impact.
+          Note: Upload images that capture the spirit of your cause—a smile, a
+          community, a place in need. Add a short video to show the heart of
+          your cause. Let donors see and feel its impact.
         </p>
         {showGuidelines && (
           <div className="absolute left-0 mt-2 p-4 bg-white border border-gray-300 shadow-lg z-10">
@@ -151,14 +171,6 @@ export default function Form3({ formData, handleImageUpload }: UploadImageProps)
         )}
       </div>
 
-      <input
-        id="media-upload"
-        type="file"
-        accept="image/*,video/*"
-        onChange={handleMediaChange}
-        className="hidden"
-      />
-
       {media && (
         <div className="mt-4">
           <div className="border block w-2/4 border-[#b5b3b3] py-3 px-2">
@@ -171,7 +183,9 @@ export default function Form3({ formData, handleImageUpload }: UploadImageProps)
                   height={30}
                 />
                 <span>
-                  <p className="text-[#363939] text-md md:text-lg font-normal">{media.name}</p>
+                  <p className="text-[#363939] text-md md:text-lg font-normal">
+                    {media.name}
+                  </p>
                   <p className="text-[#b5b3b3] text-xs">{media.size} KB</p>
                 </span>
               </div>
@@ -206,7 +220,9 @@ export default function Form3({ formData, handleImageUpload }: UploadImageProps)
                     height={30}
                   />
                   <span>
-                    <p className="text-[#363939] text-md md:text-lg font-normal">{media.name}</p>
+                    <p className="text-[#363939] text-md md:text-lg font-normal">
+                      {media.name}
+                    </p>
                     <p className="text-[#b5b3b3] text-xs">{media.size} KB</p>
                   </span>
                 </div>
@@ -225,4 +241,4 @@ export default function Form3({ formData, handleImageUpload }: UploadImageProps)
       )}
     </div>
   );
-}
+};

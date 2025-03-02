@@ -1,7 +1,5 @@
-import ListacauseForm from "./_components/ListacauseForm";
+import ListacauseForm from "../../components/ListacauseForm";
 
 export default function Listacause() {
-  return (
-    <ListacauseForm />
-  );
+  return <ListacauseForm />;
 }
