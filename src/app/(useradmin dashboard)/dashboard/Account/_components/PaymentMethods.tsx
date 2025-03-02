@@ -89,7 +89,7 @@ export default function PaymentMethods() {
                 Add Method
               </Button>
             </DialogTrigger>
-            <DialogContent className="bg-white">
+            <DialogContent className="bg-white w-[90%] rounded-lg ">
               <DialogHeader>
                 <DialogTitle>Add Payment Method</DialogTitle>
               </DialogHeader>
@@ -102,7 +102,7 @@ export default function PaymentMethods() {
                   className="w-full"
                 >
                   <TabsList className="grid w-full grid-cols-2">
-                    <TabsTrigger value="creditCard">Credit Card</TabsTrigger>
+                    <TabsTrigger value="creditCard" >Credit Card</TabsTrigger>
                     <TabsTrigger value="cryptoWallet">Crypto Wallet</TabsTrigger>
                   </TabsList>
 
@@ -123,9 +123,9 @@ export default function PaymentMethods() {
       <CardContent>
         <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="mb-4">
-            <TabsTrigger value="all">All Methods</TabsTrigger>
-            <TabsTrigger value="creditCard">Credit Cards</TabsTrigger>
-            <TabsTrigger value="cryptoWallet">Crypto Wallets</TabsTrigger>
+            <TabsTrigger value="all" className="flex-1 sm:flex-none text-xs sm:text-sm lg:text-base px-2 sm:px-4 py-1 sm:py-2">All Methods</TabsTrigger>
+            <TabsTrigger value="creditCard" className="flex-1 sm:flex-none text-xs sm:text-sm lg:text-base px-2 sm:px-4 py-1 sm:py-2">Credit Cards</TabsTrigger>
+            <TabsTrigger value="cryptoWallet" className="flex-1 sm:flex-none text-xs sm:text-sm lg:text-base px-2 sm:px-4 py-1 sm:py-2">Crypto Wallets</TabsTrigger>
           </TabsList>
 
           <TabsContent value="all" className="space-y-4">
