@@ -5,8 +5,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
 
     return (
         <DashBoardLayout profileImage={"/UserProfile/defaultProfile.svg"}>
-            {/* Fixed topbar */}
-
+        
             {children}
         </DashBoardLayout>
 

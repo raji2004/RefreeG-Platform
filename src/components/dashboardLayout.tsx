@@ -204,7 +204,7 @@ const Layout: React.FC<LayoutProps> = ({ profileImage, children }) => {
             {/* Main Content */}
             <div className="flex flex-1">
                 {/* Desktop Sidebar */}
-                <div className="hidden md:block">{renderSidebarContent()}</div>
+                <div className="hidden  md:block">{renderSidebarContent()}</div>
 
                 {/* Mobile Sidebar */}
                 <div
