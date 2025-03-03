@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import StatsCard from "../../../components/StatsCard";
-import ChartComponent from "../../../components/ChartComponent";
-import TransactionsTable from "../../../components/TransactionsTable";
-import Comments from "../../../components/Comments";
+import StatsCard from "@/components/StatsCard";
+import ChartComponent from "@/components/ChartComponent";
+import TransactionsTable from "@/components/TransactionsTable";
+import Comments from "@/components/Comments";
 
 const Dashboard: React.FC = () => {
   // State to track the number of comments
@@ -16,7 +16,7 @@ const Dashboard: React.FC = () => {
   };
 
   return (
-    <div className="p-6 bg-gray-100">
+    <div className="p-6">
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         <StatsCard

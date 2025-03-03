@@ -1,9 +1,7 @@
-"use client"
-import React, { useState } from "react";
-import NotificationItem from "../../../../components/NotificationItem"; // Import the new component
+import NotificationItem from "@/components/NotificationItem"; // Import the new component
 
 const Notifications = () => {
-  const [notifications, setNotifications] = useState([
+  const notifications=[
     {
       id: 1,
       type: "donation",
@@ -16,10 +14,10 @@ const Notifications = () => {
       message:
         'You just received a message: "So what else do you need for this cause?"',
     },
-  ]);
+  ];
 
   return (
-    <div className="p-8 bg-gray-100">
+    <div className="p-8">
       <h1 className="text-2xl font-semibold mb-4">Notification Center</h1>
 
       {notifications.length === 0 ? (

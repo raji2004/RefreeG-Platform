@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation"; // ✅ Correct import for App Router
-import Topbar from "../../../../components/Topbar";
-import Sidebar from "../../../../components/Sidebar";
+
 
 const ChangePassword = () => {
   const router = useRouter(); // ✅ This should now work properly
@@ -23,10 +22,7 @@ const ChangePassword = () => {
   };
 
   return (
-    <div className="flex h-screen">
-      <Sidebar />
-      <div className="flex-1 flex flex-col">
-        <Topbar />
+
         <div className="flex justify-center items-center h-full">
           {success ? (
             <div className="bg-white p-6 rounded-lg shadow-lg text-center max-w-md">
@@ -87,8 +83,6 @@ const ChangePassword = () => {
             </form>
           )}
         </div>
-      </div>
-    </div>
   );
 };
 
