@@ -27,13 +27,12 @@ export default function FormSwitcher() {
     formValues.country &&
     formValues.postalCode;
 
-    const handleChange = (
-      e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-    ) => {
-      const { id, value } = e.target;
-      setFormValues((prev) => ({ ...prev, [id]: value }));
-    };
-    
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { id, value } = e.target;
+    setFormValues((prev) => ({ ...prev, [id]: value }));
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
