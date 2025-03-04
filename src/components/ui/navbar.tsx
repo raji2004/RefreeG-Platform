@@ -17,7 +17,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import SearchModal from './searchModal';
-import { LogOut } from 'lucide-react'
+import { ChevronDown, LogOut } from 'lucide-react'
 
 interface MenuLinkProps {
   href: string;
@@ -41,6 +41,7 @@ const MenuLink = ({ href, children, className, onClick, ...props }: MenuLinkProp
 export function Navbar({ userSession }: { userSession?: boolean }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
+  const [aboutUsOpen, setAboutUsOpen] = useState(false);
 
   const handleSearch = () => {
     alert(`Searching for: ${searchQuery}`);
@@ -69,22 +70,53 @@ export function Navbar({ userSession }: { userSession?: boolean }) {
 
         <MenuLink href="#" className='hover:bg-blue-100'>Explore causes</MenuLink>
 
-        <MenuLink href="#" className='hover:bg-blue-100'>
-          <DropdownMenu>
-            <DropdownMenuTrigger className="flex outline-none items-center">
-              About us
-              <Image src={Dropdown} height={12} width={12} alt="dropdown" className='ml-2' />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>Profile</DropdownMenuItem>
-              <DropdownMenuItem>Billing</DropdownMenuItem>
-              <DropdownMenuItem>Team</DropdownMenuItem>
-              <DropdownMenuItem>Subscription</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </MenuLink>
+        <div 
+          className="relative"
+          onMouseEnter={() => setAboutUsOpen(true)} 
+          onMouseLeave={() => setAboutUsOpen(false)}
+        >
+          <MenuLink href="#" className="hover:bg-blue-100">
+            <DropdownMenu open={aboutUsOpen} onOpenChange={setAboutUsOpen}>
+              <DropdownMenuTrigger asChild>
+                <div 
+                  className="flex items-center cursor-pointer"
+                  onClick={(e) => {
+                    e.stopPropagation(); // Prevents closing when clicking inside
+                    setAboutUsOpen((prev) => !prev);
+                  }}
+                >
+                  About us
+                  <Image src={Dropdown} height={12} width={12} alt="dropdown" className="ml-2" />
+                </div>
+              </DropdownMenuTrigger>
+
+              <DropdownMenuContent className="absolute mt-2 py-4 bg-white shadow-lg rounded-md hidden lg:block" align="start">
+                <div className="">
+                  <div className='flex'>
+                    <DropdownMenuItem className="whitespace-nowrap hover:underline">
+                      Our Mission
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="whitespace-nowrap hover:underline">
+                      Our Story (The "Why" Behind RefreeG)
+                    </DropdownMenuItem>
+                  </div>
+                  <div className='flex'>
+                    <DropdownMenuItem className="whitespace-nowrap hover:underline">
+                      Our Impact
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="whitespace-nowrap hover:underline">
+                      Who Are We Made By?
+                    </DropdownMenuItem>
+                  </div>
+                  <DropdownMenuItem className="whitespace-nowrap hover:underline col-span-2">
+                    What We Do
+                  </DropdownMenuItem>
+                </div>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </MenuLink>
+        </div>
+
 
         <MenuLink href="#" className='hover:bg-blue-100'>
           <DropdownMenu>
@@ -149,7 +181,27 @@ export function Navbar({ userSession }: { userSession?: boolean }) {
             </Link>
             <div className="grid gap-2 py-6">
               <MenuLink href="#">Explore causes</MenuLink>
-              <MenuLink href="#">About us</MenuLink>
+              {/* Mobile About Us (Accordion) */}
+              <div className="lg:hidden">
+                <button
+                  onClick={() => setAboutUsOpen((prev) => !prev)}
+                  className="w-full text-left flex justify-between items-center py-2 px-3 hover:bg-gray-100"
+                >
+                  About Us
+                  <ChevronDown className={`h-4 w-4 transition-transform ${aboutUsOpen ? "rotate-180" : ""}`} />
+                </button>
+
+                {aboutUsOpen && (
+                  <div className="pl-4 space-y-1">
+                    <MenuLink href="#" className='text-xs'>Our Mission</MenuLink>
+                    <MenuLink href="#" className='text-xs'>Our Story (The "Why" Behind RefreeG)</MenuLink>
+                    <MenuLink href="#" className='text-xs'>Our Impact</MenuLink>
+                    <MenuLink href="#" className='text-xs'>Who Are We Made By?</MenuLink>
+                    <MenuLink href="#" className='text-xs'>What We Do</MenuLink>
+                  </div>
+                )}
+              </div>
+
               <MenuLink href="#">How it works</MenuLink>
               <MenuLink href="#">List a cause</MenuLink>
 
