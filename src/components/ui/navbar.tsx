@@ -56,7 +56,6 @@ export function Navbar({ userSession }: { userSession?: boolean }) {
     <header className="flex h-20 w-full shrink-0 items-center px-4 md:px-6">
       <Link href="#" className="mr-6 lg:mr-0" prefetch={false}>
         <Image src={Logo} alt="logo" height={50} width={50} />
-        <span className="sr-only">Acme Inc</span>
       </Link>
 
       {/* Large Screen Navigation */}
@@ -140,8 +139,8 @@ export function Navbar({ userSession }: { userSession?: boolean }) {
           List a cause
         </MenuLink>
 
-        {userSession ? <MenuLink href='/profile'> <Image
-          src="/images/logo.png"
+        {userSession ? <MenuLink href='/dashboard/UserProfile'> <Image
+          src="/UserProfile/defaultProfile.svg"
           alt="Profile"
           width={40}
           height={40}
@@ -212,8 +211,8 @@ export function Navbar({ userSession }: { userSession?: boolean }) {
             </div>
 
             <div className='mt-auto flex justify-start items-center  '>
-              {userSession ? <MenuLink href='/profile'> <Image
-                src="/images/logo.png"
+              {userSession ? <MenuLink href='/dashboard/UserProfile'> <Image
+                src="/UserProfile/defaultProfile.svg"
                 alt="Profile"
                 width={40}
                 height={40}

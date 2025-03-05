@@ -7,10 +7,12 @@ import FAQ from "./_components/frequentlyAskedQuestions";
 import WhyUseUs from "./_components/whyUseUs";
 import { H2, P, Ol } from "@/components/typograpy";
 import { DonationCarousel } from "@/components/donationCarousel";
+import Hero from "./_components/hero";
 
 export default function Home() {
   return (
     <div>
+      <Hero />
       <WhyUseUs />
 
       <div className="w-full  px-10 py-8 bg-white border-b">
