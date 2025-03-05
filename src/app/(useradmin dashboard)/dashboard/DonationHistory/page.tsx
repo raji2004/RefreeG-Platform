@@ -2,7 +2,7 @@ import React from "react";
 import { DonationHistoryData } from "@/lib/dummyData";
 import { donationHistoryColumn } from "@/components/columns";
 import { DataTable } from "@/components/ui/data-table";
-import RefreshButton from "@/components/refreshButton";
+import { GrRefresh } from "react-icons/gr";
 
 export default function Donations() {
   return (
@@ -14,7 +14,7 @@ export default function Donations() {
                   <span className="text-gray-500">Activity Overview</span> <span className="text-gray-700">&gt;</span> <span>Donation History</span>
                 </div>
                 <div className="py-4 lg:pr-4">
-                  <RefreshButton />
+                  <GrRefresh />
                 </div>
               </div>
               <DataTable
