@@ -93,12 +93,13 @@ export function Navbar({ userSession }: { userSession?: boolean }) {
               <DropdownMenuContent className="absolute mt-2 py-4 bg-white shadow-lg rounded-md hidden lg:block" align="start">
                 <div className="">
                   <div className='flex'>
-                    <DropdownMenuItem className="whitespace-nowrap hover:underline">
+                    <DropdownMenuItem className="whitespace-nowrap hover:underline hover:bg-[#D6EBFF]">
                       Our Mission
                     </DropdownMenuItem>
                     <DropdownMenuItem className="whitespace-nowrap hover:underline">
-                      Our Story (The "Why" Behind RefreeG)
+                      Our Story (The &quot;Why&quot; Behind RefreeG)
                     </DropdownMenuItem>
+
                   </div>
                   <div className='flex'>
                     <DropdownMenuItem className="whitespace-nowrap hover:underline">
@@ -194,7 +195,10 @@ export function Navbar({ userSession }: { userSession?: boolean }) {
                 {aboutUsOpen && (
                   <div className="pl-4 space-y-1">
                     <MenuLink href="#" className='text-xs'>Our Mission</MenuLink>
-                    <MenuLink href="#" className='text-xs'>Our Story (The "Why" Behind RefreeG)</MenuLink>
+                    <MenuLink href="#" className='text-xs'>
+                      Our Story (The &quot;Why&quot; Behind RefreeG)
+                    </MenuLink>
+
                     <MenuLink href="#" className='text-xs'>Our Impact</MenuLink>
                     <MenuLink href="#" className='text-xs'>Who Are We Made By?</MenuLink>
                     <MenuLink href="#" className='text-xs'>What We Do</MenuLink>

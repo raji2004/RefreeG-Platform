@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, useCallback } from "react";
 import { useMousePosition } from "@/utils/mouse";
 
 interface ParticlesProps {
@@ -29,33 +29,11 @@ export default function Particles({
 	const canvasSize = useRef<{ w: number; h: number }>({ w: 0, h: 0 });
 	const dpr = typeof window !== "undefined" ? window.devicePixelRatio : 1;
 
-	useEffect(() => {
-		if (canvasRef.current) {
-			context.current = canvasRef.current.getContext("2d");
-		}
-		initCanvas();
-		animate();
-		window.addEventListener("resize", initCanvas);
+	
 
-		return () => {
-			window.removeEventListener("resize", initCanvas);
-		};
-	}, []);
+	
 
-	useEffect(() => {
-		onMouseMove();
-	}, [mousePosition.x, mousePosition.y]);
-
-	useEffect(() => {
-		initCanvas();
-	}, [refresh]);
-
-	const initCanvas = () => {
-		resizeCanvas();
-		drawParticles();
-	};
-
-	const onMouseMove = () => {
+	const onMouseMove = useCallback(() => {
 		if (canvasRef.current) {
 			const rect = canvasRef.current.getBoundingClientRect();
 			const { w, h } = canvasSize.current;
@@ -67,7 +45,7 @@ export default function Particles({
 				mouse.current.y = y;
 			}
 		}
-	};
+	}, [mousePosition]);
 
 	type Particle = {
 		x: number;
@@ -167,6 +145,11 @@ export default function Particles({
 		}
 	};
 
+	const initCanvas = useCallback(() => {
+		resizeCanvas();
+		drawParticles();
+	}, [resizeCanvas, drawParticles]);
+
 	const remapValue = (
 		value: number,
 		start1: number,
@@ -178,8 +161,9 @@ export default function Particles({
 			((value - start1) * (end2 - start2)) / (end1 - start1) + start2;
 		return remapped > 0 ? remapped : 0;
 	};
+	
 
-	const animate = () => {
+	const animate = useCallback(() => {
 		clearContext();
 		circles.current.forEach((particle: Particle, i: number) => {
 			const edge = [
@@ -232,7 +216,28 @@ export default function Particles({
 			}
 		});
 		window.requestAnimationFrame(animate);
-	};
+	}, [staticity, ease]);
+
+	useEffect(() => {
+		if (canvasRef.current) {
+			context.current = canvasRef.current.getContext("2d");
+		}
+		initCanvas();
+		animate();
+		window.addEventListener("resize", initCanvas);
+	
+		return () => {
+			window.removeEventListener("resize", initCanvas);
+		};
+	}, [initCanvas, animate]);
+
+	useEffect(() => {
+		onMouseMove();
+	}, [mousePosition, onMouseMove]);
+
+	useEffect(() => {
+		initCanvas();
+	}, [refresh, initCanvas]);
 
 	return (
 		<div className={className} ref={canvasContainerRef} aria-hidden="true">

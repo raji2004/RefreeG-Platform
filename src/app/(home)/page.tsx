@@ -13,7 +13,7 @@ export default function Home() {
     <div>
       <WhyUseUs />
 
-      <div className="w-full px-4 py-8 bg-white border-b">
+      <div className="w-full  px-10 py-8 bg-white border-b">
         <div className="flex justify-between items-center mb-6">
           <H2>Urgent causes</H2>
           <a href="#" className="text-blue-600 hover:underline">
@@ -32,7 +32,7 @@ export default function Home() {
         </nav>
       </div> */}
 
-      <div className="pt-2 pb-8 mb-8">
+      <div className="pt-2 px-10 pb-8 mb-8">
         <H2 className="mt-8 font-semibold text-2xl">How it works</H2>
         <P className="text-xl mb-12">
           How donation on{" "}

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useFormContext, useFieldArray } from "react-hook-form";
@@ -32,12 +32,13 @@ const AutoResizeTextarea = React.forwardRef<
   // Use external ref if provided, otherwise internal
   const textareaRef = (ref as React.MutableRefObject<HTMLTextAreaElement>) || internalRef;
 
-  const adjustHeight = () => {
+  const adjustHeight = useCallback(() => {
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     }
-  };
+  }, []);
+  
 
   const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     adjustHeight();
@@ -46,7 +47,8 @@ const AutoResizeTextarea = React.forwardRef<
 
   useEffect(() => {
     adjustHeight();
-  }, [value]);
+  }, [adjustHeight]);
+  
 
   return (
     <textarea
@@ -77,12 +79,14 @@ export const Form4 = () => {
   }, [fields, append]);
 
   const maxLength = 2000;
-  const sections = (watch("sections") as Section[]) || [];
+  const sections = useMemo(() => (watch("sections") as Section[]) || [], [watch]);
+
 
   // Sync sections to localStorage whenever sections change.
   useEffect(() => {
     localStorage.setItem("formSections", JSON.stringify(sections));
   }, [sections]);
+  
 
   // Check that every section has a non-empty header and description.
   const isSectionsValid =
