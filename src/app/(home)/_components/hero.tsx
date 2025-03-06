@@ -7,7 +7,7 @@ import React from "react";
 const Hero = () => {
   return (
     <section
-      className="w-full md:px-[50px] px-[10px] py-[15px] md:py-[25px] md:flex justify-between relative md:min-h-screen h-screen"
+      className="w-full md:px-[50px] px-[10px] py-[15px] md:py-[25px] md:flex justify-between relative min-h-[90vh]"
       id="home"
     >
       {/* african map  */}
@@ -24,10 +24,10 @@ const Hero = () => {
       </div>
       {/* hero caption  */}
       <div className="md:pt-10 mt-12 md:mt-0 text-center">
-        <p className="text-[12px] md:text-[14px] font-semibold text-center text-baseline-2">
+        <p className="text-[12px] md:text-[14px] font-semibold text-center text-[#151314]">
           Building Africa’s number 1 crowd funding platform.
         </p>
-        <p className="text-[65px] md:text-[100px] font-bold md:font-semibold text-[#336BAD] text-accent">
+        <p className="text-[65px] md:text-[100px] font-bold md:font-semibold text-[#00478f]">
           RefreeG
         </p>
         <p className="md:text-[20px] text-[16px]  text-baseline font-medium">
@@ -37,7 +37,7 @@ const Hero = () => {
 
         <Link
         href={""}
-        className="flex gap-[6px] bg-light py-[10px] px-[15px] rounded-[8px] text-bold text-[15px] items-center justify-center mx-auto relative z-30 
+        className="flex gap-[6px] bg-light py-[10px] px-[15px] rounded-[8px] text-[#003366] text-[15px] items-center justify-center mx-auto relative z-30 
             md:mt-16 mt-8 font-semibold cursor-pointer bg-[#EFF4FB] hover:bg-[#336BAD] hover:text-light hover:text-white transition"
         >
             Explore Causes
