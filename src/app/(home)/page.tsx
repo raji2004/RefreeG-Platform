@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import CausesAboutSocioEconomicGrowth from "./_components/causesAboutSocioEconomicGrowth";
 import HappeningNearYou from "./_components/happeningNearYou";
 import CausesSupported from "./_components/causesWeSupport";
@@ -38,9 +39,10 @@ export default function Home() {
         <H2 className="mt-8 font-semibold text-2xl">How it works</H2>
         <P className="text-xl mb-12">
           How donation on{" "}
-          <span className="text-gray-500 text-xl font-semibold underline">
+          <Link href="https://www.refreeg.com" className="text-gray-500 text-xl font-semibold underline">
             Refreeg
-          </span>{" "}
+          </Link>{" "}
+
           works!
         </P>
 
