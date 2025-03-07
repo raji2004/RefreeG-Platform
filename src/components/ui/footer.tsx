@@ -45,7 +45,7 @@ export function Footer() {
           </button>
         </Link>
       </div> */}
-      <section className="w-full h-full px-[10px] md:px-[50px] py-[25px] mt-[30px] bg-footer">
+      <section className="w-full h-full px-[10px] md:px-[50px] py-[25px] mt-[30px] bg-footer bg-[#F5FAFF]">
         <div className="md:flex md:space-x-3 space-y-4 md:space-y-0">
           <div className="w-full md:w-3/6">
             <p className="font-semibold text-[18px] mb-2 ">Subscribe</p>
