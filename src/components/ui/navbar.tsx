@@ -23,7 +23,7 @@ interface MenuLinkProps {
   href: string;
   children: ReactNode;
   className?: string;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void; // Explicitly define event type
 }
 
 const MenuLink = ({ href, children, className, onClick, ...props }: MenuLinkProps) => (
@@ -31,7 +31,7 @@ const MenuLink = ({ href, children, className, onClick, ...props }: MenuLinkProp
     href={href}
     className={`relative group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-base font-medium transition-colors duration-500 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 ease-in-out transform hover:-translate-y-1 hover:scale-110 ${className}`}
     prefetch={false}
-    onClick={onClick}
+    onClick={onClick} // No change here, just ensuring type compatibility
     {...props}
   >
     {children}
@@ -135,9 +135,20 @@ export function Navbar({ userSession }: { userSession?: boolean }) {
           </DropdownMenu>
         </MenuLink>
 
-        <MenuLink href="/List_a_cause" className="text-white hover:text-white bg-blue-600 hover:bg-blue-700">
+        <MenuLink
+          href={userSession ? "/List_a_cause" : "/login"}
+          className="text-white hover:text-white bg-blue-600 hover:bg-blue-700"
+          onClick={(e) => {
+            if (!userSession) {
+              e.preventDefault(); // Prevent default navigation
+              alert("You need to log in before listing a cause.");
+            }
+          }}
+        >
           List a cause
         </MenuLink>
+
+
 
         {userSession ? <MenuLink href='/dashboard/UserProfile'> <Image
           src="/UserProfile/defaultProfile.svg"
@@ -206,7 +217,17 @@ export function Navbar({ userSession }: { userSession?: boolean }) {
               </div>
 
               <MenuLink href="#">How it works</MenuLink>
-              <MenuLink href="#">List a cause</MenuLink>
+              <MenuLink
+                href={userSession ? "/List_a_cause" : "/login"}
+                onClick={(e) => {
+                  if (!userSession) {
+                    e.preventDefault(); // Prevent default navigation
+                    alert("You need to log in before listing a cause.");
+                  }
+                }}
+              >
+                List a cause
+              </MenuLink>
 
             </div>
 

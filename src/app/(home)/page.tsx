@@ -91,13 +91,15 @@ export default function Home() {
         <div className="md:flex lg:flex mt-10 mb-10 text-base lg:text-2xl">
           <span className="mr-4">Want to be a part of us?</span>
           <span className="flex mr-1 md:font-semibold lg:font-semibold underline">
-            Join our Community!
-            <Image
-              src="/images/arrowRight.svg"
-              alt="arrow right"
-              height={15}
-              width={15}
-            />
+            <button className="flex">
+              Join our Community!
+              <Image
+                src="/images/arrowRight.svg"
+                alt="arrow right"
+                height={15}
+                width={15}
+              />
+            </button>
           </span>
         </div>
       </div>
