@@ -3,9 +3,10 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import Navbar from "../List_a_cause/_components/navbar";
-import { collection, addDoc } from "firebase/firestore";
+import Navbar from "../create/_components/navbar";
+import { collection, addDoc, setDoc, doc } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
+import { getAuth } from "firebase/auth";
 import {
   FaExclamationTriangle,
   FaHeartbeat,
@@ -76,24 +77,44 @@ const PreviewPage = () => {
     router.push("/List_a_cause");
   };
 
-  // Final submission handled on the preview page.
   const handleSubmit = async () => {
     if (!isFormValid()) {
       setErrorMessage("Please fill out all required fields before submitting.");
       return;
     }
     setErrorMessage("");
+  
     try {
+      const auth = getAuth();
+      await auth.authStateReady; // Ensure auth state is ready before checking currentUser
+      const currentUser = auth.currentUser;
+  
+      if (!currentUser) {
+        throw new Error("User not logged in");
+      }
+  
+      const userId = currentUser.uid;
+  
       // Combine the formData, sections, and uploadedImage into one object.
-      const finalData = { ...formData, sections, uploadedImage };
-      const docRef = await addDoc(collection(db, "formSubmissions"), finalData);
-      console.log("Document written with ID: ", docRef.id);
-      router.push(`/See_Preview/Success?id=${docRef.id}`);
+      const finalData = { ...formData, sections, uploadedImage, userId };
+  
+      // Save to the global "causes" collection
+      const causesRef = collection(db, "causes");
+      const globalDocRef = await addDoc(causesRef, finalData);
+  
+      // Save under the specific user's ID "users/{userId}/causes"
+      const userCausesRef = collection(db, "users", userId, "causes");
+      await setDoc(doc(userCausesRef, globalDocRef.id), finalData); // Use same ID for consistency
+  
+      console.log("Document written globally with ID: ", globalDocRef.id);
+      router.push(`/See_Preview/Success?id=${globalDocRef.id}`);
     } catch (error: any) {
       console.error("Error adding document: ", error.message);
       setErrorMessage("There was an error submitting the form. Please try again.");
     }
   };
+  
+  
 
   // Helper function to compute days left from the deadline.
   function getDaysLeft(deadline: string): string {
