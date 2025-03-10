@@ -84,12 +84,12 @@ export const MainCauseCard: React.FC<MainCauseCardProps> = ({
         </div>
         {/* Bookmark Icon */}
         <div onClick={toggleBookmark} className="cursor-pointer">
-          <Bookmark
+          {/* <Bookmark
             size={30}
             className={`transition-colors duration-300 ${
               isBookmarked ? "text-blue-600 fill-blue-600" : "text-gray-500"
             }`}
-          />
+          /> */}
         </div>
       </div>
 
