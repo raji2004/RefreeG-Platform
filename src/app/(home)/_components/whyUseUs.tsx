@@ -49,7 +49,7 @@ export const WhyUseUs: FC = () => {
         <div className="text-lg md:text-xl">
           Reasons why your donation will be used right!
         </div>
-        <div className="w-full py-6 flex flex-col md:flex-row overflow-x-auto scrollbar-hide space-y-6 md:space-y-0 md:space-x-6">
+        <div className="w-full py-6 flex flex-col md:flex-row space-y-6 md:space-y-0 md:space-x-6">
           <FeatureCard
             imageSrc={"/images/blockchain.png"}
             title="Blockchain Transparency"

@@ -7,6 +7,8 @@ import { getContract } from "thirdweb";
 import { polygonAmoy } from "thirdweb/chains";
 import { deployPublishedContract } from "thirdweb/deploys";
 import { useActiveAccount, useReadContract } from "thirdweb/react";
+import { db } from "@/lib/firebase/config";
+import { collection, addDoc } from "firebase/firestore"; // Firebase Firestore functions
 
 export default function DashboardPage() {
   const account = useActiveAccount();
@@ -87,7 +89,7 @@ const CreateCampaignModal = ({
   const [isDeployingContract, setIsDeployingContract] =
     useState<boolean>(false);
 
-  // Deploy contract from CrowdfundingFactory
+  // Deploy contract from CrowdfundingFactory and save to Firebase
   const handleDeployContract = async () => {
     setIsDeployingContract(true);
     try {
@@ -109,9 +111,30 @@ const CreateCampaignModal = ({
         version: "1.0.0", // Version of the contract you're deploying
       });
 
-      alert("Contract deployed successfully!");
+      console.log("Contract deployed:", response);
+
+      // Save campaign data to Firebase in the "crypto-campaigns" collection
+      const campaignData = {
+        name: campaignName,
+        description: campaignDescription,
+        goal: campaignGoal,
+        deadline: campaignDeadline,
+        owner: account?.address,
+        // contractAddress: response.contractAddress, // Address of the deployed contract
+        // transactionHash: response.receipt.transactionHash, // Blockchain transaction ID
+        creationTime: new Date().toISOString(),
+      };
+
+      const docRef = await addDoc(
+        collection(db, "crypto-campaigns"),
+        campaignData
+      );
+      console.log("Campaign saved to Firebase with ID:", docRef.id);
+
+      alert("Campaign created and saved successfully!");
     } catch (error) {
-      console.error(error);
+      console.error("Error creating campaign:", error);
+      alert("Failed to create campaign.");
     } finally {
       setIsDeployingContract(false);
       setIsModalOpen(false);
