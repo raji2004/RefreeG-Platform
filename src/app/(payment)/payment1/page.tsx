@@ -2,7 +2,7 @@
 import DonationForm from "@/components/DonationForm";
 import { Navbar } from "@/components/ui/navbar";
 
-export default function PaymentPage() {
+export default function DonatePage() {
   return (
     <div className="min-h-screen bg-gray-100">
       <Navbar />
