@@ -5,7 +5,6 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
-import { Slider } from "@/components/ui/slider";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Navbar } from "@/components/ui/navbar";
 
@@ -14,6 +13,19 @@ export default function PaymentPage() {
   const [tip, setTip] = useState(0);
   const serviceFee = 10;
   const totalAmount = donation + tip + serviceFee;
+
+  const handleTipChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    // Only update the tip if the donation amount is greater than 0
+    if (donation > 0) {
+      setTip(Number(value));
+    }
+  };
+
+  const handleDonationChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setDonation(Number(value));
+  };
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -53,9 +65,17 @@ export default function PaymentPage() {
           ))}
         </ToggleGroup>
 
+        {/* Editable Donation Amount Input */}
         <div className="flex justify-between items-center p-3 border rounded-lg">
           <span className="text-lg font-semibold">₦ NGN</span>
-          <span className="text-lg">{donation.toLocaleString() || "0.00"}</span>
+          <input
+            type="number"
+            value={donation === 0 ? "" : donation} // Remove the "0" placeholder
+            onChange={handleDonationChange}
+            className="text-lg text-right border-none outline-none"
+            placeholder="Enter donation amount"
+            min="0"
+          />
         </div>
 
         <Separator />
@@ -76,13 +96,27 @@ export default function PaymentPage() {
           your donation to go where it’s needed most.
         </p>
 
-        <Slider
-          defaultValue={[0]}
-          max={donation}
-          step={100}
-          onValueChange={(value) => setTip(value[0])}
-        />
-        <p>Enter custom tip? ₦{tip.toLocaleString()}</p>
+        {/* Added an input text box for custom tip */}
+        <div className="space-y-2">
+          <label htmlFor="customTip" className="text-gray-700">
+            Enter custom tip:
+          </label>
+          <input
+            id="customTip"
+            type="number"
+            value={tip === 0 ? "" : tip} // Remove the "0" placeholder
+            onChange={handleTipChange}
+            className="w-full p-2 border rounded-lg"
+            placeholder="Enter your custom tip"
+            min="0"
+            disabled={donation === 0} // Disable input if no donation is selected
+          />
+          {donation === 0 && (
+            <p className="text-sm text-red-500">
+              Please select or enter a donation amount first.
+            </p>
+          )}
+        </div>
 
         <div className="flex items-center space-x-2">
           <Checkbox />
