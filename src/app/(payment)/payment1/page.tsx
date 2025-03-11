@@ -70,9 +70,9 @@ export default function PaymentPage() {
           <span className="text-lg font-semibold">₦ NGN</span>
           <input
             type="number"
-            value={donation === 0 ? "" : donation} // Remove the "0" placeholder
+            value={donation === 0 ? "" : donation}
             onChange={handleDonationChange}
-            className="text-lg text-right border-none outline-none"
+            className="text-lg text-right border-none outline-none placeholder:text-sm"
             placeholder="Enter donation amount"
             min="0"
           />
