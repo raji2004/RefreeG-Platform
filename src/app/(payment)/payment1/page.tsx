@@ -153,7 +153,15 @@ export default function PaymentPage() {
           </div>
         </div>
 
-        <Button className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700">
+        {/* Updated Button with conditional styling and disabled state */}
+        <Button
+          className={`w-full text-white py-3 rounded-lg ${
+            donation === 0
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-blue-600 hover:bg-blue-700"
+          }`}
+          disabled={donation === 0}
+        >
           Proceed
         </Button>
       </div>
