@@ -15,7 +15,6 @@ export default function DonationForm() {
 
   const handleTipChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    // Only update the tip if the donation amount is greater than 0
     if (donation > 0) {
       setTip(Number(value));
     }
@@ -37,8 +36,10 @@ export default function DonationForm() {
       />
       <div className="space-y-3">
         <h1 className="text-xl font-bold">
-          You're about to donate to{" "}
-          <span className="text-blue-600">"Support flood victims"</span>
+          You&apos;re about to donate to{" "}
+          <span className="text-blue-600">
+            &quot;Support flood victims&quot;
+          </span>
         </h1>
         <p className="text-gray-600">
           Help the victims of the Maiduguri floods rebuild their new homes and
@@ -62,7 +63,6 @@ export default function DonationForm() {
         ))}
       </ToggleGroup>
 
-      {/* Editable Donation Amount Input */}
       <div className="flex justify-between items-center p-3 border rounded-lg">
         <span className="text-lg font-semibold">₦ NGN</span>
         <input
@@ -78,7 +78,7 @@ export default function DonationForm() {
       <Separator />
 
       <div className="flex items-center space-x-2">
-        <h3 className="font-bold">Support RefreeG's Mission</h3>
+        <h3 className="font-bold">Support RefreeG&apos;s Mission</h3>
         <Image
           src="/donation_flow/information.svg"
           alt="Info"
@@ -87,13 +87,12 @@ export default function DonationForm() {
         />
       </div>
       <p className="text-gray-600">
-        At RefreeG, we're committed to connecting donors with meaningful causes
-        that foster socioeconomic growth across Africa. We don't charge causes
-        or beneficiaries a fee to list on our platform—we want 100% of your
-        donation to go where it's needed most.
+        At RefreeG, we&apos;re committed to connecting donors with meaningful
+        causes that foster socioeconomic growth across Africa. We don&apos;t
+        charge causes or beneficiaries a fee to list on our platform—we want
+        100% of your donation to go where it&apos;s needed most.
       </p>
 
-      {/* Added an input text box for custom tip */}
       <div className="space-y-2">
         <label htmlFor="customTip" className="text-gray-700">
           Enter custom tip:
