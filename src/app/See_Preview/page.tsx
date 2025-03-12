@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import Navbar from "../create/_components/navbar";
+import Navbar from "../cause/create/_components/navbar";
 import { collection, addDoc, setDoc, doc } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
 import { getAuth } from "firebase/auth";
