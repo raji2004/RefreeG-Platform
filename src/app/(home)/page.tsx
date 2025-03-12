@@ -1,5 +1,6 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 import CausesAboutSocioEconomicGrowth from "./_components/causesAboutSocioEconomicGrowth";
 import HappeningNearYou from "./_components/happeningNearYou";
 import CausesSupported from "./_components/causesWeSupport";
@@ -7,13 +8,15 @@ import FAQ from "./_components/frequentlyAskedQuestions";
 import WhyUseUs from "./_components/whyUseUs";
 import { H2, P, Ol } from "@/components/typograpy";
 import { DonationCarousel } from "@/components/donationCarousel";
+import Hero from "./_components/hero";
 
 export default function Home() {
   return (
     <div>
+      <Hero />
       <WhyUseUs />
 
-      <div className="w-full px-4 py-8 bg-white border-b">
+      <div className="w-full  px-10 py-8 bg-white border-b">
         <div className="flex justify-between items-center mb-6">
           <H2>Urgent causes</H2>
           <a href="#" className="text-blue-600 hover:underline">
@@ -32,13 +35,14 @@ export default function Home() {
         </nav>
       </div> */}
 
-      <div className="pt-2 pb-8 mb-8">
+      <div className="pt-2 px-10 pb-8 mb-8">
         <H2 className="mt-8 font-semibold text-2xl">How it works</H2>
         <P className="text-xl mb-12">
           How donation on{" "}
-          <span className="text-gray-500 text-xl font-semibold underline">
+          <Link href="https://www.refreeg.com" className="text-gray-500 text-xl font-semibold underline">
             Refreeg
-          </span>{" "}
+          </Link>{" "}
+
           works!
         </P>
 
@@ -89,13 +93,15 @@ export default function Home() {
         <div className="md:flex lg:flex mt-10 mb-10 text-base lg:text-2xl">
           <span className="mr-4">Want to be a part of us?</span>
           <span className="flex mr-1 md:font-semibold lg:font-semibold underline">
-            Join our Community!
-            <Image
-              src="/images/arrowRight.svg"
-              alt="arrow right"
-              height={15}
-              width={15}
-            />
+            <button className="flex hover:bg-[#434a52] px-1 rounded-xl">
+              Join our Community!
+              <Image
+                src="/images/arrowRight.svg"
+                alt="arrow right"
+                height={15}
+                width={15}
+              />
+            </button>
           </span>
         </div>
       </div>
