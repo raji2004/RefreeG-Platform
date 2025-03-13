@@ -9,7 +9,7 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form"; // Adjust the path as needed
-import { UploadedImage } from "../../../components/ListacauseForm";
+import { UploadedImage } from "@/components/ListacauseForm";
 
 export const Form3 = () => {
   const { setValue, setError, clearErrors } = useFormContext();
