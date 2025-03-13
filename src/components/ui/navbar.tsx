@@ -145,6 +145,7 @@ export function Navbar({ userSession }: { userSession?: boolean }) {
             }
           }}
         >
+
           List a cause
         </MenuLink>
 
