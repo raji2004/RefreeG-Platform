@@ -9,10 +9,10 @@ import { collection, addDoc } from "firebase/firestore";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Form1 } from "@/app/create/Form1/Form1Component";// Update these components to use useFormContext()
-import { Form2 } from "@/app/create/Form2/Form2Component";
-import { Form3 } from "@/app/create/Form3/Form3Component";
-import { Form4 } from "../app/create/Form4/Form4Component";
+import { Form1 } from "@/app/cause/create/Form1/Form1Component";// Update these components to use useFormContext()
+import { Form2 } from "@/app/cause/create/Form2/Form2Component";
+import { Form3 } from "@/app/cause/create/Form3/Form3Component";
+import { Form4 } from "../app/cause/create/Form4/Form4Component";
 
 // Define the UploadedImage interface
 export interface UploadedImage {
