@@ -45,24 +45,28 @@ export function Footer() {
           </button>
         </Link>
       </div> */}
-      <section className="w-full h-full px-[10px] md:px-[50px] py-[25px] mt-[30px] bg-footer">
-        <div className="md:flex md:space-x-3 space-y-4 md:space-y-0">
-          <div className="w-full md:w-3/6">
-            <p className="font-semibold text-[18px] mb-2 ">Subscribe</p>
+      <section className="w-full h-full px-[10px] md:px-[50px] py-[25px] mt-[30px] bg-footer bg-[#F5FAFF]">
+        <div className="md:flex md:justify-between md:space-x-3 space-y-4 md:space-y-0">
+          <div className="w-full md:w-4/12">
+            <p className="font-semibold text-[18px] mb-2">Subscribe</p>
             <p className="text-[15px] font-light">
               Join our newsletter to stay up to date on features <br />
               and releases
             </p>
-            <GetMail />
+
+            {/* Wrap GetMail in a full-width div */}
+            <div className="w-full">
+              <GetMail />
+            </div>
+
             <p className="text-[10px] mt-3">
               By Subscribing you agree with our{" "}
-              <span className="text-bold font-medium underline">
-                Privacy policy
-              </span>
+              <span className="text-bold font-medium underline">Privacy policy</span>
             </p>
           </div>
 
-          <div className="w-full md:w-1/6">
+
+          <div className="w-full md:w-2/12">
             <p className="font-medium text-[15px]">Quick Links</p>
             <div className="flex flex-col space-y-3 pt-4">
               {quickLinks.map((link) => (
@@ -77,7 +81,7 @@ export function Footer() {
             </div>
           </div>
 
-          <div className="w-full md:w-2/6">
+          <div className="w-full md:w-2/12">
             <p className="font-medium text-[15px]">Contact Us</p>
             <div className="flex flex-col space-y-3 pt-4">
               {contactLinks.map((link) => (
@@ -92,7 +96,7 @@ export function Footer() {
             </div>
           </div>
 
-          <div className="w-full md:w-1/6">
+          <div className="w-full md:w-2/12">
             <p className="font-medium text-[15px]">Legal</p>
             <div className="flex flex-col space-y-3 pt-4">
               {legalLinks.map((link) => (
