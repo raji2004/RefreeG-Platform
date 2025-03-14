@@ -136,7 +136,7 @@ export function Navbar({ userSession }: { userSession?: boolean }) {
         </MenuLink>
 
         <MenuLink
-          href={userSession ? "/List_a_cause" : "/login"}
+          href={userSession ? "/create" : "/login"}
           className="text-white hover:text-white bg-blue-600 hover:bg-blue-700"
           onClick={(e) => {
             if (!userSession) {
@@ -145,6 +145,7 @@ export function Navbar({ userSession }: { userSession?: boolean }) {
             }
           }}
         >
+
           List a cause
         </MenuLink>
 

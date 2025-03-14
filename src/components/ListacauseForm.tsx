@@ -9,10 +9,10 @@ import { collection, addDoc } from "firebase/firestore";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Form1 } from "@/app/List_a_cause/Form1/Form1Component";// Update these components to use useFormContext()
-import { Form2 } from "@/app/List_a_cause/Form2/Form2Component";
-import { Form3 } from "@/app/List_a_cause/Form3/Form3Component";
-import { Form4 } from "../app/List_a_cause/Form4/Form4Component";
+import { Form1 } from "@/app/cause/create/Form1/Form1Component";// Update these components to use useFormContext()
+import { Form2 } from "@/app/cause/create/Form2/Form2Component";
+import { Form3 } from "@/app/cause/create/Form3/Form3Component";
+import { Form4 } from "../app/cause/create/Form4/Form4Component";
 
 // Define the UploadedImage interface
 export interface UploadedImage {
@@ -59,11 +59,11 @@ const fullSchema = z.object({
       .refine(
         (num) => {
           // Allow negative values without error.
-          if (num < 0) return true;
+          if (num < 1000) return true;
           // If non-negative, the number must be greater than zero.
-          return num > 0;
+          return num > 1000;
         },
-        { message: "Goal amount must be greater than zero" }
+        { message: "Goal amount must be greater than 1000" }
       )
       .transform((num) => num.toString())
   ),

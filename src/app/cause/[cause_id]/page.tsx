@@ -1,7 +1,7 @@
 "use client"; // Ensures that this component is rendered on the client-side
 
 import React, { useState } from "react";
-import DonationProgress from "../../components/ui/donationProgress"; // Import a custom donation progress bar
+import DonationProgress from "../../../components/ui/donationProgress"; // Import a custom donation progress bar
 import {
   FaExclamationTriangle,
   FaHeartbeat,
