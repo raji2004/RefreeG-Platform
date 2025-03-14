@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { useFormContext } from "react-hook-form";
 import {
@@ -9,14 +9,16 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form"; // Adjust the path as needed
-import { UploadedImage } from "../../../components/ListacauseForm";
+import { UploadedImage } from "@/components/ListacauseForm";
 
 export const Form3 = () => {
-  const { setValue } = useFormContext();
+  const { setValue, setError, clearErrors } = useFormContext();
   const [media, setMedia] = useState<UploadedImage | null>(null);
+  const [uploadError, setUploadError] = useState<string | null>(null);
   const [showGuidelines, setShowGuidelines] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Load saved media data on mount (optional)
+  // Load saved media on mount (if any)
   useEffect(() => {
     const savedMedia = localStorage.getItem("uploadedImage");
     if (savedMedia) {
@@ -26,14 +28,71 @@ export const Form3 = () => {
     }
   }, [setValue]);
 
-  // Update react-hook-form field when media changes
+  // Update react-hook-form field whenever media changes
   useEffect(() => {
     setValue("uploadedImage", media);
   }, [media, setValue]);
 
   const handleMediaChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (!event.target.files || event.target.files.length === 0) return;
+    setUploadError(null);
+    clearErrors("uploadedImage");
+
+    if (!event.target.files || event.target.files.length === 0) {
+      console.log("No file selected");
+      return;
+    }
+
     const file = event.target.files[0];
+    console.log("Selected file:", file);
+
+    // Define limits
+    const maxImageSize = 5 * 1024 * 1024; // 5MB
+    const maxVideoSize = 50 * 1024 * 1024; // 50MB
+
+    // Allowed file types
+    const allowedImageTypes = ["image/jpeg", "image/png"];
+    const allowedVideoTypes = ["video/mp4"];
+
+    // Validate image or video file
+    if (file.type.startsWith("image/")) {
+      if (!allowedImageTypes.includes(file.type)) {
+        const errMsg = "Invalid image format. Please upload a JPEG or PNG image.";
+        console.log("Validation error:", errMsg);
+        setUploadError(errMsg);
+        setError("uploadedImage", { type: "manual", message: errMsg });
+        return;
+      }
+      if (file.size > maxImageSize) {
+        const errMsg = "Image size exceeds the maximum allowed size of 5MB.";
+        console.log("Validation error:", errMsg);
+        setUploadError(errMsg);
+        setError("uploadedImage", { type: "manual", message: errMsg });
+        return;
+      }
+    } else if (file.type.startsWith("video/")) {
+      if (!allowedVideoTypes.includes(file.type)) {
+        const errMsg = "Invalid video format. Please upload an MP4 video.";
+        console.log("Validation error:", errMsg);
+        setUploadError(errMsg);
+        setError("uploadedImage", { type: "manual", message: errMsg });
+        return;
+      }
+      if (file.size > maxVideoSize) {
+        const errMsg = "Video size exceeds the maximum allowed size of 50MB.";
+        console.log("Validation error:", errMsg);
+        setUploadError(errMsg);
+        setError("uploadedImage", { type: "manual", message: errMsg });
+        return;
+      }
+    } else {
+      const errMsg = "Unsupported file type. Please upload an image or video.";
+      console.log("Validation error:", errMsg);
+      setUploadError(errMsg);
+      setError("uploadedImage", { type: "manual", message: errMsg });
+      return;
+    }
+
+    // Passed validation – create a preview and simulate upload progress
     const sizeInKB = Math.round(file.size / 1024);
     const newMedia: UploadedImage = {
       src: URL.createObjectURL(file),
@@ -43,6 +102,7 @@ export const Form3 = () => {
       type: file.type,
     };
 
+    console.log("File passed validation:", newMedia);
     setMedia(newMedia);
     localStorage.setItem("uploadedImage", JSON.stringify(newMedia));
 
@@ -55,6 +115,7 @@ export const Form3 = () => {
         localStorage.setItem("uploadedImage", JSON.stringify(updatedMedia));
         if (updatedProgress === 100) {
           clearInterval(interval);
+          console.log("Upload complete");
         }
         return updatedMedia;
       });
@@ -78,8 +139,7 @@ export const Form3 = () => {
       </h2>
       <p className="text-[#2b2829] text-sm font-normal font-montserrat mb-2">
         An image or video can be worth a thousand words. Add photos or videos
-        that showcase the real people, places, or situations your cause
-        supports.
+        that showcase the real people, places, or situations your cause supports.
       </p>
       <FormItem>
         <FormLabel>Upload Media</FormLabel>
@@ -87,13 +147,13 @@ export const Form3 = () => {
           <>
             <button
               type="button"
-              onClick={() => document.getElementById("media-upload")?.click()}
+              onClick={() => fileInputRef.current?.click()}
               className={`border-dashed border-2 border-gray-300 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:bg-gray-100 ${
                 media ? "p-0" : "py-10 px-48"
               }`}
             >
               {media ? (
-                media.type && media.type.startsWith("video/") ? (
+                media.type.startsWith("video/") ? (
                   <video
                     src={media.src}
                     controls
@@ -102,13 +162,15 @@ export const Form3 = () => {
                     height={200}
                   />
                 ) : (
-                  <Image
-                    src={media.src}
-                    alt="Uploaded preview"
-                    width={200}
-                    height={200}
-                    className="object-cover rounded-lg"
-                  />
+                  // Wrap the image in a fixed-aspect ratio container (landscape 16:9)
+                  <div className="relative w-[200px] h-[112.5px]">
+                    <Image
+                      src={media.src}
+                      alt="Uploaded preview"
+                      fill
+                      className="object-cover rounded-lg"
+                    />
+                  </div>
                 )
               ) : (
                 <Image
@@ -120,6 +182,7 @@ export const Form3 = () => {
               )}
             </button>
             <input
+              ref={fileInputRef}
               id="media-upload"
               type="file"
               accept="image/*,video/*"
@@ -129,6 +192,9 @@ export const Form3 = () => {
           </>
         </FormControl>
         <FormMessage />
+        {uploadError && (
+          <p className="text-red-500 text-sm mt-2">{uploadError}</p>
+        )}
       </FormItem>
 
       <div className="relative mt-4">
@@ -146,8 +212,8 @@ export const Form3 = () => {
         </button>
         <p className="text-[#2b2829] text-sm font-normal font-montserrat mt-10">
           Note: Upload images that capture the spirit of your cause—a smile, a
-          community, a place in need. Add a short video to show the heart of
-          your cause. Let donors see and feel its impact.
+          community, a place in need. Add a short video to show the heart of your
+          cause. Let donors see and feel its impact.
         </p>
         {showGuidelines && (
           <div className="absolute left-0 mt-2 p-4 bg-white border border-gray-300 shadow-lg z-10">
@@ -181,6 +247,7 @@ export const Form3 = () => {
                   alt="File icon"
                   width={30}
                   height={30}
+                  style={{ width: "30px", height: "30px" }}
                 />
                 <span>
                   <p className="text-[#363939] text-md md:text-lg font-normal">
@@ -196,6 +263,7 @@ export const Form3 = () => {
                     alt="Check"
                     width={30}
                     height={30}
+                    style={{ width: "30px", height: "30px" }}
                   />
                 </span>
               )}
@@ -218,6 +286,7 @@ export const Form3 = () => {
                     alt="File icon"
                     width={30}
                     height={30}
+                    style={{ width: "30px", height: "30px" }}
                   />
                   <span>
                     <p className="text-[#363939] text-md md:text-lg font-normal">
@@ -232,6 +301,7 @@ export const Form3 = () => {
                     alt="Delete icon"
                     width={30}
                     height={30}
+                    style={{ width: "30px", height: "30px" }}
                   />
                 </button>
               </div>
