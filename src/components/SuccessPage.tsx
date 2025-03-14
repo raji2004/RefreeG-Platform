@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
+import { getAuth } from "firebase/auth";
 
 interface FormData {
   state: string;
@@ -32,8 +33,18 @@ export default function SuccessPage() {
     if (docId) {
       const fetchData = async () => {
         try {
-          const docRef = doc(db, "formSubmissions", docId);
+          const auth = getAuth();
+          const currentUser = auth.currentUser;
+          if (!currentUser) {
+            console.error("No logged-in user found");
+            return;
+          }
+          const userId = currentUser.uid;
+          
+          // Reference the document from the nested collection.
+          const docRef = doc(db, "users", userId, "causes", docId);
           const docSnap = await getDoc(docRef);
+          
           if (docSnap.exists()) {
             setFormData(docSnap.data() as FormData);
           } else {
@@ -43,14 +54,16 @@ export default function SuccessPage() {
           console.error("Error fetching document:", error);
         }
       };
+  
       fetchData();
     }
   }, [docId]);
+  
 
   // Define the cause URL to share.
   const causeUrl =
     typeof window !== "undefined" && formData
-      ? `${window.location.origin}/List_a_cause/${encodeURIComponent(
+      ? `${window.location.origin}/create/${encodeURIComponent(
           formData.causeTitle
         )}`
       : "";

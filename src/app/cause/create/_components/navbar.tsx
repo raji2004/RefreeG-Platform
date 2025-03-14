@@ -7,7 +7,7 @@ const Navbar = () => {
   const pathname = usePathname();
 
   // Check if the current path is the preview page
-  const isPreviewPage = pathname === "/List_a_cause/See_Preview"; // Replace with the correct path for your preview page
+  const isPreviewPage = pathname === "/cause/See_Preview"; // Replace with the correct path for your preview page
 
   return (
     <nav className=" w-full px-6 py-3 h-16 flex items-center justify-between bg-white shadow-md fixed">
