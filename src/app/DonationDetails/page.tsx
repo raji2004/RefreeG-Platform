@@ -106,7 +106,7 @@ const DonationDetail: React.FC = () => {
             This cause is of high precedence
           </p>
 
-          {/* Image carousel with slider settings */}
+          {/* Image carousel with slider settings
           <Slider {...settings}>
             {images.map((src, index) => (
               <div key={index} className="relative">
@@ -120,7 +120,7 @@ const DonationDetail: React.FC = () => {
                 />
               </div>
             ))}
-          </Slider>
+          </Slider> */}
 
           {/* Tag indicators for category and location */}
           <div className="flex space-x-2 mt-9">

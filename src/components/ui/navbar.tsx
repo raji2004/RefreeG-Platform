@@ -67,7 +67,7 @@ export function Navbar({ userSession }: { userSession?: boolean }) {
           </MenuLink>
         </div>
 
-        <MenuLink href="#" className='hover:bg-blue-100'>Explore causes</MenuLink>
+        <MenuLink href="../cause" className='hover:bg-blue-100'>Explore causes</MenuLink>
 
         <div 
           className="relative"
@@ -136,7 +136,7 @@ export function Navbar({ userSession }: { userSession?: boolean }) {
         </MenuLink>
 
         <MenuLink
-          href={userSession ? "/create" : "/login"}
+          href={userSession ? "../cause/create" : "/login"}
           className="text-white hover:text-white bg-blue-600 hover:bg-blue-700"
           onClick={(e) => {
             if (!userSession) {
