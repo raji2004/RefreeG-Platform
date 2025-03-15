@@ -1,7 +1,7 @@
 import React from 'react'
 import { FaArrowRight } from "react-icons/fa6";
 import Image from 'next/image';
-import { H2, P, Ol, Ul } from "@/components/typograpy";
+import { Ul } from "@/components/typograpy";
 
 export default function Hero() {
   return (
@@ -10,9 +10,17 @@ export default function Hero() {
             <div className='w-full lg:w-5/6 mb-7'>
                 <div className='text-2xl font-semibold pb-2 md:pb-2 lg:mb-1'>Our Story 🌍💙</div>
                 <div className='text-sm md:text-base lg:text-lg'>
-                    <span className='font-semibold'> A Vision for Change, A Platform for Impact </span><br />
-                    RefreeG was born out of a simple yet powerful idea—to create a platform where giving is transparent, impactful, and accessible to all. In a world where millions struggle to access basic necessities, education, and opportunities, we saw a need for a crowdfunding solution that puts power back in the hands of the people. <br />
-                    We believe that helping others should not be complicated. Yet, many people hesitate to donate because they fear their money won't reach the right hands. We asked ourselves:
+                    <span className='font-semibold'> 
+                        A Vision for Change, A Platform for Impact 
+                    </span><br />
+                        RefreeG was born out of a simple yet powerful idea—to create a 
+                        platform where giving is transparent, impactful, and accessible to 
+                        all. In a world where millions struggle to access basic necessities, 
+                        education, and opportunities, we saw a need for a crowdfunding 
+                        solution that puts power back in the hands of the people. <br />
+                        We believe that helping others should not be complicated. Yet, 
+                        many people hesitate to donate because they fear their money 
+                        won&apos;t reach the right hands. We asked ourselves:
                     <Ul>
                         <li className="pl-4 text-base">
                             What if every donation could be tracked?
