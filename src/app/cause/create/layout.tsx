@@ -30,7 +30,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
                       height={50}
                     />
                     <span>
-                      <h4>Unoagu Amadike Nomso</h4>
+                      <h4>Chukwunomso Amadike-Unaogu</h4>
                       <p>Developer, Refreeg</p>
                     </span>
                   </div>

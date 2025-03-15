@@ -215,12 +215,12 @@ export const legalLinks = [
   {
     key: 1,
     label: "Privacy Policy",
-    route: "/privacy-policy",
+    route: "https://www.refreeg.com/privacy-policy",
   },
   {
     key: 2,
     label: "Terms of service",
-    route: "/terms-of-service",
+    route: "https://www.refreeg.com/terms-of-service",
   },
 ];
 
