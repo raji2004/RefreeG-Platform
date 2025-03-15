@@ -219,7 +219,7 @@ export function Navbar({ userSession }: { userSession?: boolean }) {
 
               <MenuLink href="#">How it works</MenuLink>
               <MenuLink
-                href={userSession ? "/List_a_cause" : "/login"}
+                href={userSession ? "/cause/create" : "/login"}
                 onClick={(e) => {
                   if (!userSession) {
                     e.preventDefault(); // Prevent default navigation

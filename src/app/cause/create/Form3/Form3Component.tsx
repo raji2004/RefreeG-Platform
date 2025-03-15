@@ -10,6 +10,8 @@ import {
   FormMessage,
 } from "@/components/ui/form"; // Adjust the path as needed
 import { UploadedImage } from "@/components/ListacauseForm";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { storage } from "@/lib/firebase/config"; // Adjust the import path
 
 export const Form3 = () => {
   const { setValue, setError, clearErrors } = useFormContext();
@@ -36,23 +38,23 @@ export const Form3 = () => {
   const handleMediaChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUploadError(null);
     clearErrors("uploadedImage");
-
+  
     if (!event.target.files || event.target.files.length === 0) {
       console.log("No file selected");
       return;
     }
-
+  
     const file = event.target.files[0];
     console.log("Selected file:", file);
-
+  
     // Define limits
     const maxImageSize = 5 * 1024 * 1024; // 5MB
     const maxVideoSize = 50 * 1024 * 1024; // 50MB
-
+  
     // Allowed file types
     const allowedImageTypes = ["image/jpeg", "image/png"];
     const allowedVideoTypes = ["video/mp4"];
-
+  
     // Validate image or video file
     if (file.type.startsWith("image/")) {
       if (!allowedImageTypes.includes(file.type)) {
@@ -91,35 +93,41 @@ export const Form3 = () => {
       setError("uploadedImage", { type: "manual", message: errMsg });
       return;
     }
-
-    // Passed validation – create a preview and simulate upload progress
-    const sizeInKB = Math.round(file.size / 1024);
-    const newMedia: UploadedImage = {
-      src: URL.createObjectURL(file),
-      name: file.name,
-      size: sizeInKB,
-      progress: 0,
-      type: file.type,
-    };
-
-    console.log("File passed validation:", newMedia);
-    setMedia(newMedia);
-    localStorage.setItem("uploadedImage", JSON.stringify(newMedia));
-
-    // Simulate upload progress
-    const interval = setInterval(() => {
-      setMedia((prev) => {
-        if (!prev) return null;
-        const updatedProgress = Math.min(prev.progress + 10, 100);
-        const updatedMedia = { ...prev, progress: updatedProgress };
+  
+    // Upload file to Firebase Storage
+    const fileName = `${Date.now()}-${file.name}`;
+    const storageRef = ref(storage, `uploads/${fileName}`);
+    const uploadTask = uploadBytesResumable(storageRef, file);
+  
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log(`Upload is ${progress}% done`);
+        setMedia((prev) => (prev ? { ...prev, progress } : null));
+      },
+      (error) => {
+        console.error("Upload failed:", error);
+        setUploadError("Upload failed. Please try again.");
+      },
+      async () => {
+        // Retrieve download URL after successful upload
+        const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+        console.log("File available at:", downloadURL);
+  
+        const updatedMedia: UploadedImage = {
+          src: downloadURL,
+          name: file.name,
+          size: Math.round(file.size / 1024),
+          progress: 100,
+          type: file.type,
+        };
+  
+        setMedia(updatedMedia);
+        setValue("uploadedImage", updatedMedia);
         localStorage.setItem("uploadedImage", JSON.stringify(updatedMedia));
-        if (updatedProgress === 100) {
-          clearInterval(interval);
-          console.log("Upload complete");
-        }
-        return updatedMedia;
-      });
-    }, 200);
+      }
+    );
   };
 
   const handleRemoveMedia = () => {

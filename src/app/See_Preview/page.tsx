@@ -88,13 +88,9 @@ const PreviewPage = () => {
       const auth = getAuth();
       await auth.authStateReady; // Ensure auth state is ready before checking currentUser
       const currentUser = auth.currentUser;
-  
-      if (!currentUser) {
-        throw new Error("User not logged in");
-      }
+      if (!currentUser) throw new Error("User not logged in");
   
       const userId = currentUser.uid;
-  
       // Combine the formData, sections, and uploadedImage into one object.
       const finalData = { ...formData, sections, uploadedImage, userId };
   
@@ -106,10 +102,10 @@ const PreviewPage = () => {
       const userCausesRef = collection(db, "users", userId, "causes");
       await setDoc(doc(userCausesRef, globalDocRef.id), finalData); // Use same ID for consistency
   
-      console.log("Document written globally with ID: ", globalDocRef.id);
+      console.log("Document saved with ID:", globalDocRef.id);
       router.push(`/See_Preview/Success?id=${globalDocRef.id}`);
     } catch (error: any) {
-      console.error("Error adding document: ", error.message);
+      console.error("Error adding document:", error.message);
       setErrorMessage("There was an error submitting the form. Please try again.");
     }
   };
