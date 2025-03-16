@@ -3,7 +3,7 @@ export type elementProps = {
     children?: React.ReactNode;
 };
 export type typographyProps = elementProps & {
-    color?: 'text-primary' | 'text-secondary' | 'text-primary-foreground' | 'text-secondary-foreground' | 'text-popover'|'text-gray-400';
+    color?: 'text-primary' | 'text-secondary' | 'text-primary-foreground' | 'text-secondary-foreground' | 'text-popover' | 'text-gray-400';
 };
 
 export interface User {
@@ -16,8 +16,8 @@ export interface User {
     phoneNumber: string;
     bvn: number;
     nin: number;
-    pin:number;
-    donationPreference:string
+    pin: number;
+    donationPreference: string
 }
 
 export interface Country {
@@ -92,7 +92,7 @@ export interface Country {
     };
 }
 
-export interface SortedCountry{
+export interface SortedCountry {
     name: {
         common: string;
         official: string;
@@ -116,28 +116,28 @@ export type DonationHistory = {
     dateTime: string;
     transactionId: string;
     paymentMethod: string;
-  };
-  
+};
+
 
 export type CauseTable = {
-  id: number;
-  name: string;
-  metrics: string;
-  status: "Pending" | "Approved" | "Completed";
+    id: number;
+    name: string;
+    metrics: string;
+    status: "Pending" | "Approved" | "Completed";
 };
 export type SignedPetitions = {
     id: number
     cause: string
     dates: string,
     times: string,
-  }
-   type CauseSections = {
+}
+type CauseSections = {
     id: number;
     header: string;
     description: string
-  }
+}
 
-  export type Cause = {
+export type Cause = {
     id: string;
     causeTitle: string;
     description: string;
@@ -158,6 +158,19 @@ export type SignedPetitions = {
     state: string;
     currency: string;
     raisedAmount: number;
-  };
-  
+    profileImage: string;
+};
+
+export interface MainCauseCardProps extends Omit<
+    Cause,
+ "sections" | "userId" | "zipCode" | "deadline" | "causeCategory" | "state" | "currency"
+> {
+    daysLeft: string;
+    progressPercentage: number;
+    tags?: { icon: JSX.Element; text: string }[];
+    hideDescription?: boolean;
+    hideTags?: boolean;
+    hideButton?: boolean;
+}
+
 

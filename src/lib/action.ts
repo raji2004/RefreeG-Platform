@@ -103,3 +103,20 @@ export const getCausesByUserId = async (userId: string): Promise<Cause[]> => {
     throw error;
   }
 };
+
+export const getCauses = async (): Promise<Cause[]> => {
+  try {
+    const causesRef = collection(db, "causes");
+    const querySnapshot = await getDocs(causesRef);
+
+    const causes: Cause[] = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    })) as Cause[];
+
+    return causes;
+  } catch (error) {
+    console.error("Error fetching causes:", error);
+    throw error;
+  }
+}
