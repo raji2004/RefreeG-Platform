@@ -92,25 +92,35 @@ export function Navbar({ userSession }: { userSession?: boolean }) {
               <DropdownMenuContent className="absolute mt-2 py-4 bg-white shadow-lg rounded-md hidden lg:block" align="start">
                 <div className="">
                   <div className='flex'>
-                    <DropdownMenuItem className="whitespace-nowrap hover:underline hover:bg-[#D6EBFF]">
-                      Our Mission
+                    <DropdownMenuItem asChild>
+                      <Link href="/OurMission" className="whitespace-nowrap hover:underline hover:bg-[#D6EBFF] px-4 py-2 block">
+                        Our Mission
+                      </Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem className="whitespace-nowrap hover:underline">
-                      Our Story (The &quot;Why&quot; Behind RefreeG)
+
+                    <DropdownMenuItem asChild>
+                      <Link href="/OurStory" className="whitespace-nowrap hover:underline hover:bg-[#D6EBFF] px-4 py-2 block">
+                        Our Story (The &quot;Why&quot; Behind RefreeG)
+                      </Link>
                     </DropdownMenuItem>
 
                   </div>
                   <div className='flex'>
-                    <DropdownMenuItem className="whitespace-nowrap hover:underline">
-                      Our Impact
+                    <DropdownMenuItem asChild>
+                      <Link href="/OurImpact" className="whitespace-nowrap hover:underline hover:bg-[#D6EBFF] px-4 py-2 block">
+                        Our Impact
+                      </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem className="whitespace-nowrap hover:underline">
                       Who Are We Made By?
                     </DropdownMenuItem>
                   </div>
-                  <DropdownMenuItem className="whitespace-nowrap hover:underline col-span-2">
-                    What We Do
-                  </DropdownMenuItem>
+
+                  <DropdownMenuItem asChild>
+                      <Link href="/WhatWeDo" className="whitespace-nowrap hover:underline hover:bg-[#D6EBFF] px-4 py-2 block">
+                        What We Do
+                      </Link>
+                    </DropdownMenuItem>
                 </div>
               </DropdownMenuContent>
             </DropdownMenu>
