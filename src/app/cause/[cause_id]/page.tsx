@@ -15,6 +15,7 @@ import { Navbar } from "@/components/ui/navbar";
 import CrowdfundingFeatures from "@/components/crowdfundingFeatures";
 import { getCauseById,getUserById } from "@/lib/action";
 import { getDaysLeft } from "@/lib/utils";
+import { Footer } from "@/components/ui/footer";
 
 
 
@@ -179,8 +180,9 @@ export default async function DonationDetail({ params }: { params: { cause_id: s
           </div>
         </div>
       </div>
-      <DonationNav />
+      {/* <DonationNav /> */}
       <CrowdfundingFeatures />
+      <Footer />
     </div>
   );
 };
