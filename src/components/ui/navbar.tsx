@@ -146,7 +146,7 @@ export function Navbar({ userSession }: { userSession?: boolean }) {
         </MenuLink>
 
         <MenuLink
-          href={userSession ? "/create" : "/login"}
+          href={userSession ? "/cause/create" : "/login"}
           className="text-white hover:text-white bg-blue-600 hover:bg-blue-700"
           onClick={(e) => {
             if (!userSession) {
@@ -229,7 +229,7 @@ export function Navbar({ userSession }: { userSession?: boolean }) {
 
               <MenuLink href="#">How it works</MenuLink>
               <MenuLink
-                href={userSession ? "/List_a_cause" : "/login"}
+                href={userSession ? "/cause/create" : "/login"}
                 onClick={(e) => {
                   if (!userSession) {
                     e.preventDefault(); // Prevent default navigation

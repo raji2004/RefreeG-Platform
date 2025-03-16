@@ -3,31 +3,20 @@ import Image from "next/image";
 import { FaHeartbeat, FaMapMarkerAlt } from "react-icons/fa";
 import DonationProgress from "../components/ui/donationProgress";
 import { Bookmark } from "lucide-react";
+import { MainCauseCardProps } from "@/lib/type";
+import Link from "next/link";
 
-interface MainCauseCardProps {
-  imageSrc: string;
-  altText: string;
-  profileImageSrc: string;
-  title: string;
-  daysLeft: string;
-  progressPercentage: number;
-  donationAmount: number;
-  goalAmount: number;
-  description?: string;
-  tags?: { icon: JSX.Element; text: string }[];
-  hideDescription?: boolean;
-  hideTags?: boolean;
-  hideButton?: boolean;
-}
+
 
 export const MainCauseCard: React.FC<MainCauseCardProps> = ({
-  imageSrc,
-  altText,
-  profileImageSrc,
-  title,
+  img,
+  uploadedImage,
+  id,
+  profileImage,
+  causeTitle,
   daysLeft,
   progressPercentage,
-  donationAmount,
+  raisedAmount,
   goalAmount,
   description,
   tags,
@@ -47,8 +36,8 @@ export const MainCauseCard: React.FC<MainCauseCardProps> = ({
     <div className="bg-white w-full rounded-lg">
       {/* Image */}
       <Image
-        src={imageSrc}
-        alt={altText}
+        src={img}
+        alt={uploadedImage.name}
         height={300}
         width={600}
         className="rounded-lg w-full"
@@ -59,15 +48,15 @@ export const MainCauseCard: React.FC<MainCauseCardProps> = ({
         <div className="flex mb-2">
           {/* Profile Image */}
           <Image
-            src={profileImageSrc}
+            src={profileImage ?? img}
             alt="profile"
             height={40}
             width={40}
-            className="md:size-16 mr-4"
+            className="md:size-16 mr-4 rounded-full"
           />
           {/* Title and Details */}
           <div className="flex-1">
-            <h3 className="text-xl md:text-2xl font-semibold">{title}</h3>
+            <h3 className="text-xl md:text-2xl font-semibold">{causeTitle}</h3>
             <p className="flex mt-2 text-gray-600">
               <Image
                 src="/images/clock.svg"
@@ -109,18 +98,18 @@ export const MainCauseCard: React.FC<MainCauseCardProps> = ({
 
       {/* Donation Progress */}
       <div className="mt-6">
-        <DonationProgress currentAmount={donationAmount} goalAmount={goalAmount} />
-        <div className="font-bold text-gray-800 mt-2">₦{donationAmount} raised</div>
+        <DonationProgress currentAmount={raisedAmount} goalAmount={goalAmount} />
+        <div className="font-bold text-gray-800 mt-2">₦{raisedAmount} raised</div>
         <div className="text-gray-800">Goal: ₦{goalAmount}</div>
       </div>
 
       {/* Donate Button */}
       {!hideButton && (
-        <div className="flex justify-center mt-4">
+        <Link href={`/cause/${id}`} className="flex justify-center mt-4">
           <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
             Donate now
           </button>
-        </div>
+        </Link>
       )}
     </div>
   );
