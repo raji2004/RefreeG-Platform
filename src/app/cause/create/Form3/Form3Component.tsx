@@ -96,7 +96,7 @@ export const Form3 = () => {
   
     // Upload file to Firebase Storage
     const fileName = `${Date.now()}-${file.name}`;
-    const storageRef = ref(storage, `uploads/${fileName}`);
+    const storageRef = ref(storage, `causes/${fileName}`);
     const uploadTask = uploadBytesResumable(storageRef, file);
   
     uploadTask.on(

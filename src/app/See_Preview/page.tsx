@@ -7,6 +7,7 @@ import Navbar from "../cause/create/_components/navbar";
 import { collection, addDoc, setDoc, doc } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
 import { getAuth } from "firebase/auth";
+import {checkUserSession, getSessionId} from "@/lib/helpers";
 import {
   FaExclamationTriangle,
   FaHeartbeat,
@@ -85,12 +86,11 @@ const PreviewPage = () => {
     setErrorMessage("");
   
     try {
-      const auth = getAuth();
-      await auth.authStateReady; // Ensure auth state is ready before checking currentUser
-      const currentUser = auth.currentUser;
+      const currentUser = getSessionId();
+      
       if (!currentUser) throw new Error("User not logged in");
   
-      const userId = currentUser.uid;
+      const userId = currentUser;
       // Combine the formData, sections, and uploadedImage into one object.
       const finalData = { ...formData, sections, uploadedImage, userId };
   

@@ -35,3 +35,7 @@ export const checkUserSession = () => {
     const userSession = cookieStore.get('userSession')?.value;
     return userSession ? true : false;
 }
+export const getSessionId = () => {
+    const cookieStore = cookies();
+    return cookieStore.get('userSession')?.value;
+}
