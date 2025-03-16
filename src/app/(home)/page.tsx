@@ -6,7 +6,7 @@ import CausesSupported from "./_components/causesWeSupport";
 import FAQ from "./_components/frequentlyAskedQuestions";
 import WhyUseUs from "./_components/whyUseUs";
 import { H2, P, Ol } from "@/components/typograpy";
-import { DonationCarousel } from "@/components/donationCarousel";
+// import { DonationCarousel } from "@/components/donationCarousel";
 import Hero from "./_components/hero";
 import { getCauses } from "@/lib/action";
 
