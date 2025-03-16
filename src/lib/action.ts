@@ -69,6 +69,22 @@ export const getCauseById = async (causeId: string): Promise<Cause | null> => {
     throw error;
   }
 };
+export const getUserById = async (userId: string): Promise<User | null> => {
+  try {
+    const causeRef = doc(db, "users", userId);
+    const docSnap = await getDoc(causeRef);
+
+    if (!docSnap.exists()) {
+      console.warn("Cause not found with ID:", userId);
+      return null;
+    }
+
+    return { id: docSnap.id, ...docSnap.data() } as User;
+  } catch (error) {
+    console.error("Error fetching cause by ID:", error);
+    throw error;
+  }
+};
 
 export const getCausesByUserId = async (userId: string): Promise<Cause[]> => {
   try {

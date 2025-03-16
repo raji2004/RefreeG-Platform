@@ -152,11 +152,12 @@ export type SignedPetitions = {
     img: string;
     userId: string;
     zipCode: string;
-    goalAmount: string;
+    goalAmount: number;
     deadline: string;
     causeCategory: string;
     state: string;
     currency: string;
+    raisedAmount: number;
   };
   
 
