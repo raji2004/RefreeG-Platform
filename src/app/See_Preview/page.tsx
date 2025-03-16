@@ -7,13 +7,14 @@ import Navbar from "../cause/create/_components/navbar";
 import { collection, addDoc, setDoc, doc } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
 import { getAuth } from "firebase/auth";
-import {checkUserSession, getSessionId} from "@/lib/helpers";
+import { checkUserSession, getSessionId } from "@/lib/helpers";
 import {
   FaExclamationTriangle,
   FaHeartbeat,
   FaMapMarkerAlt,
   FaGlobe,
 } from "react-icons/fa";
+import { addCause } from "@/lib/action";
 
 interface Section {
   id: number;
@@ -75,42 +76,34 @@ const PreviewPage = () => {
   };
 
   const handleBackToForm = () => {
-    router.push("/List_a_cause");
+    router.push("/cause/create");
   };
 
   const handleSubmit = async () => {
+    console.log("Submitting form...");
     if (!isFormValid()) {
       setErrorMessage("Please fill out all required fields before submitting.");
       return;
     }
     setErrorMessage("");
-  
+
     try {
-      const currentUser = getSessionId();
-      
-      if (!currentUser) throw new Error("User not logged in");
-  
-      const userId = currentUser;
+      const currentUser =  await getSessionId();
+
+      if (currentUser === undefined) router.push("/login");
+      console.log("Current User: ", currentUser);
+
       // Combine the formData, sections, and uploadedImage into one object.
-      const finalData = { ...formData, sections, uploadedImage, userId };
-  
-      // Save to the global "causes" collection
-      const causesRef = collection(db, "causes");
-      const globalDocRef = await addDoc(causesRef, finalData);
-  
-      // Save under the specific user's ID "users/{userId}/causes"
-      const userCausesRef = collection(db, "users", userId, "causes");
-      await setDoc(doc(userCausesRef, globalDocRef.id), finalData); // Use same ID for consistency
-  
-      console.log("Document saved with ID:", globalDocRef.id);
-      router.push(`/See_Preview/Success?id=${globalDocRef.id}`);
+      const finalData = { ...formData, sections, img: uploadedImage?.src, userId: currentUser };
+      const causeId = await addCause(finalData);
+      router.push(`/See_Preview/Success?id=${causeId}`);
     } catch (error: any) {
       console.error("Error adding document:", error.message);
       setErrorMessage("There was an error submitting the form. Please try again.");
     }
   };
-  
-  
+
+
 
   // Helper function to compute days left from the deadline.
   function getDaysLeft(deadline: string): string {
@@ -229,7 +222,7 @@ const PreviewPage = () => {
             <button
               className="bg-[#0070e0] text-white px-4 py-2 rounded"
               onClick={handleSubmit}
-              disabled={!isFormValid()}
+              // disabled={!isFormValid()}
               aria-label="Submit Form"
             >
               Proceed

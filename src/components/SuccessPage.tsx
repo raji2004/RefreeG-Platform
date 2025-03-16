@@ -2,71 +2,19 @@
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import { useSearchParams } from "next/navigation";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase/config";
-import { getAuth } from "firebase/auth";
+import { Cause } from "@/lib/type";
 
-interface FormData {
-  state: string;
-  zipCode: string;
-  currency: string;
-  causeTitle: string;
-  causeCategory: string;
-  deadline: string;
-  goalAmount: string;
-  uploadedImage?: {
-    src: string;
-    name: string;
-    size: number;
-    progress: number;
-  } | null;
-  description?: string;
-}
 
-export default function SuccessPage() {
-  const [formData, setFormData] = useState<FormData | null>(null);
-  const searchParams = useSearchParams();
-  const docId = searchParams.get("id");
 
-  useEffect(() => {
-    if (docId) {
-      const fetchData = async () => {
-        try {
-          const auth = getAuth();
-          const currentUser = auth.currentUser;
-          if (!currentUser) {
-            console.error("No logged-in user found");
-            return;
-          }
-          const userId = currentUser.uid;
-          
-          // Reference the document from the nested collection.
-          const docRef = doc(db, "users", userId, "causes", docId);
-          const docSnap = await getDoc(docRef);
-          
-          if (docSnap.exists()) {
-            setFormData(docSnap.data() as FormData);
-          } else {
-            console.error("No such document!");
-          }
-        } catch (error) {
-          console.error("Error fetching document:", error);
-        }
-      };
-  
-      fetchData();
-    }
-  }, [docId]);
+
+export default function SuccessPage({causeData,baseURL}:{causeData:Cause,baseURL:string}) {
+const causeUrl= `${baseURL}/cause/${causeData.id}`;
+ console.log(causeUrl)
+
+
   
 
-  // Define the cause URL to share.
-  const causeUrl =
-    typeof window !== "undefined" && formData
-      ? `${window.location.origin}/create/${encodeURIComponent(
-          formData.causeTitle
-        )}`
-      : "";
+
 
   // Share handler functions
   const handleCopyLink = () => {
@@ -94,7 +42,7 @@ export default function SuccessPage() {
     if (navigator.share && causeUrl) {
       navigator
         .share({
-          title: formData?.causeTitle || "My Cause",
+          title: causeData?.causeTitle || "My Cause",
           text: "Check out my cause!",
           url: causeUrl,
         })
@@ -185,9 +133,9 @@ export default function SuccessPage() {
       {/* Bottom Panel with "Pull-up" Effect */}
       <div
         className={`
-          fixed bottom-0 left-0 w-full z-50 bg-[#214570] text-white px-4 pt-4 pb-6 rounded-t-3xl
+          fixed bottom-2 left-0 w-full z-50 bg-[#214570] text-white px-4 pt-4 pb-6 rounded-t-3xl
           transition-transform duration-300
-          ${isOpen ? "translate-y-0" : "translate-y-[calc(100%-80px)]"}
+          ${isOpen ? "translate-y-3" : "translate-y-[calc(100%-80px)]"}
         `}
       >
         {/* Toggle Handle */}
@@ -199,6 +147,7 @@ export default function SuccessPage() {
             alt="Toggle bar"
             className="mb-3 w-24 cursor-pointer"
             onClick={() => setIsOpen(!isOpen)}
+            onDragCapture={() => setIsOpen(!isOpen)}
           />
         </div>
 
@@ -207,10 +156,10 @@ export default function SuccessPage() {
           <div className="w-full md:w-1/2 mb-4 md:mb-0">
             <div className="flex items-center space-x-3">
               <div className="w-16 h-16 flex-shrink-0">
-                {formData && formData.uploadedImage ? (
+                {causeData && causeData.uploadedImage ? (
                   <Image
-                    src={formData.uploadedImage.src}
-                    alt={formData.uploadedImage.name}
+                    src={causeData.uploadedImage.src}
+                    alt={causeData.uploadedImage.name}
                     width={64}
                     height={64}
                     className="rounded object-cover"
@@ -227,18 +176,18 @@ export default function SuccessPage() {
               </div>
               <div className="text-left">
                 <h2 className="text-lg font-medium font-montserrat">
-                  {formData ? formData.causeTitle : "Your Cause Title"}
+                  {causeData ? causeData.causeTitle : "Your Cause Title"}
                 </h2>
                 <p className="text-xs">
-                  Goal Amount: {formData ? formData.goalAmount : "N/A"}
+                  Goal Amount: {causeData ? causeData.goalAmount : "N/A"}
                 </p>
                 <p className="text-xs">
-                  Category: {formData ? formData.causeCategory : "N/A"}
+                  Category: {causeData ? causeData.causeCategory : "N/A"}
                 </p>
                 <p className="text-xs">
                   Deadline:{" "}
-                  {formData?.deadline
-                    ? `${formData.deadline} | ${getDaysLeft(formData.deadline)}`
+                  {causeData?.deadline
+                    ? `${causeData.deadline} | ${getDaysLeft(causeData.deadline)}`
                     : "N/A"}
                 </p>
               </div>
