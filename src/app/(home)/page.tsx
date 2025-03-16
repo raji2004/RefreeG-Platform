@@ -1,7 +1,6 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import CausesAboutSocioEconomicGrowth from "./_components/causesAboutSocioEconomicGrowth";
 import HappeningNearYou from "./_components/happeningNearYou";
 import CausesSupported from "./_components/causesWeSupport";
 import FAQ from "./_components/frequentlyAskedQuestions";
