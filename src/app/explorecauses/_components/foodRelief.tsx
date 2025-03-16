@@ -4,8 +4,10 @@ import Image from "next/image";
 import { H2, P, Ol } from "@/components/typograpy";
 import { DonationCarousel } from "./exploredonationcarosuel";
 import { ChevronRight } from "lucide-react";
+import { getCauses } from "@/lib/action";
 
-export default function FoodRelief() {
+export default async function FoodRelief() {
+  const causes = await getCauses();
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
@@ -17,7 +19,7 @@ export default function FoodRelief() {
           View all <ChevronRight size={20} />
         </a>
       </div>
-      <DonationCarousel />
+      <DonationCarousel causes={causes}  />
     </div>
   );
 }

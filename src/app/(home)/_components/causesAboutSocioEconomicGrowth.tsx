@@ -13,10 +13,12 @@ import { causesData } from "@/lib/dummyData";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { H2, P } from "@/components/typograpy";
+import { Cause } from "@/lib/type";
+import { getDaysLeft } from "@/lib/utils";
 
-export default function CausesAboutSocioEconomicGrowth() {
-  const mainCause = { ...causesData[0], description: causesData[0].description || "" }; // Ensure description is defined
-  const otherCauses = causesData.slice(1);
+export default function CausesAboutSocioEconomicGrowth({ causes }: { causes: Cause[] }) {
+  // const mainCause = { ...causesData[0], description: causesData[0].description || "" }; // Ensure description is defined
+  // const otherCauses = causesData.slice(1);
   const [api, setApi] = useState<CarouselApi>();
 
   const handleNext = () => {
@@ -40,9 +42,13 @@ export default function CausesAboutSocioEconomicGrowth() {
       </div>
       <Carousel setApi={setApi}>
         <CarouselContent>
-          {otherCauses.map((cause) => (
+          {causes.map((cause) => (
             <CarouselItem key={cause.id} className="basis-full md:basis-1/2 lg:basis-1/3">
-              <MainCauseCard {...cause} hideDescription hideTags />
+              <MainCauseCard  {...cause}
+                daysLeft={getDaysLeft(cause.deadline)}
+                progressPercentage={(cause.raisedAmount / cause.goalAmount) * 100}
+                hideDescription
+                hideTags />
             </CarouselItem>
           ))}
         </CarouselContent>

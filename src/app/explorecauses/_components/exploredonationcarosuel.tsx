@@ -12,13 +12,15 @@ import { useState, useEffect } from "react";
 import { causesData } from "@/lib/dummyData";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "../../../components/ui/button";
+import { Cause } from "@/lib/type";
+import { getDaysLeft } from "@/lib/utils";
 
-export const DonationCarousel: React.FC = () => {
-  const mainCause = {
-    ...causesData[0],
-    description: causesData[0].description || "",
-  }; // Ensure description is defined
-  const otherCauses = causesData.slice(1);
+export const DonationCarousel = ({ causes }: { causes: Cause[] }) => {
+  // const mainCause = {
+  //   ...causesData[0],
+  //   description: causesData[0].description || "",
+  // }; // Ensure description is defined
+  // const otherCauses = causesData.slice(1);
   const [api, setApi] = useState<CarouselApi>();
   const [mobileApi, setMobileApi] = useState<CarouselApi>();
 
@@ -42,8 +44,8 @@ export const DonationCarousel: React.FC = () => {
 
   // Group causes into chunks of 4 (2x2 grid per slide)
   const groupedCauses = [];
-  for (let i = 0; i < otherCauses.length; i += 4) {
-    groupedCauses.push(otherCauses.slice(i, i + 4));
+  for (let i = 0; i < causes.length; i += 4) {
+    groupedCauses.push(causes.slice(i, i + 4));
   }
 
   return (
@@ -59,9 +61,13 @@ export const DonationCarousel: React.FC = () => {
           <div className="md:hidden">
             <Carousel setApi={setMobileApi}>
               <CarouselContent>
-                {otherCauses.map((cause) => (
+                {causes.map((cause) => (
                   <CarouselItem key={cause.id} className="basis-full">
-                    <MainCauseCard {...cause} hideDescription hideTags />
+                    <MainCauseCard {...cause}
+                      daysLeft={getDaysLeft(cause.deadline)}
+                      progressPercentage={(cause.raisedAmount / cause.goalAmount) * 100}
+                      hideDescription
+                      hideTags />
                   </CarouselItem>
                 ))}
               </CarouselContent>
@@ -79,9 +85,11 @@ export const DonationCarousel: React.FC = () => {
                         <MainCauseCard
                           key={cause.id}
                           {...cause}
+                          daysLeft={getDaysLeft(cause.deadline)}
+                          progressPercentage={(cause.raisedAmount / cause.goalAmount) * 100}
                           hideDescription
-                          hideTags
-                        />
+                          hideTags />
+
                       ))}
 
                       {Array.from({ length: 4 - group.length }).map(
