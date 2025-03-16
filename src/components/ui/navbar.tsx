@@ -1,11 +1,11 @@
 "use client";
-import { useState } from 'react';
+import { useState } from "react";
 import { Sheet, SheetTrigger, SheetContent } from "../ui/sheet";
 import { Button } from "../ui/button";
 import Link from "next/link";
-import Logo from '../../../public/images/logo.svg';
-import Search from '../../../public/images/search.svg';
-import Dropdown from '../../../public/images/dropdown.svg';
+import Logo from "../../../public/images/logo.svg";
+import Search from "../../../public/images/search.svg";
+import Dropdown from "../../../public/images/dropdown.svg";
 import Image from "next/image";
 import { ReactNode } from "react";
 import {
@@ -16,8 +16,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import SearchModal from './searchModal';
-import { ChevronDown, LogOut } from 'lucide-react'
+import SearchModal from "./searchModal";
+import { ChevronDown, LogOut } from "lucide-react";
 
 interface MenuLinkProps {
   href: string;
@@ -26,7 +26,13 @@ interface MenuLinkProps {
   onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void; // Explicitly define event type
 }
 
-const MenuLink = ({ href, children, className, onClick, ...props }: MenuLinkProps) => (
+const MenuLink = ({
+  href,
+  children,
+  className,
+  onClick,
+  ...props
+}: MenuLinkProps) => (
   <Link
     href={href}
     className={`relative group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-base font-medium transition-colors duration-500 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 ease-in-out transform hover:-translate-y-1 hover:scale-110 ${className}`}
@@ -39,7 +45,7 @@ const MenuLink = ({ href, children, className, onClick, ...props }: MenuLinkProp
 );
 
 export function Navbar({ userSession }: { userSession?: boolean }) {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const [aboutUsOpen, setAboutUsOpen] = useState(false);
 
@@ -61,23 +67,29 @@ export function Navbar({ userSession }: { userSession?: boolean }) {
       {/* Large Screen Navigation */}
       <nav className="hidden lg:flex ml-auto gap-6">
         <div className="relative">
-          <MenuLink href="#" onClick={toggleSearchModal} className='hover:bg-blue-100'>
+          <MenuLink
+            href="#"
+            onClick={toggleSearchModal}
+            className="hover:bg-blue-100"
+          >
             <Image src={Search} height={20} width={20} alt="search" />
             Search
           </MenuLink>
         </div>
 
-        <MenuLink href="#" className='hover:bg-blue-100'>Explore causes</MenuLink>
+        <MenuLink href="#" className="hover:bg-blue-100">
+          Explore causes
+        </MenuLink>
 
-        <div 
+        <div
           className="relative"
-          onMouseEnter={() => setAboutUsOpen(true)} 
+          onMouseEnter={() => setAboutUsOpen(true)}
           onMouseLeave={() => setAboutUsOpen(false)}
         >
           <MenuLink href="#" className="hover:bg-blue-100">
             <DropdownMenu open={aboutUsOpen} onOpenChange={setAboutUsOpen}>
               <DropdownMenuTrigger asChild>
-                <div 
+                <div
                   className="flex items-center cursor-pointer"
                   onClick={(e) => {
                     e.stopPropagation(); // Prevents closing when clicking inside
@@ -85,22 +97,30 @@ export function Navbar({ userSession }: { userSession?: boolean }) {
                   }}
                 >
                   About us
-                  <Image src={Dropdown} height={12} width={12} alt="dropdown" className="ml-2" />
+                  <Image
+                    src={Dropdown}
+                    height={12}
+                    width={12}
+                    alt="dropdown"
+                    className="ml-2"
+                  />
                 </div>
               </DropdownMenuTrigger>
 
-              <DropdownMenuContent className="absolute mt-2 py-4 bg-white shadow-lg rounded-md hidden lg:block" align="start">
+              <DropdownMenuContent
+                className="absolute mt-2 py-4 bg-white shadow-lg rounded-md hidden lg:block"
+                align="start"
+              >
                 <div className="">
-                  <div className='flex'>
+                  <div className="flex">
                     <DropdownMenuItem className="whitespace-nowrap hover:underline hover:bg-[#D6EBFF]">
                       Our Mission
                     </DropdownMenuItem>
                     <DropdownMenuItem className="whitespace-nowrap hover:underline">
                       Our Story (The &quot;Why&quot; Behind RefreeG)
                     </DropdownMenuItem>
-
                   </div>
-                  <div className='flex'>
+                  <div className="flex">
                     <DropdownMenuItem className="whitespace-nowrap hover:underline">
                       Our Impact
                     </DropdownMenuItem>
@@ -117,12 +137,17 @@ export function Navbar({ userSession }: { userSession?: boolean }) {
           </MenuLink>
         </div>
 
-
-        <MenuLink href="#" className='hover:bg-blue-100'>
+        <MenuLink href="#" className="hover:bg-blue-100">
           <DropdownMenu>
             <DropdownMenuTrigger className="flex outline-none items-center">
               How it works
-              <Image src={Dropdown} height={12} width={12} alt="dropdown" className='ml-2' />
+              <Image
+                src={Dropdown}
+                height={12}
+                width={12}
+                alt="dropdown"
+                className="ml-2"
+              />
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
@@ -136,7 +161,7 @@ export function Navbar({ userSession }: { userSession?: boolean }) {
         </MenuLink>
 
         <MenuLink
-          href={userSession ? "/create" : "/login"}
+          href={userSession ? "/cause/create" : "/login"}
           className="text-white hover:text-white bg-blue-600 hover:bg-blue-700"
           onClick={(e) => {
             if (!userSession) {
@@ -145,32 +170,30 @@ export function Navbar({ userSession }: { userSession?: boolean }) {
             }
           }}
         >
-
           List a cause
         </MenuLink>
 
-
-
-        {userSession ? <MenuLink href='/dashboard/UserProfile'> <Image
-          src="/UserProfile/defaultProfile.svg"
-          alt="Profile"
-          width={40}
-          height={40}
-          className="rounded-full"
-        />
-        </MenuLink> : <MenuLink href="/login" className="hover:underline">
-          Login
-        </MenuLink>
-        }
+        {userSession ? (
+          <MenuLink href="/dashboard/UserProfile">
+            {" "}
+            <Image
+              src="/UserProfile/defaultProfile.svg"
+              alt="Profile"
+              width={40}
+              height={40}
+              className="rounded-full"
+            />
+          </MenuLink>
+        ) : (
+          <MenuLink href="/login" className="hover:underline">
+            Login
+          </MenuLink>
+        )}
       </nav>
 
       {/* Small Screen Menu and Search Button */}
       <div className="lg:hidden ml-auto flex items-center space-x-4">
-        <button
-          onClick={toggleSearchModal}
-          className="p-2"
-          aria-label="Search"
-        >
+        <button onClick={toggleSearchModal} className="p-2" aria-label="Search">
           <Image src={Search} alt="search icon" height={24} width={24} />
         </button>
         <Sheet>
@@ -200,19 +223,31 @@ export function Navbar({ userSession }: { userSession?: boolean }) {
                   className="w-full text-left flex justify-between items-center py-2 px-3 hover:bg-gray-100"
                 >
                   About Us
-                  <ChevronDown className={`h-4 w-4 transition-transform ${aboutUsOpen ? "rotate-180" : ""}`} />
+                  <ChevronDown
+                    className={`h-4 w-4 transition-transform ${
+                      aboutUsOpen ? "rotate-180" : ""
+                    }`}
+                  />
                 </button>
 
                 {aboutUsOpen && (
                   <div className="pl-4 space-y-1">
-                    <MenuLink href="#" className='text-xs'>Our Mission</MenuLink>
-                    <MenuLink href="#" className='text-xs'>
+                    <MenuLink href="#" className="text-xs">
+                      Our Mission
+                    </MenuLink>
+                    <MenuLink href="#" className="text-xs">
                       Our Story (The &quot;Why&quot; Behind RefreeG)
                     </MenuLink>
 
-                    <MenuLink href="#" className='text-xs'>Our Impact</MenuLink>
-                    <MenuLink href="#" className='text-xs'>Who Are We Made By?</MenuLink>
-                    <MenuLink href="#" className='text-xs'>What We Do</MenuLink>
+                    <MenuLink href="#" className="text-xs">
+                      Our Impact
+                    </MenuLink>
+                    <MenuLink href="#" className="text-xs">
+                      Who Are We Made By?
+                    </MenuLink>
+                    <MenuLink href="#" className="text-xs">
+                      What We Do
+                    </MenuLink>
                   </div>
                 )}
               </div>
@@ -220,41 +255,44 @@ export function Navbar({ userSession }: { userSession?: boolean }) {
               <MenuLink href="#">How it works</MenuLink>
               <MenuLink
                 href={userSession ? "/cause/create" : "/login"}
+                className="text-white hover:text-white bg-blue-600 hover:bg-blue-700"
                 onClick={(e) => {
                   if (!userSession) {
-                    e.preventDefault(); // Prevent default navigation
+                    e.preventDefault();
                     alert("You need to log in before listing a cause.");
                   }
                 }}
               >
                 List a cause
               </MenuLink>
-
             </div>
 
-            <div className='mt-auto flex justify-start items-center  '>
-              {userSession ? <MenuLink href='/dashboard/UserProfile'> <Image
-                src="/UserProfile/defaultProfile.svg"
-                alt="Profile"
-                width={40}
-                height={40}
-                className="rounded-full"
-              />
-              </MenuLink> : <MenuLink href="/login" className="hover:underline">
-                Login
-              </MenuLink>
-              }
+            <div className="mt-auto flex justify-start items-center  ">
+              {userSession ? (
+                <MenuLink href="/dashboard/UserProfile">
+                  {" "}
+                  <Image
+                    src="/UserProfile/defaultProfile.svg"
+                    alt="Profile"
+                    width={40}
+                    height={40}
+                    className="rounded-full"
+                  />
+                </MenuLink>
+              ) : (
+                <MenuLink href="/login" className="hover:underline">
+                  Login
+                </MenuLink>
+              )}
 
-              {userSession && <div className=' ml-auto'>
-                <Button variant='outline' size='icon' className='border-none'>
-                  <LogOut size={24} />
-                </Button>
-              </div>
-              }
+              {userSession && (
+                <div className=" ml-auto">
+                  <Button variant="outline" size="icon" className="border-none">
+                    <LogOut size={24} />
+                  </Button>
+                </div>
+              )}
             </div>
-
-
-
           </SheetContent>
         </Sheet>
       </div>
@@ -271,7 +309,7 @@ export function Navbar({ userSession }: { userSession?: boolean }) {
   );
 }
 
-interface IconProps extends React.SVGProps<SVGSVGElement> { }
+interface IconProps extends React.SVGProps<SVGSVGElement> {}
 
 function MenuIcon(props: IconProps) {
   return (

@@ -9,7 +9,7 @@ import { collection, addDoc } from "firebase/firestore";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Form1 } from "@/app/cause/create/Form1/Form1Component";// Update these components to use useFormContext()
+import { Form1 } from "@/app/cause/create/Form1/Form1Component";
 import { Form2 } from "@/app/cause/create/Form2/Form2Component";
 import { Form3 } from "@/app/cause/create/Form3/Form3Component";
 import { Form4 } from "../app/cause/create/Form4/Form4Component";
@@ -18,10 +18,12 @@ import { Form4 } from "../app/cause/create/Form4/Form4Component";
 export interface UploadedImage {
   src: string;
   name: string;
-  size: number; // in KB
+  size: number;
   progress: number;
   type: string;
+  path?: string; // Optional path property
 }
+
 
 // Define the complete form data interface and Zod schema
 export interface FormData {
@@ -97,6 +99,8 @@ export default function ListacauseForm() {
   const router = useRouter();
   const [step, setStep] = useState(1);
   const [mounted, setMounted] = useState(false);
+  // New state to control crypto donation flow
+  const [cryptoSetupDone, setCryptoSetupDone] = useState<boolean>(false);
 
   // Retrieve initial data from localStorage if available
   const initialValues: FormData = (() => {
@@ -138,6 +142,12 @@ export default function ListacauseForm() {
     return () => subscription.unsubscribe();
   }, [watch]);
 
+  // Read cryptoSetupDone flag from localStorage on mount
+  useEffect(() => {
+    const flag = localStorage.getItem("cryptoSetupDone");
+    setCryptoSetupDone(flag === "true");
+  }, []);
+
   // Mark component as mounted to ensure client-only code runs correctly.
   useEffect(() => {
     setMounted(true);
@@ -145,6 +155,11 @@ export default function ListacauseForm() {
 
   // Handle going to the next step by triggering validation for only the current step’s fields.
   const handleNext = async () => {
+    // If on step 1 and currency is Crypto Currency but crypto setup is not done, block progression.
+    if (step === 1 && watch("currency") === "Crypto Currency" && !cryptoSetupDone) {
+      alert("Please setup your crypto donation before proceeding.");
+      return;
+    }
     let fieldNames: (keyof FormData)[] = [];
     if (step === 1) fieldNames = ["state", "zipCode", "currency"];
     if (step === 2) fieldNames = ["causeTitle", "causeCategory"];
@@ -159,7 +174,6 @@ export default function ListacauseForm() {
 
   // Remove the final submit button; submission will be handled on the preview page.
   const onSubmit = async (data: FormData) => {
-    // We log the data for debugging purposes.
     console.log("Data ready for preview:", data);
   };
 
