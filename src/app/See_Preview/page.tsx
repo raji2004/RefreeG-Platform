@@ -94,7 +94,7 @@ const PreviewPage = () => {
       console.log("Current User: ", currentUser);
 
       // Combine the formData, sections, and uploadedImage into one object.
-      const finalData = { ...formData, sections, img: uploadedImage?.src, userId: currentUser };
+      const finalData = { ...formData, sections, img: uploadedImage?.src, userId: currentUser,raisedAmount:0,goalAmount:parseInt(formData.goalAmount) };
       const causeId = await addCause(finalData);
       router.push(`/See_Preview/Success?id=${causeId}`);
     } catch (error: any) {

@@ -69,6 +69,22 @@ export const getCauseById = async (causeId: string): Promise<Cause | null> => {
     throw error;
   }
 };
+export const getUserById = async (userId: string): Promise<User | null> => {
+  try {
+    const causeRef = doc(db, "users", userId);
+    const docSnap = await getDoc(causeRef);
+
+    if (!docSnap.exists()) {
+      console.warn("Cause not found with ID:", userId);
+      return null;
+    }
+
+    return { id: docSnap.id, ...docSnap.data() } as User;
+  } catch (error) {
+    console.error("Error fetching cause by ID:", error);
+    throw error;
+  }
+};
 
 export const getCausesByUserId = async (userId: string): Promise<Cause[]> => {
   try {
@@ -87,3 +103,20 @@ export const getCausesByUserId = async (userId: string): Promise<Cause[]> => {
     throw error;
   }
 };
+
+export const getCauses = async (): Promise<Cause[]> => {
+  try {
+    const causesRef = collection(db, "causes");
+    const querySnapshot = await getDocs(causesRef);
+
+    const causes: Cause[] = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    })) as Cause[];
+
+    return causes;
+  } catch (error) {
+    console.error("Error fetching causes:", error);
+    throw error;
+  }
+}
