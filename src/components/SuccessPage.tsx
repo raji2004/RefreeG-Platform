@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Cause } from "@/lib/type";
+import Link from "next/link";
 
 
 
@@ -10,11 +11,6 @@ import { Cause } from "@/lib/type";
 export default function SuccessPage({causeData,baseURL}:{causeData:Cause,baseURL:string}) {
 const causeUrl= `${baseURL}/cause/${causeData.id}`;
  console.log(causeUrl)
-
-
-  
-
-
 
   // Share handler functions
   const handleCopyLink = () => {
@@ -200,7 +196,8 @@ const causeUrl= `${baseURL}/cause/${causeData.id}`;
                 Support and FAQs
               </button>
             </div>
-            <button
+            <Link
+            href={`/cause/${causeData.id}`}
               className="mt-4 flex items-center justify-center space-x-2 bg-white text-black py-2 px-4 rounded-md w-full"
               aria-label="View cause page"
             >
@@ -211,7 +208,7 @@ const causeUrl= `${baseURL}/cause/${causeData.id}`;
                 width={15}
                 height={15}
               />
-            </button>
+            </Link>
           </div>
 
           {/* Divider (Only on medium screens and up) */}
@@ -273,7 +270,8 @@ const causeUrl= `${baseURL}/cause/${causeData.id}`;
                 />
               </button>
             </div>
-            <button
+            <Link
+              href="/"
               className="flex items-center justify-center space-x-2 bg-white text-black py-2 px-4 rounded-md w-full"
               aria-label="Go to dashboard"
             >
@@ -284,7 +282,7 @@ const causeUrl= `${baseURL}/cause/${causeData.id}`;
                 width={15}
                 height={15}
               />
-            </button>
+            </Link>
           </div>
         </div>
       </div>
