@@ -4,12 +4,14 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Navbar from "../cause/create/_components/navbar";
+import { checkUserSession, getSessionId } from "@/lib/helpers";
 import {
   FaExclamationTriangle,
   FaHeartbeat,
   FaMapMarkerAlt,
   FaGlobe,
 } from "react-icons/fa";
+import { addCause } from "@/lib/action";
 import { saveCauseToFirestore } from "@/utils/listACause";
 
 interface Section {
@@ -76,6 +78,7 @@ const PreviewPage = () => {
   };
 
   const handleSubmit = async () => {
+    console.log("Submitting form...");
     if (!isFormValid()) {
       setErrorMessage("Please fill out all required fields before submitting.");
       return;
@@ -83,6 +86,11 @@ const PreviewPage = () => {
     setErrorMessage("");
 
     try {
+      const currentUser =  await getSessionId();
+
+      if (currentUser === undefined) router.push("/login");
+      console.log("Current User: ", currentUser);
+
       // Combine the formData, sections, and uploadedImage into one object.
       const finalData = { ...formData, sections, uploadedImage };
 
@@ -214,7 +222,7 @@ const PreviewPage = () => {
             <button
               className="bg-[#0070e0] text-white px-4 py-2 rounded"
               onClick={handleSubmit}
-              disabled={!isFormValid()}
+              // disabled={!isFormValid()}
               aria-label="Submit Form"
             >
               Proceed

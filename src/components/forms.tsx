@@ -64,9 +64,13 @@ export default function LoginForm() {
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
       const res = await signInWithEmailAndPassword(data.email, data.password)
+      console.log('res', res?.user.uid)
       setCookie('userSession', JSON.stringify(res?.user.uid), { maxAge: sessionAge });
-      push('/')
-
+      if (res != undefined) {
+        push('/')
+      }else{
+          toast('Invalid email or password')
+      }
     } catch (e) {
       console.error('error', e)
     }
@@ -666,7 +670,7 @@ export const CompanyForm = () => {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input type="number"  placeholder="Tax Identification Number" {...field}
+                <Input type="number" placeholder="Tax Identification Number" {...field}
                 />
               </FormControl>
               <FormMessage />
@@ -760,8 +764,8 @@ export const CompanyContactForm = () => {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input   placeholder="Position/Role Within the Organization" {...field}
-                
+                <Input placeholder="Position/Role Within the Organization" {...field}
+
                 />
               </FormControl>
               <FormMessage />

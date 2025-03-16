@@ -1,12 +1,18 @@
-"use client";
-
 import React, { Suspense } from "react";
 import SuccessPage from "@/components/SuccessPage";
+import { getCauseById } from "@/lib/action";
+import { getBaseURL } from "@/lib/helpers";
 
-export default function SuccessPageWrapper() {
+export default async function SuccessPageWrapper({searchParams}:{searchParams:{id:string}}) {
+ 
+  const cause = await getCauseById(searchParams.id);
+  const baseURL = await getBaseURL();
+  if (!cause) {
+    return <div>Cause not found</div>;
+  }
   return (
     <Suspense fallback={<div>Loading success page...</div>}>
-      <SuccessPage />
+      <SuccessPage causeData={cause} baseURL={baseURL} />
     </Suspense>
   );
 }
