@@ -18,7 +18,7 @@ const causeUrl= `${baseURL}/cause/${causeData.id}`;
       navigator.clipboard
         .writeText(causeUrl)
         .then(() => alert("Link copied to clipboard!"))
-        .catch(() => alert("Failed to copy link"));
+        .catch(() => alert("Failed to copy link "));
     }
   };
 
