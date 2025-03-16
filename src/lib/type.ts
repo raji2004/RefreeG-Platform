@@ -131,4 +131,32 @@ export type SignedPetitions = {
     dates: string,
     times: string,
   }
+   type CauseSections = {
+    id: number;
+    header: string;
+    description: string
+  }
+
+  export type Cause = {
+    id: string;
+    causeTitle: string;
+    description: string;
+    sections: CauseSections[]; // Adjust the type based on your actual structure
+    uploadedImage: {
+        src: string;
+        name: string;
+        size: number;
+        type: string;
+        progress: number;
+    };
+    img: string;
+    userId: string;
+    zipCode: string;
+    goalAmount: string;
+    deadline: string;
+    causeCategory: string;
+    state: string;
+    currency: string;
+  };
+  
 
