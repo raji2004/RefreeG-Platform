@@ -2,6 +2,7 @@
 import { Mail } from "lucide-react";
 import React, { useState } from "react";
 import { handleSubmit } from "../../lib/formActions";
+import { toast } from "react-toastify";
 
 const GetMail = () => {
   const [message, setMessage] = useState("");
@@ -10,7 +11,7 @@ const GetMail = () => {
     <div className="w-full">
       <form
         action={async (formData) => {
-          await handleSubmit(formData);
+          await handleSubmit(formData,toast);
           setMessage("Subscription successful! ✅");
           setTimeout(() => setMessage(""), 3000);
         }}
