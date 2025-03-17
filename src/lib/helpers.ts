@@ -40,6 +40,12 @@ export const getSessionId = async () => {
     return await cookieStore.get('userSession')?.value;
 }
 
+export const SessionLogout = async () => {
+    const cookieStore = cookies();
+   await cookieStore.delete('userSession');
+    return true;
+}
+
 export const getBaseURL = (): string => {
     if (typeof window !== "undefined") {
       // Client-side (browser)
