@@ -18,6 +18,7 @@ interface BookmarkButtonProps {
     img: string;
     goalAmount: number;
     daysLeft: string;
+    progressPercentage: number;
     raisedAmount: number;
     description?: string; // Make `description` optional
   };
@@ -50,13 +51,14 @@ const BookmarkButton: React.FC<BookmarkButtonProps> = ({ cause }) => {
       // Validate and sanitize the `cause` object before saving
       const sanitizedCause = {
         id: cause.id,
-        causeTitle: cause.causeTitle || "", // Fallback to empty string if undefined
-        uploadedImage: cause.uploadedImage || null, // Fallback to null if undefined
-        img: cause.img || "", // Fallback to empty string if undefined
-        goalAmount: cause.goalAmount || 0, // Fallback to 0 if undefined
-        daysLeft: cause.daysLeft || "", // Fallback to empty string if undefined
-        raisedAmount: cause.raisedAmount || 0, // Fallback to 0 if undefined
-        description: cause.description || "", // Fallback to empty string if undefined
+        causeTitle: cause.causeTitle,
+        uploadedImage: cause.uploadedImage,
+        progressPercentage: cause.progressPercentage,
+        img: cause.img,
+        goalAmount: cause.goalAmount,
+        daysLeft: cause.daysLeft,
+        raisedAmount: cause.raisedAmount,
+        description: cause.description,
       };
 
       await setDoc(bookmarkRef, sanitizedCause);

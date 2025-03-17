@@ -108,11 +108,11 @@ const FavouriteCauses: React.FC = () => {
               uploadedImage={cause.uploadedImage}
               img={cause.img}
               goalAmount={cause.goalAmount}
-              progressPercentage={cause.progressPercentage}
               daysLeft={cause.daysLeft}
               raisedAmount={cause.raisedAmount}
+              progressPercentage={cause.progressPercentage}
               description={cause.description}
-              profileImage={cause.img}
+              profileImage={cause.profileImage} // Provide a default value
               tags={cause.tags}
               hideDescription={false}
               hideTags={false}
