@@ -22,6 +22,7 @@ interface Cause {
   description: string;
   profileImage: string;
   tags?: { icon: JSX.Element; text: string }[];
+  isBookmarked: boolean; // Add isBookmarked to the Cause interface
 }
 
 export default async function FavouriteCausesPage() {
@@ -43,7 +44,7 @@ export default async function FavouriteCausesPage() {
       const raisedAmount = data.raisedAmount || 0;
       const goalAmount = data.goalAmount || 1; // Avoid division by zero
       const progressPercentage = Math.round((raisedAmount / goalAmount) * 100); // Calculate progressPercentage
-      return { ...data, progressPercentage } as Cause;
+      return { ...data, progressPercentage, isBookmarked: true } as Cause; // Set isBookmarked to true
     });
 
     return (

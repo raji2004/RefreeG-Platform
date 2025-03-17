@@ -1,7 +1,10 @@
-import React, { useState, useEffect } from "react";
+// components/BookmarkButton.tsx
+"use client";
+
+import React, { useState } from "react";
 import { Bookmark } from "lucide-react";
 import { db } from "@/lib/firebase/config";
-import { doc, setDoc, deleteDoc, getDoc } from "firebase/firestore";
+import { doc, setDoc, deleteDoc } from "firebase/firestore";
 import { getSessionId } from "@/lib/helpers";
 
 interface BookmarkButtonProps {
@@ -20,25 +23,17 @@ interface BookmarkButtonProps {
     daysLeft: string;
     progressPercentage: number;
     raisedAmount: number;
-    description?: string; // Make `description` optional
+    description?: string;
   };
+  isBookmarked: boolean; // Add isBookmarked as a prop
 }
 
-const BookmarkButton: React.FC<BookmarkButtonProps> = ({ cause }) => {
-  const [isBookmarked, setIsBookmarked] = useState(false);
+const BookmarkButton: React.FC<BookmarkButtonProps> = ({
+  cause,
+  isBookmarked: initialBookmarked,
+}) => {
+  const [isBookmarked, setIsBookmarked] = useState(initialBookmarked);
   const userId = getSessionId(); // Get the user ID from the session
-
-  useEffect(() => {
-    const fetchBookmarkStatus = async () => {
-      if (userId) {
-        const bookmarkRef = doc(db, `users/${userId}/bookmarked`, cause.id);
-        const bookmarkSnap = await getDoc(bookmarkRef);
-        setIsBookmarked(bookmarkSnap.exists());
-      }
-    };
-
-    fetchBookmarkStatus();
-  }, [cause.id, userId]);
 
   const toggleBookmark = async () => {
     if (!userId) return;
@@ -48,7 +43,6 @@ const BookmarkButton: React.FC<BookmarkButtonProps> = ({ cause }) => {
     if (isBookmarked) {
       await deleteDoc(bookmarkRef);
     } else {
-      // Validate and sanitize the `cause` object before saving
       const sanitizedCause = {
         id: cause.id,
         causeTitle: cause.causeTitle,

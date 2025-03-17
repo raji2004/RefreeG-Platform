@@ -26,6 +26,7 @@ interface Cause {
   description: string;
   profileImage: string;
   tags?: { icon: JSX.Element; text: string }[];
+  isBookmarked: boolean; // Add isBookmarked to the Cause interface
 }
 
 interface FavouriteCausesProps {
@@ -83,6 +84,7 @@ const FavouriteCauses: React.FC<FavouriteCausesProps> = ({
               hideDescription={false}
               hideTags={false}
               hideButton={false}
+              isBookmarked={cause.isBookmarked} // Pass the isBookmarked prop
             />
           ))}
         </div>

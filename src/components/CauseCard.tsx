@@ -1,3 +1,4 @@
+// components/CauseCard.tsx
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -20,6 +21,7 @@ export const MainCauseCard: React.FC<MainCauseCardProps> = ({
   hideDescription,
   hideTags,
   hideButton,
+  isBookmarked, // Destructure isBookmarked
 }) => {
   return (
     <div className="bg-white w-full rounded-lg">
@@ -73,6 +75,7 @@ export const MainCauseCard: React.FC<MainCauseCardProps> = ({
             raisedAmount,
             description,
           }}
+          isBookmarked={isBookmarked} // Pass isBookmarked to BookmarkButton
         />
       </div>
       {/* Tags */}
