@@ -11,7 +11,7 @@ import { MainCauseCard } from "@/components/CauseCard"; // Import the MainCauseC
 interface Cause {
   id: string;
   causeTitle: string;
-  uploadedImage?: {
+  uploadedImage: {
     src: string;
     name: string;
     size: number;
@@ -20,11 +20,11 @@ interface Cause {
   };
   img: string;
   goalAmount: number;
-  progressPercentage: number;
+  progressPercentage: number; // Ensure this is included
   daysLeft: string;
   raisedAmount: number;
   description: string;
-  profileImage?: string; // Add profileImage to match MainCauseCardProps
+  profileImage: string; // Add profileImage to match MainCauseCardProps
   tags?: { icon: JSX.Element; text: string }[]; // Add tags to match MainCauseCardProps
 }
 
@@ -41,9 +41,13 @@ const FavouriteCauses: React.FC = () => {
             collection(db, `users/${userId}/bookmarked`)
           );
           const querySnapshot = await getDocs(bookmarksQuery);
-          const bookmarks = querySnapshot.docs.map(
-            (doc) => doc.data() as Cause
-          );
+          const bookmarks = querySnapshot.docs.map((doc) => {
+            const data = doc.data();
+            const raisedAmount = data.raisedAmount || 0;
+            const goalAmount = data.goalAmount || 1; // Avoid division by zero
+            const progressPercentage = Math.round((raisedAmount / goalAmount) * 100); // Calculate progressPercentage
+            return { ...data, progressPercentage } as Cause;
+          });
           setBookmarkedCauses(bookmarks);
         } catch (error) {
           console.error("Error fetching bookmarks:", error);
@@ -110,9 +114,9 @@ const FavouriteCauses: React.FC = () => {
               goalAmount={cause.goalAmount}
               daysLeft={cause.daysLeft}
               raisedAmount={cause.raisedAmount}
-              progressPercentage={cause.progressPercentage}
+              progressPercentage={cause.progressPercentage} // Pass the calculated progressPercentage
               description={cause.description}
-              profileImage={cause.profileImage} // Provide a default value
+              profileImage={cause.profileImage}
               tags={cause.tags}
               hideDescription={false}
               hideTags={false}

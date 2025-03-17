@@ -67,6 +67,7 @@ export const MainCauseCard: React.FC<MainCauseCardProps> = ({
             causeTitle,
             uploadedImage,
             img,
+            progressPercentage,
             goalAmount,
             daysLeft,
             raisedAmount,
