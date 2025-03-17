@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Image from "next/image";
-import { Bookmark } from "lucide-react";
 import Link from "next/link";
 import DonationProgress from "../components/ui/donationProgress";
+import BookmarkButton from "./ui/BookmarkButton";
 import { MainCauseCardProps } from "@/lib/type";
 
 export const MainCauseCard: React.FC<MainCauseCardProps> = ({
@@ -21,42 +21,12 @@ export const MainCauseCard: React.FC<MainCauseCardProps> = ({
   hideTags,
   hideButton,
 }) => {
-  // State to track bookmark status
-  const [isBookmarked, setIsBookmarked] = useState(false);
-
-  // Load bookmarks from localStorage on mount
-  useEffect(() => {
-    const savedBookmarks: string[] = JSON.parse(
-      localStorage.getItem("bookmarkedCauses") || "[]"
-    );
-
-    if (causeTitle) {
-      setIsBookmarked(savedBookmarks.includes(causeTitle));
-    }
-  }, [causeTitle]);
-
-  // Toggle bookmark function
-  const toggleBookmark = () => {
-    let savedBookmarks: string[] = JSON.parse(
-      localStorage.getItem("bookmarkedCauses") || "[]"
-    );
-
-    if (savedBookmarks.includes(causeTitle)) {
-      savedBookmarks = savedBookmarks.filter((title) => title !== causeTitle);
-    } else {
-      savedBookmarks.push(causeTitle);
-    }
-
-    localStorage.setItem("bookmarkedCauses", JSON.stringify(savedBookmarks));
-    setIsBookmarked(!isBookmarked);
-  };
-
   return (
     <div className="bg-white w-full rounded-lg">
       {/* Image */}
       <Image
         src={img}
-        alt={uploadedImage.name}
+        alt={uploadedImage?.name || "Cause Image"}
         height={300}
         width={600}
         className="rounded-lg w-full"
@@ -91,15 +61,8 @@ export const MainCauseCard: React.FC<MainCauseCardProps> = ({
             )}
           </div>
         </div>
-        {/* Bookmark Icon */}
-        <div onClick={toggleBookmark} className="cursor-pointer">
-          <Bookmark
-            size={30}
-            className={`transition-colors duration-300 ${
-              isBookmarked ? "text-blue-600 fill-blue-600" : "text-gray-500"
-            }`}
-          />
-        </div>
+        {/* Bookmark Button Component */}
+        <BookmarkButton causeTitle={causeTitle} />
       </div>
 
       {/* Tags */}
