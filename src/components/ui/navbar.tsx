@@ -54,7 +54,7 @@ export function Navbar({ userSession }: { userSession?: boolean }) {
 
   return (
     <header className="flex h-20 w-full shrink-0 items-center px-4 md:px-6">
-      <Link href="#" className="mr-6 lg:mr-0" prefetch={false}>
+      <Link href="/" className="mr-6 lg:mr-0" prefetch={false}>
         <Image src={Logo} alt="logo" height={50} width={50} />
       </Link>
 

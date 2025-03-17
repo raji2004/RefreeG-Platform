@@ -1,3 +1,5 @@
+import { LucideIcon } from "lucide-react";
+
 export type elementProps = {
     className?: string;
     children?: React.ReactNode;
@@ -172,5 +174,11 @@ export interface MainCauseCardProps extends Omit<
     hideTags?: boolean;
     hideButton?: boolean;
 }
+
+export type CauseCategory = {
+    name: string;
+    icon: LucideIcon;
+  };
+  
 
 
