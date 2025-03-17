@@ -180,6 +180,37 @@ export const causes = [
   },
 ];
 
+export const stories = [
+  {
+    imageSrc: "/images/radio.svg",
+    title: "How It Started",
+    points: [
+      "It all began with a frustration with traditional donation systems—high transaction fees, lack of transparency, and little accountability. Too often, money meant to help those in need never reaches them due to middlemen, mismanagement, or lack of proper tracking.",
+      "We envisioned a better way—a decentralized, community-driven platform where:\n✅ Anyone can raise funds for causes they believe in\n✅ Donors can track how their money is spent\n✅ Every contribution leads to measurable impact\n\nWhat started as a dream quickly became a mission—and now, a growing movement."
+    ],
+    linkHref: "#",
+  },
+  {
+    imageSrc: "/images/radio.svg",
+    title: "Where We Are Today",
+    points: [
+      "From helping victims of disasters, to funding education for children, to supporting small businesses in underserved communities, RefreeG has become more than just a crowdfunding platform—it’s a force for social change.",
+      "With a thriving community of donors, changemakers, and organizations, we are proving that small acts of generosity can create life-changing ripple effects.\n ✅ Thousands of lives impacted through verified fundraisers\n✅ Millions in donations tracked securely using blockchain\n✅ A growing global community committed to making a difference"
+    ],
+    linkHref: "#",
+  },
+  {
+    imageSrc: "/images/radio.svg",
+    title: "Where We’re Headed",
+    points: [
+      "We’re just getting started. Our goal is to make RefreeG the go-to crowdfunding platform for Africa, one that not only raises funds but also drives sustainable change.",
+      "🔹 More transparency – Strengthening our blockchain-powered tracking system\n🔹 More impact – Expanding partnerships with NGOs, businesses, and institutions\n🔹 More accessibility – Making it easier for anyone to start and support causes We believe in a future where no cause goes unfunded, no dream goes unsupported, and no life goes unchanged."
+    ],
+    linkHref: "#",
+  },
+
+];
+
 export const faqs = [
   {
     question: "What is RefreeG?",

@@ -54,7 +54,7 @@ export function Navbar({ userSession }: { userSession?: boolean }) {
 
   return (
     <header className="flex h-20 w-full shrink-0 items-center px-4 md:px-6">
-      <Link href="#" className="mr-6 lg:mr-0" prefetch={false}>
+      <Link href="/" className="mr-6 lg:mr-0" prefetch={false}>
         <Image src={Logo} alt="logo" height={50} width={50} />
       </Link>
 
@@ -92,25 +92,35 @@ export function Navbar({ userSession }: { userSession?: boolean }) {
               <DropdownMenuContent className="absolute mt-2 py-4 bg-white shadow-lg rounded-md hidden lg:block" align="start">
                 <div className="">
                   <div className='flex'>
-                    <DropdownMenuItem className="whitespace-nowrap hover:underline hover:bg-[#D6EBFF]">
-                      Our Mission
+                    <DropdownMenuItem asChild>
+                      <Link href="/OurMission" className="whitespace-nowrap hover:underline hover:bg-[#D6EBFF] px-4 py-2 block">
+                        Our Mission
+                      </Link>
                     </DropdownMenuItem>
-                    <DropdownMenuItem className="whitespace-nowrap hover:underline">
-                      Our Story (The &quot;Why&quot; Behind RefreeG)
+
+                    <DropdownMenuItem asChild>
+                      <Link href="/OurStory" className="whitespace-nowrap hover:underline hover:bg-[#D6EBFF] px-4 py-2 block">
+                        Our Story (The &quot;Why&quot; Behind RefreeG)
+                      </Link>
                     </DropdownMenuItem>
 
                   </div>
                   <div className='flex'>
-                    <DropdownMenuItem className="whitespace-nowrap hover:underline">
-                      Our Impact
+                    <DropdownMenuItem asChild>
+                      <Link href="/OurImpact" className="whitespace-nowrap hover:underline hover:bg-[#D6EBFF] px-4 py-2 block">
+                        Our Impact
+                      </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem className="whitespace-nowrap hover:underline">
                       Who Are We Made By?
                     </DropdownMenuItem>
                   </div>
-                  <DropdownMenuItem className="whitespace-nowrap hover:underline col-span-2">
-                    What We Do
-                  </DropdownMenuItem>
+
+                  <DropdownMenuItem asChild>
+                      <Link href="/WhatWeDo" className="whitespace-nowrap hover:underline hover:bg-[#D6EBFF] px-4 py-2 block">
+                        What We Do
+                      </Link>
+                    </DropdownMenuItem>
                 </div>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -136,7 +146,7 @@ export function Navbar({ userSession }: { userSession?: boolean }) {
         </MenuLink>
 
         <MenuLink
-          href={userSession ? "../cause/create" : "/login"}
+          href={userSession ? "/cause/create" : "/login"}
           className="text-white hover:text-white bg-blue-600 hover:bg-blue-700"
           onClick={(e) => {
             if (!userSession) {
@@ -219,7 +229,7 @@ export function Navbar({ userSession }: { userSession?: boolean }) {
 
               <MenuLink href="#">How it works</MenuLink>
               <MenuLink
-                href={userSession ? "/List_a_cause" : "/login"}
+                href={userSession ? "/cause/create" : "/login"}
                 onClick={(e) => {
                   if (!userSession) {
                     e.preventDefault(); // Prevent default navigation

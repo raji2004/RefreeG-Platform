@@ -71,7 +71,7 @@ export function DataTable<TData, TValue>({
                 />}
 
                 <div className={`${!nofilter ? "" : " ml-auto"} `}>
-                    {addCause && <Link href={'/list_a_cause'} className=" inline-flex items-center gap-1 text-primaryShades-800">
+                    {addCause && <Link href={'/cause/create'} className=" inline-flex items-center gap-1 text-primaryShades-800">
                         <Plus size={19} />
                         Add cause
                     </Link>}
