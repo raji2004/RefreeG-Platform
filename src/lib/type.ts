@@ -167,6 +167,8 @@ export type Cause = {
   currency: string;
   raisedAmount: number;
   profileImage: string;
+  isBookmarked: boolean;
+  onRemoveBookmark?: (id: string) => void;
 };
 
 export interface MainCauseCardProps

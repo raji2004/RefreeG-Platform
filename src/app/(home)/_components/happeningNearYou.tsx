@@ -44,10 +44,14 @@ export default function HappeningNearYou({ causes }: { causes: Cause[] }) {
         <CarouselContent>
           {causes.map((cause) => (
             <CarouselItem key={cause.id} className="basis-full md:basis-1/2 lg:basis-1/3">
-              <MainCauseCard
+               <MainCauseCard
                 {...cause}
+                isBookmarked={cause.isBookmarked ?? false}
+                onRemoveBookmark={cause.onRemoveBookmark ?? (() => {})}
                 daysLeft={getDaysLeft(cause.deadline)}
-                progressPercentage={(cause.raisedAmount / cause.goalAmount) * 100}
+                progressPercentage={
+                  (cause.raisedAmount / cause.goalAmount) * 100
+                }
                 hideDescription
                 hideTags
               />

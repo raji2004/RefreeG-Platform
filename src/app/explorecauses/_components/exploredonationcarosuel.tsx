@@ -63,11 +63,17 @@ export const DonationCarousel = ({ causes }: { causes: Cause[] }) => {
               <CarouselContent>
                 {causes.map((cause) => (
                   <CarouselItem key={cause.id} className="basis-full">
-                    <MainCauseCard {...cause}
+                    <MainCauseCard
+                      {...cause}
+                      isBookmarked={cause.isBookmarked ?? false}
+                      onRemoveBookmark={cause.onRemoveBookmark ?? (() => {})}
                       daysLeft={getDaysLeft(cause.deadline)}
-                      progressPercentage={(cause.raisedAmount / cause.goalAmount) * 100}
+                      progressPercentage={
+                        (cause.raisedAmount / cause.goalAmount) * 100
+                      }
                       hideDescription
-                      hideTags />
+                      hideTags
+                    />
                   </CarouselItem>
                 ))}
               </CarouselContent>
@@ -83,13 +89,18 @@ export const DonationCarousel = ({ causes }: { causes: Cause[] }) => {
                     <div className="grid grid-cols-4 grid-rows-1 gap-6">
                       {group.map((cause) => (
                         <MainCauseCard
-                          key={cause.id}
                           {...cause}
+                          isBookmarked={cause.isBookmarked ?? false}
+                          onRemoveBookmark={
+                            cause.onRemoveBookmark ?? (() => {})
+                          }
                           daysLeft={getDaysLeft(cause.deadline)}
-                          progressPercentage={(cause.raisedAmount / cause.goalAmount) * 100}
+                          progressPercentage={
+                            (cause.raisedAmount / cause.goalAmount) * 100
+                          }
                           hideDescription
-                          hideTags />
-
+                          hideTags
+                        />
                       ))}
 
                       {Array.from({ length: 4 - group.length }).map(
