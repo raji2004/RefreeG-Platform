@@ -57,9 +57,10 @@ export const getCauseById = async (causeId: string): Promise<Cause | null> => {
   try {
     const causeRef = doc(db, "causes", causeId);
     const docSnap = await getDoc(causeRef);
+    // console.log(causeId)
 
     if (!docSnap.exists()) {
-      console.warn("Cause not found with ID:", causeId);
+      // console.log("Cause not found with ID:", causeId);
       return null;
     }
 
@@ -70,26 +71,48 @@ export const getCauseById = async (causeId: string): Promise<Cause | null> => {
   }
 };
 export const getUserById = async (userId: string): Promise<User | null> => {
+  const decodedId = decodeURIComponent(userId).replace(/"/g, "").trim();
   try {
-    const causeRef = doc(db, "users", userId);
-    const docSnap = await getDoc(causeRef);
+    if (!userId) {
+      console.warn("Invalid user ID provided:", userId);
+      return null;
+    }
 
+    const userRef = doc(db, "users", decodedId); // Get reference to specific user
+    const docSnap = await getDoc(userRef);
     if (!docSnap.exists()) {
-      console.warn("Cause not found with ID:", userId);
+      console.warn("User not found with ID:", userId);
       return null;
     }
 
     return { id: docSnap.id, ...docSnap.data() } as User;
   } catch (error) {
-    console.error("Error fetching cause by ID:", error);
+    console.error("Error fetching user by ID:", error);
+    throw error;
+  }
+};
+
+export const getAllUsers = async (): Promise<User[]> => {
+  try {
+    const usersRef = collection(db, "users");
+    const querySnapshot = await getDocs(usersRef);
+    const users = querySnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    })) as User[];
+
+    console.log("All user IDs:", users.map(user => user.id)); // Log all IDs
+    return users;
+  } catch (error) {
+    console.error("Error fetching users:", error);
     throw error;
   }
 };
 
 export const getCausesByUserId = async (userId: string): Promise<Cause[]> => {
   try {
-    const causesRef = collection(db, "causes"); 
-    const q = query(causesRef, where("userId", "==", userId)); 
+    const causesRef = collection(db, "causes");
+    const q = query(causesRef, where("userId", "==", userId));
     const querySnapshot = await getDocs(q);
 
     const causes: Cause[] = querySnapshot.docs.map((doc) => ({

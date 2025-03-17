@@ -1,7 +1,8 @@
 import { clsx, type ClassValue } from "clsx"
 import { ReadonlyURLSearchParams } from "next/navigation"
 import { twMerge } from "tailwind-merge"
-import { User } from "./type"
+import { CauseCategory, User } from "./type"
+import { Bookmark, LucideIcon, GraduationCap, Heart, Users, Briefcase, Leaf, PiggyBank, Sprout } from "lucide-react";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -46,4 +47,12 @@ export function getDaysLeft(deadline: string): string {
   return `${dayWord} day${diffDays > 1 ? "s" : ""} left`;
 }
 
-
+export const CauseCategories: CauseCategory[] = [
+  { name: "Education", icon: GraduationCap },
+  { name: "Healthcare", icon: Heart },
+  { name: "Women’s Empowerment", icon: Users },
+  { name: "Youth Development", icon: Briefcase },
+  { name: "Economic Development", icon: PiggyBank },
+  { name: "Agriculture", icon: Sprout },
+  { name: "Environment", icon: Leaf },
+] as const;
