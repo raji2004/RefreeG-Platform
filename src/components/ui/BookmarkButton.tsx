@@ -1,65 +1,60 @@
 import React, { useState, useEffect } from "react";
 import { Bookmark } from "lucide-react";
-import { auth, db } from "@/lib/firebase/config";
-import {
-  doc,
-  updateDoc,
-  arrayUnion,
-  arrayRemove,
-  getDoc,
-} from "firebase/firestore";
 
 interface BookmarkButtonProps {
-  causeTitle: string;
+  cause: {
+    id: string;
+    causeTitle: string;
+    uploadedImage: {
+      src: string;
+      name: string;
+      size: number;
+      type: string;
+      progress: number;
+    };
+    img: string;
+    goalAmount: number;
+    daysLeft: string;
+    raisedAmount: number;
+    description: string;
+  };
 }
 
-const BookmarkButton: React.FC<BookmarkButtonProps> = ({ causeTitle }) => {
+const BookmarkButton: React.FC<BookmarkButtonProps> = ({ cause }) => {
   const [isBookmarked, setIsBookmarked] = useState(false);
-  const user = auth.currentUser;
 
   useEffect(() => {
-    const fetchBookmarkedCauses = async () => {
-      if (!user) return;
+    const storedBookmarks = JSON.parse(
+      localStorage.getItem("bookmarkedCauses") || "[]"
+    );
+    setIsBookmarked(storedBookmarks.some((item: any) => item.id === cause.id));
+  }, [cause.id]);
 
-      const userRef = doc(db, "users", user.uid);
-      const userDoc = await getDoc(userRef);
-      const savedBookmarks = userDoc.exists()
-        ? userDoc.data().bookmarkedCauses || []
-        : [];
+  const toggleBookmark = () => {
+    let storedBookmarks: any[] = JSON.parse(
+      localStorage.getItem("bookmarkedCauses") || "[]"
+    );
 
-      setIsBookmarked(savedBookmarks.includes(causeTitle));
-    };
-
-    fetchBookmarkedCauses();
-  }, [causeTitle, user]);
-
-  const toggleBookmark = async () => {
-    if (!user) {
-      alert("Please log in to bookmark causes.");
-      return;
+    if (storedBookmarks.some((item) => item.id === cause.id)) {
+      storedBookmarks = storedBookmarks.filter((item) => item.id !== cause.id);
+    } else {
+      storedBookmarks.push({
+        id: cause.id,
+        causeTitle: cause.causeTitle,
+        uploadedImage: cause.uploadedImage,
+        goalAmount: cause.goalAmount,
+        daysLeft: cause.daysLeft,
+        raisedAmount: cause.raisedAmount || 0, // Ensure it doesn't break if undefined
+        description: cause.description,
+        img: cause.img,
+      });
     }
 
-    const userRef = doc(db, "users", user.uid);
-    const userDoc = await getDoc(userRef);
-    const savedBookmarks = userDoc.exists()
-      ? userDoc.data().bookmarkedCauses || []
-      : [];
+    localStorage.setItem("bookmarkedCauses", JSON.stringify(storedBookmarks));
+    setIsBookmarked(!isBookmarked);
 
-    try {
-      if (savedBookmarks.includes(causeTitle)) {
-        await updateDoc(userRef, {
-          bookmarkedCauses: arrayRemove(causeTitle),
-        });
-        setIsBookmarked(false);
-      } else {
-        await updateDoc(userRef, {
-          bookmarkedCauses: arrayUnion(causeTitle),
-        });
-        setIsBookmarked(true);
-      }
-    } catch (error) {
-      console.error("Error updating bookmark:", error);
-    }
+    // Dispatch event to notify FavouriteCauses component
+    window.dispatchEvent(new Event("storage"));
   };
 
   return (

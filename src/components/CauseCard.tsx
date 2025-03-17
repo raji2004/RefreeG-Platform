@@ -31,7 +31,6 @@ export const MainCauseCard: React.FC<MainCauseCardProps> = ({
         width={600}
         className="rounded-lg w-full"
       />
-
       {/* Content */}
       <div className="flex justify-between mt-4">
         <div className="flex mb-2">
@@ -62,9 +61,19 @@ export const MainCauseCard: React.FC<MainCauseCardProps> = ({
           </div>
         </div>
         {/* Bookmark Button Component */}
-        <BookmarkButton causeTitle={causeTitle} />
+        <BookmarkButton
+          cause={{
+            id,
+            causeTitle,
+            uploadedImage,
+            img,
+            goalAmount,
+            daysLeft,
+            raisedAmount,
+            description,
+          }}
+        />
       </div>
-
       {/* Tags */}
       {!hideTags && (
         <div className="hidden md:flex space-x-2 mt-9">
@@ -78,7 +87,6 @@ export const MainCauseCard: React.FC<MainCauseCardProps> = ({
           ))}
         </div>
       )}
-
       {/* Donation Progress */}
       <div className="mt-6">
         <DonationProgress
@@ -90,7 +98,6 @@ export const MainCauseCard: React.FC<MainCauseCardProps> = ({
         </div>
         <div className="text-gray-800">Goal: ₦{goalAmount}</div>
       </div>
-
       {/* Donate Button */}
       {!hideButton && (
         <Link href={`/cause/${id}`} className="flex justify-center mt-4">
