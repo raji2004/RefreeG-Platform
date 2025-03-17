@@ -1,12 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { FaHeartbeat, FaMapMarkerAlt } from "react-icons/fa";
-import DonationProgress from "../components/ui/donationProgress";
 import { Bookmark } from "lucide-react";
-import { MainCauseCardProps } from "@/lib/type";
 import Link from "next/link";
-
-
+import DonationProgress from "../components/ui/donationProgress";
+import { MainCauseCardProps } from "@/lib/type";
 
 export const MainCauseCard: React.FC<MainCauseCardProps> = ({
   img,
@@ -27,9 +24,31 @@ export const MainCauseCard: React.FC<MainCauseCardProps> = ({
   // State to track bookmark status
   const [isBookmarked, setIsBookmarked] = useState(false);
 
+  // Load bookmarks from localStorage on mount
+  useEffect(() => {
+    const savedBookmarks: string[] = JSON.parse(
+      localStorage.getItem("bookmarkedCauses") || "[]"
+    );
+
+    if (causeTitle) {
+      setIsBookmarked(savedBookmarks.includes(causeTitle));
+    }
+  }, [causeTitle]);
+
   // Toggle bookmark function
   const toggleBookmark = () => {
-    setIsBookmarked((prev) => !prev);
+    let savedBookmarks: string[] = JSON.parse(
+      localStorage.getItem("bookmarkedCauses") || "[]"
+    );
+
+    if (savedBookmarks.includes(causeTitle)) {
+      savedBookmarks = savedBookmarks.filter((title) => title !== causeTitle);
+    } else {
+      savedBookmarks.push(causeTitle);
+    }
+
+    localStorage.setItem("bookmarkedCauses", JSON.stringify(savedBookmarks));
+    setIsBookmarked(!isBookmarked);
   };
 
   return (
@@ -67,22 +86,23 @@ export const MainCauseCard: React.FC<MainCauseCardProps> = ({
               />
               {daysLeft} • {progressPercentage}% funded
             </p>
-            {/* Description (Hidden on Mobile) */}
-            {!hideDescription && <p className="mt-2 hidden lg:block">{description}</p>}
+            {!hideDescription && (
+              <p className="mt-2 hidden lg:block">{description}</p>
+            )}
           </div>
         </div>
         {/* Bookmark Icon */}
         <div onClick={toggleBookmark} className="cursor-pointer">
-          {/* <Bookmark
+          <Bookmark
             size={30}
             className={`transition-colors duration-300 ${
               isBookmarked ? "text-blue-600 fill-blue-600" : "text-gray-500"
             }`}
-          /> */}
+          />
         </div>
       </div>
 
-      {/* Tags (Hidden on Mobile) */}
+      {/* Tags */}
       {!hideTags && (
         <div className="hidden md:flex space-x-2 mt-9">
           {tags?.map((tag, index) => (
@@ -98,8 +118,13 @@ export const MainCauseCard: React.FC<MainCauseCardProps> = ({
 
       {/* Donation Progress */}
       <div className="mt-6">
-        <DonationProgress currentAmount={raisedAmount} goalAmount={goalAmount} />
-        <div className="font-bold text-gray-800 mt-2">₦{raisedAmount} raised</div>
+        <DonationProgress
+          currentAmount={raisedAmount}
+          goalAmount={goalAmount}
+        />
+        <div className="font-bold text-gray-800 mt-2">
+          ₦{raisedAmount} raised
+        </div>
         <div className="text-gray-800">Goal: ₦{goalAmount}</div>
       </div>
 
