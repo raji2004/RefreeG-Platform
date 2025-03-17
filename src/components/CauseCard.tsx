@@ -1,12 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import DonationProgress from "../components/ui/donationProgress";
-import { Bookmark } from "lucide-react";
+import BookmarkButton from "./ui/BookmarkButton";
 import { MainCauseCardProps } from "@/lib/type";
-import Link from "next/link";
-
-
 
 export const MainCauseCard: React.FC<MainCauseCardProps> = ({
   img,
