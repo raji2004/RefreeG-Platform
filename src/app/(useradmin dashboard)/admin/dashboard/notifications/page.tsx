@@ -1,7 +1,8 @@
 import NotificationItem from "@/components/NotificationItem"; // Import the new component
+import Link from "next/link";
 
 const Notifications = () => {
-  const notifications=[
+  const notifications = [
     {
       id: 1,
       type: "donation",
@@ -21,7 +22,16 @@ const Notifications = () => {
       <h1 className="text-2xl font-semibold mb-4">Notification Center</h1>
 
       {notifications.length === 0 ? (
-        <p>You have no new notifications at this time :)</p>
+        <div className="flex flex-col items-center justify-center mt-10">
+          <p className="text-gray-600 mb-4">
+            You have no saved notifications at this time 🙂
+          </p>
+          <Link href="/">
+            <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+              Browse Causes →
+            </button>
+          </Link>
+        </div>
       ) : (
         notifications.map((notification) => (
           <NotificationItem
