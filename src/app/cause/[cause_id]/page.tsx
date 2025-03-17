@@ -13,13 +13,16 @@ import Image from "next/image";
 import DonationNav from "@/components/donationNavbar";
 import { Navbar } from "@/components/ui/navbar";
 import CrowdfundingFeatures from "@/components/crowdfundingFeatures";
-import { getCauseById,getUserById } from "@/lib/action";
+import { getCauseById, getUserById } from "@/lib/action";
 import { getDaysLeft } from "@/lib/utils";
 import { Footer } from "@/components/ui/footer";
+import { CauseCategories } from "@/lib/utils";
+import {User } from 'lucide-react'
+import { P } from "@/components/typograpy";
 
 
 
-const Section = ({ title, description }:{title:string,description:string}) => {
+const Section = ({ title, description }: { title: string, description: string }) => {
   return (
     <div className="space-y-1">
       <strong>{title}</strong>
@@ -33,21 +36,18 @@ const Section = ({ title, description }:{title:string,description:string}) => {
 // Main component definition
 export default async function DonationDetail({ params }: { params: { cause_id: string } }) {
   const cause = await getCauseById(params.cause_id)
- 
+
+
+
   if (!cause) {
     return <div>Cause not found</div>;
   }
+  const matchedCategory = CauseCategories.find((item) => item.name === cause.causeCategory);
+  const IconComponent = matchedCategory?.icon ?? FaHeartbeat;
   const user = await getUserById(cause.userId)
   const goalAmount = Number(cause.goalAmount);
   const donationAmount = cause.raisedAmount;
   const daysleft = getDaysLeft(cause.deadline)
-
-  // Function to handle donations, updating the donation amount
-  // const handleDonate = (amount: number): void => {
-  //   setDonationAmount(donationAmount + amount); // Increase donation amount by input value
-  // };
-
-
   const progressPercentage = (donationAmount / goalAmount) * 100;
 
   return (
@@ -81,7 +81,7 @@ export default async function DonationDetail({ params }: { params: { cause_id: s
           {/* Tag indicators for category and location */}
           <div className="flex space-x-2 mt-9">
             <span className="text-sm bg-gray-200 rounded-full px-3 py-1 flex items-center hover:bg-gray-300 transition-colors duration-300">
-              <FaHeartbeat className="mr-1" /> {cause?.causeCategory ?? "Health"}
+              <IconComponent className="mr-1" /> {cause?.causeCategory ?? "Health"}
             </span>
             <span className="text-sm bg-gray-200 rounded-full px-3 py-1 flex items-center hover:bg-gray-300 transition-colors duration-300">
               <FaMapMarkerAlt className="mr-1" /> {cause?.state ?? "Borno"}
@@ -89,9 +89,9 @@ export default async function DonationDetail({ params }: { params: { cause_id: s
           </div>
 
           {/* Organization supporting the cause */}
-          <p className="flex mt-4 font-semibold text-sm">
-            <FaGlobe className="mr-1" />{user?.firstName ?? "Save the Children"}
-          </p>
+          <div className="flex items-end text-end mt-4 font-semibold text-sm">
+            <User className="mr-2" /> {user?.firstName ?? "Save the Children"}
+          </div>
 
           {/* Cause description paragraphs */}
           <div className="mt-4 space-y-2">
@@ -147,7 +147,7 @@ export default async function DonationDetail({ params }: { params: { cause_id: s
                 className="flex-grow bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition-colors duration-300"
               // Call donation handler for ₦50,000 donation
               >
-                Donate 
+                Donate
               </button>
             </div>
           </div>

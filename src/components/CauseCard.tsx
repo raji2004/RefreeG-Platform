@@ -1,9 +1,10 @@
+"use client";
 import React, { useState } from "react";
 import Image from "next/image";
 import { FaHeartbeat, FaMapMarkerAlt } from "react-icons/fa";
 import DonationProgress from "../components/ui/donationProgress";
-import { Bookmark } from "lucide-react";
-import { MainCauseCardProps } from "@/lib/type";
+
+import {  MainCauseCardProps } from "@/lib/type";
 import Link from "next/link";
 
 
@@ -114,3 +115,5 @@ export const MainCauseCard: React.FC<MainCauseCardProps> = ({
     </div>
   );
 };
+
+
