@@ -5,7 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Bookmark } from "lucide-react";
 import { db } from "@/lib/firebase/config";
-import { collection, getDocs, query, doc, deleteDoc } from "firebase/firestore"; // Import `doc` and `deleteDoc`
+import { collection, getDocs, query, doc, deleteDoc } from "firebase/firestore";
 import { getSessionId } from "@/lib/helpers";
 
 interface Cause {
@@ -27,17 +27,28 @@ interface Cause {
 
 const FavouriteCauses: React.FC = () => {
   const [bookmarkedCauses, setBookmarkedCauses] = useState<Cause[]>([]);
+  const [isLoading, setIsLoading] = useState(true); // Add a loading state
   const userId = getSessionId(); // Get the user ID from the session
 
   useEffect(() => {
     const fetchBookmarks = async () => {
       if (userId) {
-        const bookmarksQuery = query(
-          collection(db, `users/${userId}/bookmarked`)
-        );
-        const querySnapshot = await getDocs(bookmarksQuery);
-        const bookmarks = querySnapshot.docs.map((doc) => doc.data() as Cause);
-        setBookmarkedCauses(bookmarks);
+        try {
+          const bookmarksQuery = query(
+            collection(db, `users/${userId}/bookmarked`)
+          );
+          const querySnapshot = await getDocs(bookmarksQuery);
+          const bookmarks = querySnapshot.docs.map(
+            (doc) => doc.data() as Cause
+          );
+          setBookmarkedCauses(bookmarks);
+        } catch (error) {
+          console.error("Error fetching bookmarks:", error);
+        } finally {
+          setIsLoading(false); // Set loading to false after fetching data
+        }
+      } else {
+        setIsLoading(false); // Set loading to false if there's no user ID
       }
     };
 
@@ -47,8 +58,8 @@ const FavouriteCauses: React.FC = () => {
   const removeBookmark = async (id: string) => {
     if (!userId) return;
 
-    const bookmarkRef = doc(db, `users/${userId}/bookmarked`, id); // Use `doc` function
-    await deleteDoc(bookmarkRef); // Use `deleteDoc` function
+    const bookmarkRef = doc(db, `users/${userId}/bookmarked`, id);
+    await deleteDoc(bookmarkRef);
 
     const updatedBookmarks = bookmarkedCauses.filter(
       (cause) => cause.id !== id
@@ -56,6 +67,18 @@ const FavouriteCauses: React.FC = () => {
     setBookmarkedCauses(updatedBookmarks);
     window.dispatchEvent(new Event("storage"));
   };
+
+  // Show a loading spinner or skeleton while data is being fetched
+  if (isLoading) {
+    return (
+      <div className="container mx-auto py-6 text-center">
+        <h1 className="text-2xl font-semibold mb-4">Favourite Causes</h1>
+        <div className="flex justify-center items-center h-40">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto py-6 text-center">
