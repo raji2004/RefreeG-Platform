@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import SearchModal from './searchModal';
 import { ChevronDown, LogOut } from 'lucide-react'
+import { SessionLogout } from "@/lib/helpers";
 
 interface MenuLinkProps {
   href: string;
@@ -38,7 +39,7 @@ const MenuLink = ({ href, children, className, onClick, ...props }: MenuLinkProp
   </Link>
 );
 
-export function Navbar({ userSession }: { userSession?: boolean }) {
+export function Navbar({ userSession,profile }: { userSession?: boolean ,profile?:string}) {
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const [aboutUsOpen, setAboutUsOpen] = useState(false);
@@ -137,10 +138,9 @@ export function Navbar({ userSession }: { userSession?: boolean }) {
             <DropdownMenuContent>
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Profile</DropdownMenuItem>
-              <DropdownMenuItem>Billing</DropdownMenuItem>
-              <DropdownMenuItem>Team</DropdownMenuItem>
-              <DropdownMenuItem>Subscription</DropdownMenuItem>
+              <DropdownMenuItem> <Link href={'/dashboard/UserProfile'}> Profile</Link></DropdownMenuItem>
+              <DropdownMenuItem> <Link href={'/dashvoard/Account'}> Settings </Link></DropdownMenuItem>
+              <DropdownMenuItem onClick={()=> SessionLogout()}>  Logout</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </MenuLink>
@@ -148,12 +148,6 @@ export function Navbar({ userSession }: { userSession?: boolean }) {
         <MenuLink
           href={userSession ? "/cause/create" : "/login"}
           className="text-white hover:text-white bg-blue-600 hover:bg-blue-700"
-          onClick={(e) => {
-            if (!userSession) {
-              e.preventDefault(); // Prevent default navigation
-              alert("You need to log in before listing a cause.");
-            }
-          }}
         >
 
           List a cause
@@ -162,11 +156,11 @@ export function Navbar({ userSession }: { userSession?: boolean }) {
 
 
         {userSession ? <MenuLink href='/dashboard/UserProfile'> <Image
-          src="/UserProfile/defaultProfile.svg"
+          src={profile??"/UserProfile/defaultProfile.svg"}
           alt="Profile"
           width={40}
           height={40}
-          className="rounded-full"
+          className="rounded-full aspect-square"
         />
         </MenuLink> : <MenuLink href="/login" className="hover:underline">
           Login
@@ -244,7 +238,7 @@ export function Navbar({ userSession }: { userSession?: boolean }) {
 
             <div className='mt-auto flex justify-start items-center  '>
               {userSession ? <MenuLink href='/dashboard/UserProfile'> <Image
-                src="/UserProfile/defaultProfile.svg"
+                src={profile??"/UserProfile/defaultProfile.svg"}
                 alt="Profile"
                 width={40}
                 height={40}
@@ -256,7 +250,7 @@ export function Navbar({ userSession }: { userSession?: boolean }) {
               }
 
               {userSession && <div className=' ml-auto'>
-                <Button variant='outline' size='icon' className='border-none'>
+                <Button variant='outline' size='icon' className='border-none' onClick={()=> SessionLogout()}>
                   <LogOut size={24} />
                 </Button>
               </div>
