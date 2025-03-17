@@ -33,7 +33,9 @@ interface FavouriteCausesProps {
   bookmarkedCauses: Cause[];
 }
 
-const FavouriteCauses: React.FC<FavouriteCausesProps> = ({ bookmarkedCauses }) => {
+const FavouriteCauses: React.FC<FavouriteCausesProps> = ({
+  bookmarkedCauses,
+}) => {
   const [bookmarks, setBookmarks] = useState<Cause[]>(bookmarkedCauses);
   const userId = getSessionId(); // Get the user ID from the session
 
