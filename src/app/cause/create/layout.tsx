@@ -1,11 +1,15 @@
+import { getUserById } from "@/lib/action";
+import { getSessionId } from "@/lib/helpers";
 import Navbar from "./_components/navbar";
 import Image from "next/image";
 
 
 export default async function Layout({ children }: { children: React.ReactNode }) {
+  const session = await getSessionId();
+  const user = await getUserById(session?? "");
   return (
     <div className="">
-      <Navbar />
+      <Navbar profile={user?.profileImage} />
        <div className="w-full mx-auto md:flex md:flex-row">
               <div className="hidden lg:block w-5/12 md:px-14 md:py-20 px-4 py-4 bg-[#f3f7fc]">
                 <div className="mb-80">

@@ -183,23 +183,23 @@ const Layout: React.FC<LayoutProps> = ({ profileImage, children }) => {
 
           {/* Right Section: Notifications & Profile */}
 
-          <div className="flex items-center">
-            <Link href="/admin/dashboard/notifications">
-              <NotificationIcon className="w-6 h-6 text-gray-500 mr-4 cursor-pointer" />
-            </Link>
-            {profileImage ? (
-              <Link href="/dashboard/UserProfile" className=" hidden md:block">
-                <Image
-                  src={profileImage}
-                  alt="Profile"
-                  width={40}
-                  height={40}
-                  className="rounded-full"
-                />
-              </Link>
-            ) : (
-              <div className="w-10 h-10 bg-gray-300 rounded-full" /> // Placeholder if no profile image
-            )}
+                    <div className="flex items-center ">
+                        <Link href="/admin/dashboard/notifications">
+                            <NotificationIcon className="w-6 h-6 text-gray-500 mr-4 cursor-pointer" />
+                        </Link>
+                        {profileImage ? (
+                            <Link href="/dashboard/UserProfile" className=" hidden md:block w-full h-full">
+                                <Image
+                                    src={profileImage}
+                                    alt="Profile"
+                                    width={30}
+                                    height={30}
+                                    className="w-full h-full rounded-full aspect-square  object-cover"
+                                />
+                            </Link>
+                        ) : (
+                            <div className="w-10 h-10 bg-gray-300 rounded-full" /> // Placeholder if no profile image
+                        )}
 
             <button
               onClick={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}

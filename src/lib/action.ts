@@ -1,10 +1,11 @@
 'use server'
-import { addDoc, collection, doc, getDoc, getDocs, query, setDoc, where } from "firebase/firestore";
-import { auth, db } from "./firebase/config";
+import { addDoc, collection, doc, getDoc, getDocs, query, setDoc, updateDoc, where } from "firebase/firestore";
+import { auth, db, storage } from "./firebase/config";
 import { User, Cause } from "./type";
 import { redirect } from "next/navigation";
 import { signOut } from "firebase/auth";
 import { cookies } from "next/headers";
+import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
 
 
@@ -92,6 +93,29 @@ export const getUserById = async (userId: string): Promise<User | null> => {
   }
 };
 
+export const updateUserById = async (
+  userId: string,
+  updatedData: Partial<Omit<User, "id">> // Ensure ID is not included in updates
+): Promise<void> => {
+  const decodedId = decodeURIComponent(userId).replace(/"/g, "").trim();
+  
+  try {
+    if (!decodedId) {
+      console.warn("Invalid user ID provided:", userId);
+      return;
+    }
+
+    const userRef = doc(db, "users", decodedId); // Reference to the user document
+
+    await updateDoc(userRef, updatedData); // Update user fields
+    console.log("User updated successfully:", decodedId);
+  } catch (error) {
+    console.error("Error updating user by ID:", error);
+    throw error;
+  }
+};
+
+
 export const getAllUsers = async (): Promise<User[]> => {
   try {
     const usersRef = collection(db, "users");
@@ -143,3 +167,5 @@ export const getCauses = async (): Promise<Cause[]> => {
     throw error;
   }
 }
+
+
