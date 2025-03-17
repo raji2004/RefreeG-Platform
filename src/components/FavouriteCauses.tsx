@@ -2,11 +2,11 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { Bookmark } from "lucide-react";
 import { db } from "@/lib/firebase/config";
 import { collection, getDocs, query, doc, deleteDoc } from "firebase/firestore";
 import { getSessionId } from "@/lib/helpers";
+import { MainCauseCard } from "@/components/CauseCard"; // Import the MainCauseCard component
 
 interface Cause {
   id: string;
@@ -20,9 +20,12 @@ interface Cause {
   };
   img: string;
   goalAmount: number;
+  progressPercentage: number;
   daysLeft: string;
   raisedAmount: number;
   description: string;
+  profileImage?: string; // Add profileImage to match MainCauseCardProps
+  tags?: { icon: JSX.Element; text: string }[]; // Add tags to match MainCauseCardProps
 }
 
 const FavouriteCauses: React.FC = () => {
@@ -98,35 +101,23 @@ const FavouriteCauses: React.FC = () => {
       ) : (
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           {bookmarkedCauses.map((cause) => (
-            <div key={cause.id} className="bg-white p-4 rounded-lg shadow-md">
-              <Image
-                src={cause.img}
-                alt={cause.causeTitle}
-                width={300}
-                height={200}
-                className="rounded-lg w-full"
-              />
-              <div className="flex justify-between items-center mt-2">
-                <h3 className="text-lg font-semibold">{cause.causeTitle}</h3>
-                <Bookmark
-                  size={24}
-                  className="fill-blue-600 cursor-pointer"
-                  onClick={() => removeBookmark(cause.id)}
-                />
-              </div>
-              <p className="text-gray-600 mt-1">{cause.description}</p>
-              <p className="text-sm text-gray-500 mt-1">
-                {cause.daysLeft} • ₦{cause.raisedAmount} raised
-              </p>
-              <Link
-                href={`/cause/${cause.id}`}
-                className="block mt-2 text-blue-600 hover:underline"
-              >
-                <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
-                  Donate now
-                </button>
-              </Link>
-            </div>
+            <MainCauseCard
+              key={cause.id}
+              id={cause.id}
+              causeTitle={cause.causeTitle}
+              uploadedImage={cause.uploadedImage}
+              img={cause.img}
+              goalAmount={cause.goalAmount}
+              progressPercentage={cause.progressPercentage}
+              daysLeft={cause.daysLeft}
+              raisedAmount={cause.raisedAmount}
+              description={cause.description}
+              profileImage={cause.img}
+              tags={cause.tags}
+              hideDescription={false}
+              hideTags={false}
+              hideButton={false}
+            />
           ))}
         </div>
       )}
