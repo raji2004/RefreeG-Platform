@@ -4,6 +4,9 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Bookmark } from "lucide-react";
+import { db } from "@/lib/firebase/config";
+import { collection, getDocs, query, doc, deleteDoc } from "firebase/firestore"; // Import `doc` and `deleteDoc`
+import { getSessionId } from "@/lib/helpers";
 
 interface Cause {
   id: string;
@@ -24,26 +27,33 @@ interface Cause {
 
 const FavouriteCauses: React.FC = () => {
   const [bookmarkedCauses, setBookmarkedCauses] = useState<Cause[]>([]);
+  const userId = getSessionId(); // Get the user ID from the session
 
   useEffect(() => {
-    const fetchBookmarks = () => {
-      const storedBookmarks = JSON.parse(
-        localStorage.getItem("bookmarkedCauses") || "[]"
-      );
-      setBookmarkedCauses(storedBookmarks);
+    const fetchBookmarks = async () => {
+      if (userId) {
+        const bookmarksQuery = query(
+          collection(db, `users/${userId}/bookmarked`)
+        );
+        const querySnapshot = await getDocs(bookmarksQuery);
+        const bookmarks = querySnapshot.docs.map((doc) => doc.data() as Cause);
+        setBookmarkedCauses(bookmarks);
+      }
     };
 
     fetchBookmarks();
-    window.addEventListener("storage", fetchBookmarks);
-    return () => window.removeEventListener("storage", fetchBookmarks);
-  }, []);
+  }, [userId]);
 
-  const removeBookmark = (id: string) => {
+  const removeBookmark = async (id: string) => {
+    if (!userId) return;
+
+    const bookmarkRef = doc(db, `users/${userId}/bookmarked`, id); // Use `doc` function
+    await deleteDoc(bookmarkRef); // Use `deleteDoc` function
+
     const updatedBookmarks = bookmarkedCauses.filter(
       (cause) => cause.id !== id
     );
     setBookmarkedCauses(updatedBookmarks);
-    localStorage.setItem("bookmarkedCauses", JSON.stringify(updatedBookmarks));
     window.dispatchEvent(new Event("storage"));
   };
 
