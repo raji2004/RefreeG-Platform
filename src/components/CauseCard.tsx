@@ -6,7 +6,9 @@ import DonationProgress from "../components/ui/donationProgress";
 import BookmarkButton from "./ui/BookmarkButton";
 import { MainCauseCardProps } from "@/lib/type";
 
-export const MainCauseCard: React.FC<MainCauseCardProps> = ({
+export const MainCauseCard: React.FC<
+  MainCauseCardProps & { onRemoveBookmark: (id: string) => void }
+> = ({
   img,
   uploadedImage,
   id,
@@ -21,7 +23,8 @@ export const MainCauseCard: React.FC<MainCauseCardProps> = ({
   hideDescription,
   hideTags,
   hideButton,
-  isBookmarked, // Destructure isBookmarked
+  isBookmarked,
+  onRemoveBookmark, // Add onRemoveBookmark to the props
 }) => {
   return (
     <div className="bg-white w-full rounded-lg">
@@ -75,7 +78,8 @@ export const MainCauseCard: React.FC<MainCauseCardProps> = ({
             raisedAmount,
             description,
           }}
-          isBookmarked={isBookmarked} // Pass isBookmarked to BookmarkButton
+          isBookmarked={isBookmarked}
+          onRemoveBookmark={onRemoveBookmark} // Pass onRemoveBookmark to BookmarkButton
         />
       </div>
       {/* Tags */}

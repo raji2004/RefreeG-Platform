@@ -33,21 +33,26 @@ interface FavouriteCausesProps {
   bookmarkedCauses: Cause[];
 }
 
-const FavouriteCauses: React.FC<FavouriteCausesProps> = ({
-  bookmarkedCauses,
-}) => {
+const FavouriteCauses: React.FC<FavouriteCausesProps> = ({ bookmarkedCauses }) => {
   const [bookmarks, setBookmarks] = useState<Cause[]>(bookmarkedCauses);
   const userId = getSessionId(); // Get the user ID from the session
 
   const removeBookmark = async (id: string) => {
     if (!userId) return;
 
-    const bookmarkRef = doc(db, `users/${userId}/bookmarked`, id);
-    await deleteDoc(bookmarkRef);
+    try {
+      const bookmarkRef = doc(db, `users/${userId}/bookmarked`, id);
+      await deleteDoc(bookmarkRef); // Remove the bookmark from Firestore
 
-    const updatedBookmarks = bookmarks.filter((cause) => cause.id !== id);
-    setBookmarks(updatedBookmarks);
-    window.dispatchEvent(new Event("storage"));
+      // Update the local state to remove the cause from the list
+      const updatedBookmarks = bookmarks.filter((cause) => cause.id !== id);
+      setBookmarks(updatedBookmarks);
+
+      // Dispatch a storage event to notify other components of the change
+      window.dispatchEvent(new Event("storage"));
+    } catch (error) {
+      console.error("Error removing bookmark:", error);
+    }
   };
 
   return (
@@ -77,14 +82,15 @@ const FavouriteCauses: React.FC<FavouriteCausesProps> = ({
               goalAmount={cause.goalAmount}
               daysLeft={cause.daysLeft}
               raisedAmount={cause.raisedAmount}
-              progressPercentage={cause.progressPercentage} // Pass the calculated progressPercentage
+              progressPercentage={cause.progressPercentage}
               description={cause.description}
               profileImage={cause.profileImage}
               tags={cause.tags}
               hideDescription={false}
               hideTags={false}
               hideButton={false}
-              isBookmarked={cause.isBookmarked} // Pass the isBookmarked prop
+              isBookmarked={cause.isBookmarked}
+              onRemoveBookmark={removeBookmark} // Pass the removeBookmark function as a prop
             />
           ))}
         </div>

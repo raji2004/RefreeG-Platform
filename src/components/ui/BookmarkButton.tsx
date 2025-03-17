@@ -25,12 +25,14 @@ interface BookmarkButtonProps {
     raisedAmount: number;
     description?: string;
   };
-  isBookmarked: boolean; // Add isBookmarked as a prop
+  isBookmarked: boolean;
+  onRemoveBookmark?: (id: string) => void; // Add onRemoveBookmark to the props
 }
 
 const BookmarkButton: React.FC<BookmarkButtonProps> = ({
   cause,
   isBookmarked: initialBookmarked,
+  onRemoveBookmark,
 }) => {
   const [isBookmarked, setIsBookmarked] = useState(initialBookmarked);
   const userId = getSessionId(); // Get the user ID from the session
@@ -41,24 +43,27 @@ const BookmarkButton: React.FC<BookmarkButtonProps> = ({
     const bookmarkRef = doc(db, `users/${userId}/bookmarked`, cause.id);
 
     if (isBookmarked) {
-      await deleteDoc(bookmarkRef);
+      await deleteDoc(bookmarkRef); // Remove the bookmark from Firestore
+      setIsBookmarked(false);
+      onRemoveBookmark?.(cause.id); // Call onRemoveBookmark to update the parent component's state
     } else {
+      // Sanitize the `cause` object to remove undefined fields
       const sanitizedCause = {
         id: cause.id,
         causeTitle: cause.causeTitle,
-        uploadedImage: cause.uploadedImage,
-        progressPercentage: cause.progressPercentage,
+        uploadedImage: cause.uploadedImage || null, // Replace undefined with null
         img: cause.img,
         goalAmount: cause.goalAmount,
         daysLeft: cause.daysLeft,
+        progressPercentage: cause.progressPercentage,
         raisedAmount: cause.raisedAmount,
-        description: cause.description,
+        description: cause.description || "", // Replace undefined with an empty string
       };
 
-      await setDoc(bookmarkRef, sanitizedCause);
+      await setDoc(bookmarkRef, sanitizedCause); // Add the bookmark to Firestore
+      setIsBookmarked(true);
     }
 
-    setIsBookmarked(!isBookmarked);
     window.dispatchEvent(new Event("storage"));
   };
 
