@@ -19,6 +19,7 @@ import { Footer } from "@/components/ui/footer";
 import { CauseCategories } from "@/lib/utils";
 import {User } from 'lucide-react'
 import { P } from "@/components/typograpy";
+import { getSessionId } from "@/lib/helpers";
 
 
 
@@ -36,6 +37,8 @@ const Section = ({ title, description }: { title: string, description: string })
 // Main component definition
 export default async function DonationDetail({ params }: { params: { cause_id: string } }) {
   const cause = await getCauseById(params.cause_id)
+  const session = await getSessionId();
+  const loggeduser = await getUserById(session ?? "");
 
 
 
@@ -52,7 +55,7 @@ export default async function DonationDetail({ params }: { params: { cause_id: s
 
   return (
     <div>
-      <Navbar />
+      <Navbar userSession={session !== undefined?true:false} profile={user?.profileImage} />
       <div className="p-4 md:flex md:justify-between">
         {/* Left side - Main content */}
         <div className="md:w-2/4">

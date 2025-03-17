@@ -12,7 +12,7 @@ import { getCauses } from "@/lib/action";
 
 export default async function Home() {
   const causes = await getCauses();
-  console.log(causes);
+
   return (
     <div>
       <Hero />

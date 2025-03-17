@@ -542,7 +542,8 @@ export const SignupForm5 = () => {
         DOB: oldParam.DOB,
         countryOfResidence: oldParam.countryOfResidence,
         phoneNumber: oldParam.phoneNumber,
-        pin: oldParam.pin
+        pin: oldParam.pin,
+        profileImage: ""
       })
       setCookie('userSession', JSON.stringify(res?.user.uid), { maxAge: sessionAge });
       console.log('successfull')

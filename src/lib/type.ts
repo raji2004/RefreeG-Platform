@@ -20,6 +20,7 @@ export interface User {
     nin: number;
     pin: number;
     donationPreference: string
+    profileImage: string;
 }
 
 export interface Country {
