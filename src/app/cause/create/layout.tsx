@@ -31,7 +31,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
                     />
                     <span>
                       <h4>Chukwunomso Amadike-Unaogu</h4>
-                      <p>Developer, Refreeg</p>
+                      <p>Chief Product Officer, Refreeg</p>
                     </span>
                   </div>
                 </div>
