@@ -6,7 +6,7 @@ import { H2, P } from "@/components/typograpy";
 import { DonationCarousel } from "./exploredonationcarosuel";
 import { ChevronRight } from "lucide-react";
 
-export default function Education({ causes }: { causes: any[] }) {
+export default function Education({ causes = [] }: { causes?: any[] }) {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">

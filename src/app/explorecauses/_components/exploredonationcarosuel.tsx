@@ -90,6 +90,7 @@ export const DonationCarousel = ({ causes }: { causes: Cause[] }) => {
                       {group.map((cause) => (
                         <MainCauseCard
                           {...cause}
+                          key={cause.id}
                           isBookmarked={cause.isBookmarked ?? false}
                           onRemoveBookmark={
                             cause.onRemoveBookmark ?? (() => {})

@@ -9,7 +9,7 @@ interface FoodReliefProps {
   causes: any[]; // Replace with the actual type if available
 }
 
-export default function FoodRelief({ causes }: FoodReliefProps) {
+export default function FoodRelief({ causes = [] }: { causes?: any[] }) {
   return (
     <div>
       <div className="flex justify-between items-center mb-6">
