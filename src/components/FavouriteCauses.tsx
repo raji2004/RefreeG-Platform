@@ -1,7 +1,6 @@
-// components/FavouriteCauses.tsx
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { db } from "@/lib/firebase/config";
 import { doc, deleteDoc } from "firebase/firestore";
@@ -36,8 +35,17 @@ interface FavouriteCausesProps {
 const FavouriteCauses: React.FC<FavouriteCausesProps> = ({
   bookmarkedCauses,
 }) => {
-  const [bookmarks, setBookmarks] = useState<Cause[]>(bookmarkedCauses);
+  const [bookmarks, setBookmarks] = useState<Cause[]>([]);
+  const [isLoading, setIsLoading] = useState(true); // Add a loading state
   const userId = getSessionId(); // Get the user ID from the session
+
+  // Initialize bookmarks state and set loading to false once data is available
+  useEffect(() => {
+    if (bookmarkedCauses) {
+      setBookmarks(bookmarkedCauses);
+      setIsLoading(false);
+    }
+  }, [bookmarkedCauses]);
 
   const removeBookmark = async (id: string) => {
     if (!userId) return;
@@ -56,6 +64,18 @@ const FavouriteCauses: React.FC<FavouriteCausesProps> = ({
       console.error("Error removing bookmark:", error);
     }
   };
+
+  // Show a loading spinner or skeleton while data is being fetched
+  if (isLoading) {
+    return (
+      <div className="container mx-auto py-6 text-center">
+        <h1 className="text-2xl font-semibold mb-4">Favourite Causes</h1>
+        <div className="flex justify-center items-center h-40">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="container mx-auto py-6 text-center">
