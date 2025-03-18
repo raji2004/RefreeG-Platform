@@ -1,3 +1,4 @@
+// components/ui/BookmarkButton.tsx
 "use client";
 
 import React, { useState } from "react";
@@ -34,41 +35,40 @@ const BookmarkButton: React.FC<BookmarkButtonProps> = ({
   onRemoveBookmark,
 }) => {
   const [isBookmarked, setIsBookmarked] = useState(initialBookmarked);
-  const userId = getSessionId(); // Get the user ID from the session
+  const userId = getSessionId();
 
   const toggleBookmark = async () => {
     if (!userId) return;
 
-    setIsBookmarked((prev) => !prev); // Optimistic UI update
+    setIsBookmarked((prev) => !prev);
 
     const bookmarkRef = doc(db, `users/${userId}/bookmarked`, cause.id);
 
     try {
       if (isBookmarked) {
-        await deleteDoc(bookmarkRef); // Remove from Firestore
-        onRemoveBookmark?.(cause.id); // Update parent state
+        await deleteDoc(bookmarkRef);
+        onRemoveBookmark?.(cause.id);
       } else {
-        // Sanitize the cause object to remove undefined fields
         const sanitizedCause = {
           id: cause.id,
           causeTitle: cause.causeTitle,
-          uploadedImage: cause.uploadedImage || null, // Replace undefined with null
+          uploadedImage: cause.uploadedImage || null,
           img: cause.img,
           goalAmount: cause.goalAmount,
           daysLeft: cause.daysLeft,
           progressPercentage: cause.progressPercentage,
           raisedAmount: cause.raisedAmount,
-          description: cause.description || "", // Replace undefined with an empty string
+          description: cause.description || "",
         };
 
-        await setDoc(bookmarkRef, sanitizedCause); // Add to Firestore
+        await setDoc(bookmarkRef, sanitizedCause);
       }
     } catch (error) {
       console.error("Error toggling bookmark:", error);
-      setIsBookmarked((prev) => !prev); // Revert UI on error
+      setIsBookmarked((prev) => !prev);
     }
 
-    window.dispatchEvent(new Event("storage")); // Notify other components
+    window.dispatchEvent(new Event("storage"));
   };
 
   return (

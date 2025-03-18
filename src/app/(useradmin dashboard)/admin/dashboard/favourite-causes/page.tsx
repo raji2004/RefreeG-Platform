@@ -3,30 +3,10 @@ import FavouriteCauses from "@/components/FavouriteCauses";
 import { db } from "@/lib/firebase/config";
 import { collection, getDocs, query } from "firebase/firestore";
 import { getSessionId } from "@/lib/helpers";
-
-interface Cause {
-  id: string;
-  causeTitle: string;
-  uploadedImage: {
-    src: string;
-    name: string;
-    size: number;
-    type: string;
-    progress: number;
-  };
-  img: string;
-  goalAmount: number;
-  progressPercentage: number;
-  daysLeft: string;
-  raisedAmount: number;
-  description: string;
-  profileImage: string;
-  tags?: { icon: JSX.Element; text: string }[];
-  isBookmarked: boolean; // Add isBookmarked to the Cause interface
-}
+import { Cause } from "@/lib/type";
 
 export default async function FavouriteCausesPage() {
-  const userId = getSessionId(); // Get the user ID from the session
+  const userId = getSessionId();
 
   if (!userId) {
     return (
@@ -42,9 +22,9 @@ export default async function FavouriteCausesPage() {
     const bookmarkedCauses = querySnapshot.docs.map((doc) => {
       const data = doc.data();
       const raisedAmount = data.raisedAmount || 0;
-      const goalAmount = data.goalAmount || 1; // Avoid division by zero
-      const progressPercentage = Math.round((raisedAmount / goalAmount) * 100); // Calculate progressPercentage
-      return { ...data, progressPercentage, isBookmarked: true } as Cause; // Set isBookmarked to true
+      const goalAmount = data.goalAmount || 1;
+      const progressPercentage = Math.round((raisedAmount / goalAmount) * 100);
+      return { ...data, progressPercentage, isBookmarked: true } as Cause;
     });
 
     return (

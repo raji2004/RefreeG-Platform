@@ -169,6 +169,8 @@ export type Cause = {
   profileImage: string;
   isBookmarked: boolean;
   onRemoveBookmark?: (id: string) => void;
+  daysLeft: string; // Add this
+  progressPercentage: number; // Add this
 };
 
 export interface MainCauseCardProps
