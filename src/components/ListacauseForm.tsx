@@ -12,7 +12,7 @@ import { z } from "zod";
 import { Form1 } from "@/app/cause/create/Form1/Form1Component";
 import { Form2 } from "@/app/cause/create/Form2/Form2Component";
 import { Form3 } from "@/app/cause/create/Form3/Form3Component";
-import { Form4 } from "../app/cause/create/Form4/Form4Component";
+import { Form4 } from "@/app/cause/create/Form4/Form4Component";
 
 // Define the UploadedImage interface
 export interface UploadedImage {
@@ -23,7 +23,6 @@ export interface UploadedImage {
   type: string;
   path?: string; // Optional path property
 }
-
 
 // Define the complete form data interface and Zod schema
 export interface FormData {
@@ -51,22 +50,12 @@ const fullSchema = z.object({
     }),
   goalAmount: z.preprocess(
     (val) => {
-      if (typeof val === "string") {
-        return parseFloat(val);
-      }
+      if (typeof val === "string") return parseFloat(val);
       return val;
     },
     z
-      .number()
-      .refine(
-        (num) => {
-          // Allow negative values without error.
-          if (num < 1000) return true;
-          // If non-negative, the number must be greater than zero.
-          return num > 1000;
-        },
-        { message: "Goal amount must be greater than 1000" }
-      )
+      .number({ invalid_type_error: "Goal amount must be a number" })
+      .min(1000, { message: "Goal amount must be at least 1000" })
       .transform((num) => num.toString())
   ),
   uploadedImage: z
@@ -83,13 +72,18 @@ const fullSchema = z.object({
     }),
 });
 
-// Create step‑specific schemas by picking fields from the full schema.
+// (Optional) Create step‑specific schemas if you need them
 const step1Schema = fullSchema.pick({
   state: true,
   zipCode: true,
   currency: true,
 });
-const step2Schema = fullSchema.pick({ causeTitle: true, causeCategory: true });
+const step2Schema = fullSchema.pick({
+  causeTitle: true,
+  causeCategory: true,
+  deadline: true,
+  goalAmount: true,
+});
 const step3Schema = z.object({
   uploadedImage: fullSchema.shape.uploadedImage,
 });
@@ -99,7 +93,6 @@ export default function ListacauseForm() {
   const router = useRouter();
   const [step, setStep] = useState(1);
   const [mounted, setMounted] = useState(false);
-  // New state to control crypto donation flow
   const [cryptoSetupDone, setCryptoSetupDone] = useState<boolean>(false);
 
   // Retrieve initial data from localStorage if available
@@ -120,7 +113,6 @@ export default function ListacauseForm() {
     };
   })();
 
-  // Initialize react-hook-form with Zod validation using the full schema.
   const methods = useForm<FormData>({
     resolver: zodResolver(fullSchema),
     defaultValues: initialValues,
@@ -134,7 +126,7 @@ export default function ListacauseForm() {
     formState: { errors },
   } = methods;
 
-  // Save formData to localStorage whenever any value changes.
+  // Save formData to localStorage on change
   useEffect(() => {
     const subscription = watch((value) => {
       localStorage.setItem("formData", JSON.stringify(value));
@@ -142,27 +134,31 @@ export default function ListacauseForm() {
     return () => subscription.unsubscribe();
   }, [watch]);
 
-  // Read cryptoSetupDone flag from localStorage on mount
+  // Read cryptoSetupDone flag on mount
   useEffect(() => {
     const flag = localStorage.getItem("cryptoSetupDone");
     setCryptoSetupDone(flag === "true");
   }, []);
 
-  // Mark component as mounted to ensure client-only code runs correctly.
+  // Mark component as mounted
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // Handle going to the next step by triggering validation for only the current step’s fields.
+  // Validate fields for the current step before advancing
   const handleNext = async () => {
-    // If on step 1 and currency is Crypto Currency but crypto setup is not done, block progression.
-    if (step === 1 && watch("currency") === "Crypto Currency" && !cryptoSetupDone) {
+    if (
+      step === 1 &&
+      watch("currency") === "Crypto Currency" &&
+      !cryptoSetupDone
+    ) {
       alert("Please setup your crypto donation before proceeding.");
       return;
     }
     let fieldNames: (keyof FormData)[] = [];
     if (step === 1) fieldNames = ["state", "zipCode", "currency"];
-    if (step === 2) fieldNames = ["causeTitle", "causeCategory"];
+    if (step === 2)
+      fieldNames = ["causeTitle", "causeCategory", "deadline", "goalAmount"];
     if (step === 3) fieldNames = ["uploadedImage"];
     if (step === 4) fieldNames = ["deadline", "goalAmount"];
 
@@ -172,9 +168,9 @@ export default function ListacauseForm() {
     }
   };
 
-  // Remove the final submit button; submission will be handled on the preview page.
   const onSubmit = async (data: FormData) => {
     console.log("Data ready for preview:", data);
+    // Add your submit logic here.
   };
 
   if (!mounted) return null;
@@ -191,9 +187,21 @@ export default function ListacauseForm() {
             }}
           >
             <TabsList className="flex gap-8 my-20 md:my-8 mb-8">
-              <TabsTrigger value="step-1" disabled={step < 1}></TabsTrigger>
-              <TabsTrigger value="step-2" disabled={step < 2}></TabsTrigger>
-              <TabsTrigger value="step-3" disabled={step < 3}></TabsTrigger>
+              <TabsTrigger
+                value="step-1"
+                disabled={step < 1}
+                completed={step > 1}
+              ></TabsTrigger>
+              <TabsTrigger
+                value="step-2"
+                disabled={step < 2}
+                completed={step > 2}
+              ></TabsTrigger>
+              <TabsTrigger
+                value="step-3"
+                disabled={step < 3}
+                completed={step > 3}
+              ></TabsTrigger>
               <TabsTrigger value="step-4" disabled={step < 4}></TabsTrigger>
             </TabsList>
 

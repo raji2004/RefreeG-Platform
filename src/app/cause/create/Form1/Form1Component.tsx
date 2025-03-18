@@ -16,6 +16,7 @@ export const Form1 = () => {
   const {
     register,
     trigger,
+    setValue,
     formState: { errors },
     watch,
   } = useFormContext();
@@ -28,31 +29,25 @@ export const Form1 = () => {
   const [authLoading, setAuthLoading] = useState<boolean>(true);
 
   // Watch the state field to pass its current value for ZIP code validation
-  const stateValue = watch("state");
+  const stateValue = watch("state"); 
   const currency = watch("currency");
 
   useEffect(() => {
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      console.log("Auth state changed:", user);
       if (user) {
         try {
           const userDocRef = doc(db, "users", user.uid);
           const userDocSnap = await getDoc(userDocRef);
-          console.log("User doc exists:", userDocSnap.exists());
           if (userDocSnap.exists()) {
             const userData = userDocSnap.data();
-            console.log("User data:", userData);
             if (userData?.countryOfResidence) {
-              console.log("User country:", userData.countryOfResidence);
               setUserCountry(userData.countryOfResidence);
               fetchStatesForCountry(userData.countryOfResidence);
             } else {
-              console.error("Country not found in profile");
               setStateError("Country not found in your profile.");
             }
           } else {
-            console.error("User document not found");
             setStateError("User document not found.");
           }
         } catch (error) {
@@ -60,7 +55,6 @@ export const Form1 = () => {
           setStateError("Failed to retrieve your country information.");
         }
       } else {
-        console.error("User not logged in.");
         setStateError("User not logged in.");
       }
       setAuthLoading(false);
@@ -69,7 +63,6 @@ export const Form1 = () => {
   }, []);
 
   const fetchStatesForCountry = async (country: string) => {
-    console.log("Fetching states for country:", country);
     setLoadingStates(true);
     setStateError(null);
     try {
@@ -79,11 +72,14 @@ export const Form1 = () => {
         body: JSON.stringify({ country }),
       });
       const data = await res.json();
-      console.log("Response from /api/states:", data);
       if (data.states && Array.isArray(data.states)) {
         setStateOptions(data.states);
+
+        // If the current stored state isn't in the new list, reset it to empty
+        if (stateValue && !data.states.includes(stateValue)) {
+          setValue("state", "");
+        }
       } else {
-        console.error("No states returned");
         setStateError("No states found for your country.");
       }
     } catch (error) {
@@ -102,20 +98,29 @@ export const Form1 = () => {
       <p className="pl-4 text-[#2b2829] text-sm font-normal font-montserrat">
         Choose the location where you plan to receive your funds.
       </p>
+
       <form className="mt-4">
         <div className="flex gap-4">
           {/* State Field */}
           <FormItem>
             <FormLabel>State</FormLabel>
             <FormControl>
-              {(authLoading && !userCountry) ? (
+              {authLoading && !userCountry ? (
                 <p>Loading user info...</p>
               ) : userCountry ? (
                 <select
+                  // Use react-hook-form’s register for validation
                   {...register("state", {
                     required: "State is required",
+                    validate: (value) =>
+                      value.trim() !== "" || "Please select a valid state",
                   })}
-                  className="mt-1 px-5 py-3.5 w-60 block rounded-md"
+                  // Control the select with watch("state") so it stays selected if valid
+                  value={stateValue || ""}
+                  onChange={(e) => {
+                    setValue("state", e.target.value, { shouldValidate: true });
+                  }}
+                  className="mt-1 px-5 py-3.5 w-60 block rounded-[10px] border border-[#898384]"
                 >
                   <option value="">Select State</option>
                   {stateOptions.map((state) => (
@@ -130,7 +135,7 @@ export const Form1 = () => {
                 </p>
               )}
             </FormControl>
-            <FormMessage />
+            <FormMessage>{errors.state?.message?.toString()}</FormMessage>
           </FormItem>
 
           {/* ZIP/Postal Code Field with Asynchronous Validation */}
@@ -145,19 +150,10 @@ export const Form1 = () => {
                   required: "ZIP/Postal Code is required",
                   validate: async (value) => {
                     if (!userCountry || !stateValue) {
-                      console.error("Validation error: Country or State not set");
                       return "Country or State not set";
                     }
                     try {
                       const zip = value.toString();
-                      console.log(
-                        "Validating ZIP:",
-                        zip,
-                        "for country:",
-                        userCountry,
-                        "and state:",
-                        stateValue
-                      );
                       const res = await fetch("/api/validateZip", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
@@ -168,12 +164,13 @@ export const Form1 = () => {
                         }),
                       });
                       const data = await res.json();
-                      console.log("Response from /api/validateZip:", data);
                       if (data.valid) {
                         return true;
                       } else {
-                        console.error("ZIP validation failed:", data.error);
-                        return data.error || "The ZIP/Postal Code does not match the selected state.";
+                        return (
+                          data.error ||
+                          "The ZIP/Postal Code does not match the selected state."
+                        );
                       }
                     } catch (err) {
                       console.error("ZIP validation error:", err);
@@ -181,15 +178,14 @@ export const Form1 = () => {
                     }
                   },
                   onBlur: () => {
-                    console.log("ZIP field blurred, triggering validation");
                     trigger("zipCode");
                   },
                 })}
-                className="mt-1 px-5 py-3.5 w-60 block rounded-md"
+                className="mt-1 px-5 py-3.5 w-60 block rounded-[10px] border border-[#898384]"
                 placeholder="Enter ZIP/Postal Code"
               />
             </FormControl>
-            <FormMessage />
+            <FormMessage>{errors.zipCode?.message?.toString()}</FormMessage>
           </FormItem>
         </div>
 
@@ -205,14 +201,14 @@ export const Form1 = () => {
           <FormControl>
             <select
               {...register("currency")}
-              className="mt-1 px-5 py-3.5 w-[200px] block rounded-md"
+              className="mt-1 px-5 py-3.5 w-[200px] block rounded-[10px] border border-[#898384]"
             >
               <option value="">Select Currency</option>
               <option value="Flat Currency">Flat Currency</option>
               <option value="Crypto Currency">Crypto Currency</option>
             </select>
           </FormControl>
-          <FormMessage />
+          <FormMessage>{errors.currency?.message?.toString()}</FormMessage>
         </FormItem>
 
         {/* When Crypto Currency is selected, show a button to setup crypto donation */}

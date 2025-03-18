@@ -86,7 +86,7 @@ const PreviewPage = () => {
     setErrorMessage("");
 
     try {
-      const currentUser =  await getSessionId();
+      const currentUser = await getSessionId();
 
       if (currentUser === undefined) router.push("/login");
       console.log("Current User: ", currentUser);
@@ -142,13 +142,15 @@ const PreviewPage = () => {
               </h1>
               {uploadedImage ? (
                 <div className="mb-6 w-full">
-                  <Image
-                    src={uploadedImage.src}
-                    alt={uploadedImage.name}
-                    className="md:ml-[100px] w-[90%] md:w-[68%] object-cover rounded-lg"
-                    width={867}
-                    height={732}
-                  />
+                  {/* Image container with enforced aspect ratio */}
+                  <div className="relative md:ml-[100px] w-[90%] md:w-[68%] aspect-video rounded-lg overflow-hidden">
+                    <Image
+                      src={uploadedImage.src}
+                      alt={uploadedImage.name}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
                 </div>
               ) : (
                 <div className="mb-6 text-center">No image uploaded</div>
@@ -188,7 +190,7 @@ const PreviewPage = () => {
             <p>of ₦{formData?.goalAmount} goal</p>
             <div className="flex md:flex-row mt-4 text-sm items-center justify-start">
               <span className="bg-gray-200 rounded-full px-3 py-1 mb-2 md:mb-0 md:mr-1">
-                - Donations
+              NIL - Donations
               </span>
               <span className="bg-gray-200 rounded-full px-3 py-1">
                 {formData?.deadline
@@ -222,7 +224,6 @@ const PreviewPage = () => {
             <button
               className="bg-[#0070e0] text-white px-4 py-2 rounded"
               onClick={handleSubmit}
-              // disabled={!isFormValid()}
               aria-label="Submit Form"
             >
               Proceed

@@ -14,7 +14,7 @@ import {
   ref,
   uploadBytesResumable,
   getDownloadURL,
-  deleteObject, // Import deleteObject
+  deleteObject,
 } from "firebase/storage";
 import { storage } from "@/lib/firebase/config"; // Adjust the import path
 
@@ -40,7 +40,9 @@ export const Form3 = () => {
     setValue("uploadedImage", media);
   }, [media, setValue]);
 
-  const handleMediaChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleMediaChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setUploadError(null);
     clearErrors("uploadedImage");
 
@@ -52,7 +54,6 @@ export const Form3 = () => {
         console.log("Old image successfully deleted from Firebase Storage.");
       } catch (error) {
         console.error("Error deleting old image:", error);
-        // Optionally handle the error (e.g., show a message)
       }
       setMedia(null);
       localStorage.removeItem("uploadedImage");
@@ -100,14 +101,15 @@ export const Form3 = () => {
 
     // Upload file to Firebase Storage
     const fileName = `${Date.now()}-${file.name}`;
-    const storagePath = `uploads/${fileName}`;
+    const storagePath = `causes/${fileName}`;
     const storageRef = ref(storage, storagePath);
     const uploadTask = uploadBytesResumable(storageRef, file);
 
     uploadTask.on(
       "state_changed",
       (snapshot) => {
-        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         console.log(`Upload is ${progress}% done`);
         setMedia((prev) => (prev ? { ...prev, progress } : null));
       },
@@ -126,7 +128,7 @@ export const Form3 = () => {
           size: Math.round(file.size / 1024),
           progress: 100,
           type: file.type,
-          path: storagePath, // Save the Firebase Storage path
+          path: storagePath,
         };
 
         setMedia(updatedMedia);
@@ -136,7 +138,6 @@ export const Form3 = () => {
     );
   };
 
-  // Delete image from Firebase Storage and clear state
   const handleRemoveMedia = async () => {
     if (media && media.path) {
       const imageRef = ref(storage, media.path);
@@ -162,7 +163,8 @@ export const Form3 = () => {
         Bring Your Cause to Life with Media
       </h2>
       <p className="text-[#2b2829] text-sm font-normal font-montserrat mb-2">
-        An image can be worth a thousand words. Add a photo that showcases the real people, places, or situations your cause supports.
+        An image can be worth a thousand words. Add a photo that showcases the real
+        people, places, or situations your cause supports.
       </p>
       <FormItem>
         <FormLabel>Upload Image</FormLabel>
@@ -171,7 +173,9 @@ export const Form3 = () => {
             <button
               type="button"
               onClick={() => fileInputRef.current?.click()}
-              className={`border-dashed border-2 border-gray-300 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:bg-gray-100 ${media ? "p-0" : "py-10 px-48"}`}
+              className={`border-dashed border-2 border-gray-300 rounded-lg flex flex-col items-center justify-center cursor-pointer hover:bg-gray-100 ${
+                media ? "p-0" : "py-10 px-48"
+              }`}
             >
               {media ? (
                 <div className="relative w-[200px] h-[112.5px]">
@@ -213,7 +217,8 @@ export const Form3 = () => {
       <div className="relative mt-4">
         <button onClick={toggleGuidelines} className="flex gap-1 items-center">
           <p className="text-[#2b2829] text-[12px] font-normal font-montserrat underline">
-            To ensure the best experience, please follow these guidelines when uploading images
+            To ensure the best experience, please follow these guidelines when
+            uploading images
           </p>
           <Image
             src="/List_a_cause/chevron-down-4.svg"
@@ -239,38 +244,38 @@ export const Form3 = () => {
       </div>
 
       {media && (
-        <div className="mt-4">
-          <div className="border block w-2/4 border-[#b5b3b3] py-3 px-2">
+        <div className="mt-4 space-y-4">
+          {/* Upload progress block */}
+          <div className="border border-[#b5b3b3] rounded-md p-3 w-full max-w-[400px]">
             <div className="flex items-center justify-between">
-              <div className="flex gap-2">
+              <div className="flex gap-2 items-center min-w-0">
                 <Image
                   src="/List_a_cause/file.svg"
                   alt="File icon"
                   width={30}
                   height={30}
-                  style={{ width: "30px", height: "30px" }}
+                  className="flex-shrink-0"
                 />
-                <span>
-                  <p className="text-[#363939] text-md md:text-lg font-normal">
+                <div className="flex flex-col flex-grow min-w-0">
+                  <p className="text-[#363939] text-xs font-normal truncate">
                     {media.name}
                   </p>
                   <p className="text-[#b5b3b3] text-xs">{media.size} KB</p>
-                </span>
+                </div>
               </div>
               {media.progress === 100 && (
-                <span className="justify-end">
+                <div className="flex-shrink-0">
                   <Image
                     src="/List_a_cause/check.svg"
                     alt="Check"
-                    width={30}
-                    height={30}
-                    style={{ width: "30px", height: "30px" }}
+                    width={24}
+                    height={24}
                   />
-                </span>
+                </div>
               )}
             </div>
-            <div className="flex">
-              <div className="w-full mt-2 bg-gray-200 rounded-lg overflow-hidden">
+            <div className="flex mt-2">
+              <div className="w-full bg-gray-200 rounded-lg overflow-hidden">
                 <div
                   className="bg-blue-500 h-4 transition-all duration-200"
                   style={{ width: `${media.progress}%` }}
@@ -278,34 +283,36 @@ export const Form3 = () => {
               </div>
             </div>
           </div>
-          <div>
-            <div className="border block w-2/4 border-[#b5b3b3] py-3 px-2">
-              <div className="flex items-center justify-between">
-                <div className="flex gap-2">
-                  <Image
-                    src="/List_a_cause/file.svg"
-                    alt="File icon"
-                    width={30}
-                    height={30}
-                    style={{ width: "30px", height: "30px" }}
-                  />
-                  <span>
-                    <p className="text-[#363939] text-md md:text-lg font-normal">
-                      {media.name}
-                    </p>
-                    <p className="text-[#b5b3b3] text-xs">{media.size} KB</p>
-                  </span>
+
+          {/* Removal block */}
+          <div className="border border-[#b5b3b3] rounded-md p-3 w-full max-w-[400px]">
+            <div className="flex items-center justify-between">
+              <div className="flex gap-2 items-center min-w-0">
+                <Image
+                  src="/List_a_cause/file.svg"
+                  alt="File icon"
+                  width={30}
+                  height={30}
+                  className="flex-shrink-0"
+                />
+                <div className="flex flex-col flex-grow min-w-0">
+                  <p className="text-[#363939] text-xs font-normal truncate">
+                    {media.name}
+                  </p>
+                  <p className="text-[#b5b3b3] text-xs">{media.size} KB</p>
                 </div>
-                <button onClick={handleRemoveMedia}>
-                  <Image
-                    src="/List_a_cause/trash-2.svg"
-                    alt="Delete icon"
-                    width={30}
-                    height={30}
-                    style={{ width: "30px", height: "30px" }}
-                  />
-                </button>
               </div>
+              <button
+                onClick={handleRemoveMedia}
+                className="flex-shrink-0 focus:outline-none"
+              >
+                <Image
+                  src="/List_a_cause/trash-2.svg"
+                  alt="Delete icon"
+                  width={24}
+                  height={24}
+                />
+              </button>
             </div>
           </div>
         </div>

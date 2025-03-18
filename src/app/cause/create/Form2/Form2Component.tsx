@@ -3,44 +3,11 @@
 import React from "react";
 import Image from "next/image";
 import { useFormContext, Controller } from "react-hook-form";
-import {
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormMessage,
-} from "@/components/ui/form";
-import { DatePicker } from "@/components/ui/date-picker"; // Ensure correct import path
-
-// Helper functions (if needed in future)
-function numberToWords(num: number): string {
-  const words = [
-    "zero",
-    "one",
-    "two",
-    "three",
-    "four",
-    "five",
-    "six",
-    "seven",
-    "eight",
-    "nine",
-    "ten",
-  ];
-  return num <= 10 ? words[num] : num.toString();
-}
-
-function getTimeLeft(deadline: Date | null): string {
-  if (!deadline) return "";
-  const now = new Date();
-  const diffTime = deadline.getTime() - now.getTime();
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  if (diffDays <= 0) return "Today";
-  if (diffDays === 1) return "one day left";
-  return `${numberToWords(diffDays)} days left`;
-}
+import { FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
+import { DatePicker } from "@/components/ui/date-picker";
 
 export const Form2 = () => {
-  const { register, control } = useFormContext();
+  const { register, control, formState: { errors } } = useFormContext();
 
   return (
     <div className="space-x-3">
@@ -55,6 +22,7 @@ export const Form2 = () => {
       <div className="flex flex-col space-y-4 gap-5">
         {/* Cause Title Field */}
         <FormItem>
+          <FormLabel>Cause Title</FormLabel>
           <FormControl>
             <input
               type="text"
@@ -63,14 +31,17 @@ export const Form2 = () => {
               className="px-[9px] py-[13px] border-b border-[#898384] w-full focus:outline-none text-[#898384] text-base font-medium font-montserrat"
             />
           </FormControl>
+          {errors.causeTitle && (
+            <FormMessage>{errors.causeTitle.message?.toString()}</FormMessage>
+          )}
           <p className="text-[#5a5555] text-sm font-normal font-montserrat">
             *Note: Pick a short, attention-grabbing title.
           </p>
-          <FormMessage />
         </FormItem>
 
         {/* Cause Category Field */}
         <FormItem>
+          <FormLabel>Cause Category</FormLabel>
           <FormControl>
             <div className="relative">
               <select
@@ -91,11 +62,14 @@ export const Form2 = () => {
               </span>
             </div>
           </FormControl>
-          <FormMessage />
+          {errors.causeCategory && (
+            <FormMessage>{errors.causeCategory.message?.toString()}</FormMessage>
+          )}
         </FormItem>
 
-        {/* Deadline with Custom DatePicker Field */}
+        {/* Deadline Field with DatePicker */}
         <FormItem>
+          <FormLabel>Deadline</FormLabel>
           <FormControl>
             <Controller
               control={control}
@@ -109,11 +83,14 @@ export const Form2 = () => {
                       selectedDate ? selectedDate.toISOString().split("T")[0] : ""
                     )
                   }
-                  className="w-full" // Add additional styling as needed
+                  className="w-full"
                 />
               )}
             />
           </FormControl>
+          {errors.deadline && (
+            <FormMessage>{errors.deadline.message?.toString()}</FormMessage>
+          )}
           <p className="text-[#5a5555] text-sm font-normal font-montserrat">
             *Note: This is when the cause will be delisted from the platform.{" "}
             <span className="inline-flex gap-1 items-center text-sm font-medium font-montserrat underline cursor-pointer">
@@ -126,11 +103,11 @@ export const Form2 = () => {
               />
             </span>
           </p>
-          <FormMessage />
         </FormItem>
 
         {/* Goal Amount Field */}
         <FormItem>
+          <FormLabel>Goal Amount</FormLabel>
           <FormControl>
             <Controller
               control={control}
@@ -176,11 +153,12 @@ export const Form2 = () => {
               }}
             />
           </FormControl>
-          {/* New note for goal amount */}
+          {errors.goalAmount && (
+            <FormMessage>{errors.goalAmount.message?.toString()}</FormMessage>
+          )}
           <p className="text-[#5a5555] text-sm font-normal font-montserrat">
             *Note: Enter the donation target you wish to achieve for your cause.
           </p>
-          <FormMessage />
         </FormItem>
       </div>
     </div>
