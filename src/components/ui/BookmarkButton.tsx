@@ -1,4 +1,3 @@
-// components/BookmarkButton.tsx
 "use client";
 
 import React, { useState } from "react";
@@ -26,7 +25,7 @@ interface BookmarkButtonProps {
     description?: string;
   };
   isBookmarked: boolean;
-  onRemoveBookmark?: (id: string) => void; // Add onRemoveBookmark to the props
+  onRemoveBookmark?: (id: string) => void;
 }
 
 const BookmarkButton: React.FC<BookmarkButtonProps> = ({
@@ -40,31 +39,36 @@ const BookmarkButton: React.FC<BookmarkButtonProps> = ({
   const toggleBookmark = async () => {
     if (!userId) return;
 
+    setIsBookmarked((prev) => !prev); // Optimistic UI update
+
     const bookmarkRef = doc(db, `users/${userId}/bookmarked`, cause.id);
 
-    if (isBookmarked) {
-      await deleteDoc(bookmarkRef); // Remove the bookmark from Firestore
-      setIsBookmarked(false);
-      onRemoveBookmark?.(cause.id); // Call onRemoveBookmark to update the parent component's state
-    } else {
-      // Sanitize the `cause` object to remove undefined fields
-      const sanitizedCause = {
-        id: cause.id,
-        causeTitle: cause.causeTitle,
-        uploadedImage: cause.uploadedImage || null, // Replace undefined with null
-        img: cause.img,
-        goalAmount: cause.goalAmount,
-        daysLeft: cause.daysLeft,
-        progressPercentage: cause.progressPercentage,
-        raisedAmount: cause.raisedAmount,
-        description: cause.description || "", // Replace undefined with an empty string
-      };
+    try {
+      if (isBookmarked) {
+        await deleteDoc(bookmarkRef); // Remove from Firestore
+        onRemoveBookmark?.(cause.id); // Update parent state
+      } else {
+        // Sanitize the cause object to remove undefined fields
+        const sanitizedCause = {
+          id: cause.id,
+          causeTitle: cause.causeTitle,
+          uploadedImage: cause.uploadedImage || null, // Replace undefined with null
+          img: cause.img,
+          goalAmount: cause.goalAmount,
+          daysLeft: cause.daysLeft,
+          progressPercentage: cause.progressPercentage,
+          raisedAmount: cause.raisedAmount,
+          description: cause.description || "", // Replace undefined with an empty string
+        };
 
-      await setDoc(bookmarkRef, sanitizedCause); // Add the bookmark to Firestore
-      setIsBookmarked(true);
+        await setDoc(bookmarkRef, sanitizedCause); // Add to Firestore
+      }
+    } catch (error) {
+      console.error("Error toggling bookmark:", error);
+      setIsBookmarked((prev) => !prev); // Revert UI on error
     }
 
-    window.dispatchEvent(new Event("storage"));
+    window.dispatchEvent(new Event("storage")); // Notify other components
   };
 
   return (
