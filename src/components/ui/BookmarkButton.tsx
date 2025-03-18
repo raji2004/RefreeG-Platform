@@ -52,7 +52,7 @@ const BookmarkButton: React.FC<BookmarkButtonProps> = ({
           uploadedImage: cause.uploadedImage || null,
           img: cause.img,
           goalAmount: cause.goalAmount,
-          daysLeft: cause.daysLeft,
+          daysLeft: cause.daysLeft, // Ensure daysLeft is included
           progressPercentage: cause.progressPercentage,
           raisedAmount: cause.raisedAmount,
           description: cause.description || "",

@@ -26,7 +26,7 @@ export const MainCauseCard: React.FC<
   hideTags,
   hideButton,
   isBookmarked,
-  onRemoveBookmark, // Add onRemoveBookmark to the props
+  onRemoveBookmark,
 }) => {
   return (
     <div className="bg-white w-full rounded-lg">
@@ -81,7 +81,7 @@ export const MainCauseCard: React.FC<
             description,
           }}
           isBookmarked={isBookmarked}
-          onRemoveBookmark={onRemoveBookmark} // Pass onRemoveBookmark to BookmarkButton
+          onRemoveBookmark={onRemoveBookmark}
         />
       </div>
       {/* Tags */}

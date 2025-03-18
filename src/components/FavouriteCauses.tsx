@@ -74,7 +74,7 @@ const FavouriteCauses: React.FC<FavouriteCausesProps> = ({
           {bookmarks.map((cause) => (
             <MainCauseCard
               key={cause.id}
-              {...cause}
+              {...cause} // Spread all properties from cause
               hideDescription={false}
               hideTags={false}
               hideButton={false}

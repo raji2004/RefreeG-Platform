@@ -24,7 +24,12 @@ export default async function FavouriteCausesPage() {
       const raisedAmount = data.raisedAmount || 0;
       const goalAmount = data.goalAmount || 1;
       const progressPercentage = Math.round((raisedAmount / goalAmount) * 100);
-      return { ...data, progressPercentage, isBookmarked: true } as Cause;
+      return {
+        ...data,
+        progressPercentage,
+        isBookmarked: true,
+        daysLeft: data.daysLeft, // Ensure daysLeft is included
+      } as Cause;
     });
 
     return (
