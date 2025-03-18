@@ -1,22 +1,24 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import CausesAboutSocioEconomicGrowth from "./_components/causesAboutSocioEconomicGrowth";
 import HappeningNearYou from "./_components/happeningNearYou";
 import CausesSupported from "./_components/causesWeSupport";
 import FAQ from "./_components/frequentlyAskedQuestions";
 import WhyUseUs from "./_components/whyUseUs";
 import { H2, P, Ol } from "@/components/typograpy";
-import { DonationCarousel } from "@/components/donationCarousel";
+// import { DonationCarousel } from "@/components/donationCarousel";
 import Hero from "./_components/hero";
+import { getCauses } from "@/lib/action";
 
-export default function Home() {
+export default async function Home() {
+  const causes = await getCauses();
+
   return (
     <div>
       <Hero />
       <WhyUseUs />
 
-      <div className="w-full  px-10 py-8 bg-white border-b">
+      {/* <div className="w-full  px-10 py-8 bg-white border-b">
         <div className="flex justify-between items-center mb-6">
           <H2>Urgent causes</H2>
           <a href="#" className="text-blue-600 hover:underline">
@@ -24,7 +26,7 @@ export default function Home() {
           </a>
         </div>
         <DonationCarousel />
-      </div>
+      </div> */}
 
       {/* <div className="flex justify-end mt-4">
         <nav className="inline-flex space-x-2">
@@ -55,6 +57,7 @@ export default function Home() {
         />
       </div>
 
+      <HappeningNearYou causes={causes} />
       <div className="w-full justify-center pt-20 pb-12 lg:pb-20 px-10 mb-20 space-y-5 text-white bg-customBlueGray">
         <H2>How do we ensure transparency?</H2>
         <Ol className="mb-16">
@@ -106,8 +109,7 @@ export default function Home() {
         </div>
       </div>
 
-      <CausesAboutSocioEconomicGrowth />
-      <HappeningNearYou />
+      {/* <CausesAboutSocioEconomicGrowth /> */}
 
       <CausesSupported />
       <FAQ />

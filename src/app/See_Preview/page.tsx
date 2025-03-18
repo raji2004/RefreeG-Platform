@@ -92,10 +92,8 @@ const PreviewPage = () => {
       console.log("Current User: ", currentUser);
 
       // Combine the formData, sections, and uploadedImage into one object.
-      const finalData = { ...formData, sections, uploadedImage };
-
-      // Use the utility function to save the cause.
-      const docId = await saveCauseToFirestore(finalData);
+     const finalData = { ...formData, sections, img: uploadedImage?.src, userId: currentUser,raisedAmount:0,goalAmount:parseInt(formData.goalAmount) };
+      const causeId = await addCause(finalData);
 
       console.log("Document saved with ID:", docId);
       router.push(`/See_Preview/Success?id=${docId}`);

@@ -1,3 +1,4 @@
+"use client";
 import { useState } from "react";
 import { FaClock } from "react-icons/fa";
 import Comment from "./Comments";

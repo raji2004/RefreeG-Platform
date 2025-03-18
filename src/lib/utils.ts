@@ -1,7 +1,8 @@
 import { clsx, type ClassValue } from "clsx"
 import { ReadonlyURLSearchParams } from "next/navigation"
 import { twMerge } from "tailwind-merge"
-import { User } from "./type"
+import { CauseCategory, User } from "./type"
+import { Bookmark, LucideIcon, GraduationCap, Heart, Users, Briefcase, Leaf, PiggyBank, Sprout } from "lucide-react";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -23,3 +24,35 @@ export const getOldParams = (searchParams:ReadonlyURLSearchParams,params:URLSear
 
 }
 
+export function getDaysLeft(deadline: string): string {
+  const deadlineDate = new Date(deadline);
+  const now = new Date();
+  const diffTime = deadlineDate.getTime() - now.getTime();
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  if (diffDays <= 0) return "Past due";
+  const words = [
+    "zero",
+    "one",
+    "two",
+    "three",
+    "four",
+    "five",
+    "six",
+    "seven",
+    "eight",
+    "nine",
+    "ten",
+  ];
+  const dayWord = diffDays <= 10 ? words[diffDays] : diffDays.toString();
+  return `${dayWord} day${diffDays > 1 ? "s" : ""} left`;
+}
+
+export const CauseCategories: CauseCategory[] = [
+  { name: "Education", icon: GraduationCap },
+  { name: "Healthcare", icon: Heart },
+  { name: "Women’s Empowerment", icon: Users },
+  { name: "Youth Development", icon: Briefcase },
+  { name: "Economic Development", icon: PiggyBank },
+  { name: "Agriculture", icon: Sprout },
+  { name: "Environment", icon: Leaf },
+] as const;

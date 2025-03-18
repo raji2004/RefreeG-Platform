@@ -59,6 +59,12 @@ export const getSessionId = async () => {
     return await cookieStore.get('userSession')?.value;
 }
 
+export const SessionLogout = async () => {
+    const cookieStore = cookies();
+   await cookieStore.delete('userSession');
+    return true;
+}
+
 export const getBaseURL = (): string => {
     if (typeof window !== "undefined") {
       // Client-side (browser)
@@ -68,3 +74,4 @@ export const getBaseURL = (): string => {
       return process.env.BASE_URL || "http://localhost:3000"; // Fallback for local dev
     }
   };
+
