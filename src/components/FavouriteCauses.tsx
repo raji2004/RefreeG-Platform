@@ -4,28 +4,40 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { db } from "@/lib/firebase/config";
-import { doc, deleteDoc } from "firebase/firestore";
+import { doc, deleteDoc, getDoc } from "firebase/firestore";
 import { getSessionId } from "@/lib/helpers";
 import { MainCauseCard } from "@/components/CauseCard";
 import { Cause } from "@/lib/type";
 
 interface FavouriteCausesProps {
-  bookmarkedCauses: Cause[];
+  bookmarkedCauseIds: string[]; // Array of cause IDs
 }
 
 const FavouriteCauses: React.FC<FavouriteCausesProps> = ({
-  bookmarkedCauses,
+  bookmarkedCauseIds,
 }) => {
   const [bookmarks, setBookmarks] = useState<Cause[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const userId = getSessionId();
 
   useEffect(() => {
-    if (bookmarkedCauses) {
-      setBookmarks(bookmarkedCauses);
+    const fetchBookmarkedCauses = async () => {
+      if (!bookmarkedCauseIds) return;
+
+      const causes: Cause[] = [];
+      for (const causeId of bookmarkedCauseIds) {
+        const causeDoc = await getDoc(doc(db, "causes", causeId));
+        if (causeDoc.exists()) {
+          causes.push({ ...causeDoc.data(), id: causeDoc.id } as Cause);
+        }
+      }
+
+      setBookmarks(causes);
       setIsLoading(false);
-    }
-  }, [bookmarkedCauses]);
+    };
+
+    fetchBookmarkedCauses();
+  }, [bookmarkedCauseIds]);
 
   const removeBookmark = async (id: string) => {
     if (!userId) return;

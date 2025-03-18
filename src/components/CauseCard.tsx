@@ -69,17 +69,7 @@ export const MainCauseCard: React.FC<
         </div>
         {/* Bookmark Button Component */}
         <BookmarkButton
-          cause={{
-            id,
-            causeTitle,
-            uploadedImage,
-            img,
-            progressPercentage,
-            goalAmount,
-            daysLeft,
-            raisedAmount,
-            description,
-          }}
+          causeId={id} // Pass only the cause ID
           isBookmarked={isBookmarked}
           onRemoveBookmark={onRemoveBookmark}
         />

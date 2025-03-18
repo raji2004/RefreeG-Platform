@@ -6,28 +6,15 @@ import { Bookmark } from "lucide-react";
 import { db } from "@/lib/firebase/config";
 import { doc, setDoc, deleteDoc } from "firebase/firestore";
 import { getSessionId } from "@/lib/helpers";
-import { Cause } from "@/lib/type";
 
-// Use Pick to select only the required properties from the Cause type
 interface BookmarkButtonProps {
-  cause: Pick<
-    Cause,
-    | "id"
-    | "causeTitle"
-    | "uploadedImage"
-    | "img"
-    | "goalAmount"
-    | "daysLeft"
-    | "progressPercentage"
-    | "raisedAmount"
-    | "description"
-  >;
+  causeId: string; // Only the cause ID is needed
   isBookmarked: boolean;
   onRemoveBookmark?: (id: string) => void;
 }
 
 const BookmarkButton: React.FC<BookmarkButtonProps> = ({
-  cause,
+  causeId,
   isBookmarked: initialBookmarked,
   onRemoveBookmark,
 }) => {
@@ -39,26 +26,15 @@ const BookmarkButton: React.FC<BookmarkButtonProps> = ({
 
     setIsBookmarked((prev) => !prev);
 
-    const bookmarkRef = doc(db, `users/${userId}/bookmarked`, cause.id);
+    const bookmarkRef = doc(db, `users/${userId}/bookmarked`, causeId);
 
     try {
       if (isBookmarked) {
         await deleteDoc(bookmarkRef);
-        onRemoveBookmark?.(cause.id);
+        onRemoveBookmark?.(causeId);
       } else {
-        const sanitizedCause = {
-          id: cause.id,
-          causeTitle: cause.causeTitle,
-          uploadedImage: cause.uploadedImage || null,
-          img: cause.img,
-          goalAmount: cause.goalAmount,
-          daysLeft: cause.daysLeft, // Ensure daysLeft is included
-          progressPercentage: cause.progressPercentage,
-          raisedAmount: cause.raisedAmount,
-          description: cause.description || "",
-        };
-
-        await setDoc(bookmarkRef, sanitizedCause);
+        // Save only the cause ID
+        await setDoc(bookmarkRef, { causeId });
       }
     } catch (error) {
       console.error("Error toggling bookmark:", error);
