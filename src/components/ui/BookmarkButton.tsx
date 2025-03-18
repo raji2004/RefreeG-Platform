@@ -6,25 +6,22 @@ import { Bookmark } from "lucide-react";
 import { db } from "@/lib/firebase/config";
 import { doc, setDoc, deleteDoc } from "firebase/firestore";
 import { getSessionId } from "@/lib/helpers";
+import { Cause } from "@/lib/type";
 
+// Use Pick to select only the required properties from the Cause type
 interface BookmarkButtonProps {
-  cause: {
-    id: string;
-    causeTitle: string;
-    uploadedImage?: {
-      src: string;
-      name: string;
-      size: number;
-      type: string;
-      progress: number;
-    };
-    img: string;
-    goalAmount: number;
-    daysLeft: string;
-    progressPercentage: number;
-    raisedAmount: number;
-    description?: string;
-  };
+  cause: Pick<
+    Cause,
+    | "id"
+    | "causeTitle"
+    | "uploadedImage"
+    | "img"
+    | "goalAmount"
+    | "daysLeft"
+    | "progressPercentage"
+    | "raisedAmount"
+    | "description"
+  >;
   isBookmarked: boolean;
   onRemoveBookmark?: (id: string) => void;
 }
