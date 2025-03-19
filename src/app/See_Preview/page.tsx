@@ -4,15 +4,9 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Navbar from "../cause/create/_components/navbar";
-import { checkUserSession, getSessionId } from "@/lib/helpers";
-import {
-  FaExclamationTriangle,
-  FaHeartbeat,
-  FaMapMarkerAlt,
-  FaGlobe,
-} from "react-icons/fa";
+import { getSessionId } from "@/lib/helpers";
+import { FaExclamationTriangle, FaHeartbeat, FaMapMarkerAlt, FaGlobe } from "react-icons/fa";
 import { addCause } from "@/lib/action";
-import { saveCauseToFirestore } from "@/utils/listACause";
 
 interface Section {
   id: number;
@@ -87,16 +81,25 @@ const PreviewPage = () => {
 
     try {
       const currentUser = await getSessionId();
-
-      if (currentUser === undefined) router.push("/login");
+      if (currentUser === undefined) {
+        router.push("/login");
+        return;
+      }
       console.log("Current User: ", currentUser);
 
       // Combine the formData, sections, and uploadedImage into one object.
-     const finalData = { ...formData, sections, img: uploadedImage?.src, userId: currentUser,raisedAmount:0,goalAmount:parseInt(formData.goalAmount) };
-      const causeId = await addCause(finalData);
+      const finalData = {
+        ...formData,
+        sections,
+        img: uploadedImage?.src,
+        userId: currentUser,
+        raisedAmount: 0,
+        goalAmount: parseInt(formData.goalAmount),
+      };
 
-      console.log("Document saved with ID:", docId);
-      router.push(`/See_Preview/Success?id=${docId}`);
+      const causeId = await addCause(finalData);
+      console.log("Document saved with ID:", causeId);
+      router.push(`/See_Preview/Success?id=${causeId}`);
     } catch (error: any) {
       console.error("Error adding document:", error.message);
       setErrorMessage("There was an error submitting the form. Please try again.");
@@ -162,8 +165,7 @@ const PreviewPage = () => {
                 </span>
               </div>
               <p className="flex items-center mt-4 mb-4 font-semibold text-sm justify-start md:justify-start">
-                <FaGlobe className="mr-1" /> United Nations International
-                Children&apos;s Emergency Fund
+                <FaGlobe className="mr-1" /> United Nations International Childrens Emergency Fund
               </p>
               {sections.length > 0 &&
                 sections.map((section) => (
@@ -188,7 +190,7 @@ const PreviewPage = () => {
             <p>of ₦{formData?.goalAmount} goal</p>
             <div className="flex md:flex-row mt-4 text-sm items-center justify-start">
               <span className="bg-gray-200 rounded-full px-3 py-1 mb-2 md:mb-0 md:mr-1">
-              NIL - Donations
+                NIL - Donations
               </span>
               <span className="bg-gray-200 rounded-full px-3 py-1">
                 {formData?.deadline
