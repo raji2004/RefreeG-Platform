@@ -90,6 +90,7 @@ const FavouriteCauses: React.FC<FavouriteCausesProps> = ({
               hideDescription={false}
               hideTags={false}
               hideButton={false}
+              isBookmarked={true} // Set isBookmarked to true for all causes
               onRemoveBookmark={removeBookmark}
             />
           ))}

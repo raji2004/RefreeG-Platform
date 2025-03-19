@@ -25,7 +25,7 @@ export const MainCauseCard: React.FC<
   hideDescription,
   hideTags,
   hideButton,
-  isBookmarked,
+  isBookmarked, // Ensure isBookmarked is passed
   onRemoveBookmark,
 }) => {
   return (
@@ -70,7 +70,7 @@ export const MainCauseCard: React.FC<
         {/* Bookmark Button Component */}
         <BookmarkButton
           causeId={id} // Pass only the cause ID
-          isBookmarked={isBookmarked}
+          isBookmarked={isBookmarked} // Pass isBookmarked prop
           onRemoveBookmark={onRemoveBookmark}
         />
       </div>
