@@ -60,7 +60,7 @@ export const MainCauseCard: React.FC<
                 width={20}
                 className="mr-1"
               />
-              {daysLeft} • {progressPercentage}% funded
+              {daysLeft} days • {progressPercentage}% funded
             </p>
             {!hideDescription && (
               <p className="mt-2 hidden lg:block">{description}</p>
