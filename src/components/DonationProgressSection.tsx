@@ -23,15 +23,13 @@ function DonationProgressSection({
 }: DonationProgressSectionProps) {
   return (
     <div className="p-6 rounded-lg border border-gray-200 shadow-sm bg-white">
-      <DonationProgress
-        currentAmount={cause.raisedAmount}
-        goalAmount={Number(cause.goalAmount)}
-      />
+      <DonationProgress progressPercentage={progressPercentage} />
       <h2 className="text-2xl font-semibold mt-3">
         ₦{donationAmount.toLocaleString()} raised
       </h2>
       <p className="text-sm mb-4">
-        of <span className="font-medium">₦{goalAmount.toLocaleString()}</span> goal
+        of <span className="font-medium">₦{goalAmount.toLocaleString()}</span>{" "}
+        goal
       </p>
 
       {/* Statistics on donations */}
@@ -48,15 +46,13 @@ function DonationProgressSection({
 
       {/* Buttons for sharing and donating */}
       <div className="flex flex-col gap-3">
-        <Button 
-          variant="outline" 
+        <Button
+          variant="outline"
           className="w-full py-3 text-blue-600 border-blue-600 hover:bg-blue-50 font-medium flex items-center justify-center"
         >
           Share <BsShare className="ml-2" size={16} />
         </Button>
-        <Button
-          className="w-full py-3 bg-blue-600 text-white hover:bg-blue-700 font-medium flex items-center justify-center"
-        >
+        <Button className="w-full py-3 bg-blue-600 text-white hover:bg-blue-700 font-medium flex items-center justify-center">
           Donate <BsChevronRight className="ml-2" size={16} />
         </Button>
       </div>

@@ -1,5 +1,6 @@
 import DonationProgress from "@/components/ui/donationProgress";
 import { FaHeartbeat, FaMapMarkerAlt, FaShare } from "react-icons/fa";
+import { BsShare, BsChevronRight } from "react-icons/bs";
 import { GoAlert } from "react-icons/go";
 import Image from "next/image";
 import { Navbar } from "@/components/ui/navbar";
@@ -8,12 +9,16 @@ import { getCauseById, getUserById } from "@/lib/action";
 import { getDaysLeft } from "@/lib/utils";
 import { Footer } from "@/components/ui/footer";
 import { CauseCategories } from "@/lib/utils";
-import { User } from "lucide-react";
 import { getSessionId } from "@/lib/helpers";
 import DonationProgressSection from "@/components/DonationProgressSection";
 import DonationList from "@/components/DonationList";
 import EmojiReaction from "@/components/EmojiReaction";
 import { Badge } from "@/components/ui/badge";
+import UnicefBanner from "@/components/UnicefBanner";
+import CauseSection from "@/components/CauseSection";
+import CauseTabs from "@/components/CauseTabs";
+import NearbyCarousel from "@/components/NearbyCarousel";
+import console from "console";
 
 const Section = ({
   title,
@@ -37,6 +42,8 @@ export default async function DonationDetail({
   params: { cause_id: string };
 }) {
   const cause = await getCauseById(params.cause_id);
+
+  console.log(cause);
   const session = await getSessionId();
   const loggeduser = await getUserById(session ?? "");
 
@@ -57,6 +64,12 @@ export default async function DonationDetail({
     "2.4k Donations",
     `${progressPercentage.toFixed(1)}% funded`,
     daysleft,
+  ];
+
+  const paragraphs = [
+    "The recent floods in Maiduguri have displaced thousands of families, leaving them without food, shelter, and basic necessities. We are raising $50,000 to provide emergency relief, including temporary housing, medical supplies, and food. Together, we can help rebuild their lives.",
+    "The recent floods in Maiduguri have displaced thousands of families, leaving them without food, shelter, and basic necessities. We are raising $50,000 to provide emergency relief, including temporary housing, medical supplies, and food. Together, we can help rebuild their lives.",
+    "The recent floods in Maiduguri have displaced thousands of families, leaving them without food, shelter, and basic necessities. We are raising $50,000 to provide emergency relief, including temporary housing, medical supplies, and food. Together, we can help rebuild their lives.",
   ];
 
   return (
@@ -110,28 +123,18 @@ export default async function DonationDetail({
           </div>
 
           {/* Organization supporting the cause */}
-          <div className="flex items-end text-end mt-4 font-semibold text-sm">
-            <User className="mr-2" /> {user?.firstName ?? "Save the Children"}
-          </div>
+          <UnicefBanner />
 
           {/* Cause description paragraphs */}
-          <div className="mt-4 space-y-2">
-            {cause?.sections.map((section) => (
-              <Section
-                key={section.id}
-                title={section.header}
-                description={section.description}
-              />
-            ))}
-          </div>
+          <CauseSection section={cause.sections} />
 
           {/* Buttons for sharing and donating */}
           <div className="flex mt-4 space-x-4">
-            <button className="flex items-center bg-gray-200 px-4 py-2 rounded-md shadow-sm hover:bg-gray-300 transition-colors duration-300">
-              <FaShare className="mr-2" /> Share
+            <button className="flex items-center bg-white border border-gray-400 px-12 py-3 rounded-md shadow-sm hover:bg-gray-300 transition-colors duration-300">
+              Share <BsShare className="ml-2" />
             </button>
-            <button className="bg-black text-white px-4 py-2 rounded-md shadow-sm hover:bg-gray-700 transition-colors duration-300">
-              Donate
+            <button className="bg-[#433E3F] flex items-center text-white px-12 py-3 rounded-md shadow-sm hover:bg-gray-700 transition-colors duration-300">
+              Donate <BsChevronRight className="ml-2" />
             </button>
           </div>
         </div>
@@ -154,7 +157,13 @@ export default async function DonationDetail({
         </div>
       </div>
       {/* <DonationNav /> */}
+
+      <CauseTabs commentCount={20} />
+
       <CrowdfundingFeatures />
+
+      <NearbyCarousel />
+
       <Footer />
     </>
   );

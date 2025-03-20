@@ -42,7 +42,7 @@ function DonationList() {
             <div>
               <div className="flex items-center gap-2">
                 <p className="font-medium">Salim Ibrahim</p>
-                <Badge className="text-xs text-[#7D568A] bg-[#F2EAF4] px-2 py-0.5 rounded">
+                <Badge className="text-xs text-[#7D568A] bg-[#F2EAF4] hover:bg-[#F2EAF4] px-2 py-0.5 rounded">
                   Recent transaction
                 </Badge>
               </div>
@@ -68,7 +68,7 @@ function DonationList() {
             <div>
               <div className="flex items-center gap-2">
                 <p className="font-medium">Hephzibah</p>
-                <Badge className="text-xs text-[#7D568A] bg-[#F2EAF4] px-2 py-0.5 rounded">
+                <Badge className="text-xs text-[#7D568A] bg-[#F2EAF4] hover:bg-[#F2EAF4] px-2 py-0.5 rounded">
                   Recent transaction
                 </Badge>
               </div>
@@ -93,7 +93,7 @@ function DonationList() {
             <div>
               <div className="flex items-center gap-2">
                 <p className="font-medium">Julius</p>
-                <Badge className="text-xs text-[#7D568A] bg-[#F2EAF4] px-2 py-0.5 rounded">
+                <Badge className="text-xs text-[#7D568A] bg-[#F2EAF4] hover:bg-[#F2EAF4] px-2 py-0.5 rounded">
                   Recent transaction
                 </Badge>
               </div>
