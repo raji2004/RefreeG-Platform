@@ -3,12 +3,10 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { db } from "@/lib/firebase/config";
-import { doc, getDoc } from "firebase/firestore";
-import { getSessionId } from "@/lib/helpers";
 import { MainCauseCard } from "@/components/CauseCard";
-import { Cause } from "@/lib/type";
 import { removeBookmark } from "@/lib/bookmark";
+import { getCauseById } from "@/lib/action";
+import { Cause } from "@/lib/type"; // Import the Cause type
 
 interface FavouriteCausesProps {
   bookmarkedCauseIds: string[]; // Array of cause IDs
@@ -19,7 +17,6 @@ const FavouriteCauses: React.FC<FavouriteCausesProps> = ({
 }) => {
   const [bookmarks, setBookmarks] = useState<Cause[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const userId = getSessionId();
 
   useEffect(() => {
     const fetchBookmarkedCauses = async () => {
@@ -27,33 +24,30 @@ const FavouriteCauses: React.FC<FavouriteCausesProps> = ({
 
       const causes: Cause[] = [];
       for (const causeId of bookmarkedCauseIds) {
-        const causeDoc = await getDoc(doc(db, "causes", causeId));
-        if (causeDoc.exists()) {
-          const causeData = causeDoc.data();
-
+        const cause = await getCauseById(causeId); // Use the reusable function
+        if (cause) {
           // Calculate progressPercentage dynamically
-          const raisedAmount = causeData.raisedAmount || 0;
-          const goalAmount = causeData.goalAmount || 1; // Avoid division by zero
+          const raisedAmount = cause.raisedAmount || 0;
+          const goalAmount = cause.goalAmount || 1; // Avoid division by zero
           const progressPercentage = Math.round(
             (raisedAmount / goalAmount) * 100
           );
 
-          // Calculate daysLeft dynamically
-          const deadline = causeData.deadline; // Ensure deadline is stored in Firestore
+          // Calculate daysLeft dynamically and ensure it's a string
+          const deadline = cause.deadline; // Ensure deadline is stored in Firestore
           const daysLeft = deadline
             ? Math.ceil(
                 (new Date(deadline).getTime() - new Date().getTime()) /
                   (1000 * 60 * 60 * 24)
-              )
+              ).toString() // Convert number to string
             : "N/A";
 
           // Add calculated fields to the cause object
           causes.push({
-            ...causeData,
-            id: causeDoc.id,
+            ...cause,
             progressPercentage,
-            daysLeft,
-          } as Cause);
+            daysLeft, // Now guaranteed to be a string
+          });
         }
       }
 
