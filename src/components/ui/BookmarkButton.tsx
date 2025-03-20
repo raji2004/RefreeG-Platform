@@ -4,8 +4,9 @@
 import React, { useState } from "react";
 import { Bookmark } from "lucide-react";
 import { db } from "@/lib/firebase/config";
-import { doc, setDoc, deleteDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { getSessionId } from "@/lib/helpers";
+import { removeBookmark } from "@/lib/bookmark";
 
 interface BookmarkButtonProps {
   causeId: string; // Only the cause ID is needed
@@ -30,7 +31,7 @@ const BookmarkButton: React.FC<BookmarkButtonProps> = ({
 
     try {
       if (isBookmarked) {
-        await deleteDoc(bookmarkRef);
+        await removeBookmark(causeId); // Use the utility function
         onRemoveBookmark?.(causeId);
       } else {
         // Save only the cause ID

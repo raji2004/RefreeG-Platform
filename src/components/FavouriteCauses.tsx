@@ -4,10 +4,11 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { db } from "@/lib/firebase/config";
-import { doc, deleteDoc, getDoc } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { getSessionId } from "@/lib/helpers";
 import { MainCauseCard } from "@/components/CauseCard";
 import { Cause } from "@/lib/type";
+import { removeBookmark } from "@/lib/bookmark";
 
 interface FavouriteCausesProps {
   bookmarkedCauseIds: string[]; // Array of cause IDs
@@ -33,7 +34,9 @@ const FavouriteCauses: React.FC<FavouriteCausesProps> = ({
           // Calculate progressPercentage dynamically
           const raisedAmount = causeData.raisedAmount || 0;
           const goalAmount = causeData.goalAmount || 1; // Avoid division by zero
-          const progressPercentage = Math.round((raisedAmount / goalAmount) * 100);
+          const progressPercentage = Math.round(
+            (raisedAmount / goalAmount) * 100
+          );
 
           // Calculate daysLeft dynamically
           const deadline = causeData.deadline; // Ensure deadline is stored in Firestore
@@ -61,20 +64,10 @@ const FavouriteCauses: React.FC<FavouriteCausesProps> = ({
     fetchBookmarkedCauses();
   }, [bookmarkedCauseIds]);
 
-  const removeBookmark = async (id: string) => {
-    if (!userId) return;
-
-    try {
-      const bookmarkRef = doc(db, `users/${userId}/bookmarked`, id);
-      await deleteDoc(bookmarkRef);
-
-      const updatedBookmarks = bookmarks.filter((cause) => cause.id !== id);
-      setBookmarks(updatedBookmarks);
-
-      window.dispatchEvent(new Event("storage"));
-    } catch (error) {
-      console.error("Error removing bookmark:", error);
-    }
+  const handleRemoveBookmark = async (id: string) => {
+    await removeBookmark(id); // Use the utility function
+    const updatedBookmarks = bookmarks.filter((cause) => cause.id !== id);
+    setBookmarks(updatedBookmarks);
   };
 
   if (isLoading) {
@@ -113,7 +106,7 @@ const FavouriteCauses: React.FC<FavouriteCausesProps> = ({
               hideTags={false}
               hideButton={false}
               isBookmarked={true} // Set isBookmarked to true for all causes
-              onRemoveBookmark={removeBookmark}
+              onRemoveBookmark={handleRemoveBookmark} // Pass the handler
             />
           ))}
         </div>
