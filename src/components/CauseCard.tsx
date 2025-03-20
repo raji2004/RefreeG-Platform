@@ -25,7 +25,7 @@ export const MainCauseCard: React.FC<
   hideDescription,
   hideTags,
   hideButton,
-  isBookmarked, // Ensure isBookmarked is passed
+  isBookmarked,
   onRemoveBookmark,
 }) => {
   return (

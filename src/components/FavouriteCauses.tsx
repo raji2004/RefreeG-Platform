@@ -28,7 +28,29 @@ const FavouriteCauses: React.FC<FavouriteCausesProps> = ({
       for (const causeId of bookmarkedCauseIds) {
         const causeDoc = await getDoc(doc(db, "causes", causeId));
         if (causeDoc.exists()) {
-          causes.push({ ...causeDoc.data(), id: causeDoc.id } as Cause);
+          const causeData = causeDoc.data();
+
+          // Calculate progressPercentage dynamically
+          const raisedAmount = causeData.raisedAmount || 0;
+          const goalAmount = causeData.goalAmount || 1; // Avoid division by zero
+          const progressPercentage = Math.round((raisedAmount / goalAmount) * 100);
+
+          // Calculate daysLeft dynamically
+          const deadline = causeData.deadline; // Ensure deadline is stored in Firestore
+          const daysLeft = deadline
+            ? Math.ceil(
+                (new Date(deadline).getTime() - new Date().getTime()) /
+                  (1000 * 60 * 60 * 24)
+              )
+            : "N/A";
+
+          // Add calculated fields to the cause object
+          causes.push({
+            ...causeData,
+            id: causeDoc.id,
+            progressPercentage,
+            daysLeft,
+          } as Cause);
         }
       }
 
