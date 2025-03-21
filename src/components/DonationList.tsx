@@ -3,8 +3,27 @@ import { FiArrowUpRight, FiHeart, FiStar } from "react-icons/fi";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import DonationListCard from "./DonationListCard";
 
 function DonationList() {
+  const donations = [
+    {
+      name: "Salim Ibrahim",
+      amount: "₦50,000",
+      badgeText: "Recent transaction",
+    },
+    {
+      name: "Hephzibah",
+      amount: "₦10,000",
+      badgeText: "Recent transaction",
+    },
+    {
+      name: "Julius",
+      amount: "₦20,000",
+      badgeText: "Recent transaction",
+    },
+  ];
+
   return (
     <div className="p-6 rounded-lg border border-gray-200 shadow-sm bg-white mt-6">
       {/* Header with icon and title */}
@@ -32,84 +51,16 @@ function DonationList() {
       <div className="border-b border-gray-200 mb-4"></div>
 
       {/* Donation list */}
-      <ul className="space-y-4">
-        {/* Donation item 1 */}
-        <li className="flex items-center justify-between">
-          <div className="flex items-center">
-            <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
-              <FiHeart className="text-gray-500" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <p className="font-medium">Salim Ibrahim</p>
-                <Badge className="text-xs text-[#7D568A] bg-[#F2EAF4] hover:bg-[#F2EAF4] px-2 py-0.5 rounded">
-                  Recent transaction
-                </Badge>
-              </div>
-              <p className="text-sm text-gray-700">₦50,000</p>
-            </div>
-          </div>
-          <div className="border border-[#E6EEF8] p-2 rounded-full">
-            <Image
-              src="/DonationDetail/Applause.svg"
-              width={24}
-              height={24}
-              alt="Applause"
-            />
-          </div>
-        </li>
-
-        {/* Donation item 2 */}
-        <li className="flex items-center justify-between">
-          <div className="flex items-center">
-            <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
-              <FiHeart className="text-gray-500" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <p className="font-medium">Hephzibah</p>
-                <Badge className="text-xs text-[#7D568A] bg-[#F2EAF4] hover:bg-[#F2EAF4] px-2 py-0.5 rounded">
-                  Recent transaction
-                </Badge>
-              </div>
-              <p className="text-sm text-gray-700">₦10,000</p>
-            </div>
-          </div>
-          <div className="border border-[#E6EEF8] p-2 rounded-full">
-            <Image
-              src="/DonationDetail/Applause.svg"
-              width={24}
-              height={24}
-              alt="Applause"
-            />
-          </div>
-        </li>
-        {/* Donation item 3 */}
-        <li className="flex items-center justify-between">
-          <div className="flex items-center">
-            <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
-              <FiHeart className="text-gray-500" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <p className="font-medium">Julius</p>
-                <Badge className="text-xs text-[#7D568A] bg-[#F2EAF4] hover:bg-[#F2EAF4] px-2 py-0.5 rounded">
-                  Recent transaction
-                </Badge>
-              </div>
-              <p className="text-sm text-gray-700">₦50,000</p>
-            </div>
-          </div>
-          <div className="border border-[#E6EEF8] p-2 rounded-full">
-            <Image
-              src="/DonationDetail/Applause.svg"
-              width={24}
-              height={24}
-              alt="Applause"
-            />
-          </div>
-        </li>
-      </ul>
+      <div className="space-y-4">
+        {donations.map((donation, index) => (
+          <DonationListCard
+            key={index}
+            name={donation.name}
+            amount={donation.amount}
+            badgeText={donation.badgeText}
+          />
+        ))}
+      </div>
 
       {/* Action buttons */}
       <div className="flex gap-3 mt-6 justify-center">
