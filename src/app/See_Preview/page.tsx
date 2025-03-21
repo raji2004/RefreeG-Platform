@@ -7,6 +7,7 @@ import Navbar from "../cause/create/_components/navbar";
 import { getSessionId } from "@/lib/helpers";
 import { FaExclamationTriangle, FaHeartbeat, FaMapMarkerAlt, FaGlobe } from "react-icons/fa";
 import { addCause } from "@/lib/action";
+import { getDaysLeft } from "@/lib/utils";
 
 interface Section {
   id: number;
@@ -106,29 +107,7 @@ const PreviewPage = () => {
     }
   };
 
-  // Helper function to compute days left from the deadline.
-  function getDaysLeft(deadline: string): string {
-    const deadlineDate = new Date(deadline);
-    const now = new Date();
-    const diffTime = deadlineDate.getTime() - now.getTime();
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    if (diffDays <= 0) return "Past due";
-    const words = [
-      "zero",
-      "one",
-      "two",
-      "three",
-      "four",
-      "five",
-      "six",
-      "seven",
-      "eight",
-      "nine",
-      "ten",
-    ];
-    const dayWord = diffDays <= 10 ? words[diffDays] : diffDays.toString();
-    return `${dayWord} day${diffDays > 1 ? "s" : ""} left`;
-  }
+ 
 
   return (
     <div>
