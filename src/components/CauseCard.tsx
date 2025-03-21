@@ -57,7 +57,10 @@ export const MainCauseCard: React.FC<MainCauseCardProps> = ({
           />
           {/* Title and Details */}
           <div className="flex-1">
-            <h3 className="text-xl md:text-2xl font-semibold">{causeTitle}</h3>
+          <h3 className="text-xl md:text-2xl font-semibold">
+            {causeTitle.replace(/\b\w/g, (char) => char.toUpperCase())}
+          </h3>
+
             <p className="flex mt-2 text-gray-600">
               <Image
                 src="/images/clock.svg"

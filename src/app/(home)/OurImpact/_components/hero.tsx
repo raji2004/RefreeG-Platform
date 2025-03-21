@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 export default function Hero() {
   return (
-    <div className='px-10 w-full flex flex-col-reverse md:flex md:flex-row justify-between'>
+    <div className='pt-10 px-10 w-full flex flex-col-reverse md:flex md:flex-row justify-between'>
         <div className='w-full lg:w-8/12'>
             <div className='w-full lg:w-5/6 mb-7'>
                 <div className='text-2xl font-semibold pb-2 md:pb-4 lg:mb-7'>Our Impact 🌍💙</div>

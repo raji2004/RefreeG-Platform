@@ -6,16 +6,14 @@ interface FeatureCardProps {
     imageSrc: string;
     title: string;
     description: string;
-    linkHref: string;
   }
   
 export const FeatureCard: FC<FeatureCardProps> = ({
     imageSrc,
     title,
     description,
-    linkHref,
 }) => (
-    <Link href={linkHref}>
+    <div>
         <div className="flex w-[350px] flex-col space-y-2 transform transition-transform duration-300 hover:scale-105 hover:shadow-lg hover:bg-slate-50 pb-5 hover:rounded-xl p-4 cursor-pointer">
           <Image
             src={imageSrc}
@@ -37,7 +35,7 @@ export const FeatureCard: FC<FeatureCardProps> = ({
               />
           </div>
         </div>
-    </Link>
+    </div>
 );
 
 export const HowDoWeAchieveThis: FC = () => {
@@ -55,25 +53,21 @@ export const HowDoWeAchieveThis: FC = () => {
             imageSrc={"/images/blockchain.png"}
             title="🔗Blockchain-Powered Transparency"
             description="Every donation made on RefreeG is trackable and verifiable using blockchain technology, ensuring that funds are used for their intended purpose."
-            linkHref="/blockchain-transparency" // Use query parameter
           />
           <FeatureCard
             imageSrc={"/images/seamless.png"}
             title="💰 Seamless & Inclusive Giving"
             description="We support multiple payment methods, including mobile money, cryptocurrency, and traditional bank transfers, making it easy for anyone, anywhere to contribute."
-            linkHref="/vetted-causes" // Use query parameter
           />
           <FeatureCard
             imageSrc={"/images/community.png"}
             title="👥 A Community-First Approach"
             description="We support multiple payment methods, including mobile money, cryptocurrency, and traditional bank transfers, making it easy for anyone, anywhere to contribute."
-            linkHref="/easy-donation-process" // Use query parameter
           />
           <FeatureCard
             imageSrc={"/images/changemakers.png"}
             title="🌍 Empowering Local Changemakers"
             description="We provide a platform where individuals, organizations, and businesses can start causes to raise funds for meaningful projects."
-            linkHref="/global-access" // Use query parameter
           />
         </div>
       </div>

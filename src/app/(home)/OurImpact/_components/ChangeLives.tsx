@@ -4,7 +4,7 @@ import { FiArrowUpRight } from "react-icons/fi";
 
 export default function ChangeLives() {
   return (
-    <div className='w-full md:w-5/6 lg:w-1/2 px-10 mt-8'>
+    <div className='w-full md:w-5/6 lg:w-1/2 px-10 my-8'>
         <div className='text-xl md:text-2xl lg:text-4xl font-semibold w-full'>💙 Your Support Changes Lives</div>
         <div className='mt-2 text-base'>
             At RefreeG, every donation counts, every cause matters, and every action leads to real impact. Whether you’re donating, starting a campaign, or simply spreading the word, you are helping reshape the future of giving.

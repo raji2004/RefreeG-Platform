@@ -6,16 +6,14 @@ interface FeatureCardProps {
     imageSrc: string;
     title: string;
     description: string;
-    linkHref: string;
   }
   
 export const FeatureCard: FC<FeatureCardProps> = ({
     imageSrc,
     title,
     description,
-    linkHref,
 }) => (
-    <Link href={linkHref}>
+    <div>
         <div className="flex w-[350px] flex-col space-y-2 transform transition-transform duration-300 hover:scale-105 hover:shadow-lg hover:bg-slate-50 pb-5 hover:rounded-xl p-4 cursor-pointer">
           <Image
             src={imageSrc}
@@ -37,7 +35,7 @@ export const FeatureCard: FC<FeatureCardProps> = ({
               />
           </div>
         </div>
-    </Link>
+    </div>
 );
 
 export const WhatDoWeFocusOn: FC = () => {
@@ -55,25 +53,21 @@ export const WhatDoWeFocusOn: FC = () => {
             imageSrc={"/images/education.png"}
             title="📚 Education & Literacy"
             description=" Scholarships, school support, books for students."
-            linkHref="/blockchain-transparency" // Use query parameter
           />
           <FeatureCard
             imageSrc={"/images/vocation.png"}
             title="🛠️ Vocational Training:"
             description="Skill-building to empower unemployed youth."
-            linkHref="/vetted-causes" // Use query parameter
           />
           <FeatureCard
             imageSrc={"/images/healthcare.png"}
             title="🚑 Healthcare Support:"
             description="Medical aid for underserved communities."
-            linkHref="/easy-donation-process" // Use query parameter
           />
           <FeatureCard
             imageSrc={"/images/gbv.png"}
             title="👩‍👧‍👦 Gender-Based Violence Support:"
             description="Aid for survivors & women empowerment."
-            linkHref="/global-access" // Use query parameter
           />
         </div>
       </div>

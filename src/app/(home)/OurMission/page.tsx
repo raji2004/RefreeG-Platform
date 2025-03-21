@@ -4,7 +4,6 @@ import WhatDoWeFocusOn from "./_components/WhatDoWeFocusOn";
 import Hero from "./_components/hero";
 import Whyweexist from "./_components/whyweexist";
 import CreateBetterFuture from "./_components/CreateBetterFuture";
-import JoinCommunity from "./_components/JoinCommunity";
 
 export default function Mission() {
     return (
@@ -14,7 +13,6 @@ export default function Mission() {
             <HowDoWeAchieveThis />
             <WhatDoWeFocusOn />
             <CreateBetterFuture />
-            <JoinCommunity />            
         </div>
     )
 }

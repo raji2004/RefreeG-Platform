@@ -1,5 +1,5 @@
 "use client";
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Sheet, SheetTrigger, SheetContent } from "../ui/sheet";
 import { Button } from "../ui/button";
 import Link from "next/link";
@@ -16,9 +16,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import SearchModal from './searchModal';
 import { ChevronDown, LogOut } from 'lucide-react'
 import { SessionLogout } from "@/lib/helpers";
+import { getCauseByName } from "@/lib/firebase/admin";
+import { ClipLoader } from "react-spinners"; // Import spinner
 
 interface MenuLinkProps {
   href: string;
@@ -40,17 +41,45 @@ const MenuLink = ({ href, children, className, onClick, ...props }: MenuLinkProp
 );
 
 export function Navbar({ userSession,profile }: { userSession?: boolean ,profile?:string}) {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [showInput, setShowInput] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [aboutUsOpen, setAboutUsOpen] = useState(false);
+  const searchRef = useRef<HTMLDivElement | null>(null); // Ref for search box
 
-  const handleSearch = () => {
-    alert(`Searching for: ${searchQuery}`);
-    setIsSearchModalOpen(false);
-  };
 
-  const toggleSearchModal = () => {
-    setIsSearchModalOpen(!isSearchModalOpen);
+  // Handle outside click
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setShowInput(false);
+      }
+    }
+
+    if (showInput) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showInput]);
+
+
+  const handleSearch = async () => {
+    if (!searchTerm.trim()) return;
+    
+    setLoading(true);
+    try {
+      const results = await getCauseByName(searchTerm);
+      setSearchResults(results);
+      console.log("Search Results:", results); // Debugging line
+    } catch (error) {
+      console.error("Search error:", error);
+      setSearchResults([]);
+    }
+    setLoading(false);
   };
 
   return (
@@ -62,13 +91,57 @@ export function Navbar({ userSession,profile }: { userSession?: boolean ,profile
       {/* Large Screen Navigation */}
       <nav className="hidden lg:flex ml-auto gap-6">
         <div className="relative">
-          <MenuLink href="#" onClick={toggleSearchModal} className='hover:bg-blue-100'>
+          <button
+            className="hover:bg-blue-100 p-2 flex items-center space-x-2"
+            onClick={() => setShowInput(!showInput)}
+          >
             <Image src={Search} height={20} width={20} alt="search" />
-            Search
-          </MenuLink>
+            <span className='font-medium'>Search</span>
+          </button>
+
+          {/* Search Input Field */}
+          {showInput && (
+            <div 
+              className="z-20 absolute top-full mt-2 bg-white shadow-lg p-3 rounded-lg w-64" 
+              ref={searchRef}
+            >
+              <div className='flex border'>
+                <input
+                  type="text"
+                  placeholder="Search for a cause..."
+                  className="outline-none p-2 w-full"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <button
+                  className="text-white p-2 rounded"
+                  onClick={handleSearch}
+                >
+                  {loading ? (
+                    <ClipLoader className='bg-[#a7d7ef]' size={30} color="#142256" />
+                  ) : (
+                    <span className="text-xl px-1 py-0.5 rounded text-black bg-[#a7d7ef] hover:text-white hover:bg-[#142256] transition ">→</span> // Right arrow
+                  )}
+                </button>
+              </div>
+
+              {/* Search Results Dropdown */}
+              {searchResults.length > 0 ? (
+                <div className="mt-2 border rounded bg-gray-100 max-h-60 overflow-y-auto">
+                  {searchResults.map((cause) => (
+                    <div key={cause.id} className="p-2 hover:bg-gray-200 cursor-pointer">
+                      {cause.causeTitle || "Unnamed Cause"} {/* Ensure name is displayed */}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                !loading && <p className="mt-2 text-gray-500">No cause found</p>
+              )}
+            </div>
+          )}
         </div>
 
-        <MenuLink href="#" className='hover:bg-blue-100'>Explore causes</MenuLink>
+        <MenuLink href="/cause" className='hover:bg-blue-100'>Explore causes</MenuLink>
 
         <div 
           className="relative"
@@ -118,10 +191,10 @@ export function Navbar({ userSession,profile }: { userSession?: boolean ,profile
                   </div>
 
                   <DropdownMenuItem asChild>
-                      <Link href="/WhatWeDo" className="whitespace-nowrap hover:underline hover:bg-[#D6EBFF] px-4 py-2 block">
-                        What We Do
-                      </Link>
-                    </DropdownMenuItem>
+                    <Link href="/WhatWeDo" className="whitespace-nowrap hover:underline hover:bg-[#D6EBFF] px-4 py-2 block">
+                      What We Do
+                    </Link>
+                  </DropdownMenuItem>
                 </div>
               </DropdownMenuContent>
             </DropdownMenu>
@@ -162,7 +235,7 @@ export function Navbar({ userSession,profile }: { userSession?: boolean ,profile
           height={40}
           className="rounded-full aspect-square"
         />
-        </MenuLink> : <MenuLink href="/login" className="hover:underline">
+        </MenuLink> : <MenuLink href="/login" className="">
           Login
         </MenuLink>
         }
@@ -170,13 +243,57 @@ export function Navbar({ userSession,profile }: { userSession?: boolean ,profile
 
       {/* Small Screen Menu and Search Button */}
       <div className="lg:hidden ml-auto flex items-center space-x-4">
-        <button
-          onClick={toggleSearchModal}
-          className="p-2"
-          aria-label="Search"
-        >
-          <Image src={Search} alt="search icon" height={24} width={24} />
-        </button>
+        <div className="relative w-full">
+          <button
+            className="p-2"
+            aria-label="Search"
+            onClick={() => setShowInput(!showInput)}
+          >
+            <Image src={Search} alt="search icon" height={24} width={24} />
+          </button>
+
+          {/* Search Input Field */}
+          {showInput && (
+            <div
+              ref={searchRef} // Attach ref here 
+              className="z-20 relative left-1/2 transform -translate-x-1/2 top-full mt-32 mx-auto bg-white shadow-lg p-3 rounded-lg w-[70vw] max-w-sm"
+            >
+              <div className="flex border">
+                <input
+                  type="text"
+                  placeholder="Search for a cause..."
+                  className="outline-none p-2 w-full"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <button className="text-white p-2 rounded" onClick={handleSearch}>
+                  {loading ? (
+                    <ClipLoader className="bg-[#a7d7ef]" size={30} color="#142256" />
+                  ) : (
+                    <span className="text-xl px-1 py-0.5 rounded text-black bg-[#a7d7ef] hover:text-white hover:bg-[#142256] transition">
+                      →
+                    </span>
+                  )}
+                </button>
+              </div>
+
+              {/* Search Results Dropdown */}
+              {searchResults.length > 0 ? (
+                <div className="mt-2 border rounded bg-gray-100 max-h-60 overflow-y-auto">
+                  {searchResults.map((cause) => (
+                    <div key={cause.id} className="p-2 hover:bg-gray-200 cursor-pointer">
+                      {cause.causeTitle || "Unnamed Cause"}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                !loading && <p className="mt-2 text-gray-500">No cause found</p>
+              )}
+            </div>
+          )}
+        </div>
+     
+        
         <Sheet>
           <SheetTrigger asChild>
             <Button variant="outline" size="icon" className="border-none">
@@ -196,12 +313,12 @@ export function Navbar({ userSession,profile }: { userSession?: boolean ,profile
               />
             </Link>
             <div className="grid gap-2 py-6">
-              <MenuLink href="#">Explore causes</MenuLink>
+              <MenuLink href="/cause">Explore causes</MenuLink>
               {/* Mobile About Us (Accordion) */}
               <div className="lg:hidden">
                 <button
                   onClick={() => setAboutUsOpen((prev) => !prev)}
-                  className="w-full text-left flex justify-between items-center py-2 px-3 hover:bg-gray-100"
+                  className="w-full font-medium text-left flex justify-between items-center py-2 px-3 hover:bg-gray-100"
                 >
                   About Us
                   <ChevronDown className={`h-4 w-4 transition-transform ${aboutUsOpen ? "rotate-180" : ""}`} />
@@ -209,14 +326,14 @@ export function Navbar({ userSession,profile }: { userSession?: boolean ,profile
 
                 {aboutUsOpen && (
                   <div className="pl-4 space-y-1">
-                    <MenuLink href="#" className='text-xs'>Our Mission</MenuLink>
-                    <MenuLink href="#" className='text-xs'>
+                    <MenuLink href="/OurMission" className='text-xs'>Our Mission</MenuLink>
+                    <MenuLink href="/OurStory" className='text-xs'>
                       Our Story (The &quot;Why&quot; Behind RefreeG)
                     </MenuLink>
 
-                    <MenuLink href="#" className='text-xs'>Our Impact</MenuLink>
+                    <MenuLink href="/OurImpact" className='text-xs'>Our Impact</MenuLink>
                     <MenuLink href="#" className='text-xs'>Who Are We Made By?</MenuLink>
-                    <MenuLink href="#" className='text-xs'>What We Do</MenuLink>
+                    <MenuLink href="/WhatWeDo" className='text-xs'>What We Do</MenuLink>
                   </div>
                 )}
               </div>
@@ -262,15 +379,6 @@ export function Navbar({ userSession,profile }: { userSession?: boolean ,profile
           </SheetContent>
         </Sheet>
       </div>
-
-      {/* Search Modal with Responsive Padding */}
-      <SearchModal
-        isOpen={isSearchModalOpen}
-        onClose={toggleSearchModal}
-        searchQuery={searchQuery}
-        setSearchQuery={setSearchQuery}
-        onSearch={handleSearch}
-      />
     </header>
   );
 }

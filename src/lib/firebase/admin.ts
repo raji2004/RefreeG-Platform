@@ -13,6 +13,28 @@ export async function getUsers() {
   }
 }
 
+// Fetch a cause by name
+export async function getCauseByName(causeName: string) {
+  try {
+    const causesCollection = collection(db, "causes");
+    const causesQuery = query(causesCollection, where("causeTitle", "==", causeName));
+    const causesSnapshot = await getDocs(causesQuery);
+
+    // Ensure name exists in the returned data
+    const causes = causesSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    console.log("Fetched Causes:", causes); // Debugging line
+    return causes;
+  } catch (error) {
+    console.error("Error fetching cause by name:", error);
+    return [];
+  }
+}
+
+
 // Fetch active causes
 export async function getCauses(statusQuery: string) {
   try {
