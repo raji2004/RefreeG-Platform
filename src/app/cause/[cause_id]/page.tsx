@@ -13,11 +13,11 @@ import Image from "next/image";
 import DonationNav from "@/components/donationNavbar";
 import { Navbar } from "@/components/ui/navbar";
 import CrowdfundingFeatures from "@/components/crowdfundingFeatures";
-import { getCauseById, getUserById } from "@/lib/action";
+import { getCauseById, getUserById } from "@/lib/firebase/actions";
 import { getDaysLeft } from "@/lib/utils";
 import { Footer } from "@/components/ui/footer";
 import { CauseCategories } from "@/lib/utils";
-import {User } from 'lucide-react'
+import { User } from 'lucide-react'
 import { P } from "@/components/typograpy";
 import { getSessionId } from "@/lib/helpers";
 
@@ -55,7 +55,7 @@ export default async function DonationDetail({ params }: { params: { cause_id: s
 
   return (
     <div>
-      <Navbar userSession={session !== undefined?true:false} profile={user?.profileImage} />
+      <Navbar userSession={session !== undefined ? true : false} profile={user?.profileImage} />
       <div className="p-4 md:flex md:justify-between">
         {/* Left side - Main content */}
         <div className="md:w-2/4">

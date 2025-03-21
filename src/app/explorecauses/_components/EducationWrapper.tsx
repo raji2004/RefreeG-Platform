@@ -1,5 +1,5 @@
 import React from "react";
-import { getCauses } from "@/lib/action";
+import { getCauses } from "@/lib/firebase/actions";
 import Education from "./education"; // Import the client component
 
 export default async function EducationWrapper() {

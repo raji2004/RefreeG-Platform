@@ -3,9 +3,8 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { MainCauseCard } from "@/components/CauseCard";
-import { removeBookmark } from "@/lib/bookmark";
-import { getCauseById } from "@/lib/action";
+import { MainCauseCard } from "@/components/CauseCard"
+import { getCauseById,removeBookmark } from "@/lib/firebase/actions";
 import { Cause } from "@/lib/type"; // Import the Cause type
 import { getDaysLeft } from "@/lib/utils";
 
@@ -26,16 +25,16 @@ const FavouriteCauses: React.FC<FavouriteCausesProps> = ({
       const causes: Cause[] = [];
       for (const causeId of bookmarkedCauseIds) {
         const cause = await getCauseById(causeId);
-         if(!cause) continue;
-          const progressPercentage = Math.round(
-            (cause.raisedAmount  / cause.goalAmount ) * 100
-          ); 
-          const daysLeft = getDaysLeft(cause.deadline)
-          causes.push({
-            ...cause,
-            progressPercentage,
-            daysLeft, 
-          }); 
+        if (!cause) continue;
+        const progressPercentage = Math.round(
+          (cause.raisedAmount / cause.goalAmount) * 100
+        );
+        const daysLeft = getDaysLeft(cause.deadline)
+        causes.push({
+          ...cause,
+          progressPercentage,
+          daysLeft,
+        });
       }
 
       setBookmarks(causes);

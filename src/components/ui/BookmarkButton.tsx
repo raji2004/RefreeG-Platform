@@ -6,7 +6,7 @@ import { Bookmark } from "lucide-react";
 import { db } from "@/lib/firebase/config";
 import { doc, setDoc } from "firebase/firestore";
 import { getSessionId } from "@/lib/helpers";
-import { removeBookmark } from "@/lib/bookmark";
+import { removeBookmark } from "@/lib/firebase/actions";
 
 interface BookmarkButtonProps {
   causeId: string; // Only the cause ID is needed
@@ -49,9 +49,8 @@ const BookmarkButton: React.FC<BookmarkButtonProps> = ({
     <div onClick={toggleBookmark} className="cursor-pointer">
       <Bookmark
         size={30}
-        className={`transition-colors duration-300 ${
-          isBookmarked ? "text-blue-600 fill-blue-600" : "text-gray-500"
-        }`}
+        className={`transition-colors duration-300 ${isBookmarked ? "text-blue-600 fill-blue-600" : "text-gray-500"
+          }`}
       />
     </div>
   );

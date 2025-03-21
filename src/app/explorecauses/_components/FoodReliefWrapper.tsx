@@ -1,5 +1,5 @@
 import React from "react";
-import { getCauses } from "@/lib/action";
+import { getCauses } from "@/lib/firebase/actions";
 import FoodRelief from "./foodRelief";
 
 export default async function FoodReliefWrapper() {

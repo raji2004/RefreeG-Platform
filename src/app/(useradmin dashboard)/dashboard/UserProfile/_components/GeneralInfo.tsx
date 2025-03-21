@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Camera } from "lucide-react";
 import { User } from "@/lib/type";
-import { updateUserById } from "@/lib/action";
+import { updateUserById } from "@/lib/firebase/actions";
 import { promises } from "dns";
 import { toast } from "react-toastify";
 import { uploadImage } from "@/lib/uploadimg";
@@ -19,7 +19,7 @@ export default function GeneralInfo({ user }: { user: User }) {
     const [currentProfileImage, setCurrentProfileImage] = useState(user.profileImage);
     const [previewImage, setPreviewImage] = useState<File | null>(null);
 
-  
+
 
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files[0]) {
@@ -47,7 +47,7 @@ export default function GeneralInfo({ user }: { user: User }) {
         try {
             if (!previewImage) {
                 return currentProfileImage || "";
-                
+
             }
             console.log(previewImage)
             const uploadedImage = await uploadImage(previewImage as File, "/profileImages");
@@ -134,7 +134,7 @@ export default function GeneralInfo({ user }: { user: User }) {
                     <Input
                         type="text"
                         name="fullName"
-                       
+
                         readOnly={!isEditing}
                         defaultValue={formValues.firstName}
                         onChange={handleInputChange}
@@ -144,7 +144,7 @@ export default function GeneralInfo({ user }: { user: User }) {
                     <Input
                         type="text"
                         name="fullName"
-                       
+
                         readOnly={!isEditing}
                         defaultValue={formValues.lastName}
                         onChange={handleInputChange}
@@ -157,7 +157,7 @@ export default function GeneralInfo({ user }: { user: User }) {
                         name="email"
                         defaultValue={formValues.email}
                         onChange={handleInputChange}
-                       
+
                         readOnly={!isEditing}
                         className={`w-full ${isEditing ? "bg-white" : "bg-gray-100"}`}
                     />
