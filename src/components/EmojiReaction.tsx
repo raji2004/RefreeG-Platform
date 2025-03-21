@@ -166,7 +166,7 @@ export default function EmojiReaction() {
                         x: circleRef.current
                           ? circleRef.current.getBoundingClientRect().left -
                             containerRef.current!.getBoundingClientRect().left -
-                            (reaction.emoji.toString().length > 1 ? 30 : 25)
+                            (reaction.emoji && reaction.emoji.toString().length > 1 ? 30 : 25)
                           : 0,
                         y: 0,
                         opacity: 0,

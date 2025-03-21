@@ -4,10 +4,8 @@ import Image from "next/image";
 import { FaHeartbeat, FaMapMarkerAlt } from "react-icons/fa";
 import DonationProgress from "../components/ui/donationProgress";
 
-import {  MainCauseCardProps } from "@/lib/type";
+import { MainCauseCardProps } from "@/lib/type";
 import Link from "next/link";
-
-
 
 export const MainCauseCard: React.FC<MainCauseCardProps> = ({
   img,
@@ -69,7 +67,9 @@ export const MainCauseCard: React.FC<MainCauseCardProps> = ({
               {daysLeft} • {progressPercentage}% funded
             </p>
             {/* Description (Hidden on Mobile) */}
-            {!hideDescription && <p className="mt-2 hidden lg:block">{description}</p>}
+            {!hideDescription && (
+              <p className="mt-2 hidden lg:block">{description}</p>
+            )}
           </div>
         </div>
         {/* Bookmark Icon */}
@@ -99,8 +99,10 @@ export const MainCauseCard: React.FC<MainCauseCardProps> = ({
 
       {/* Donation Progress */}
       <div className="mt-6">
-        <DonationProgress currentAmount={raisedAmount} goalAmount={goalAmount} />
-        <div className="font-bold text-gray-800 mt-2">₦{raisedAmount} raised</div>
+        <DonationProgress progressPercentage={progressPercentage} />
+        <div className="font-bold text-gray-800 mt-2">
+          ₦{raisedAmount} raised
+        </div>
         <div className="text-gray-800">Goal: ₦{goalAmount}</div>
       </div>
 
@@ -115,5 +117,3 @@ export const MainCauseCard: React.FC<MainCauseCardProps> = ({
     </div>
   );
 };
-
-
