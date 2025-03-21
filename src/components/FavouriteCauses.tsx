@@ -7,6 +7,7 @@ import { MainCauseCard } from "@/components/CauseCard";
 import { removeBookmark } from "@/lib/bookmark";
 import { getCauseById } from "@/lib/action";
 import { Cause } from "@/lib/type"; // Import the Cause type
+import { getDaysLeft } from "@/lib/utils";
 
 interface FavouriteCausesProps {
   bookmarkedCauseIds: string[]; // Array of cause IDs
@@ -24,31 +25,17 @@ const FavouriteCauses: React.FC<FavouriteCausesProps> = ({
 
       const causes: Cause[] = [];
       for (const causeId of bookmarkedCauseIds) {
-        const cause = await getCauseById(causeId); // Use the reusable function
-        if (cause) {
-          // Calculate progressPercentage dynamically
-          const raisedAmount = cause.raisedAmount || 0;
-          const goalAmount = cause.goalAmount || 1; // Avoid division by zero
+        const cause = await getCauseById(causeId);
+         if(!cause) continue;
           const progressPercentage = Math.round(
-            (raisedAmount / goalAmount) * 100
-          );
-
-          // Calculate daysLeft dynamically and ensure it's a string
-          const deadline = cause.deadline; // Ensure deadline is stored in Firestore
-          const daysLeft = deadline
-            ? Math.ceil(
-                (new Date(deadline).getTime() - new Date().getTime()) /
-                  (1000 * 60 * 60 * 24)
-              ).toString() // Convert number to string
-            : "N/A";
-
-          // Add calculated fields to the cause object
+            (cause.raisedAmount  / cause.goalAmount ) * 100
+          ); 
+          const daysLeft = getDaysLeft(cause.deadline)
           causes.push({
             ...cause,
             progressPercentage,
-            daysLeft, // Now guaranteed to be a string
-          });
-        }
+            daysLeft, 
+          }); 
       }
 
       setBookmarks(causes);
