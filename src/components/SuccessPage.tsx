@@ -18,7 +18,7 @@ const causeUrl= `${baseURL}/cause/${causeData.id}`;
       navigator.clipboard
         .writeText(causeUrl)
         .then(() => alert("Link copied to clipboard!"))
-        .catch(() => alert("Failed to copy link"));
+        .catch(() => alert("Failed to copy link "));
     }
   };
 
@@ -216,7 +216,7 @@ const causeUrl= `${baseURL}/cause/${causeData.id}`;
 
           {/* Side B: Social Sharing */}
           <div className="w-full md:w-1/2 flex flex-col gap-5">
-            <p className="mb-4 text-sm mt-2  font-medium font-montserrat">
+            <p className="mb-4 text-sm mt-2 font-medium font-montserrat">
               Help your cause gain visibility! Share it on social media to reach
               more potential supporters.
             </p>

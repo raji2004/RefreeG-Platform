@@ -4,17 +4,10 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Navbar from "../cause/create/_components/navbar";
-import { collection, addDoc, setDoc, doc } from "firebase/firestore";
-import { db } from "@/lib/firebase/config";
-import { getAuth } from "firebase/auth";
-import { checkUserSession, getSessionId } from "@/lib/helpers";
-import {
-  FaExclamationTriangle,
-  FaHeartbeat,
-  FaMapMarkerAlt,
-  FaGlobe,
-} from "react-icons/fa";
+import { getSessionId } from "@/lib/helpers";
+import { FaExclamationTriangle, FaHeartbeat, FaMapMarkerAlt, FaGlobe } from "react-icons/fa";
 import { addCause } from "@/lib/action";
+import { getDaysLeft } from "@/lib/utils";
 
 interface Section {
   id: number;
@@ -88,14 +81,25 @@ const PreviewPage = () => {
     setErrorMessage("");
 
     try {
-      const currentUser =  await getSessionId();
-
-      if (currentUser === undefined) router.push("/login");
+      const currentUser = await getSessionId();
+      if (currentUser === undefined) {
+        router.push("/login");
+        return;
+      }
       console.log("Current User: ", currentUser);
 
       // Combine the formData, sections, and uploadedImage into one object.
-      const finalData = { ...formData, sections, img: uploadedImage?.src, userId: currentUser,raisedAmount:0,goalAmount:parseInt(formData.goalAmount) };
+      const finalData = {
+        ...formData,
+        sections,
+        img: uploadedImage?.src,
+        userId: currentUser,
+        raisedAmount: 0,
+        goalAmount: parseInt(formData.goalAmount),
+      };
+
       const causeId = await addCause(finalData);
+      console.log("Document saved with ID:", causeId);
       router.push(`/See_Preview/Success?id=${causeId}`);
     } catch (error: any) {
       console.error("Error adding document:", error.message);
@@ -103,31 +107,7 @@ const PreviewPage = () => {
     }
   };
 
-
-
-  // Helper function to compute days left from the deadline.
-  function getDaysLeft(deadline: string): string {
-    const deadlineDate = new Date(deadline);
-    const now = new Date();
-    const diffTime = deadlineDate.getTime() - now.getTime();
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    if (diffDays <= 0) return "Past due";
-    const words = [
-      "zero",
-      "one",
-      "two",
-      "three",
-      "four",
-      "five",
-      "six",
-      "seven",
-      "eight",
-      "nine",
-      "ten",
-    ];
-    const dayWord = diffDays <= 10 ? words[diffDays] : diffDays.toString();
-    return `${dayWord} day${diffDays > 1 ? "s" : ""} left`;
-  }
+ 
 
   return (
     <div>
@@ -142,13 +122,15 @@ const PreviewPage = () => {
               </h1>
               {uploadedImage ? (
                 <div className="mb-6 w-full">
-                  <Image
-                    src={uploadedImage.src}
-                    alt={uploadedImage.name}
-                    className="md:ml-[100px] w-[90%] md:w-[68%] object-cover rounded-lg"
-                    width={867}
-                    height={732}
-                  />
+                  {/* Image container with enforced aspect ratio */}
+                  <div className="relative md:ml-[100px] w-[90%] md:w-[68%] aspect-video rounded-lg overflow-hidden">
+                    <Image
+                      src={uploadedImage.src}
+                      alt={uploadedImage.name}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
                 </div>
               ) : (
                 <div className="mb-6 text-center">No image uploaded</div>
@@ -162,8 +144,7 @@ const PreviewPage = () => {
                 </span>
               </div>
               <p className="flex items-center mt-4 mb-4 font-semibold text-sm justify-start md:justify-start">
-                <FaGlobe className="mr-1" /> United Nations International
-                Children&apos;s Emergency Fund
+                <FaGlobe className="mr-1" /> United Nations International Childrens Emergency Fund
               </p>
               {sections.length > 0 &&
                 sections.map((section) => (
@@ -188,7 +169,7 @@ const PreviewPage = () => {
             <p>of ₦{formData?.goalAmount} goal</p>
             <div className="flex md:flex-row mt-4 text-sm items-center justify-start">
               <span className="bg-gray-200 rounded-full px-3 py-1 mb-2 md:mb-0 md:mr-1">
-                - Donations
+                NIL - Donations
               </span>
               <span className="bg-gray-200 rounded-full px-3 py-1">
                 {formData?.deadline
@@ -222,7 +203,6 @@ const PreviewPage = () => {
             <button
               className="bg-[#0070e0] text-white px-4 py-2 rounded"
               onClick={handleSubmit}
-              // disabled={!isFormValid()}
               aria-label="Submit Form"
             >
               Proceed

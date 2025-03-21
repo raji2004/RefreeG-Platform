@@ -29,6 +29,25 @@ export const fetchCountriesData = async (): Promise<SortedCountry[]> => {
     }
 };
 
+export const fetchStatesForCountry = async (country: string): Promise<string[]> => {
+    try {
+      const response = await fetch("https://countriesnow.space/api/v0.1/countries/states", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ country }),
+      });
+      const data = await response.json();
+      if (!data.error && data.data && data.data.states) {
+        // Return an array of state names
+        return data.data.states.map((s: { name: string }) => s.name);
+      } else {
+        throw new Error("No states data found for this country");
+      }
+    } catch (error) {
+      console.error("Error fetching states for country:", error);
+      throw error;
+    }
+  };
 
 export const checkUserSession = () => {
     const cookieStore = cookies();
