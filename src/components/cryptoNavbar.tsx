@@ -67,7 +67,7 @@ const CryptoNavbar = () => {
               <div className="flex space-x-4">
                 <Link href={"/crypto-donation"}>
                   <p className="rounded-md px-3 py-2 text-sm font-medium text-slate-700">
-                    Campaigns
+                    Causes
                   </p>
                 </Link>
                 {account && (
