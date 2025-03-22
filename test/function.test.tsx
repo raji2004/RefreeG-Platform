@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { checkEmailExists } from "../src/lib/action"; 
+import { checkEmailExists } from "../src/lib/firebase/actions/action";
 
 // Mock the function to always return true or false as needed
 vi.mock("../src/lib/action", () => ({

@@ -35,7 +35,7 @@ import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import { useCreateUserWithEmailAndPassword, useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth'
 import { auth } from "@/lib/firebase/config";
-import { addUser, checkEmailExists } from "@/lib/action";
+import { addUser, checkEmailExists } from "@/lib/firebase/actions";
 import { setCookie } from 'cookies-next';
 
 
@@ -68,8 +68,8 @@ export default function LoginForm() {
       setCookie('userSession', JSON.stringify(res?.user.uid), { maxAge: sessionAge });
       if (res != undefined) {
         push('/')
-      }else{
-          toast('Invalid email or password')
+      } else {
+        toast('Invalid email or password')
       }
     } catch (e) {
       console.error('error', e)
