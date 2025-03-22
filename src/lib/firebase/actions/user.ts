@@ -14,14 +14,14 @@ export async function addUser(docId: string, user: Omit<User, 'id' | 'nin' | 'bv
   }
 }
 export const getUserById = async (userId: string): Promise<User | null> => {
-    const decodedId = decodeURIComponent(userId).replace(/"/g, "").trim();
+   
     try {
       if (!userId) {
         console.warn("Invalid user ID provided:", userId);
         return null;
       }
   
-      const userRef = doc(db, "users", decodedId); // Get reference to specific user
+      const userRef = doc(db, "users", userId); // Get reference to specific user
       const docSnap = await getDoc(userRef);
       if (!docSnap.exists()) {
         console.warn("User not found with ID:", userId);
@@ -39,18 +39,18 @@ export const getUserById = async (userId: string): Promise<User | null> => {
     userId: string,
     updatedData: Partial<Omit<User, "id">> // Ensure ID is not included in updates
   ): Promise<void> => {
-    const decodedId = decodeURIComponent(userId).replace(/"/g, "").trim();
+    
     
     try {
-      if (!decodedId) {
+      if (!userId) {
         console.warn("Invalid user ID provided:", userId);
         return;
       }
   
-      const userRef = doc(db, "users", decodedId); // Reference to the user document
+      const userRef = doc(db, "users", userId); // Reference to the user document
   
       await updateDoc(userRef, updatedData); // Update user fields
-      console.log("User updated successfully:", decodedId);
+      console.log("User updated successfully:", userId);
     } catch (error) {
       console.error("Error updating user by ID:", error);
       throw error;

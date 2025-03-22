@@ -9,9 +9,12 @@ import { H2, P, Ol } from "@/components/typograpy";
 // import { DonationCarousel } from "@/components/donationCarousel";
 import Hero from "./_components/hero";
 import { getCauses } from "@/lib/firebase/actions";
+import { getSessionId } from "@/lib/helpers";
 
 export default async function Home() {
   const causes = await getCauses();
+  const userId = await getSessionId();
+  
 
   return (
     <div>
@@ -57,7 +60,7 @@ export default async function Home() {
         />
       </div>
 
-      <HappeningNearYou causes={causes} />
+      <HappeningNearYou causes={causes}  />
       <div className="w-full justify-center pt-20 pb-12 lg:pb-20 px-10 mb-20 space-y-5 text-white bg-customBlueGray">
         <H2>How do we ensure transparency?</H2>
         <Ol className="mb-16">

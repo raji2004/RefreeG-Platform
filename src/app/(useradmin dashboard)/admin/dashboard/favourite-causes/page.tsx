@@ -5,11 +5,11 @@ import { redirect } from "next/navigation";
 
 export default async function FavouriteCausesPage() {
   const userId = await getSessionId();
-  if(!userId || userId === 'undefined'){
+  if (!userId || userId === 'undefined') {
     redirect('/login');
   }
 
-const bookmarkedid = await getBookmarkedIds(userId);
+  const bookmarkedid = await getBookmarkedIds(userId);
 
   return (
     <div>
@@ -17,5 +17,5 @@ const bookmarkedid = await getBookmarkedIds(userId);
     </div>
   );
 
-  
+
 }

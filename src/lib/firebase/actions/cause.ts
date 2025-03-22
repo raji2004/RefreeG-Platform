@@ -2,6 +2,7 @@
 import { Cause } from "@/lib/type";
 import { collection, addDoc, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 import { db } from "../config";
+import { checkIfBookmarked } from ".";
 
 export const addCause = async (causeData: Omit<Cause, "id">): Promise<string> => {
     try {
@@ -20,7 +21,6 @@ export const getCauseById = async (causeId: string): Promise<Cause | null> => {
         const causeRef = doc(db, "causes", causeId);
         const docSnap = await getDoc(causeRef);
         // console.log(causeId)
-
         if (!docSnap.exists()) {
             // console.log("Cause not found with ID:", causeId);
             return null;
@@ -55,17 +55,26 @@ export const getCauses = async (): Promise<Cause[]> => {
         const causesRef = collection(db, "causes");
         const querySnapshot = await getDocs(causesRef);
 
-        const causes: Cause[] = querySnapshot.docs.map((doc) => ({
-            id: doc.id,
-            ...doc.data(),
-        })) as Cause[];
+        const causes = await Promise.all(
+            querySnapshot.docs.map(async (doc) => {
+                const data = doc.data();
+                
+                // Call async function to check if it's bookmarked
+                const isBookmarked = await checkIfBookmarked(doc.id);
+                
+                
 
-        return causes;
+                return { id: doc.id, ...data, isBookmarked }  as Cause ;
+            })
+        );
+
+        return causes.filter(cause => cause !== null) as Cause[];
     } catch (error) {
         console.error("Error fetching causes:", error);
         throw error;
     }
-}
+};
+
 
 
 

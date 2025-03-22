@@ -3,10 +3,9 @@
 
 import React, { useState } from "react";
 import { Bookmark } from "lucide-react";
-import { db } from "@/lib/firebase/config";
-import { doc, setDoc } from "firebase/firestore";
 import { getSessionId } from "@/lib/helpers";
-import { removeBookmark } from "@/lib/firebase/actions";
+import { addBookmark, removeBookmark } from "@/lib/firebase/actions";
+import { toast } from "react-toastify";
 
 interface BookmarkButtonProps {
   causeId: string; // Only the cause ID is needed
@@ -20,22 +19,18 @@ const BookmarkButton: React.FC<BookmarkButtonProps> = ({
   onRemoveBookmark,
 }) => {
   const [isBookmarked, setIsBookmarked] = useState(initialBookmarked);
-  const userId = getSessionId();
+ 
 
   const toggleBookmark = async () => {
-    if (!userId) return;
+  
 
     setIsBookmarked((prev) => !prev);
-
-    const bookmarkRef = doc(db, `users/${userId}/bookmarked`, causeId);
-
     try {
       if (isBookmarked) {
         await removeBookmark(causeId); // Use the utility function
         onRemoveBookmark?.(causeId);
       } else {
-        // Save only the cause ID
-        await setDoc(bookmarkRef, { causeId });
+        await addBookmark(causeId); // Use the utility function
       }
     } catch (error) {
       console.error("Error toggling bookmark:", error);

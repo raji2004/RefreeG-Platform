@@ -4,7 +4,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { MainCauseCard } from "@/components/CauseCard"
-import { getCauseById,removeBookmark } from "@/lib/firebase/actions";
+import { getCauseById, removeBookmark } from "@/lib/firebase/actions";
 import { Cause } from "@/lib/type"; // Import the Cause type
 import { getDaysLeft } from "@/lib/utils";
 
