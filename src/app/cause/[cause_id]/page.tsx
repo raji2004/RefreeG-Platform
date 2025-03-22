@@ -55,7 +55,7 @@ export default async function DonationDetail({ params }: { params: { cause_id: s
 
   return (
     <div>
-      <Navbar userSession={session !== undefined ? true : false} profile={user?.profileImage} />
+      <Navbar userSession={!!session} profile={loggeduser?.profileImage} />
       <div className="p-4 md:flex md:justify-between">
         {/* Left side - Main content */}
         <div className="md:w-2/4">

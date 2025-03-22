@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 
 export default async function FavouriteCausesPage() {
   const userId = await getSessionId();
-  if (!userId || userId === 'undefined') {
+  if (!userId) {
     redirect('/login');
   }
 

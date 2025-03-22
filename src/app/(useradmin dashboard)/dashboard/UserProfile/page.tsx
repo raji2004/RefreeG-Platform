@@ -5,7 +5,7 @@ import { getUserById } from "@/lib/firebase/actions";
 
 export default async function UserProfile() {
   const session = await getSessionId();
-  if (session === undefined) {
+  if (!session) {
     redirect("/login");
   }
   const user = await getUserById(session);

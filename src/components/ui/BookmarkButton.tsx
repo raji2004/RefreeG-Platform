@@ -3,9 +3,8 @@
 
 import React, { useState } from "react";
 import { Bookmark } from "lucide-react";
-import { getSessionId } from "@/lib/helpers";
 import { addBookmark, removeBookmark } from "@/lib/firebase/actions";
-import { toast } from "react-toastify";
+
 
 interface BookmarkButtonProps {
   causeId: string; // Only the cause ID is needed

@@ -39,7 +39,7 @@ export const getSessionId = async () => {
     const cookieStore = cookies();
     
     const userId= await cookieStore.get('userSession')?.value;
-    if (!userId) return null
+    if (!userId || userId === undefined) return null
 
     return decodeURIComponent(userId).replace(/"/g, "").trim();
 }

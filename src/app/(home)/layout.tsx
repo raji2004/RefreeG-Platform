@@ -9,7 +9,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
   const user = await getUserById(session ?? "")
   return (
     <div>
-      <Navbar userSession={session != undefined ? true : false} profile={user?.profileImage === "" ? undefined : user?.profileImage} />
+      <Navbar userSession={!!session} profile={user?.profileImage === "" ? undefined : user?.profileImage} />
       {children}
       <Footer />
     </div>
