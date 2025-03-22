@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import {
   Carousel,
   CarouselContent,
@@ -16,7 +16,11 @@ import { H2, P } from "@/components/typograpy";
 import { Cause } from "@/lib/type";
 import { getDaysLeft } from "@/lib/utils";
 
-export default function CausesAboutSocioEconomicGrowth({ causes }: { causes: Cause[] }) {
+export default function CausesAboutSocioEconomicGrowth({
+  causes,
+}: {
+  causes: Cause[];
+}) {
   // const mainCause = { ...causesData[0], description: causesData[0].description || "" }; // Ensure description is defined
   // const otherCauses = causesData.slice(1);
   const [api, setApi] = useState<CarouselApi>();
@@ -25,44 +29,56 @@ export default function CausesAboutSocioEconomicGrowth({ causes }: { causes: Cau
     if (api) {
       api.scrollNext(); // Scroll desktop carousel
     }
-
   };
 
   const handlePrevious = () => {
     if (api) {
       api.scrollPrev(); // Scroll desktop carousel
     }
-
   };
   return (
     <div className=" my-10 px-10 space-y-5">
       <div>
         <H2 className=" font-medium">Causes about socio-economic growth</H2>
-        <P className=" mt-1 text-gray-400">These causes contribute to socio-economic growth of the community</P>
+        <P className=" mt-1 text-gray-400">
+          These causes contribute to socio-economic growth of the community
+        </P>
       </div>
       <Carousel setApi={setApi}>
         <CarouselContent>
           {causes.map((cause) => (
-            <CarouselItem key={cause.id} className="basis-full md:basis-1/2 lg:basis-1/3">
-              <MainCauseCard  {...cause}
+            <CarouselItem
+              key={cause.id}
+              className="basis-full md:basis-1/2 lg:basis-1/3"
+            >
+              <MainCauseCard
+                {...cause}
+                isBookmarked={cause.isBookmarked ?? false}
+                onRemoveBookmark={cause.onRemoveBookmark ?? (() => {})}
                 daysLeft={getDaysLeft(cause.deadline)}
-                progressPercentage={(cause.raisedAmount / cause.goalAmount) * 100}
+                progressPercentage={
+                  (cause.raisedAmount / cause.goalAmount) * 100
+                }
                 hideDescription
-                hideTags />
+                hideTags
+              />
             </CarouselItem>
           ))}
         </CarouselContent>
       </Carousel>
 
       <div className=" mt-10 flex justify-center md:justify-end">
-        <Button variant={"link"} className=" text-black" onClick={handlePrevious}>
+        <Button
+          variant={"link"}
+          className=" text-black"
+          onClick={handlePrevious}
+        >
           <ChevronLeft size={24} />
         </Button>
         <Button variant={"link"} className=" text-black" onClick={handleNext}>
           <ChevronRight size={24} />
         </Button>
       </div>
-
     </div>
-  )
+  );
 }
