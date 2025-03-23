@@ -34,6 +34,28 @@ export async function getCauseByName(causeName: string) {
   }
 }
 
+export async function getCauseByKeyword(searchTerm: string) {
+  try {
+    const causesCollection = collection(db, "causes");
+    const causesQuery = query(
+      causesCollection,
+      where("keywords", "array-contains", searchTerm.toLowerCase())
+    );
+    const causesSnapshot = await getDocs(causesQuery);
+
+    const causes = causesSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    console.log("Fetched Causes:", causes);
+    return causes;
+  } catch (error) {
+    console.error("Error fetching cause by keyword:", error);
+    return [];
+  }
+}
+
 
 // Fetch active causes
 export async function getCauses(statusQuery: string) {

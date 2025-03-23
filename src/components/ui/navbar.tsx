@@ -1,10 +1,10 @@
 "use client";
-import { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useDebounce } from "./useDebounce"; // Adjust the import path
 import { Sheet, SheetTrigger, SheetContent } from "../ui/sheet";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import Logo from '../../../public/images/logo.svg';
-import Search from '../../../public/images/search.svg';
 import Dropdown from '../../../public/images/dropdown.svg';
 import Image from "next/image";
 import { ReactNode } from "react";
@@ -18,8 +18,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ChevronDown, LogOut } from 'lucide-react'
 import { SessionLogout } from "@/lib/helpers";
-import { getCauseByName } from "@/lib/firebase/admin";
+import { getCauseByKeyword } from "@/lib/firebase/admin";
 import { ClipLoader } from "react-spinners"; // Import spinner
+import { CiSearch } from "react-icons/ci";
+import { IoMdClose } from "react-icons/io";
 
 interface MenuLinkProps {
   href: string;
@@ -46,33 +48,17 @@ export function Navbar({ userSession,profile }: { userSession?: boolean ,profile
   const [showInput, setShowInput] = useState(false);
   const [loading, setLoading] = useState(false);
   const [aboutUsOpen, setAboutUsOpen] = useState(false);
-  const searchRef = useRef<HTMLDivElement | null>(null); // Ref for search box
+
+  // Debounce the search term
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
 
-  // Handle outside click
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
-        setShowInput(false);
-      }
-    }
+  const handleSearch = async (term: string) => {
+    if (!term.trim()) return;
 
-    if (showInput) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [showInput]);
-
-
-  const handleSearch = async () => {
-    if (!searchTerm.trim()) return;
-    
     setLoading(true);
     try {
-      const results = await getCauseByName(searchTerm);
+      const results = await getCauseByKeyword(term);
       setSearchResults(results);
       console.log("Search Results:", results); // Debugging line
     } catch (error) {
@@ -81,6 +67,11 @@ export function Navbar({ userSession,profile }: { userSession?: boolean ,profile
     }
     setLoading(false);
   };
+
+  // Trigger search when debouncedSearchTerm changes
+  React.useEffect(() => {
+    handleSearch(debouncedSearchTerm);
+  }, [debouncedSearchTerm]);
 
   return (
     <header className="flex h-20 w-full shrink-0 items-center px-4 md:px-6">
@@ -95,17 +86,14 @@ export function Navbar({ userSession,profile }: { userSession?: boolean ,profile
             className="hover:bg-blue-100 p-2 flex items-center space-x-2"
             onClick={() => setShowInput(!showInput)}
           >
-            <Image src={Search} height={20} width={20} alt="search" />
-            <span className='font-medium'>Search</span>
+            <span className="font-medium">{showInput ? <IoMdClose /> : <CiSearch size={20} />}</span>
+            <span className="font-medium">{showInput ? "Close" : "Search"}</span>
           </button>
 
           {/* Search Input Field */}
           {showInput && (
-            <div 
-              className="z-20 absolute top-full mt-2 bg-white shadow-lg p-3 rounded-lg w-64" 
-              ref={searchRef}
-            >
-              <div className='flex border'>
+            <div className="z-20 absolute top-full mt-2 bg-white shadow-lg p-3 rounded-lg w-64">
+              <div className="flex border">
                 <input
                   type="text"
                   placeholder="Search for a cause..."
@@ -113,14 +101,13 @@ export function Navbar({ userSession,profile }: { userSession?: boolean ,profile
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
-                <button
-                  className="text-white p-2 rounded"
-                  onClick={handleSearch}
-                >
+                <button className="text-white p-2 rounded" onClick={() => handleSearch(searchTerm)}>
                   {loading ? (
-                    <ClipLoader className='bg-[#a7d7ef]' size={30} color="#142256" />
+                    <ClipLoader className="bg-[#a7d7ef]" size={30} color="#142256" />
                   ) : (
-                    <span className="text-xl px-1 py-0.5 rounded text-black bg-[#a7d7ef] hover:text-white hover:bg-[#142256] transition ">→</span> // Right arrow
+                    <span className="text-xl px-1 py-0.5 rounded text-black bg-[#a7d7ef] hover:text-white hover:bg-[#142256] transition">
+                      →
+                    </span>
                   )}
                 </button>
               </div>
@@ -140,6 +127,7 @@ export function Navbar({ userSession,profile }: { userSession?: boolean ,profile
             </div>
           )}
         </div>
+
 
         <MenuLink href="/cause" className='hover:bg-blue-100'>Explore causes</MenuLink>
 
@@ -241,6 +229,8 @@ export function Navbar({ userSession,profile }: { userSession?: boolean ,profile
         }
       </nav>
 
+      
+
       {/* Small Screen Menu and Search Button */}
       <div className="lg:hidden ml-auto flex items-center space-x-4">
         <div className="relative w-full">
@@ -249,15 +239,12 @@ export function Navbar({ userSession,profile }: { userSession?: boolean ,profile
             aria-label="Search"
             onClick={() => setShowInput(!showInput)}
           >
-            <Image src={Search} alt="search icon" height={24} width={24} />
+            <span className="font-medium">{showInput ? <IoMdClose /> : <CiSearch size={20} />}</span>
           </button>
 
           {/* Search Input Field */}
           {showInput && (
-            <div
-              ref={searchRef} // Attach ref here 
-              className="z-20 relative left-1/2 transform -translate-x-1/2 top-full mt-32 mx-auto bg-white shadow-lg p-3 rounded-lg w-[70vw] max-w-sm"
-            >
+            <div className="fixed inset-x-0 top-16 mx-auto bg-white shadow-lg p-3 rounded-lg w-[80vw] max-w-md z-50">
               <div className="flex border">
                 <input
                   type="text"
@@ -266,7 +253,7 @@ export function Navbar({ userSession,profile }: { userSession?: boolean ,profile
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
-                <button className="text-white p-2 rounded" onClick={handleSearch}>
+                <button className="text-white p-2 rounded" onClick={() => handleSearch(searchTerm)}>
                   {loading ? (
                     <ClipLoader className="bg-[#a7d7ef]" size={30} color="#142256" />
                   ) : (
