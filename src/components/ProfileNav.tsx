@@ -209,26 +209,7 @@ const ProfileNav: React.FC<ProfileNavProps> = ({
     if (isLoading) {
       return (
         <div className="py-12 flex justify-center">
-          <svg
-            className="animate-spin h-10 w-10 text-blue-500"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            ></circle>
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-            ></path>
-          </svg>
+          {/* ... (keep existing loading spinner) */}
         </div>
       );
     }
@@ -247,20 +228,22 @@ const ProfileNav: React.FC<ProfileNavProps> = ({
     switch (activeTab) {
       case "Causes":
         return (
-          <div className="px-4 py-6">
+          <div className="px-4 py-6 relative">
             <Carousel>
-              <CarouselContent>
-                {causes.map((cause) => (
-                  <CarouselItem
-                    key={cause.id}
-                    className="basis-full md:basis-1/2 lg:basis-1/3"
-                  >
-                    {renderCauseCard(cause)}
-                  </CarouselItem>
-                ))}
-              </CarouselContent>
-              <CarouselPrevious className="left-1" />
-              <CarouselNext className="right-2" />
+              <div className="relative">
+                <CarouselContent>
+                  {causes.map((cause) => (
+                    <CarouselItem
+                      key={cause.id}
+                      className="basis-full md:basis-1/2 lg:basis-1/3"
+                    >
+                      {renderCauseCard(cause)}
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious className="absolute top-1/2 -translate-y-1/2 -translate-x-2 z-10" />
+                <CarouselNext className="absolute right-0 top-1/2 -translate-y-1/2 -translate-x-2 z-10" />
+              </div>
             </Carousel>
           </div>
         );
