@@ -20,6 +20,7 @@ export interface User {
   firstName: string;
   lastName: string;
   countryOfResidence: string;
+  bio: string;
   DOB: string;
   phoneNumber: string;
   bvn: number;
@@ -27,6 +28,13 @@ export interface User {
   pin: number;
   donationPreference: string;
   profileImage: string;
+  isVerified?: boolean;
+  createdAt: Date | string | number;
+  updatedAt: Date | string | number;
+  followersCount: number;
+  followingCount: number;
+  causesCount: number;
+  userType: "individual" | "organization";
 }
 
 export interface Country {
