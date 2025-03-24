@@ -33,8 +33,8 @@ export interface User {
   updatedAt: Date | string | number;
   followersCount?: number;
   followingCount?: number;
-  causesCount?: number;     
-  userType: "individual" | "organization";
+  causesCount?: number;
+  userType?: "individual" | "organization";
 }
 
 export interface Country {

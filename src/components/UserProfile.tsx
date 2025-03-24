@@ -26,7 +26,7 @@ const UserProfile: React.FC<UserProfileProps> = ({
     followersCount = 0,
     followingCount = 0,
     causesCount = 0,
-    userType,
+    userType = "individual",
   } = user;
 
   // Default avatar if no photoURL is provided
