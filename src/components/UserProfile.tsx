@@ -70,21 +70,25 @@ const UserProfile: React.FC<UserProfileProps> = ({
               className="w-full h-full object-cover"
             />
           </div>
-
           {/* Username with verification */}
-          <div className="flex items-center gap-1 mb-1">
+          <div className="flex items-center gap-2 mb-1">
             <h1 className="text-xl font-semibold">{lastName || firstName}</h1>
             {isVerified && (
-              <svg
-                className="w-5 h-5 text-blue-500"
-                fill="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
-              </svg>
+              <span className="text-blue-500" aria-label="Verified account">
+                <svg
+                  className="w-5 h-5"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15l-5-5 1.41-1.41L11 14.17l7.59-7.59L20 8l-9 9z"
+                  />
+                </svg>
+              </span>
             )}
           </div>
-
           {/* User Type Badge */}
           <div className="flex items-center text-gray-600 mb-3">
             <svg
@@ -112,7 +116,6 @@ const UserProfile: React.FC<UserProfileProps> = ({
             </svg>
             <span className="text-sm capitalize">{userType}</span>
           </div>
-
           {/* Follow Button or Edit Profile */}
           {isOwnProfile ? (
             <Link
@@ -126,7 +129,6 @@ const UserProfile: React.FC<UserProfileProps> = ({
               Follow
             </button>
           )}
-
           {/* Stats */}
           <div className="flex justify-center w-full gap-6 mb-4">
             <div className="text-center">
@@ -142,7 +144,6 @@ const UserProfile: React.FC<UserProfileProps> = ({
               <p className="text-sm text-gray-500">following</p>
             </div>
           </div>
-
           {/* Bio */}
           <div className="w-full text-sm text-gray-700 mb-6">
             <p>{bio || "No bio provided."}</p>

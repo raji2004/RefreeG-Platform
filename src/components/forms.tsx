@@ -559,6 +559,7 @@ export const SignupForm5 = () => {
         bio: oldParam.bio || "", // Set from user input if available
         createdAt: oldParam.createdAt || new Date().toISOString(),
         updatedAt: oldParam.updatedAt || new Date().toISOString(),
+        isVerified: true,
 
         // Dynamic fields that will change over time
         followersCount: oldParam.followersCount || 0,

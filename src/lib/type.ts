@@ -28,7 +28,7 @@ export interface User {
   pin: number;
   donationPreference: string;
   profileImage: string;
-  isVerified?: boolean;
+  isVerified: boolean;
   createdAt: Date | string | number;
   updatedAt: Date | string | number;
   followersCount: number;
