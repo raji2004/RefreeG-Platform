@@ -24,7 +24,6 @@ const EmptyStateIllustration = () => (
 const ProfileNav: React.FC<ProfileNavProps> = ({
   isOwnProfile,
   userId,
-  currentUserId,
   firstName,
   lastName,
 }) => {
