@@ -144,9 +144,9 @@ const ProfileNav: React.FC<ProfileNavProps> = ({
     return (
       <div
         key={cause.id}
-        className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+        className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col"
       >
-        <Link href={`/cause/${cause.id}`}>
+        <Link href={`/cause/${cause.id}`} className="flex-grow">
           <div className="relative aspect-video bg-gray-100">
             {cause.uploadedImage && (
               <Image
@@ -157,7 +157,7 @@ const ProfileNav: React.FC<ProfileNavProps> = ({
               />
             )}
           </div>
-          <div className="p-4">
+          <div className="p-4 flex-grow">
             <h3 className="font-semibold text-lg mb-1 line-clamp-1">
               {cause.causeTitle}
             </h3>
@@ -178,7 +178,7 @@ const ProfileNav: React.FC<ProfileNavProps> = ({
               </div>
             </div>
 
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center mb-3">
               <span className="font-medium">
                 ₦{cause.raisedAmount.toLocaleString()}
               </span>
@@ -188,6 +188,16 @@ const ProfileNav: React.FC<ProfileNavProps> = ({
             </div>
           </div>
         </Link>
+
+        {/* Donate Button - outside the Link to avoid nested links */}
+        <div className="px-4 pb-4">
+          <Link
+            href={`/cause/${cause.id}`}
+            className="block w-full bg-blue-600 hover:bg-blue-700 text-white text-center py-2 px-4 rounded-lg transition-colors"
+          >
+            Donate Now
+          </Link>
+        </div>
       </div>
     );
   };
