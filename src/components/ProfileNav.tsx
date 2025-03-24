@@ -2,17 +2,19 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { getCausesByUserId } from "@/lib/firebase/actions";
 import { getDonationsByUserId } from "@/lib/firebase/actions/donation";
 import { useRouter } from "next/navigation";
 import { Cause } from "@/lib/type";
+import { getDaysLeft } from "@/lib/utils";
 
 interface ProfileNavProps {
   isOwnProfile: boolean;
   userId: string;
   currentUserId?: string;
-  firstName?: string; // Add these
-  lastName?: string; // Add these
+  firstName?: string;
+  lastName?: string;
 }
 
 const EmptyStateIllustration = () => (
@@ -33,7 +35,6 @@ const ProfileNav: React.FC<ProfileNavProps> = ({
   const [causes, setCauses] = useState<Cause[]>([]);
   const [donations, setDonations] = useState([]);
 
-  // Define tabs based on view type
   const tabOptions = isOwnProfile
     ? ["Causes", "Donations"]
     : ["Causes", "Donations"];
@@ -49,7 +50,6 @@ const ProfileNav: React.FC<ProfileNavProps> = ({
           const fetchedDonations = await getDonationsByUserId(userId);
           setDonations(fetchedDonations || []);
         }
-        // Add other tab data fetching as needed
       } catch (error) {
         console.error(`Error fetching ${activeTab.toLowerCase()}:`, error);
       } finally {
@@ -67,8 +67,8 @@ const ProfileNav: React.FC<ProfileNavProps> = ({
   const handleStartCause = () => {
     router.push("/cause/create");
   };
+
   const getEmptyStateMessage = () => {
-    // Use firstName if available, otherwise fall back to lastName
     const userName = firstName || lastName || "This user";
     const name = isOwnProfile ? "You" : userName;
 
@@ -83,16 +83,15 @@ const ProfileNav: React.FC<ProfileNavProps> = ({
     }
     return "No items to display.";
   };
+
   const renderEmptyState = () => (
     <div className="py-12 px-6">
       <EmptyStateIllustration />
-
       <div className="text-center">
         <h3 className="text-lg font-medium mb-2">No {activeTab} Yet</h3>
         <p className="text-gray-600 mb-6 max-w-md mx-auto">
           {getEmptyStateMessage()}
         </p>
-
         {isOwnProfile && activeTab === "Causes" ? (
           <button
             onClick={handleStartCause}
@@ -136,6 +135,63 @@ const ProfileNav: React.FC<ProfileNavProps> = ({
     </div>
   );
 
+  const renderCauseCard = (cause: Cause) => {
+    const progressPercentage = Math.round(
+      (cause.raisedAmount / cause.goalAmount) * 100
+    );
+    const daysLeft = getDaysLeft(cause.deadline);
+
+    return (
+      <div
+        key={cause.id}
+        className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+      >
+        <Link href={`/cause/${cause.id}`}>
+          <div className="relative aspect-video bg-gray-100">
+            {cause.uploadedImage && (
+              <Image
+                src={cause.uploadedImage.src}
+                alt={cause.causeTitle}
+                fill
+                className="object-cover"
+              />
+            )}
+          </div>
+          <div className="p-4">
+            <h3 className="font-semibold text-lg mb-1 line-clamp-1">
+              {cause.causeTitle}
+            </h3>
+            <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+              {cause.description}
+            </p>
+
+            <div className="mb-2">
+              <div className="flex justify-between text-sm mb-1">
+                <span>Raised: {progressPercentage}%</span>
+                <span>{daysLeft}</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div
+                  className="bg-blue-500 h-2 rounded-full"
+                  style={{ width: `${progressPercentage}%` }}
+                ></div>
+              </div>
+            </div>
+
+            <div className="flex justify-between items-center">
+              <span className="font-medium">
+                ₦{cause.raisedAmount.toLocaleString()}
+              </span>
+              <span className="text-sm text-gray-500">
+                of ₦{cause.goalAmount.toLocaleString()}
+              </span>
+            </div>
+          </div>
+        </Link>
+      </div>
+    );
+  };
+
   const renderContent = () => {
     if (isLoading) {
       return (
@@ -164,7 +220,6 @@ const ProfileNav: React.FC<ProfileNavProps> = ({
       );
     }
 
-    // Check if there's data to display
     const hasItems =
       activeTab === "Causes"
         ? causes.length > 0
@@ -176,32 +231,18 @@ const ProfileNav: React.FC<ProfileNavProps> = ({
       return renderEmptyState();
     }
 
-    // Render actual content for each tab
     switch (activeTab) {
       case "Causes":
         return (
-          <div className="px-4 py-6">
-            {/* Display list of causes */}
-            <p className="text-center text-gray-500">
-              Causes will be displayed here
-            </p>
+          <div className="px-4 py-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {causes.map(renderCauseCard)}
           </div>
         );
       case "Donations":
         return (
           <div className="px-4 py-6">
-            {/* Display list of donations */}
             <p className="text-center text-gray-500">
               Donations will be displayed here
-            </p>
-          </div>
-        );
-      case "Drafts":
-        return (
-          <div className="px-4 py-6">
-            {/* Display list of draft causes */}
-            <p className="text-center text-gray-500">
-              Draft causes will be displayed here
             </p>
           </div>
         );
