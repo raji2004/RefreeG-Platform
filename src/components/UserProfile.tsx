@@ -116,7 +116,7 @@ const UserProfile: React.FC<UserProfileProps> = ({
           {/* Follow Button or Edit Profile */}
           {isOwnProfile ? (
             <Link
-              href="/settings/profile"
+              href="/dashboard/UserProfile"
               className="px-4 py-1 mb-4 text-sm border border-gray-300 rounded-full hover:bg-gray-50 transition-colors"
             >
               Edit Profile

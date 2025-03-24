@@ -37,7 +37,7 @@ const ProfileNav: React.FC<ProfileNavProps> = ({
 
   // Define tabs based on view type
   const tabOptions = isOwnProfile
-    ? ["Causes", "Donations", "Drafts"]
+    ? ["Causes", "Donations"]
     : ["Causes", "Donations"];
 
   useEffect(() => {
@@ -63,11 +63,11 @@ const ProfileNav: React.FC<ProfileNavProps> = ({
   }, [activeTab, userId]);
 
   const handleExplore = () => {
-    router.push("/explore");
+    router.push("/");
   };
 
   const handleStartCause = () => {
-    router.push("/causes/create");
+    router.push("/cause/create");
   };
 
   const getEmptyStateMessage = () => {
