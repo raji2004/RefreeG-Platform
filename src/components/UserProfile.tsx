@@ -1,10 +1,8 @@
-// components/profile/UserProfile.tsx
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { User } from "@/lib/type";
 import ProfileNav from "./ProfileNav";
-// import { formatDate } from "@/lib/utils";
 
 interface UserProfileProps {
   user: User;
@@ -60,23 +58,25 @@ const UserProfile: React.FC<UserProfileProps> = ({
       {/* Profile Information */}
       <div className="px-6">
         <div className="flex flex-col items-center">
-          {/* Avatar */}
-          <div className="w-20 h-20 rounded-full overflow-hidden mb-3 relative">
+          {/* Larger Avatar - Updated size */}
+          <div className="w-32 h-32 sm:w-40 sm:h-40 rounded-full overflow-hidden mb-4 relative border-4 border-white shadow-md">
             <Image
               src={avatarUrl}
               alt={`${lastName}'s profile picture`}
-              width={80}
-              height={80}
+              width={160}
+              height={160}
               className="w-full h-full object-cover"
+              priority
             />
           </div>
+
           {/* Username with verification */}
-          <div className="flex items-center gap-2 mb-1">
-            <h1 className="text-xl font-semibold">{firstName || lastName}</h1>
+          <div className="flex items-center gap-2 mb-2">
+            <h1 className="text-2xl font-bold">{firstName || lastName}</h1>
             {isVerified && (
               <span className="text-blue-500" aria-label="Verified account">
                 <svg
-                  className="w-5 h-5"
+                  className="w-6 h-6"
                   fill="currentColor"
                   viewBox="0 0 24 24"
                 >
@@ -89,10 +89,11 @@ const UserProfile: React.FC<UserProfileProps> = ({
               </span>
             )}
           </div>
+
           {/* User Type Badge */}
-          <div className="flex items-center text-gray-600 mb-3">
+          <div className="flex items-center text-gray-600 mb-4">
             <svg
-              className="w-4 h-4 mr-1"
+              className="w-5 h-5 mr-1"
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
               fill="none"
@@ -116,36 +117,39 @@ const UserProfile: React.FC<UserProfileProps> = ({
             </svg>
             <span className="text-sm capitalize">{userType}</span>
           </div>
+
           {/* Follow Button or Edit Profile */}
           {isOwnProfile ? (
             <Link
               href="/dashboard/UserProfile"
-              className="px-4 py-1 mb-4 text-sm border border-gray-300 rounded-full hover:bg-gray-50 transition-colors"
+              className="px-6 py-2 mb-6 text-sm font-medium border border-gray-300 rounded-full hover:bg-gray-50 transition-colors"
             >
               Edit Profile
             </Link>
           ) : (
-            <button className="px-4 py-1 mb-4 text-sm border border-gray-300 rounded-full hover:bg-gray-50 transition-colors">
+            <button className="px-6 py-2 mb-6 text-sm font-medium border border-gray-300 rounded-full hover:bg-gray-50 transition-colors">
               Follow
             </button>
           )}
+
           {/* Stats */}
-          <div className="flex justify-center w-full gap-6 mb-4">
+          <div className="flex justify-center w-full gap-8 mb-6">
             <div className="text-center">
-              <p className="font-semibold">{causesCount}</p>
-              <p className="text-sm text-gray-500">causes</p>
+              <p className="text-xl font-bold">{causesCount}</p>
+              <p className="text-sm text-gray-800">causes</p>
             </div>
             <div className="text-center">
-              <p className="font-semibold">{followersCount}</p>
-              <p className="text-sm text-gray-500">followers</p>
+              <p className="text-xl font-bold">{followersCount}</p>
+              <p className="text-sm text-gray-800">followers</p>
             </div>
             <div className="text-center">
-              <p className="font-semibold">{followingCount}</p>
-              <p className="text-sm text-gray-500">following</p>
+              <p className="text-xl font-bold">{followingCount}</p>
+              <p className="text-sm text-gray-800">following</p>
             </div>
           </div>
+
           {/* Bio */}
-          <div className="w-full text-sm text-gray-700 mb-6">
+          <div className="w-full text-base text-gray-700 mb-8 px-4 text-center">
             <p>{bio || "No bio provided."}</p>
           </div>
         </div>
@@ -156,8 +160,8 @@ const UserProfile: React.FC<UserProfileProps> = ({
         isOwnProfile={isOwnProfile}
         userId={user.id}
         currentUserId={currentUserId}
-        firstName={user.firstName} // Pass the first name
-        lastName={user.lastName} // Pass the last name
+        firstName={user.firstName}
+        lastName={user.lastName}
       />
     </div>
   );
