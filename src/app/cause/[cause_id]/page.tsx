@@ -17,40 +17,46 @@ import { getCauseById, getUserById } from "@/lib/firebase/actions";
 import { getDaysLeft } from "@/lib/utils";
 import { Footer } from "@/components/ui/footer";
 import { CauseCategories } from "@/lib/utils";
-import { User } from 'lucide-react'
+import { User } from "lucide-react";
 import { P } from "@/components/typograpy";
 import { getSessionId } from "@/lib/helpers";
 
-
-
-const Section = ({ title, description }: { title: string, description: string }) => {
+const Section = ({
+  title,
+  description,
+}: {
+  title: string;
+  description: string;
+}) => {
   return (
     <div className="space-y-1">
       <strong>{title}</strong>
-      <p>
-        {description}
-      </p>
+      <p>{description}</p>
     </div>
   );
-}
+};
 
 // Main component definition
-export default async function DonationDetail({ params }: { params: { cause_id: string } }) {
-  const cause = await getCauseById(params.cause_id)
+export default async function DonationDetail({
+  params,
+}: {
+  params: { cause_id: string };
+}) {
+  const cause = await getCauseById(params.cause_id);
   const session = await getSessionId();
   const loggeduser = await getUserById(session ?? "");
-
-
 
   if (!cause) {
     return <div>Cause not found</div>;
   }
-  const matchedCategory = CauseCategories.find((item) => item.name === cause.causeCategory);
+  const matchedCategory = CauseCategories.find(
+    (item) => item.name === cause.causeCategory
+  );
   const IconComponent = matchedCategory?.icon ?? FaHeartbeat;
-  const user = await getUserById(cause.userId)
+  const user = await getUserById(cause.userId);
   const goalAmount = Number(cause.goalAmount);
   const donationAmount = cause.raisedAmount;
-  const daysleft = getDaysLeft(cause.deadline)
+  const daysleft = getDaysLeft(cause.deadline);
   const progressPercentage = (donationAmount / goalAmount) * 100;
 
   return (
@@ -59,7 +65,9 @@ export default async function DonationDetail({ params }: { params: { cause_id: s
       <div className="p-4 md:flex md:justify-between">
         {/* Left side - Main content */}
         <div className="md:w-2/4">
-          <h1 className="text-2xl font-bold mb-2">{cause?.causeTitle ?? "Support Flood Victims"}</h1>
+          <h1 className="text-2xl font-bold mb-2">
+            {cause?.causeTitle ?? "Support Flood Victims"}
+          </h1>
 
           {/* Important notification about high-priority cause */}
           {/* <p className="text-red-600 font-medium flex items-center">
@@ -72,7 +80,9 @@ export default async function DonationDetail({ params }: { params: { cause_id: s
           <div className="relative">
             <Image
               src={cause?.img ?? "/DonationDetail/flood1.svg"}
-              alt={cause?.uploadedImage.name ?? `Image of flood relief scenario`}
+              alt={
+                cause?.uploadedImage.name ?? `Image of flood relief scenario`
+              }
               className="w-[100%] h-[65%] object-cover rounded-lg items-center"
               width={867}
               height={732}
@@ -80,11 +90,11 @@ export default async function DonationDetail({ params }: { params: { cause_id: s
             />
           </div>
 
-
           {/* Tag indicators for category and location */}
           <div className="flex space-x-2 mt-9">
             <span className="text-sm bg-gray-200 rounded-full px-3 py-1 flex items-center hover:bg-gray-300 transition-colors duration-300">
-              <IconComponent className="mr-1" /> {cause?.causeCategory ?? "Health"}
+              <IconComponent className="mr-1" />{" "}
+              {cause?.causeCategory ?? "Health"}
             </span>
             <span className="text-sm bg-gray-200 rounded-full px-3 py-1 flex items-center hover:bg-gray-300 transition-colors duration-300">
               <FaMapMarkerAlt className="mr-1" /> {cause?.state ?? "Borno"}
@@ -93,14 +103,20 @@ export default async function DonationDetail({ params }: { params: { cause_id: s
 
           {/* Organization supporting the cause */}
           <div className="flex items-end text-end mt-4 font-semibold text-sm">
-            <User className="mr-2" /> {user?.firstName ?? "Save the Children"}
+            <User className="mr-2" />
+            <Link href={`/profile/${user?.id}`} className="hover:underline">
+              {user?.firstName ?? "Save the Children"}
+            </Link>
           </div>
 
           {/* Cause description paragraphs */}
           <div className="mt-4 space-y-2">
-
             {cause?.sections.map((section) => (
-              <Section key={section.id} title={section.header} description={section.description} />
+              <Section
+                key={section.id}
+                title={section.header}
+                description={section.description}
+              />
             ))}
           </div>
 
@@ -148,7 +164,7 @@ export default async function DonationDetail({ params }: { params: { cause_id: s
               </button>
               <button
                 className="flex-grow bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition-colors duration-300"
-              // Call donation handler for ₦50,000 donation
+                // Call donation handler for ₦50,000 donation
               >
                 Donate
               </button>
@@ -188,6 +204,4 @@ export default async function DonationDetail({ params }: { params: { cause_id: s
       <Footer />
     </div>
   );
-};
-
-
+}
