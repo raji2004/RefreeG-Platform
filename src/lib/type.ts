@@ -6,12 +6,12 @@ export type elementProps = {
 };
 export type typographyProps = elementProps & {
   color?:
-    | "text-primary"
-    | "text-secondary"
-    | "text-primary-foreground"
-    | "text-secondary-foreground"
-    | "text-popover"
-    | "text-gray-400";
+  | "text-primary"
+  | "text-secondary"
+  | "text-primary-foreground"
+  | "text-secondary-foreground"
+  | "text-popover"
+  | "text-gray-400";
 };
 
 export interface User {
@@ -27,6 +27,10 @@ export interface User {
   pin: number;
   donationPreference: string;
   profileImage: string;
+  accDetails?: {
+    account_number: string,
+    subaccount_code: string 
+  }[]
 }
 
 export interface Country {
@@ -157,6 +161,7 @@ export type Cause = {
     type: string;
     progress: number;
   };
+ 
   img: string;
   userId: string;
   zipCode: string;
@@ -172,6 +177,23 @@ export type Cause = {
   daysLeft: string; // Add this
   progressPercentage: number; // Add this
 };
+
+export interface TransactionData extends Pick<User, "email" | "firstName" | "lastName" | "id"> {
+  amount: number;
+  subaccounts: {
+    subaccount: string,
+    share: number
+  }
+
+};
+
+export interface ICreateSubaccount {
+  bank_code: string,
+  account_number: string,
+  percentage_charge?: number,
+  business_name: string
+}
+
 
 export interface MainCauseCardProps
   extends Omit<
