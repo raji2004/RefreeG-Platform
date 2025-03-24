@@ -19,7 +19,7 @@ import {
 import SearchModal from "./searchModal";
 import { ChevronDown, LogOut } from "lucide-react";
 import { SessionLogout } from "@/lib/helpers";
-import { TestProfileLink } from "./testbutton";
+// import { TestProfileLink } from "./testbutton";
 
 interface MenuLinkProps {
   href: string;
@@ -89,7 +89,7 @@ export function Navbar({
           Explore causes
         </MenuLink>
 
-        <TestProfileLink />
+        {/* <TestProfileLink /> */}
 
         <div
           className="relative"
