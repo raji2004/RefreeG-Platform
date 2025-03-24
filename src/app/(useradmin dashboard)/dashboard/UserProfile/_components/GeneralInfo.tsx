@@ -10,8 +10,10 @@ import { User } from "@/lib/type";
 import { updateUserById } from "@/lib/firebase/actions";
 import { toast } from "react-toastify";
 import { uploadImage } from "@/lib/uploadimg";
+import { useRouter } from "next/navigation";
 
 export default function GeneralInfo({ user }: { user: User }) {
+  const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
   const [currentProfileImage, setCurrentProfileImage] = useState(
     user.profileImage
@@ -82,7 +84,7 @@ export default function GeneralInfo({ user }: { user: User }) {
         <span className={isEditing ? "text-gray-500" : "text-black"}>
           General Information
         </span>
-        {isEditing && <span className="text-black"> Edit Profile</span>}
+        {isEditing && <span className="text-black"> &gt; Edit Profile</span>}
         <Button
           onClick={() => (isEditing ? handleSaveChanges() : setIsEditing(true))}
           variant={isEditing ? "default" : "outline"}
@@ -180,7 +182,7 @@ export default function GeneralInfo({ user }: { user: User }) {
             className={`w-full ${isEditing ? "bg-white" : "bg-gray-100"}`}
           />
 
-          {/* Enhanced Bio Field */}
+          {/* Bio Field */}
           <Label className="block text-sm sm:text-lg font-medium">Bio</Label>
           {isEditing ? (
             <div className="relative">
@@ -210,13 +212,18 @@ export default function GeneralInfo({ user }: { user: User }) {
           )}
         </form>
 
-        <Button
-          onClick={() => (isEditing ? handleSaveChanges() : setIsEditing(true))}
-          variant={isEditing ? "default" : "outline"}
-          className="text-xs sm:text-sm lg:text-lg md:hidden mt-10"
-        >
-          {isEditing ? "Save Changes" : "Edit Profile"}
-        </Button>
+        {/* Action Buttons */}
+        <div className="flex flex-col gap-4 w-full mt-6">
+          {!isEditing && (
+            <Button
+              onClick={() => router.push(`/profile/${user.id}`)}
+              variant="outline"
+              className="w-full"
+            >
+              View Profile
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -28,9 +28,9 @@ export function TestProfileLink() {
   return (
     <button
       onClick={handleClick}
-      className="fixed bottom-4 right-4 bg-blue-500 text-white px-4 py-2 rounded-md z-50"
+      className=" bg-blue-500 text-white px-4 py-2 rounded-md z-50"
     >
-      Test My Profile
+      View Profile
     </button>
   );
 }
