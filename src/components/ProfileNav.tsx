@@ -8,6 +8,13 @@ import { getDonationsByUserId } from "@/lib/firebase/actions/donation";
 import { useRouter } from "next/navigation";
 import { Cause } from "@/lib/type";
 import { getDaysLeft } from "@/lib/utils";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 interface ProfileNavProps {
   isOwnProfile: boolean;
@@ -142,10 +149,7 @@ const ProfileNav: React.FC<ProfileNavProps> = ({
     const daysLeft = getDaysLeft(cause.deadline);
 
     return (
-      <div
-        key={cause.id}
-        className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col"
-      >
+      <div className="border rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col h-full mx-2">
         <Link href={`/cause/${cause.id}`} className="flex-grow">
           <div className="relative aspect-video bg-gray-100">
             {cause.uploadedImage && (
@@ -189,7 +193,6 @@ const ProfileNav: React.FC<ProfileNavProps> = ({
           </div>
         </Link>
 
-        {/* Donate Button - outside the Link to avoid nested links */}
         <div className="px-4 pb-4">
           <Link
             href={`/cause/${cause.id}`}
@@ -244,8 +247,21 @@ const ProfileNav: React.FC<ProfileNavProps> = ({
     switch (activeTab) {
       case "Causes":
         return (
-          <div className="px-4 py-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {causes.map(renderCauseCard)}
+          <div className="px-4 py-6">
+            <Carousel>
+              <CarouselContent>
+                {causes.map((cause) => (
+                  <CarouselItem
+                    key={cause.id}
+                    className="basis-full md:basis-1/2 lg:basis-1/3"
+                  >
+                    {renderCauseCard(cause)}
+                  </CarouselItem>
+                ))}
+              </CarouselContent>
+              <CarouselPrevious className="left-1" />
+              <CarouselNext className="right-2" />
+            </Carousel>
           </div>
         );
       case "Donations":
