@@ -11,6 +11,8 @@ interface ProfileNavProps {
   isOwnProfile: boolean;
   userId: string;
   currentUserId?: string;
+  firstName?: string; // Add these
+  lastName?: string; // Add these
 }
 
 const EmptyStateIllustration = () => (
@@ -23,6 +25,8 @@ const ProfileNav: React.FC<ProfileNavProps> = ({
   isOwnProfile,
   userId,
   currentUserId,
+  firstName,
+  lastName,
 }) => {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<string>("Causes");
@@ -64,9 +68,10 @@ const ProfileNav: React.FC<ProfileNavProps> = ({
   const handleStartCause = () => {
     router.push("/cause/create");
   };
-
   const getEmptyStateMessage = () => {
-    const name = isOwnProfile ? "You" : "Justice";
+    // Use firstName if available, otherwise fall back to lastName
+    const userName = firstName || lastName || "This user";
+    const name = isOwnProfile ? "You" : userName;
 
     if (activeTab === "Causes") {
       return isOwnProfile
@@ -76,13 +81,9 @@ const ProfileNav: React.FC<ProfileNavProps> = ({
       return isOwnProfile
         ? "You haven't made any donations yet. Explore causes to support!"
         : `It looks like ${name} hasn't donated to a cause yet. Stay tuned for their first impact story, or explore other causes making a difference! 💙`;
-    } else if (activeTab === "Drafts") {
-      return "You don't have any draft causes yet. Start creating a cause to save as draft.";
     }
-
     return "No items to display.";
   };
-
   const renderEmptyState = () => (
     <div className="py-12 px-6">
       <EmptyStateIllustration />

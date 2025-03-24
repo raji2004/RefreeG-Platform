@@ -156,6 +156,8 @@ const UserProfile: React.FC<UserProfileProps> = ({
         isOwnProfile={isOwnProfile}
         userId={user.id}
         currentUserId={currentUserId}
+        firstName={user.firstName} // Pass the first name
+        lastName={user.lastName} // Pass the last name
       />
     </div>
   );
