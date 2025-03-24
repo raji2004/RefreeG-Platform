@@ -31,9 +31,9 @@ export interface User {
   isVerified: boolean;
   createdAt: Date | string | number;
   updatedAt: Date | string | number;
-  followersCount: number;
-  followingCount: number;
-  causesCount: number;
+  followersCount?: number;
+  followingCount?: number;
+  causesCount?: number;     
   userType: "individual" | "organization";
 }
 

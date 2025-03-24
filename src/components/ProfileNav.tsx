@@ -15,12 +15,7 @@ interface ProfileNavProps {
 
 const EmptyStateIllustration = () => (
   <div className="flex justify-center mb-4">
-    <Image
-      src="/images/empty-state-illustration.svg"
-      alt="No items yet"
-      width={140}
-      height={140}
-    />
+    <Image src="/nullCauses.svg" alt="No items yet" width={140} height={140} />
   </div>
 );
 
@@ -122,7 +117,7 @@ const ProfileNav: React.FC<ProfileNavProps> = ({
             onClick={handleExplore}
             className="px-6 py-2 bg-blue-500 text-white rounded-full flex items-center mx-auto"
           >
-            <span>Explore causes on refreeg</span>
+            <span>Donate Now</span>
             <svg
               className="ml-1 w-4 h-4"
               xmlns="http://www.w3.org/2000/svg"

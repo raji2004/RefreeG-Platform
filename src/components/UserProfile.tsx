@@ -23,9 +23,9 @@ const UserProfile: React.FC<UserProfileProps> = ({
     profileImage,
     bio,
     isVerified,
-    followersCount,
-    followingCount,
-    causesCount,
+    followersCount = 0,
+    followingCount = 0,
+    causesCount = 0,
     userType,
   } = user;
 
@@ -64,7 +64,7 @@ const UserProfile: React.FC<UserProfileProps> = ({
           <div className="w-20 h-20 rounded-full overflow-hidden mb-3 relative">
             <Image
               src={avatarUrl}
-              alt={`${firstName}'s profile picture`}
+              alt={`${lastName}'s profile picture`}
               width={80}
               height={80}
               className="w-full h-full object-cover"
@@ -72,7 +72,7 @@ const UserProfile: React.FC<UserProfileProps> = ({
           </div>
           {/* Username with verification */}
           <div className="flex items-center gap-2 mb-1">
-            <h1 className="text-xl font-semibold">{lastName || firstName}</h1>
+            <h1 className="text-xl font-semibold">{firstName || lastName}</h1>
             {isVerified && (
               <span className="text-blue-500" aria-label="Verified account">
                 <svg
