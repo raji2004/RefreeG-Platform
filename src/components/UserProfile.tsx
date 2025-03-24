@@ -1,8 +1,11 @@
-import React from "react";
+// components/UserProfile.tsx
+"use client";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { User } from "@/lib/type";
 import ProfileNav from "./ProfileNav";
+import { getCausesByUserId } from "@/lib/firebase/actions";
 
 interface UserProfileProps {
   user: User;
@@ -23,9 +26,29 @@ const UserProfile: React.FC<UserProfileProps> = ({
     isVerified,
     followersCount = 0,
     followingCount = 0,
-    causesCount = 0,
+    causesCount: initialCausesCount = 0,
     userType = "individual",
   } = user;
+
+  // State for causes count with initial value from props
+  const [causesCount, setCausesCount] = useState(initialCausesCount);
+
+  // Fetch causes count on component mount (for real-time updates)
+  useEffect(() => {
+    const fetchCausesCount = async () => {
+      try {
+        const causes = await getCausesByUserId(user.id);
+        setCausesCount(causes.length);
+      } catch (error) {
+        console.error("Error fetching causes count:", error);
+      }
+    };
+
+    fetchCausesCount();
+  }, [user.id]);
+
+  // Determine the correct label for causes
+  const causesLabel = causesCount === 1 ? "cause" : "causes";
 
   // Default avatar if no photoURL is provided
   const avatarUrl = profileImage || "/images/default-avatar.png";
@@ -136,7 +159,7 @@ const UserProfile: React.FC<UserProfileProps> = ({
           <div className="flex justify-center w-full gap-8 mb-6">
             <div className="text-center">
               <p className="text-xl font-bold">{causesCount}</p>
-              <p className="text-sm text-gray-800">causes</p>
+              <p className="text-sm text-gray-800">{causesLabel}</p>
             </div>
             <div className="text-center">
               <p className="text-xl font-bold">{followersCount}</p>

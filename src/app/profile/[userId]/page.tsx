@@ -1,6 +1,5 @@
-//app/profile/[userId]/page.tsx
-
-import { getUserById } from "@/lib/firebase/actions";
+// app/profile/[userId]/page.tsx
+import { getUserById, getCausesByUserId } from "@/lib/firebase/actions";
 import { getSessionId } from "@/lib/helpers";
 import UserProfile from "@/components/UserProfile";
 import { Suspense } from "react";
@@ -14,6 +13,10 @@ export default async function ProfilePage({
   try {
     // Get the profile user data
     const profileUser = await getUserById(params.userId);
+
+    // Get the user's causes count
+    const userCauses = await getCausesByUserId(params.userId);
+    const causesCount = userCauses.length;
 
     // Get the current logged-in user's ID
     const currentUserId = await getSessionId();
@@ -35,7 +38,7 @@ export default async function ProfilePage({
     return (
       <Suspense fallback={<Loading />}>
         <UserProfile
-          user={profileUser}
+          user={{ ...profileUser, causesCount }} // Add causesCount to user object
           isOwnProfile={isOwnProfile}
           currentUserId={currentUserId || undefined}
         />
