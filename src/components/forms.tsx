@@ -554,7 +554,19 @@ export const SignupForm5 = () => {
         phoneNumber: oldParam.phoneNumber,
         pin: oldParam.pin,
         profileImage: "",
+
+        // Required fields
+        bio: oldParam.bio || "", // Set from user input if available
+        createdAt: oldParam.createdAt || new Date().toISOString(),
+        updatedAt: oldParam.updatedAt || new Date().toISOString(),
+
+        // Dynamic fields that will change over time
+        followersCount: oldParam.followersCount || 0,
+        followingCount: oldParam.followingCount || 0,
+        causesCount: oldParam.causesCount || 0,
+        userType: oldParam.userType || "individual", // Default but can be changed
       });
+
       setCookie("userSession", JSON.stringify(res?.user.uid), {
         maxAge: sessionAge,
       });

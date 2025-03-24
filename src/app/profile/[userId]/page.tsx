@@ -26,7 +26,7 @@ export default async function ProfilePage({
         <div className="flex flex-col items-center justify-center h-screen">
           <h2 className="text-2xl font-bold mb-4">User Not Found</h2>
           <p className="text-gray-600">
-            The user profile you're looking for doesn't exist.
+            The user profile you&apos;re looking for doesn&apos;t exist.
           </p>
         </div>
       );
