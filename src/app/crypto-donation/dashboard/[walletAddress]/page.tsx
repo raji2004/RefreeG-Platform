@@ -8,7 +8,7 @@ import { polygonAmoy } from "thirdweb/chains";
 import { deployPublishedContract } from "thirdweb/deploys";
 import { useActiveAccount, useReadContract } from "thirdweb/react";
 import { db } from "@/lib/firebase/config";
-import { collection, addDoc } from "firebase/firestore"; // Firebase Firestore functions
+import { collection, addDoc } from "firebase/firestore";
 
 export default function DashboardPage() {
   const account = useActiveAccount();
@@ -42,10 +42,10 @@ export default function DashboardPage() {
           className="px-4 py-2 bg-blue-500 text-white rounded-md"
           onClick={() => setIsModalOpen(true)}
         >
-          Create Campaign
+          Create Cause
         </button>
       </div>
-      <p className="text-2xl font-semibold mb-4">My Campaigns:</p>
+      <p className="text-2xl font-semibold mb-4">My Causes:</p>
       <div className="grid grid-cols-3 gap-4">
         {!isLoadingMyCampaigns &&
           (myCampaigns && myCampaigns.length > 0 ? (
@@ -57,7 +57,7 @@ export default function DashboardPage() {
               />
             ))
           ) : (
-            <p>No campaigns</p>
+            <p>No Cause</p>
           ))}
       </div>
 
@@ -129,12 +129,12 @@ const CreateCampaignModal = ({
         collection(db, "crypto-campaigns"),
         campaignData
       );
-      console.log("Campaign saved to Firebase with ID:", docRef.id);
+      console.log("Cause saved to Firebase with ID:", docRef.id);
 
-      alert("Campaign created and saved successfully!");
+      alert("Cause created and saved successfully!");
     } catch (error) {
-      console.error("Error creating campaign:", error);
-      alert("Failed to create campaign.");
+      console.error("Error creating cause:", error);
+      alert("Failed to create cause.");
     } finally {
       setIsDeployingContract(false);
       setIsModalOpen(false);
@@ -162,7 +162,7 @@ const CreateCampaignModal = ({
     <div className="fixed inset-0 bg-black bg-opacity-75 flex justify-center items-center backdrop-blur-md">
       <div className="w-1/2 bg-slate-100 p-6 rounded-md">
         <div className="flex justify-between items-center mb-4">
-          <p className="text-lg font-semibold">Create a Campaign</p>
+          <p className="text-lg font-semibold">Create a Cause</p>
           <button
             className="text-sm px-4 py-2 bg-slate-600 text-white rounded-md"
             onClick={() => setIsModalOpen(false)}
@@ -171,29 +171,29 @@ const CreateCampaignModal = ({
           </button>
         </div>
         <div className="flex flex-col">
-          <label>Campaign Name:</label>
+          <label>Cause Name:</label>
           <input
             type="text"
             value={campaignName}
             onChange={(e) => setCampaignName(e.target.value)}
-            placeholder="Campaign Name"
+            placeholder="Cause Name"
             className="mb-4 px-4 py-2 bg-slate-300 rounded-md"
           />
-          <label>Campaign Description:</label>
+          <label>Caause Description:</label>
           <textarea
             value={campaignDescription}
             onChange={(e) => setCampaignDescription(e.target.value)}
-            placeholder="Campaign Description"
+            placeholder="Cause Description"
             className="mb-4 px-4 py-2 bg-slate-300 rounded-md"
           ></textarea>
-          <label>Campaign Goal:</label>
+          <label>Cause Goal:</label>
           <input
             type="number"
             value={campaignGoal}
             onChange={(e) => handleCampaignGoal(parseInt(e.target.value))}
             className="mb-4 px-4 py-2 bg-slate-300 rounded-md"
           />
-          <label>{`Campaign Length (Days)`}</label>
+          <label>{`Cause Length (Days)`}</label>
           <div className="flex space-x-4">
             <input
               type="number"
@@ -209,7 +209,7 @@ const CreateCampaignModal = ({
             className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-md"
             onClick={handleDeployContract}
           >
-            {isDeployingContract ? "Creating Campaign..." : "Create Campaign"}
+            {isDeployingContract ? "Creating Cause..." : "Create Cause"}
           </button>
         </div>
       </div>

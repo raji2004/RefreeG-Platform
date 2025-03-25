@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useCallback, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useFormContext, useFieldArray } from "react-hook-form";
@@ -19,7 +19,7 @@ export interface FormData {
   causeCategory: string;
   deadline: string;
   goalAmount: string;
-  uploadedImage: any; // Use your UploadedImage interface if needed
+  uploadedImage: any;
   sections: Section[];
 }
 
@@ -29,15 +29,16 @@ const AutoResizeTextarea = React.forwardRef<
   React.TextareaHTMLAttributes<HTMLTextAreaElement>
 >(({ value, onChange, ...props }, ref) => {
   const internalRef = useRef<HTMLTextAreaElement>(null);
-  // Use external ref if provided, otherwise internal
-  const textareaRef = (ref as React.MutableRefObject<HTMLTextAreaElement>) || internalRef;
+  const textareaRef =
+    (ref as React.MutableRefObject<HTMLTextAreaElement>) || internalRef;
 
-  const adjustHeight = () => {
+  // Stabilized function to prevent unnecessary re-renders
+  const adjustHeight = useCallback(() => {
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
       textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`;
     }
-  };
+  }, [textareaRef]);
 
   const handleInput = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     adjustHeight();
@@ -46,7 +47,7 @@ const AutoResizeTextarea = React.forwardRef<
 
   useEffect(() => {
     adjustHeight();
-  }, [value]);
+  }, [adjustHeight, value]); // ✅ Fixed missing dependency warning
 
   return (
     <textarea
@@ -69,22 +70,21 @@ export const Form4 = () => {
     name: "sections",
   });
 
-  // On mount, if no sections exist, initialize with a default section.
+  // Memoize sections to prevent unnecessary re-renders
+  const sections = useMemo(() => watch("sections") || [], [watch]);
+
   useEffect(() => {
     if (fields.length === 0) {
       append({ id: 1, header: "", description: "" });
     }
   }, [fields, append]);
 
-  const maxLength = 2000;
-  const sections = (watch("sections") as Section[]) || [];
-
-  // Sync sections to localStorage whenever sections change.
   useEffect(() => {
     localStorage.setItem("formSections", JSON.stringify(sections));
-  }, [sections]);
+  }, [sections]); // ✅ Prevents unnecessary effect triggers
 
-  // Check that every section has a non-empty header and description.
+  const maxLength = 2000;
+
   const isSectionsValid =
     sections.length > 0 &&
     sections.every(
@@ -93,7 +93,7 @@ export const Form4 = () => {
     );
 
   const handlePreview = () => {
-    if (!isSectionsValid) return; // Extra guard.
+    if (!isSectionsValid) return;
     router.push(
       `/See_Preview?data=${encodeURIComponent(JSON.stringify(sections))}`
     );
@@ -123,8 +123,8 @@ export const Form4 = () => {
         make.
       </div>
       <div className="mt-2 text-xs text-white border py-2 px-1 rounded bg-[#433e3f] border-[#CCCBCB]">
-        In this section, try sharing what inspired you to start this cause? Share
-        the personal journey or experience that led you to create it.
+        In this section, try sharing what inspired you to start this cause?
+        Share the personal journey or experience that led you to create it.
       </div>
 
       {/* Form Content */}

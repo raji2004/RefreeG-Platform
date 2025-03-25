@@ -16,7 +16,7 @@ import { H2, P } from "@/components/typograpy";
 import { Cause } from "@/lib/type";
 import { getDaysLeft } from "@/lib/utils";
 
-export default function HappeningNearYou({ causes }: { causes: Cause[] }) {
+export default function HappeningNearYou({ causes,}: { causes: Cause[]}) {
   // const mainCause = { ...causesData[0], description: causesData[0].description || "" }; // Ensure description is defined
   // const otherCauses = causesData.slice(1);
   const [api, setApi] = useState<CarouselApi>();
@@ -34,6 +34,7 @@ export default function HappeningNearYou({ causes }: { causes: Cause[] }) {
     }
 
   };
+
   return (
     <div className="px-10 my-10 space-y-5">
       <div>
@@ -44,10 +45,14 @@ export default function HappeningNearYou({ causes }: { causes: Cause[] }) {
         <CarouselContent>
           {causes.map((cause) => (
             <CarouselItem key={cause.id} className="basis-full md:basis-1/2 lg:basis-1/3">
-              <MainCauseCard
+               <MainCauseCard
                 {...cause}
+                isBookmarked={ cause.isBookmarked?? false}
+                onRemoveBookmark={cause.onRemoveBookmark ?? (() => {})}
                 daysLeft={getDaysLeft(cause.deadline)}
-                progressPercentage={(cause.raisedAmount / cause.goalAmount) * 100}
+                progressPercentage={
+                  (cause.raisedAmount / cause.goalAmount) * 100
+                }
                 hideDescription
                 hideTags
               />

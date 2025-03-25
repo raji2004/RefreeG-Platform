@@ -5,7 +5,7 @@ import { GoAlert } from "react-icons/go";
 import Image from "next/image";
 import { Navbar } from "@/components/ui/navbar";
 import CrowdfundingFeatures from "@/components/crowdfundingFeatures";
-import { getCauseById, getUserById } from "@/lib/action";
+import { getCauseById, getUserById } from "@/lib/firebase/actions";
 import { getDaysLeft } from "@/lib/utils";
 import { Footer } from "@/components/ui/footer";
 import { CauseCategories } from "@/lib/utils";

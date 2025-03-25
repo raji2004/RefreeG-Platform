@@ -1,9 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { EyeIcon, Trash2Icon, PlusIcon } from "lucide-react";
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -11,10 +17,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogFooter,
 } from "@/components/ui/dialog";
 import { CreditCardForm } from "./CreditCardForm";
 import { CryptoWalletForm } from "./CryptoWalletForm";
+import AccountNumberForm from "./AccountNumberForm";
 
 // Interfaces for payment methods
 interface CreditCard {
@@ -32,14 +38,26 @@ interface CryptoWallet {
   network: string;
 }
 
-type PaymentMethod = CreditCard | CryptoWallet;
+interface AccountNumber {
+  id: number;
+  accountName: string;
+  bankName: string;
+  accountType: "savings" | "current";
+  accountNumber: string;
+}
+
+type PaymentMethod = CreditCard | CryptoWallet | AccountNumber;
 
 export default function PaymentMethods() {
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([]);
-  const [showAccountDetails, setShowAccountDetails] = useState<Record<number, boolean>>({});
+  const [showAccountDetails, setShowAccountDetails] = useState<
+    Record<number, boolean>
+  >({});
   const [activeTab, setActiveTab] = useState<string>("all");
   const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
   const [selectedMethod, setSelectedMethod] = useState<string>("");
+
+  console.log(activeTab);
 
   const handleMethodChange = (value: string) => {
     setSelectedMethod(value);
@@ -63,6 +81,18 @@ export default function PaymentMethods() {
     setIsAddModalOpen(false);
   };
 
+  const handleSubmitAccountNumber = (data: any) => {
+    const newAccount: AccountNumber = {
+      id: Date.now(),
+      accountName: data.accountName,
+      bankName: data.bankName,
+      accountType: data.accountType,
+      accountNumber: data.accountNumber || "XXXXXXXX", // Default value if not provided
+    };
+    setPaymentMethods((prev) => [...prev, newAccount]);
+    setIsAddModalOpen(false);
+  };
+
   const toggleAccountDetails = (id: number) => {
     setShowAccountDetails((prev) => ({ ...prev, [id]: !prev[id] }));
   };
@@ -71,11 +101,49 @@ export default function PaymentMethods() {
     setPaymentMethods((prev) => prev.filter((method) => method.id !== id));
   };
 
-  const filteredMethods = paymentMethods.filter((method) => {
-    if (activeTab === "creditCard") return "cardNumber" in method;
-    if (activeTab === "cryptoWallet") return "address" in method;
-    return true;
-  });
+  const renderCardTitle = () => {
+    // TODO
+  };
+
+  // Use a ref to track if we've already added test data
+  const testDataAdded = React.useRef(false);
+
+  useEffect(() => {
+    // Only add test data once and only in development
+    if (
+      paymentMethods.length === 0 &&
+      !testDataAdded.current &&
+      process.env.NODE_ENV === "development"
+    ) {
+      testDataAdded.current = true;
+
+      // This is just for development testing
+      const testCard: CreditCard = {
+        id: 1,
+        name: "Test User",
+        bankName: "Test Bank",
+        cardNumber: "4111111111111111",
+        expiry: "12/25",
+        cvv: "123",
+      };
+
+      const testWallet: CryptoWallet = {
+        id: 2,
+        address: "0x1234567890abcdef1234567890abcdef12345678",
+        network: "Ethereum",
+      };
+
+      const testAccount: AccountNumber = {
+        id: 3,
+        accountName: "Test Account",
+        bankName: "Test Bank",
+        accountType: "savings",
+        accountNumber: "1234567890",
+      };
+
+      setPaymentMethods([testCard, testWallet, testAccount]);
+    }
+  }, [paymentMethods.length]);
 
   return (
     <Card className="w-full">
@@ -97,22 +165,33 @@ export default function PaymentMethods() {
               <div className="mt-4">
                 <Tabs
                   defaultValue="creditCard"
-                  value={selectedMethod}
+                  value={selectedMethod || "creditCard"}
                   onValueChange={handleMethodChange}
                   className="w-full"
                 >
-                  <TabsList className="grid w-full grid-cols-2">
-                    <TabsTrigger value="creditCard" >Credit Card</TabsTrigger>
-                    <TabsTrigger value="cryptoWallet">Crypto Wallet</TabsTrigger>
+                  <TabsList className="grid w-full grid-cols-3">
+                    <TabsTrigger value="creditCard">Credit Card</TabsTrigger>
+                    <TabsTrigger value="cryptoWallet">
+                      Crypto Wallet
+                    </TabsTrigger>
+                    <TabsTrigger value="accountNumber">
+                      Account Number
+                    </TabsTrigger>
                   </TabsList>
 
-                  <TabsContent value="creditCard">
-                    <CreditCardForm onSubmit={handleSubmitCreditCard} />
-                  </TabsContent>
+                  <div className="mt-4">
+                    {selectedMethod === "creditCard" && (
+                      <CreditCardForm onSubmit={handleSubmitCreditCard} />
+                    )}
 
-                  <TabsContent value="cryptoWallet">
-                    <CryptoWalletForm onSubmit={handleSubmitCryptoWallet} />
-                  </TabsContent>
+                    {selectedMethod === "cryptoWallet" && (
+                      <CryptoWalletForm onSubmit={handleSubmitCryptoWallet} />
+                    )}
+
+                    {selectedMethod === "accountNumber" && (
+                      <AccountNumberForm onSubmit={handleSubmitAccountNumber} />
+                    )}
+                  </div>
                 </Tabs>
               </div>
             </DialogContent>
@@ -121,134 +200,56 @@ export default function PaymentMethods() {
       </CardHeader>
 
       <CardContent>
-        <Tabs defaultValue="all" value={activeTab} onValueChange={setActiveTab}>
+        <Tabs
+          defaultValue="all"
+          value={activeTab}
+          onValueChange={setActiveTab}
+          className="w-full"
+        >
           <TabsList className="mb-4">
-            <TabsTrigger value="all" className="flex-1 sm:flex-none text-xs sm:text-sm lg:text-base px-2 sm:px-4 py-1 sm:py-2">All Methods</TabsTrigger>
-            <TabsTrigger value="creditCard" className="flex-1 sm:flex-none text-xs sm:text-sm lg:text-base px-2 sm:px-4 py-1 sm:py-2">Credit Cards</TabsTrigger>
-            <TabsTrigger value="cryptoWallet" className="flex-1 sm:flex-none text-xs sm:text-sm lg:text-base px-2 sm:px-4 py-1 sm:py-2">Crypto Wallets</TabsTrigger>
+            <TabsTrigger
+              value="all"
+              className="flex-1 sm:flex-none text-xs sm:text-sm lg:text-base px-2 sm:px-4 py-1 sm:py-2"
+            >
+              All Methods
+            </TabsTrigger>
+            <TabsTrigger
+              value="creditCard"
+              className="flex-1 sm:flex-none text-xs sm:text-sm lg:text-base px-2 sm:px-4 py-1 sm:py-2"
+            >
+              Credit Cards
+            </TabsTrigger>
+            <TabsTrigger
+              value="cryptoWallet"
+              className="flex-1 sm:flex-none text-xs sm:text-sm lg:text-base px-2 sm:px-4 py-1 sm:py-2"
+            >
+              Crypto Wallets
+            </TabsTrigger>
+
+            <TabsTrigger
+              value="accountNumber"
+              className="flex-1 sm:flex-none text-xs sm:text-sm lg:text-base px-2 sm:px-4 py-1 sm:py-2"
+            >
+              Account Numbers
+            </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="all" className="space-y-4">
-            {renderPaymentMethods(filteredMethods, toggleAccountDetails, handleRemoveMethod, showAccountDetails)}
-          </TabsContent>
-
-          <TabsContent value="creditCard" className="space-y-4">
-            {renderPaymentMethods(filteredMethods, toggleAccountDetails, handleRemoveMethod, showAccountDetails)}
-          </TabsContent>
-
-          <TabsContent value="cryptoWallet" className="space-y-4">
-            {renderPaymentMethods(filteredMethods, toggleAccountDetails, handleRemoveMethod, showAccountDetails)}
-          </TabsContent>
+          <div className="mt-4 space-y-4">
+            {renderPaymentMethods(activeTab)}
+          </div>
         </Tabs>
       </CardContent>
     </Card>
   );
 }
 
-function renderPaymentMethods(
-  methods: PaymentMethod[],
-  toggleDetails: (id: number) => void,
-  removeMethod: (id: number) => void,
-  showDetails: Record<number, boolean>
-) {
-  if (methods.length === 0) {
-    return (
-      <div className="text-center h-svh py-6 text-muted-foreground">
-        No payment methods available
-      </div>
-    );
+function renderPaymentMethods(activeTab: string) {
+  switch (activeTab) {
+    case "creditCard":
+      return <CreditCardForm />;
+    case "cryptoWallet":
+      return <CryptoWalletForm />;
+    case "accountNumber":
+      return <AccountNumberForm />;
   }
-
-  return (
-    <div className="space-y-3">
-      {methods.map((method) => (
-        <Card key={method.id} className="overflow-hidden">
-          {"cardNumber" in method ? (
-            <div className="p-4 flex justify-between items-center">
-              <div className="flex items-center gap-4">
-                <div className="bg-blue-100 p-3 rounded-full">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="text-blue-600"
-                  >
-                    <rect width="20" height="14" x="2" y="5" rx="2" />
-                    <line x1="2" x2="22" y1="10" y2="10" />
-                  </svg>
-                </div>
-                <div>
-                  <p className="font-medium">{method.bankName}</p>
-                  <p className="text-sm text-muted-foreground">
-                    {showDetails[method.id] ? method.cardNumber : "**** **** **** " + method.cardNumber.slice(-4)}
-                  </p>
-                </div>
-              </div>
-              <div className="flex gap-2">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => toggleDetails(method.id)}
-                >
-                  <EyeIcon className="h-4 w-4" />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => removeMethod(method.id)}
-                  className="text-red-500 hover:text-red-600 hover:bg-red-50"
-                >
-                  <Trash2Icon className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-          ) : (
-            <div className="p-4 flex justify-between items-center">
-              <div className="flex items-center gap-4">
-                <div className="bg-purple-100 p-3 rounded-full">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="text-purple-600"
-                  >
-                    <circle cx="12" cy="12" r="10" />
-                    <path d="M8 14s1.5 2 4 2 4-2 4-2" />
-                    <line x1="9" x2="9.01" y1="9" y2="9" />
-                    <line x1="15" x2="15.01" y1="9" y2="9" />
-                  </svg>
-                </div>
-                <div>
-                  <p className="font-medium">{method.network}</p>
-                  <p className="text-sm text-muted-foreground truncate max-w-md">
-                    {method.address}
-                  </p>
-                </div>
-              </div>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => removeMethod(method.id)}
-                className="text-red-500 hover:text-red-600 hover:bg-red-50"
-              >
-                <Trash2Icon className="h-4 w-4" />
-              </Button>
-            </div>
-          )}
-        </Card>
-      ))}
-    </div>
-  );
 }
