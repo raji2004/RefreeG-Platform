@@ -73,7 +73,7 @@ export const MainCauseCard: React.FC<
 
           <div className="flex text-xs text-gray-500 mb-2">
             <span className="text-black font-medium flex items-center gap-1">
-              <GoClock /> {daysLeft} days left
+              <GoClock /> {daysLeft}
             </span>
             <span className="mx-2 text-md text-black">•</span>
             <span>{progressPercentage}% funded</span>
