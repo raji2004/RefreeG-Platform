@@ -3,6 +3,7 @@
 
 import React, { useState } from "react";
 import { Bookmark } from "lucide-react";
+import { BsBookmarkDash, BsBookmarkFill, BsBookmark } from "react-icons/bs";
 import { addBookmark, removeBookmark } from "@/lib/firebase/actions";
 
 
@@ -18,10 +19,10 @@ const BookmarkButton: React.FC<BookmarkButtonProps> = ({
   onRemoveBookmark,
 }) => {
   const [isBookmarked, setIsBookmarked] = useState(initialBookmarked);
- 
+
 
   const toggleBookmark = async () => {
-  
+
 
     setIsBookmarked((prev) => !prev);
     try {
@@ -41,11 +42,17 @@ const BookmarkButton: React.FC<BookmarkButtonProps> = ({
 
   return (
     <div onClick={toggleBookmark} className="cursor-pointer">
-      <Bookmark
-        size={30}
-        className={`transition-colors duration-300 ${isBookmarked ? "text-blue-600 fill-blue-600" : "text-gray-500"
-          }`}
-      />
+      {isBookmarked ? (
+        <BsBookmarkFill
+          size={20}
+          className="text-blue-600"
+        />
+      ) : (
+        <BsBookmark
+          size={20}
+          className="text-black"
+        />
+      )}
     </div>
   );
 };

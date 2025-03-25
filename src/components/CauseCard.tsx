@@ -7,6 +7,9 @@ import Link from "next/link";
 import DonationProgress from "../components/ui/donationProgress";
 import BookmarkButton from "./ui/BookmarkButton";
 import { MainCauseCardProps } from "@/lib/type";
+import { BsBookmark } from "react-icons/bs";
+import { GoClock } from "react-icons/go";
+import { Badge } from "./ui/badge";
 
 export const MainCauseCard: React.FC<
   MainCauseCardProps & { onRemoveBookmark: (id: string) => void }
@@ -16,10 +19,10 @@ export const MainCauseCard: React.FC<
   id,
   profileImage,
   causeTitle,
-  daysLeft,
-  progressPercentage,
-  raisedAmount,
-  goalAmount,
+  daysLeft = 0,
+  progressPercentage = 0,
+  raisedAmount = 0,
+  goalAmount = 0,
   description,
   tags,
   hideDescription,
