@@ -56,7 +56,7 @@ export default async function DonationDetail({
     (item) => item.name === cause.causeCategory
   );
   const IconComponent = matchedCategory?.icon ?? FaHeartbeat;
-  const user = await getUserById(cause.userId);
+  const causeUser = await getUserById(cause.userId);
   const goalAmount = Number(cause.goalAmount);
   const donationAmount = cause.raisedAmount;
   const daysleft = getDaysLeft(cause.deadline);
@@ -75,7 +75,7 @@ export default async function DonationDetail({
   ];
 
   return (
-    <div>
+    <>
       <Navbar userSession={!!session} profile={loggeduser?.profileImage} />
       <div className="p-4 md:flex md:justify-between">
         {/* Left side - Main content */}
@@ -122,7 +122,7 @@ export default async function DonationDetail({
           </div>
 
           {/* Organization supporting the cause */}
-          <UnicefBanner />
+          <UnicefBanner name={causeUser?.firstName + " " + causeUser?.lastName} />
 
           {/* Cause description paragraphs */}
           <CauseSection section={cause.sections} />
