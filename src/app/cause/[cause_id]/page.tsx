@@ -124,6 +124,7 @@ export default async function DonationDetail({
           {/* Organization supporting the cause */}
           <UnicefBanner
             name={causeUser?.firstName + " " + causeUser?.lastName}
+            userId={causeUser?.id} // Pass the user ID
           />
 
           {/* Cause description paragraphs */}
