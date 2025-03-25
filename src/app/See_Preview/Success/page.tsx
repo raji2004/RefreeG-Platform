@@ -1,10 +1,10 @@
 import React, { Suspense } from "react";
 import SuccessPage from "@/components/SuccessPage";
-import { getCauseById } from "@/lib/action";
+import { getCauseById } from "@/lib/firebase/actions";
 import { getBaseURL } from "@/lib/helpers";
 
-export default async function SuccessPageWrapper({searchParams}:{searchParams:{id:string}}) {
- 
+export default async function SuccessPageWrapper({ searchParams }: { searchParams: { id: string } }) {
+
   const cause = await getCauseById(searchParams.id);
   const baseURL = await getBaseURL();
   if (!cause) {

@@ -1,13 +1,16 @@
+// components/CauseCard.tsx
 "use client";
-import React, { useState } from "react";
+
+import React from "react";
 import Image from "next/image";
-import { FaHeartbeat, FaMapMarkerAlt } from "react-icons/fa";
-import DonationProgress from "../components/ui/donationProgress";
-
-import { MainCauseCardProps } from "@/lib/type";
 import Link from "next/link";
+import DonationProgress from "../components/ui/donationProgress";
+import BookmarkButton from "./ui/BookmarkButton";
+import { MainCauseCardProps } from "@/lib/type";
 
-export const MainCauseCard: React.FC<MainCauseCardProps> = ({
+export const MainCauseCard: React.FC<
+  MainCauseCardProps & { onRemoveBookmark: (id: string) => void }
+> = ({
   img,
   uploadedImage,
   id,
@@ -22,26 +25,19 @@ export const MainCauseCard: React.FC<MainCauseCardProps> = ({
   hideDescription,
   hideTags,
   hideButton,
+  isBookmarked,
+  onRemoveBookmark,
 }) => {
-  // State to track bookmark status
-  const [isBookmarked, setIsBookmarked] = useState(false);
-
-  // Toggle bookmark function
-  const toggleBookmark = () => {
-    setIsBookmarked((prev) => !prev);
-  };
-
   return (
     <div className="bg-white w-full rounded-lg">
       {/* Image */}
       <Image
         src={img}
-        alt={uploadedImage.name}
+        alt={uploadedImage?.name || "Cause Image"}
         height={300}
         width={600}
         className="rounded-lg w-full"
       />
-
       {/* Content */}
       <div className="flex justify-between mt-4">
         <div className="flex mb-2">
@@ -64,26 +60,21 @@ export const MainCauseCard: React.FC<MainCauseCardProps> = ({
                 width={20}
                 className="mr-1"
               />
-              {daysLeft} • {progressPercentage}% funded
+              {daysLeft} days • {progressPercentage}% funded
             </p>
-            {/* Description (Hidden on Mobile) */}
             {!hideDescription && (
               <p className="mt-2 hidden lg:block">{description}</p>
             )}
           </div>
         </div>
-        {/* Bookmark Icon */}
-        <div onClick={toggleBookmark} className="cursor-pointer">
-          {/* <Bookmark
-            size={30}
-            className={`transition-colors duration-300 ${
-              isBookmarked ? "text-blue-600 fill-blue-600" : "text-gray-500"
-            }`}
-          /> */}
-        </div>
+        {/* Bookmark Button Component */}
+        <BookmarkButton
+          causeId={id} // Pass only the cause ID
+          isBookmarked={isBookmarked} // Pass isBookmarked prop
+          onRemoveBookmark={onRemoveBookmark}
+        />
       </div>
-
-      {/* Tags (Hidden on Mobile) */}
+      {/* Tags */}
       {!hideTags && (
         <div className="hidden md:flex space-x-2 mt-9">
           {tags?.map((tag, index) => (
@@ -96,16 +87,17 @@ export const MainCauseCard: React.FC<MainCauseCardProps> = ({
           ))}
         </div>
       )}
-
       {/* Donation Progress */}
       <div className="mt-6">
-        <DonationProgress progressPercentage={progressPercentage} />
+        <DonationProgress
+          currentAmount={raisedAmount}
+          goalAmount={goalAmount}
+        />
         <div className="font-bold text-gray-800 mt-2">
           ₦{raisedAmount} raised
         </div>
         <div className="text-gray-800">Goal: ₦{goalAmount}</div>
       </div>
-
       {/* Donate Button */}
       {!hideButton && (
         <Link href={`/cause/${id}`} className="flex justify-center mt-4">

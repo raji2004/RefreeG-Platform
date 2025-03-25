@@ -37,7 +37,11 @@ export const checkUserSession = () => {
 }
 export const getSessionId = async () => {
     const cookieStore = cookies();
-    return await cookieStore.get('userSession')?.value;
+    
+    const userId= await cookieStore.get('userSession')?.value;
+    if (!userId || userId === undefined) return null
+
+    return decodeURIComponent(userId).replace(/"/g, "").trim();
 }
 
 export const SessionLogout = async () => {
