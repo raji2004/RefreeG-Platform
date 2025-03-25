@@ -2,7 +2,7 @@
 import { Cause } from "@/lib/type";
 import { collection, addDoc, doc, getDoc, getDocs, query, where } from "firebase/firestore";
 import { db } from "../config";
-import { checkIfBookmarked } from ".";
+import { checkIfBookmarked, getUserById } from ".";
 
 export const addCause = async (causeData: Omit<Cause, "id">): Promise<string> => {
     try {
@@ -61,10 +61,11 @@ export const getCauses = async (): Promise<Cause[]> => {
                 
                 // Call async function to check if it's bookmarked
                 const isBookmarked = await checkIfBookmarked(doc.id);
-                
+
+                const userProfile = await getUserById(data.userId);
                 
 
-                return { id: doc.id, ...data, isBookmarked }  as Cause ;
+                return { id: doc.id, ...data, isBookmarked,profileImage:userProfile?.profileImage }  as Cause ;
             })
         );
 

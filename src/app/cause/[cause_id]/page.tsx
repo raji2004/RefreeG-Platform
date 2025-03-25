@@ -44,8 +44,6 @@ export default async function DonationDetail({
   params: { cause_id: string };
 }) {
   const cause = await getCauseById(params.cause_id);
-
-  console.log(cause);
   const session = await getSessionId();
   const loggeduser = await getUserById(session ?? "");
 
@@ -63,7 +61,7 @@ export default async function DonationDetail({
   const progressPercentage = (donationAmount / goalAmount) * 100;
 
   const stats = [
-    "2.4k Donations",
+    `${cause.raisedAmount.toLocaleString()} Donations`,
     `${progressPercentage.toFixed(1)}% funded`,
     daysleft,
   ];

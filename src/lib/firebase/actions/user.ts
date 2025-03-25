@@ -21,7 +21,7 @@ export const getUserById = async (userId: string): Promise<User | null> => {
         return null;
       }
   
-      const userRef = doc(db, "users", userId); // Get reference to specific user
+      const userRef = doc(db, "users", decodeURIComponent(userId).replace(/"/g, "").trim()); // Get reference to specific user
       const docSnap = await getDoc(userRef);
       if (!docSnap.exists()) {
         console.warn("User not found with ID:", userId);
