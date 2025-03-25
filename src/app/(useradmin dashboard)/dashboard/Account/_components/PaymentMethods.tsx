@@ -63,15 +63,7 @@ export default function PaymentMethods() {
     setSelectedMethod(value);
   };
 
-  const handleSubmitCreditCard = (data: any) => {
-    const newCard: CreditCard = {
-      id: Date.now(),
-      ...data,
-    };
-    setPaymentMethods((prev) => [...prev, newCard]);
-    setIsAddModalOpen(false);
-  };
-
+  
   const handleSubmitCryptoWallet = (data: any) => {
     const newWallet: CryptoWallet = {
       id: Date.now(),
