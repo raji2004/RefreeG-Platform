@@ -74,7 +74,7 @@ export default async function DonationDetail({
     <>
       <Navbar
         userSession={session !== undefined ? true : false}
-        profile={user?.profileImage}
+        profile={loggeduser?.profileImage}
       />
       <div className="p-4 md:flex md:justify-between mt-10">
         {/* Left side - Main content */}
