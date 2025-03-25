@@ -186,7 +186,7 @@ export interface MainCauseCardProps
   > {
   daysLeft: string;
   progressPercentage: number;
-  tags?: { icon: JSX.Element; text: string }[];
+  tags?:  string[];
   hideDescription?: boolean;
   hideTags?: boolean;
   hideButton?: boolean;
