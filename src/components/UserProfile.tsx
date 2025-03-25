@@ -6,6 +6,7 @@ import Link from "next/link";
 import { User } from "@/lib/type";
 import ProfileNav from "./ProfileNav";
 import { getCausesByUserId } from "@/lib/firebase/actions";
+import { VerifiedBadge } from "./ui/VerifiedBadge";
 
 interface UserProfileProps {
   user: User;
@@ -93,24 +94,12 @@ const UserProfile: React.FC<UserProfileProps> = ({
             />
           </div>
 
-          {/* Username with verification */}
+          {/* Updated Username with verification */}
           <div className="flex items-center gap-2 mb-2">
-            <h1 className="text-2xl font-bold">{firstName || lastName}</h1>
-            {isVerified && (
-              <span className="text-blue-500" aria-label="Verified account">
-                <svg
-                  className="w-6 h-6"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    fillRule="evenodd"
-                    clipRule="evenodd"
-                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15l-5-5 1.41-1.41L11 14.17l7.59-7.59L20 8l-9 9z"
-                  />
-                </svg>
-              </span>
-            )}
+            <h1 className="text-2xl font-bold">
+              {[firstName, lastName].filter(Boolean).join(" ")}
+            </h1>
+            {isVerified && <VerifiedBadge className="w-6 h-6" />}
           </div>
 
           {/* User Type Badge */}

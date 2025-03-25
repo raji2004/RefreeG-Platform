@@ -21,6 +21,7 @@ import CauseSection from "@/components/CauseSection";
 import CauseTabs from "@/components/CauseTabs";
 import NearbyCarousel from "@/components/NearbyCarousel";
 import console from "console";
+import { VerifiedBadge } from "@/components/ui/VerifiedBadge";
 
 const Section = ({
   title,
@@ -123,8 +124,9 @@ export default async function DonationDetail({
 
           {/* Organization supporting the cause */}
           <UnicefBanner
-            name={causeUser?.firstName + " " + causeUser?.lastName}
-            userId={causeUser?.id} // Pass the user ID
+            name={`${causeUser?.firstName} ${causeUser?.lastName}`}
+            userId={causeUser?.id}
+            isVerified={causeUser?.isVerified} // Pass the verification status
           />
 
           {/* Cause description paragraphs */}
