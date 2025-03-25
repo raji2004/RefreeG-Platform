@@ -170,7 +170,6 @@ export default function PaymentMethods() {
                   className="w-full"
                 >
                   <TabsList className="grid w-full grid-cols-3">
-                    <TabsTrigger value="creditCard">Credit Card</TabsTrigger>
                     <TabsTrigger value="cryptoWallet">
                       Crypto Wallet
                     </TabsTrigger>
@@ -180,9 +179,6 @@ export default function PaymentMethods() {
                   </TabsList>
 
                   <div className="mt-4">
-                    {selectedMethod === "creditCard" && (
-                      <CreditCardForm onSubmit={handleSubmitCreditCard} />
-                    )}
 
                     {selectedMethod === "cryptoWallet" && (
                       <CryptoWalletForm onSubmit={handleSubmitCryptoWallet} />
@@ -204,12 +200,12 @@ export default function PaymentMethods() {
           defaultValue="all"
           value={activeTab}
           onValueChange={setActiveTab}
-          className="w-full"
+          className="w-full bg-white"
         >
-          <TabsList className="mb-4">
+          <TabsList className="mb-4 bg-white">
             <TabsTrigger
               value="all"
-              className="flex-1 sm:flex-none text-xs sm:text-sm lg:text-base px-2 sm:px-4 py-1 sm:py-2"
+              className="flex-1 bg-white sm:flex-none text-xs sm:text-sm lg:text-base px-2 sm:px-4 py-1 sm:py-2"
             >
               All Methods
             </TabsTrigger>
@@ -246,10 +242,10 @@ export default function PaymentMethods() {
 function renderPaymentMethods(activeTab: string) {
   switch (activeTab) {
     case "creditCard":
-      return <CreditCardForm />;
+      return <CreditCardForm onSubmit={() => {}} />;
     case "cryptoWallet":
-      return <CryptoWalletForm />;
+      return <CryptoWalletForm onSubmit={() => {}} />;
     case "accountNumber":
-      return <AccountNumberForm />;
+      return <AccountNumberForm onSubmit={() => {}} />;
   }
 }

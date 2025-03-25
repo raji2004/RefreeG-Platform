@@ -108,7 +108,7 @@ function AccountNumberForm({ onSubmit }: AccountNumberFormProps) {
   };
 
   return (
-    <div className="bg-white rounded-lg px-6 py-10 w-[50%] mx-auto border">
+    <div className="bg-white rounded-lg px-6 py-10 w-[100%] mx-auto border">
       <form onSubmit={handleSubmit}>
         <div className="space-y-4">
           {/* Name on Account */}
