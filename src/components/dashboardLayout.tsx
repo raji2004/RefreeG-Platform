@@ -23,6 +23,8 @@ import {
 } from "@heroicons/react/24/outline";
 import Image from "next/image";
 import Link from "next/link";
+import { SessionLogout } from "@/lib/helpers";
+import { MouseEvent } from 'react';
 
 interface LayoutProps {
   profileImage?: string | null; // Allow profileImage to be null or undefined
@@ -34,6 +36,21 @@ const Layout: React.FC<LayoutProps> = ({ profileImage, children }) => {
   const pathname = usePathname();
   const [isActivityOpen, setIsActivityOpen] = useState(false);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+
+  const handleSignOut = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    try {
+      await SessionLogout();
+      
+      if (typeof window !== 'undefined') {
+        localStorage.clear();
+        sessionStorage.clear();
+        window.location.assign('/?_=' + Date.now());
+      }
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
 
   useEffect(() => {
     if (
@@ -90,7 +107,15 @@ const Layout: React.FC<LayoutProps> = ({ profileImage, children }) => {
       path: "/admin/dashboard/support",
       icon: SupportIcon,
     },
-    { name: "Sign Out", path: "/signout", icon: SignOutIcon },
+    {
+      name: "Sign Out",
+      path: "#",
+      icon: SignOutIcon,
+      onClick: (e: MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        handleSignOut(e);
+      }
+    }
   ];
 
   // Extract the common sidebar content into a function
@@ -101,10 +126,17 @@ const Layout: React.FC<LayoutProps> = ({ profileImage, children }) => {
       </h1>
       <nav>
         <ul>
-          {navItems.map(({ name, path, icon: Icon, hasDropdown, subItems }) => (
+          {navItems.map(({ name, path, icon: Icon, hasDropdown, subItems, onClick }) => (
             <li key={name} className="mb-4">
               <button
-                onClick={() => {
+                onClick={(e) => {
+                  e.preventDefault();
+                  
+                  if (onClick) {
+                    onClick(e);
+                    return;
+                  }
+                  
                   if (hasDropdown) {
                     setIsActivityOpen(!isActivityOpen);
                   } else {

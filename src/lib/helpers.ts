@@ -35,6 +35,7 @@ export const checkUserSession = () => {
     const userSession = cookieStore.get('userSession')?.value;
     return userSession ? true : false;
 }
+
 export const getSessionId = async () => {
     const cookieStore = cookies();
     
@@ -44,11 +45,15 @@ export const getSessionId = async () => {
     return decodeURIComponent(userId).replace(/"/g, "").trim();
 }
 
+// lib/helpers.ts
 export const SessionLogout = async () => {
+    // Server-side: Delete cookie
     const cookieStore = cookies();
-   await cookieStore.delete('userSession');
-    return true;
-}
+    cookieStore.delete('userSession');
+    
+    // Return a response that the client can handle
+    return { success: true };
+  };
 
 export const getBaseURL = (): string => {
     if (typeof window !== "undefined") {
@@ -58,5 +63,5 @@ export const getBaseURL = (): string => {
       // Server-side (Node.js)
       return process.env.BASE_URL || "http://localhost:3000"; // Fallback for local dev
     }
-  };
+};
 
