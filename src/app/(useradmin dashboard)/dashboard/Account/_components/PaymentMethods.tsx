@@ -210,12 +210,6 @@ export default function PaymentMethods() {
               All Methods
             </TabsTrigger>
             <TabsTrigger
-              value="creditCard"
-              className="flex-1 sm:flex-none text-xs sm:text-sm lg:text-base px-2 sm:px-4 py-1 sm:py-2"
-            >
-              Credit Cards
-            </TabsTrigger>
-            <TabsTrigger
               value="cryptoWallet"
               className="flex-1 sm:flex-none text-xs sm:text-sm lg:text-base px-2 sm:px-4 py-1 sm:py-2"
             >
