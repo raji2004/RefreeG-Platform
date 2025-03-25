@@ -6,28 +6,20 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Camera } from "lucide-react";
+import { User } from "@/lib/type";
+import { updateUserById } from "@/lib/firebase/actions";
+import { promises } from "dns";
+import { toast } from "react-toastify";
+import { uploadImage } from "@/lib/uploadimg";
 
-interface GeneralInfoProps {
-    profileImage: string;
-}
 
-export default function GeneralInfo({ profileImage }: GeneralInfoProps) {
+
+export default function GeneralInfo({ user }: { user: User }) {
     const [isEditing, setIsEditing] = useState(false);
-    const [currentProfileImage, setCurrentProfileImage] = useState(profileImage);
+    const [currentProfileImage, setCurrentProfileImage] = useState(user.profileImage);
     const [previewImage, setPreviewImage] = useState<File | null>(null);
 
-    useEffect(() => {
-        const fetchProfileImage = async () => {
-            try {
-                const response = await fetch("/api/profile/getProfileImage");
-                const data = await response.json();
-                if (data.profileImage) setCurrentProfileImage(data.profileImage);
-            } catch (error) {
-                console.error("Failed to fetch profile image:", error);
-            }
-        };
-        fetchProfileImage();
-    }, []);
+
 
     const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files[0]) {
@@ -36,9 +28,10 @@ export default function GeneralInfo({ profileImage }: GeneralInfoProps) {
     };
 
     const [formValues, setFormValues] = useState({
-        fullName: "Angulu Adeiza Julius",
-        email: "personal@gmail.com",
-        phone: "+234 567 890 1234",
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        phone: user.phoneNumber,
     });
 
     // Handle input changes
@@ -50,29 +43,33 @@ export default function GeneralInfo({ profileImage }: GeneralInfoProps) {
         }))
     };
 
-    const saveProfileImageToDB = async (imageUrl: string) => {
+    const saveProfileImageToDB = async (): Promise<string> => {
         try {
-            const response = await fetch("/api/profile/updateImage", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ profileImage: imageUrl }),
-            });
-            if (!response.ok) throw new Error("Failed to save image");
+            if (!previewImage) {
+                return currentProfileImage || "";
+
+            }
+            console.log(previewImage)
+            const uploadedImage = await uploadImage(previewImage as File, "/profileImages");
+            if (uploadedImage === undefined || uploadedImage === null) {
+                return "";
+            }
+            console.log("Uploaded Image:", uploadedImage);
+            return uploadedImage;
         } catch (error) {
             console.error("Error saving profile image:", error);
+            return "";
         }
     };
 
     const handleSaveChanges = async () => {
-        if (previewImage) {
-            const reader = new FileReader();
-            reader.onloadend = async () => {
-                const imageUrl = reader.result as string;
-                setCurrentProfileImage(imageUrl);
-                await saveProfileImageToDB(imageUrl);
-            };
-            reader.readAsDataURL(previewImage);
-        }
+        updateUserById(user.id,
+            {
+                ...user,
+                ...formValues,
+                profileImage: await saveProfileImageToDB(),
+                phoneNumber: formValues.phone
+            });
         setIsEditing(false);
     };
 
@@ -133,13 +130,23 @@ export default function GeneralInfo({ profileImage }: GeneralInfoProps) {
 
                 {/* Form Fields */}
                 <form className="space-y-3 sm:space-y-4 w-full mt-4">
-                    <Label className="block text-sm sm:text-lg font-medium">Full Name</Label>
+                    <Label className="block text-sm sm:text-lg font-medium">First Name</Label>
                     <Input
                         type="text"
                         name="fullName"
-                        defaultValue="Angulu Adeiza Julius"
+
                         readOnly={!isEditing}
-                        value={formValues.fullName}
+                        defaultValue={formValues.firstName}
+                        onChange={handleInputChange}
+                        className={`w-full ${isEditing ? "bg-white" : "bg-gray-100"}`}
+                    />
+                    <Label className="block text-sm sm:text-lg font-medium">Last Name</Label>
+                    <Input
+                        type="text"
+                        name="fullName"
+
+                        readOnly={!isEditing}
+                        defaultValue={formValues.lastName}
                         onChange={handleInputChange}
                         className={`w-full ${isEditing ? "bg-white" : "bg-gray-100"}`}
                     />
@@ -148,9 +155,9 @@ export default function GeneralInfo({ profileImage }: GeneralInfoProps) {
                     <Input
                         type="email"
                         name="email"
-                        value={formValues.email}
+                        defaultValue={formValues.email}
                         onChange={handleInputChange}
-                        defaultValue="personal@gmail.com"
+
                         readOnly={!isEditing}
                         className={`w-full ${isEditing ? "bg-white" : "bg-gray-100"}`}
                     />
@@ -159,9 +166,8 @@ export default function GeneralInfo({ profileImage }: GeneralInfoProps) {
                     <Input
                         type="text"
                         name="phone"
-                        value={formValues.phone}
+                        defaultValue={formValues.phone}
                         onChange={handleInputChange}
-                        defaultValue="+234 567 890 1234"
                         readOnly={!isEditing}
                         className={`w-full ${isEditing ? "bg-white" : "bg-gray-100"}`}
                     />

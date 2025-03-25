@@ -29,15 +29,18 @@ import Image from "next/image";
 import { DatePicker } from "./ui/date-picker";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import { getOldParams, sessionAge, } from "@/lib/utils";
+import { getOldParams, sessionAge } from "@/lib/utils";
 import { InputOTP, InputOTPSeparator, InputOTPSlot } from "./ui/input-otp";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
-import { useCreateUserWithEmailAndPassword, useSignInWithEmailAndPassword } from 'react-firebase-hooks/auth'
+import {
+  useCreateUserWithEmailAndPassword,
+  useSignInWithEmailAndPassword,
+} from "react-firebase-hooks/auth";
 import { auth } from "@/lib/firebase/config";
-import { addUser, checkEmailExists } from "@/lib/action";
-import { setCookie } from 'cookies-next';
-
+import { addUser, checkEmailExists } from "@/lib/firebase/actions";
+import { setCookie } from "cookies-next";
+import { Checkbox } from "./ui/checkbox";
 
 // Define prop types for the LoginForm
 interface LoginFormProps {
@@ -59,22 +62,23 @@ export default function LoginForm() {
   });
 
   const { push } = useRouter();
-  const [signInWithEmailAndPassword] = useSignInWithEmailAndPassword(auth)
+  const [signInWithEmailAndPassword] = useSignInWithEmailAndPassword(auth);
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
-      const res = await signInWithEmailAndPassword(data.email, data.password)
-      console.log('res', res?.user.uid)
-      setCookie('userSession', JSON.stringify(res?.user.uid), { maxAge: sessionAge });
+      const res = await signInWithEmailAndPassword(data.email, data.password);
+      console.log("res", res?.user.uid);
+      setCookie("userSession", JSON.stringify(res?.user.uid), {
+        maxAge: sessionAge,
+      });
       if (res != undefined) {
-        push('/')
-      }else{
-          toast('Invalid email or password')
+        push("/");
+      } else {
+        toast("Invalid email or password");
       }
     } catch (e) {
-      console.error('error', e)
+      console.error("error", e);
     }
-
   };
 
   return (
@@ -128,15 +132,15 @@ export default function LoginForm() {
       </form>
     </Form>
   );
-};
+}
 
 // Signup Form 1
 export const SignupForm1 = ({
   defaultValues,
 }: {
   defaultValues:
-  | Pick<User, "firstName" | "lastName" | "countryOfResidence" | "DOB">
-  | undefined;
+    | Pick<User, "firstName" | "lastName" | "countryOfResidence" | "DOB">
+    | undefined;
 }) => {
   const signu1Schema = signUpSchema.pick({
     firstName: true,
@@ -305,7 +309,7 @@ export const SignupForm2 = ({
       toast.error("Password does not match");
       return;
     }
-    const check = await checkEmailExists(data.email)
+    const check = await checkEmailExists(data.email);
     if (check) {
       // Email exists
       toast.error("Email already exists. Please choose a different email.");
@@ -374,7 +378,11 @@ export const SignupForm2 = ({
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input placeholder="Confirm Password" type="password" {...field} />
+                <Input
+                  placeholder="Confirm Password"
+                  type="password"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -447,8 +455,7 @@ export const SignupForm3 = () => {
 };
 
 export const SignupForm4 = () => {
-
-  const [value, setValue] = useState("")
+  const [value, setValue] = useState("");
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { push } = useRouter();
@@ -463,18 +470,18 @@ export const SignupForm4 = () => {
     push(`signup5?${params.toString()}`);
   };
   return (
-
     <form className=" flex flex-col items-center text-center ">
       <H1 className=" mb-8">Confirm 4-digit payment code</H1>
-      <P className=" mb-8">This will serve as a transaction before you make any donation</P>
-
+      <P className=" mb-8">
+        This will serve as a transaction before you make any donation
+      </P>
 
       <InputOTP
         maxLength={4}
         value={value}
         onChange={(value) => {
-          console.log(value)
-          setValue(value)
+          console.log(value);
+          setValue(value);
         }}
         pattern={REGEXP_ONLY_DIGITS}
       >
@@ -485,101 +492,119 @@ export const SignupForm4 = () => {
         <InputOTPSlot index={2} />
         <InputOTPSeparator />
         <InputOTPSlot index={3} />
-
       </InputOTP>
 
-      <Button onClick={(e) => {
-        e.preventDefault()
-        onSubmit({ pin: value })
-      }}
-        variant={"ghost"} className="w-1/2 mt-16  mx-auto rounded-md">
+      <Button
+        onClick={(e) => {
+          e.preventDefault();
+          onSubmit({ pin: value });
+        }}
+        variant={"ghost"}
+        className="w-1/2 mt-16  mx-auto rounded-md"
+      >
         Next <ChevronRight />
       </Button>
     </form>
-  )
-}
+  );
+};
 
 export const SignupForm5 = () => {
   const signu3Schema = signUpSchema.pick({
-    donationPreference: true
+    donationPreference: true,
   });
-  const [createUserWithEmailAndPassword] = useCreateUserWithEmailAndPassword(auth)
+  const [createUserWithEmailAndPassword] =
+    useCreateUserWithEmailAndPassword(auth);
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace, push } = useRouter();
   const form = useForm({
     resolver: zodResolver(signu3Schema),
     defaultValues: {
-      donationPreference: "",
+      donationPreference: [],
     },
   });
   const donationOptions = [
-    'Education',
-    'Healthcare',
+    "Education",
+    "Healthcare",
     "Women’s Empowerment",
-    'Youth Development',
-    'Economic Development',
-    'Agriculture',
-    'Environment'
-  ]
-
+    "Youth Development",
+    "Economic Development",
+    "Agriculture",
+    "Environment",
+  ];
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-
     const params = new URLSearchParams(searchParams);
     const oldParam = getOldParams(searchParams, params);
     Object.entries(data).forEach(([key, value]) => {
       params.set(key, value);
     });
     try {
-
-      const res = await createUserWithEmailAndPassword(oldParam.email, oldParam.password)
+      const res = await createUserWithEmailAndPassword(
+        oldParam.email,
+        oldParam.password
+      );
       await addUser(`${res?.user.uid}`, {
         email: oldParam.email,
-        donationPreference: data.donationPreference,
+        donationPreference: data.donationPreference, // This is now an array
         firstName: oldParam.firstName,
         lastName: oldParam.lastName,
         DOB: oldParam.DOB,
         countryOfResidence: oldParam.countryOfResidence,
         phoneNumber: oldParam.phoneNumber,
-        pin: oldParam.pin
-      })
-      setCookie('userSession', JSON.stringify(res?.user.uid), { maxAge: sessionAge });
-      console.log('successfull')
-      push('/')
+        pin: oldParam.pin,
+        profileImage: "",
+      });
+      setCookie("userSession", JSON.stringify(res?.user.uid), {
+        maxAge: sessionAge,
+      });
+      console.log("successful");
+      push("/");
     } catch (e) {
-      console.error('error:', e)
+      console.error("error:", e);
     }
-    // replace(`${pathname}?${params.toString()}`);
   };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className=" text-center space-y-6">
-        <H1>Please select your donation prefrences</H1>
-        <P>This helps us know what causes to bring to your attention urgently</P>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="text-center space-y-6"
+      >
+        <H1>Please select your donation preferences</H1>
+        <P>
+          This helps us know what causes to bring to your attention urgently
+        </P>
         <FormField
           control={form.control}
           name="donationPreference"
           render={({ field }) => (
             <FormControl>
-              <RadioGroup
-                onValueChange={field.onChange}
-                defaultValue={field.value}
-              >
+              <div className="space-y-4">
                 {donationOptions.map((donation) => (
-                  <FormItem key={donation} className="flex items-center space-x-12 space-y-0 bg-palette-baseWhite h-14 pl-5">
+                  <FormItem
+                    key={donation}
+                    className="flex items-center space-x-3 space-y-0 bg-palette-baseWhite h-14 pl-5"
+                  >
                     <FormControl>
-                      <RadioGroupItem value={donation} />
+                      <Checkbox
+                        checked={(field.value as string[]).includes(donation)} // Explicitly cast field.value to string[]
+                        onCheckedChange={(checked) => {
+                          const newValue = checked
+                            ? [...(field.value as string[]), donation] // Explicitly cast field.value to string[]
+                            : (field.value as string[]).filter(
+                                (value) => value !== donation
+                              ); // Explicitly cast field.value to string[]
+                          field.onChange(newValue);
+                        }}
+                      />
                     </FormControl>
                     <FormLabel className="font-normal text-xl">
                       {donation}
                     </FormLabel>
                   </FormItem>
-                )
-                )
-                }
-              </RadioGroup>
+                ))}
+              </div>
             </FormControl>
           )}
         />
@@ -588,8 +613,8 @@ export const SignupForm5 = () => {
         </Button>
       </form>
     </Form>
-  )
-}
+  );
+};
 
 export const CompanyForm = () => {
   const companySchema1 = compnanySchema.pick({
@@ -625,9 +650,14 @@ export const CompanyForm = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="max-w-lg space-y-5 text-center">
+        className="max-w-lg space-y-5 text-center"
+      >
         <H1>Create a company account</H1>
-        <P>{"We need the following information to stay CBN  compliant,Please stay with us :)"}</P>
+        <P>
+          {
+            "We need the following information to stay CBN  compliant,Please stay with us :)"
+          }
+        </P>
         <FormField
           control={form.control}
           name="organizatonName"
@@ -646,7 +676,10 @@ export const CompanyForm = () => {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input placeholder="Organization Type (NGO’s, educational institute, etc)" {...field} />
+                <Input
+                  placeholder="Organization Type (NGO’s, educational institute, etc)"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -670,7 +703,10 @@ export const CompanyForm = () => {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input type="number" placeholder="Tax Identification Number" {...field}
+                <Input
+                  type="number"
+                  placeholder="Tax Identification Number"
+                  {...field}
                 />
               </FormControl>
               <FormMessage />
@@ -682,9 +718,8 @@ export const CompanyForm = () => {
         </Button>
       </form>
     </Form>
-
-  )
-}
+  );
+};
 export const CompanyContactForm = () => {
   const companySchema1 = compnanySchema.pick({
     fullName: true,
@@ -719,9 +754,14 @@ export const CompanyContactForm = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="max-w-lg space-y-5 text-center">
+        className="max-w-lg space-y-5 text-center"
+      >
         <H1>Contact person information</H1>
-        <P>{"We need the following information to verify the identity of the person who’ll be managing the company’s account"}</P>
+        <P>
+          {
+            "We need the following information to verify the identity of the person who’ll be managing the company’s account"
+          }
+        </P>
         <FormField
           control={form.control}
           name="fullName"
@@ -764,8 +804,9 @@ export const CompanyContactForm = () => {
           render={({ field }) => (
             <FormItem>
               <FormControl>
-                <Input placeholder="Position/Role Within the Organization" {...field}
-
+                <Input
+                  placeholder="Position/Role Within the Organization"
+                  {...field}
                 />
               </FormControl>
               <FormMessage />
@@ -777,6 +818,5 @@ export const CompanyContactForm = () => {
         </Button>
       </form>
     </Form>
-
-  )
-}
+  );
+};

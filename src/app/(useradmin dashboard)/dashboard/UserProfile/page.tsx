@@ -1,7 +1,26 @@
+import { getSessionId } from "@/lib/helpers";
+import { redirect } from "next/navigation";
 import GeneralInfo from "./_components/GeneralInfo";
+import { getUserById } from "@/lib/firebase/actions";
 
-export default function UserProfile() {
+export default async function UserProfile() {
+  const session = await getSessionId();
+  if (!session) {
+    redirect("/login");
+  }
+  const user = await getUserById(session);
+  if (user === null) {
+    return <div> user not found</div>
+  }
   return (
-        <GeneralInfo profileImage="/UserProfile/defaultProfile.svg" />
+    <GeneralInfo
+      user={
+        {
+          ...user,
+          profileImage: user.profileImage ?? "/UserProfile/defaultProfile.svg",
+        }
+
+      }
+    />
   );
 }

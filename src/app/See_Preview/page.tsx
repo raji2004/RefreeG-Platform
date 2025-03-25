@@ -14,7 +14,7 @@ import {
   FaMapMarkerAlt,
   FaGlobe,
 } from "react-icons/fa";
-import { addCause } from "@/lib/action";
+import { addCause } from "@/lib/firebase/actions";
 
 interface Section {
   id: number;
@@ -88,13 +88,13 @@ const PreviewPage = () => {
     setErrorMessage("");
 
     try {
-      const currentUser =  await getSessionId();
+      const currentUser = await getSessionId();
 
       if (currentUser === undefined) router.push("/login");
       console.log("Current User: ", currentUser);
 
       // Combine the formData, sections, and uploadedImage into one object.
-      const finalData = { ...formData, sections, img: uploadedImage?.src, userId: currentUser,raisedAmount:0,goalAmount:parseInt(formData.goalAmount) };
+      const finalData = { ...formData, sections, img: uploadedImage?.src, userId: currentUser, raisedAmount: 0, goalAmount: parseInt(formData.goalAmount) };
       const causeId = await addCause(finalData);
       router.push(`/See_Preview/Success?id=${causeId}`);
     } catch (error: any) {
