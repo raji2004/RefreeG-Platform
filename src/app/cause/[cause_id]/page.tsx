@@ -9,8 +9,6 @@ import { getCauseById, getUserById } from "@/lib/firebase/actions";
 import { getDaysLeft } from "@/lib/utils";
 import { Footer } from "@/components/ui/footer";
 import { CauseCategories } from "@/lib/utils";
-import { User } from 'lucide-react'
-import { P } from "@/components/typograpy";
 import { getSessionId } from "@/lib/helpers";
 import DonationProgressSection from "@/components/DonationProgressSection";
 import DonationList from "@/components/DonationList";
@@ -74,8 +72,11 @@ export default async function DonationDetail({
 
   return (
     <>
-      <Navbar userSession={!!session} profile={loggeduser?.profileImage} />
-      <div className="p-4 md:flex md:justify-between">
+      <Navbar
+        userSession={session !== undefined ? true : false}
+        profile={user?.profileImage}
+      />
+      <div className="p-4 md:flex md:justify-between mt-10">
         {/* Left side - Main content */}
         <div className="md:w-2/4">
           <h1 className="text-2xl font-bold mb-2">
@@ -120,7 +121,9 @@ export default async function DonationDetail({
           </div>
 
           {/* Organization supporting the cause */}
-          <UnicefBanner name={causeUser?.firstName + " " + causeUser?.lastName} />
+          <UnicefBanner
+            name={causeUser?.firstName + " " + causeUser?.lastName}
+          />
 
           {/* Cause description paragraphs */}
           <CauseSection section={cause.sections} />

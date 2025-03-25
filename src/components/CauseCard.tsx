@@ -75,46 +75,32 @@ export const MainCauseCard: React.FC<
             <span className="text-black font-medium flex items-center gap-1">
               <GoClock /> {daysLeft} 
             </span>
-            <span className="mx-2 text-md text-black">•</span>
-            <span>{progressPercentage}% funded</span>
-          </div>
-
-          <div className="w-full bg-gray-200 rounded-full h-1.5 mb-4">
-            <div
-              className="bg-blue-600 h-1.5 rounded-full"
-              style={{ width: `${progressPercentage}%` }}
-            ></div>
-          </div>
-
-          <div className="font-bold mb-2">₦{raisedAmount.toLocaleString()} raised</div>
-          <div className="text-xs text-gray-500 mb-4">
-            Goal: ₦{goalAmount.toLocaleString()}
-          </div>
-
-          {!hideTags && tags && tags.length > 0 && (
-            <div className="flex flex-wrap gap-2 mb-4">
-              {tags.map((tag, index) => (
-                <Badge key={index} variant="outline" className="text-xs">
-                  {tag}
-                </Badge>
-              ))}
-            </div>
-          )}
-
-          {!hideDescription && description && (
-            <p className="text-sm text-gray-600 mb-4 line-clamp-2">
-              {description}
-            </p>
-          )}
-
-          {!hideButton && (
-            <Link href={`/cause/${id}`}>
-              <button className=" bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors flex items-center justify-center">
-                Donate now <span className="ml-1">›</span>
-              </button>
-            </Link>
-          )}
+          ))}
         </div>
+      )}
+      {/* Donation Progress */}
+      <div className="mt-6">
+        <DonationProgress
+          currentAmount={raisedAmount}
+          goalAmount={goalAmount}
+        />
+        <div className="font-bold text-gray-800 mt-2">
+          ₦{raisedAmount} raised
+        </div>
+        <DonationProgress progressPercentage={progressPercentage} />
+        <div className="font-bold text-gray-800 mt-2">
+          ₦{raisedAmount} raised
+        </div>
+        <div className="text-gray-800">Goal: ₦{goalAmount}</div>
       </div>
-    );
-  };
+      {/* Donate Button */}
+      {!hideButton && (
+        <Link href={`/cause/${id}`} className="flex justify-center mt-4">
+          <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+            Donate now
+          </button>
+        </Link>
+      )}
+    </div>
+  );
+};
