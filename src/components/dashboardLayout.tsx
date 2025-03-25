@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useTransition } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import { handleSignOut } from "@/lib/firebase/actions";
 import {
   Squares2X2Icon as DashboardIcon,
   UserIcon,
@@ -27,8 +28,8 @@ import { SessionLogout } from "@/lib/helpers";
 import { MouseEvent } from 'react';
 
 interface LayoutProps {
-  profileImage?: string | null; // Allow profileImage to be null or undefined
-  children: React.ReactNode; // Children to render the main content
+  profileImage?: string | null;
+  children: React.ReactNode;
 }
 
 const Layout: React.FC<LayoutProps> = ({ profileImage, children }) => {
@@ -36,21 +37,14 @@ const Layout: React.FC<LayoutProps> = ({ profileImage, children }) => {
   const pathname = usePathname();
   const [isActivityOpen, setIsActivityOpen] = useState(false);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
-  const handleSignOut = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-    try {
-      await SessionLogout();
-      
-      if (typeof window !== 'undefined') {
-        localStorage.clear();
-        sessionStorage.clear();
-        window.location.assign('/?_=' + Date.now());
-      }
-    } catch (error) {
-      console.error('Logout failed:', error);
-    }
+  const handleSignOutClick = () => {
+    startTransition(async () => {
+      await handleSignOut();
+    });
   };
+
 
   useEffect(() => {
     if (
@@ -111,14 +105,10 @@ const Layout: React.FC<LayoutProps> = ({ profileImage, children }) => {
       name: "Sign Out",
       path: "#",
       icon: SignOutIcon,
-      onClick: (e: MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault();
-        handleSignOut(e);
-      }
-    }
+      onClick: handleSignOutClick,
+    },
   ];
 
-  // Extract the common sidebar content into a function
   const renderSidebarContent = () => (
     <div className="md:w-64 bg-white text-black min-h-screen p-4 border-r overflow-auto pb-24 sticky top-0 h-screen">
       <h1 className="text-2xl font-bold flex items-center mb-6">
@@ -126,70 +116,68 @@ const Layout: React.FC<LayoutProps> = ({ profileImage, children }) => {
       </h1>
       <nav>
         <ul>
-          {navItems.map(({ name, path, icon: Icon, hasDropdown, subItems, onClick }) => (
-            <li key={name} className="mb-4">
-              <button
-                onClick={(e) => {
-                  e.preventDefault();
-                  
-                  if (onClick) {
-                    onClick(e);
-                    return;
-                  }
-                  
-                  if (hasDropdown) {
-                    setIsActivityOpen(!isActivityOpen);
-                  } else {
-                    router.push(path);
-                    setIsMobileSidebarOpen(false);
-                  }
-                }}
-                className={`flex items-center justify-between p-2 rounded w-full text-left transition duration-300 ${
-                  pathname === path || (hasDropdown && isActivityOpen)
-                    ? "bg-gray-200 font-semibold"
-                    : "hover:bg-gray-100"
-                }`}
-              >
-                <span className="flex items-center">
-                  <Icon className="w-5 h-5 mr-2" /> {name}
-                </span>
-                {hasDropdown && (
-                  <ChevronDownIcon
-                    className={`w-4 h-4 transition-transform duration-300 ${
-                      isActivityOpen ? "rotate-180" : "rotate-0"
-                    }`}
-                  />
-                )}
-              </button>
-              {hasDropdown && (
-                <div
-                  className={`overflow-hidden transition-[max-height] duration-300 ease-in-out ${
-                    isActivityOpen ? "max-h-60" : "max-h-0"
+          {navItems.map(
+            ({ name, path, icon: Icon, hasDropdown, subItems, onClick }) => (
+              <li key={name} className="mb-4">
+                <button
+                  onClick={() => {
+                    if (onClick) {
+                      onClick();
+                    } else if (hasDropdown) {
+                      setIsActivityOpen(!isActivityOpen);
+                    } else {
+                      router.push(path);
+                      setIsMobileSidebarOpen(false);
+                    }
+                  }}
+                  className={`flex items-center justify-between p-2 rounded w-full text-left transition duration-300 ${
+                    pathname === path || (hasDropdown && isActivityOpen)
+                      ? "bg-gray-200 font-semibold"
+                      : "hover:bg-gray-100"
                   }`}
+                  disabled={isPending}
                 >
-                  <ul className="ml-6 mt-2 space-y-2">
-                    {subItems.map(({ name, path, icon: SubIcon }) => (
-                      <li key={name}>
-                        <button
-                          className={`flex items-center p-2 rounded w-full text-left transition duration-300 ${
-                            pathname === path
-                              ? "bg-gray-300 font-semibold"
-                              : "hover:bg-gray-100"
-                          }`}
-                          onClick={() => {
-                            router.push(path);
-                            setIsMobileSidebarOpen(false);
-                          }}
-                        >
-                          <SubIcon className="w-5 h-5 mr-2" /> {name}
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </li>
-          ))}
+                  <span className="flex items-center">
+                    <Icon className="w-5 h-5 mr-2" /> {name}
+                  </span>
+                  {hasDropdown && (
+                    <ChevronDownIcon
+                      className={`w-4 h-4 transition-transform duration-300 ${
+                        isActivityOpen ? "rotate-180" : "rotate-0"
+                      }`}
+                    />
+                  )}
+                </button>
+                {hasDropdown && (
+                  <div
+                    className={`overflow-hidden transition-[max-height] duration-300 ease-in-out ${
+                      isActivityOpen ? "max-h-60" : "max-h-0"
+                    }`}
+                  >
+                    <ul className="ml-6 mt-2 space-y-2">
+                      {subItems.map(({ name, path, icon: SubIcon }) => (
+                        <li key={name}>
+                          <button
+                            className={`flex items-center p-2 rounded w-full text-left transition duration-300 ${
+                              pathname === path
+                                ? "bg-gray-300 font-semibold"
+                                : "hover:bg-gray-100"
+                            }`}
+                            onClick={() => {
+                              router.push(path);
+                              setIsMobileSidebarOpen(false);
+                            }}
+                          >
+                            <SubIcon className="w-5 h-5 mr-2" /> {name}
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </li>
+            )
+          )}
         </ul>
       </nav>
     </div>
@@ -200,11 +188,10 @@ const Layout: React.FC<LayoutProps> = ({ profileImage, children }) => {
       {/* Topbar */}
       <div className="bg-white shadow-sm p-4 w-full sticky top-0 z-10">
         <div className="container mx-auto flex justify-between items-center">
-          {/* Left Section: Logo and Hamburger Menu */}
           <div className="flex items-center">
             <Link href="/">
               <Image
-                src="/logo.svg" // Update this with your actual logo path
+                src="/logo.svg"
                 alt="Logo"
                 width={40}
                 height={40}
@@ -213,25 +200,26 @@ const Layout: React.FC<LayoutProps> = ({ profileImage, children }) => {
             </Link>
           </div>
 
-          {/* Right Section: Notifications & Profile */}
-
-                    <div className="flex items-center ">
-                        <Link href="/admin/dashboard/notifications">
-                            <NotificationIcon className="w-6 h-6 text-gray-500 mr-4 cursor-pointer" />
-                        </Link>
-                        {profileImage ? (
-                            <Link href="/dashboard/UserProfile" className=" hidden md:block w-full h-full">
-                                <Image
-                                    src={profileImage}
-                                    alt="Profile"
-                                    width={30}
-                                    height={30}
-                                    className="w-full h-full rounded-full aspect-square  object-cover"
-                                />
-                            </Link>
-                        ) : (
-                            <div className="w-10 h-10 bg-gray-300 rounded-full" /> // Placeholder if no profile image
-                        )}
+          <div className="flex items-center">
+            <Link href="/admin/dashboard/notifications">
+              <NotificationIcon className="w-6 h-6 text-gray-500 mr-4 cursor-pointer" />
+            </Link>
+            {profileImage ? (
+              <Link
+                href="/dashboard/UserProfile"
+                className="hidden md:block w-full h-full"
+              >
+                <Image
+                  src={profileImage}
+                  alt="Profile"
+                  width={30}
+                  height={30}
+                  className="w-full h-full rounded-full aspect-square object-cover"
+                />
+              </Link>
+            ) : (
+              <div className="w-10 h-10 bg-gray-300 rounded-full" />
+            )}
 
             <button
               onClick={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
@@ -246,7 +234,7 @@ const Layout: React.FC<LayoutProps> = ({ profileImage, children }) => {
       {/* Main Content */}
       <div className="flex flex-1">
         {/* Desktop Sidebar */}
-        <div className="hidden  md:block">{renderSidebarContent()}</div>
+        <div className="hidden md:block">{renderSidebarContent()}</div>
 
         {/* Mobile Sidebar */}
         <div
@@ -254,7 +242,6 @@ const Layout: React.FC<LayoutProps> = ({ profileImage, children }) => {
             isMobileSidebarOpen ? "translate-x-0" : "-translate-x-full"
           } md:hidden`}
         >
-          {/* Sidebar panel */}
           <div className="relative">
             {renderSidebarContent()}
             <button
