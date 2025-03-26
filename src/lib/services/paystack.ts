@@ -9,8 +9,6 @@ if (!PAYSTACK_KEY) {
   );
 }
 
-console.log(PAYSTACK_KEY);
-
 const Paystack = {
   api: axios.create({
     baseURL: "https://api.paystack.co",
@@ -84,6 +82,7 @@ const Paystack = {
       console.log(
         `Verifying account: ${accountNumber} with bank code: ${bankCode}`
       );
+
       const response = await this.api.get("/bank/resolve", {
         params: { account_number: accountNumber, bank_code: bankCode },
       });
@@ -99,6 +98,7 @@ const Paystack = {
         "Error verifying account:",
         error.response?.data || error.message || error
       );
+
       throw new Error(
         error.response?.data?.message || "Failed to verify account number"
       );

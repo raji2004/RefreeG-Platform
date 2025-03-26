@@ -61,7 +61,6 @@ function AccountNumberForm({ onSubmit }: AccountNumberFormProps) {
         setIsVerifying(true);
         setVerificationError("");
         setIsVerified(false);
-
         try {
           const accountData = await Paystack.verifyAccountNumber(
             accountNumber,
