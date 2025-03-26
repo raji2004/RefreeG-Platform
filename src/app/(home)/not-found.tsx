@@ -1,17 +1,19 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 
 export default function NotFoundPage() {
   return (
     <div className="flex flex-col items-center justify-center min-h-[90vh] bg-white px-4 text-center pb-20">
       <div className="max-w-lg">
         {" "}
-        {/* Increased from max-w-md to max-w-lg */}
-        <img
+        <Image
           src="/404-illustration.svg"
           alt="404 Illustration"
-          className="w-100 mx-auto mb-6"
+          width={300} // Adjust width based on design
+          height={300} // Adjust height based on design
+          className="mx-auto mb-6"
         />
         <h1 className="text-2xl font-bold text-gray-900">
           Oops! Page Not Found
