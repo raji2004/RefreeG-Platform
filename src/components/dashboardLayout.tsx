@@ -38,12 +38,16 @@ const Layout: React.FC<LayoutProps> = ({ profileImage, children }) => {
   const [isActivityOpen, setIsActivityOpen] = useState(false);
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [isPending, startTransition] = useTransition();
+  const [isSigningOut, setIsSigningOut] = useState(false);
 
   const handleSignOutClick = () => {
+    setIsSigningOut(true);
     startTransition(async () => {
       await handleSignOut();
+      // The redirect happens in handleSignOut, but we'll keep the state for UI
     });
   };
+
 
 
   useEffect(() => {
@@ -106,6 +110,7 @@ const Layout: React.FC<LayoutProps> = ({ profileImage, children }) => {
       path: "#",
       icon: SignOutIcon,
       onClick: handleSignOutClick,
+      isLoading: isSigningOut,
     },
   ];
 
@@ -117,10 +122,11 @@ const Layout: React.FC<LayoutProps> = ({ profileImage, children }) => {
       <nav>
         <ul>
           {navItems.map(
-            ({ name, path, icon: Icon, hasDropdown, subItems, onClick }) => (
+            ({ name, path, icon: Icon, hasDropdown, subItems, onClick, isLoading }) => (
               <li key={name} className="mb-4">
                 <button
-                  onClick={() => {
+                  onClick={(e) => {
+                    e.preventDefault();
                     if (onClick) {
                       onClick();
                     } else if (hasDropdown) {
@@ -134,13 +140,18 @@ const Layout: React.FC<LayoutProps> = ({ profileImage, children }) => {
                     pathname === path || (hasDropdown && isActivityOpen)
                       ? "bg-gray-200 font-semibold"
                       : "hover:bg-gray-100"
-                  }`}
-                  disabled={isPending}
+                  } ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
+                  disabled={isPending || isLoading}
                 >
                   <span className="flex items-center">
-                    <Icon className="w-5 h-5 mr-2" /> {name}
+                    {isLoading ? (
+                      <span className="w-5 h-5 mr-2 border-2 border-gray-400 border-t-transparent rounded-full animate-spin" />
+                    ) : (
+                      <Icon className="w-5 h-5 mr-2" />
+                    )}
+                    {name}
                   </span>
-                  {hasDropdown && (
+                  {hasDropdown && !isLoading && (
                     <ChevronDownIcon
                       className={`w-4 h-4 transition-transform duration-300 ${
                         isActivityOpen ? "rotate-180" : "rotate-0"
@@ -225,7 +236,11 @@ const Layout: React.FC<LayoutProps> = ({ profileImage, children }) => {
               onClick={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
               className="md:hidden mr-4"
             >
-              <Bars3Icon className="w-7 h-7" />
+              {isMobileSidebarOpen ? (
+                <XMarkIcon className="w-7 h-7" />
+              ) : (
+                <Bars3Icon className="w-7 h-7" />
+              )}
             </button>
           </div>
         </div>
@@ -254,7 +269,18 @@ const Layout: React.FC<LayoutProps> = ({ profileImage, children }) => {
         </div>
 
         {/* Page Content */}
-        <div className="flex-1 overflow-auto p-4 bg-gray-50">{children}</div>
+        <div className="flex-1 overflow-auto p-4 bg-gray-50">
+          {isSigningOut && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm w-full text-center">
+                <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+                <h3 className="text-lg font-medium text-gray-900">Signing out...</h3>
+                <p className="mt-2 text-sm text-gray-500">Please wait while we securely sign you out.</p>
+              </div>
+            </div>
+          )}
+          {children}
+        </div>
       </div>
     </div>
   );
