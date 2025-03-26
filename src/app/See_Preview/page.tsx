@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import Navbar from "../cause/create/_components/navbar";
 import { getSessionId } from "@/lib/helpers";
 import { FaExclamationTriangle, FaHeartbeat, FaMapMarkerAlt, FaGlobe } from "react-icons/fa";
-import { addCause } from "@/lib/action";
+import { addCause } from "@/lib/firebase/actions";
 import { getDaysLeft } from "@/lib/utils";
 
 interface Section {
@@ -82,22 +82,12 @@ const PreviewPage = () => {
 
     try {
       const currentUser = await getSessionId();
-      if (currentUser === undefined) {
-        router.push("/login");
-        return;
-      }
+
+      if (currentUser === undefined) router.push("/login");
       console.log("Current User: ", currentUser);
 
       // Combine the formData, sections, and uploadedImage into one object.
-      const finalData = {
-        ...formData,
-        sections,
-        img: uploadedImage?.src,
-        userId: currentUser,
-        raisedAmount: 0,
-        goalAmount: parseInt(formData.goalAmount),
-      };
-
+      const finalData = { ...formData, sections, img: uploadedImage?.src, userId: currentUser, raisedAmount: 0, goalAmount: parseInt(formData.goalAmount) };
       const causeId = await addCause(finalData);
       console.log("Document saved with ID:", causeId);
       router.push(`/See_Preview/Success?id=${causeId}`);

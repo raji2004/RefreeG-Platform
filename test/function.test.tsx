@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import { checkEmailExists } from "../src/lib/action"; 
+import { checkEmailExists } from "../src/lib/firebase/actions/action";
 
 // Mock the function to always return true or false as needed
 vi.mock("../src/lib/action", () => ({
@@ -8,7 +8,7 @@ vi.mock("../src/lib/action", () => ({
 
 describe("checkEmailExists", () => {
   it("should return true if email exists", async () => {
-    const result = await checkEmailExists("john.doe@example.com");
+    const result = await checkEmailExists("kingraj1344@gmail.com");
     expect(result).toBe(true); // Forced to pass
   });
 

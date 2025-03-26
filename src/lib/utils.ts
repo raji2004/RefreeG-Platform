@@ -47,6 +47,37 @@ export function getDaysLeft(deadline: string): string {
   return `${dayWord} day${diffDays > 1 ? "s" : ""} left`;
 }
 
+export function generateKeywords(title: string): string[] {
+  if (!title) return [];
+
+  title = title.toLowerCase().trim();
+  const words = title.split(/\s+/); 
+  const keywordSet = new Set<string>();
+
+  words.forEach((word) => keywordSet.add(word));
+
+  let currentPrefix = "";
+  for (const char of title) {
+    if (char !== " ") {
+      currentPrefix += char;
+      keywordSet.add(currentPrefix);
+    }
+  }
+
+  for (let i = 0; i < words.length; i++) {
+    let phrase = words[i];
+    keywordSet.add(phrase);
+    for (let j = i + 1; j < words.length; j++) {
+      phrase += " " + words[j];
+      keywordSet.add(phrase);
+    }
+  }
+
+  return Array.from(keywordSet);
+}
+
+
+
 export const CauseCategories: CauseCategory[] = [
   { name: "Education", icon: GraduationCap },
   { name: "Healthcare", icon: Heart },
