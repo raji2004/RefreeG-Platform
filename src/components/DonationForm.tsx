@@ -2,23 +2,18 @@
 
 import Image from "next/image";
 import { useState, ChangeEvent } from "react";
-import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { Cause, User } from "@/lib/type";
+import PaymentButton from "./PaymentButton";
 
-export default function DonationForm() {
+export default function DonationForm({ cause, user }: { cause: Cause, user: User }) {
   const [donation, setDonation] = useState(0);
-  const [tip, setTip] = useState(0);
-  const serviceFee = 10;
-  const totalAmount = donation + tip + serviceFee;
-
-  const handleTipChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    if (donation > 0) {
-      setTip(Number(value));
-    }
-  };
+  const [isAnonymous, setIsAnonymous] = useState(false);
+  const serviceFee = 100;
+  const totalAmount = donation + serviceFee;
+  const PayStackFee = 100;
 
   const handleDonationChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -29,7 +24,7 @@ export default function DonationForm() {
     <>
       <Image
         className="w-full rounded-lg"
-        src="/donation_flow/cause_background.svg"
+        src={cause.img ?? "/donation_flow/cause_background.svg"}
         alt="Donation Cause Image"
         width={800}
         height={400}
@@ -38,12 +33,11 @@ export default function DonationForm() {
         <h1 className="text-xl font-bold">
           You&apos;re about to donate to{" "}
           <span className="text-blue-600">
-            &quot;Support flood victims&quot;
+            &quot;{cause.causeTitle}&quot;
           </span>
         </h1>
         <p className="text-gray-600">
-          Help the victims of the Maiduguri floods rebuild their new homes and
-          send their kids back to school with your donations!
+          {cause.sections[0].description}
         </p>
       </div>
 
@@ -78,44 +72,10 @@ export default function DonationForm() {
       <Separator />
 
       <div className="flex items-center space-x-2">
-        <h3 className="font-bold">Support RefreeG&apos;s Mission</h3>
-        <Image
-          src="/donation_flow/information.svg"
-          alt="Info"
-          width={20}
-          height={20}
+        <Checkbox
+          checked={isAnonymous}
+          onCheckedChange={(checked) => setIsAnonymous(checked as boolean)}
         />
-      </div>
-      <p className="text-gray-600">
-        At RefreeG, we&apos;re committed to connecting donors with meaningful
-        causes that foster socioeconomic growth across Africa. We don&apos;t
-        charge causes or beneficiaries a fee to list on our platform—we want
-        100% of your donation to go where it&apos;s needed most.
-      </p>
-
-      <div className="space-y-2">
-        <label htmlFor="customTip" className="text-gray-700">
-          Enter custom tip:
-        </label>
-        <input
-          id="customTip"
-          type="number"
-          value={tip === 0 ? "" : tip}
-          onChange={handleTipChange}
-          className="w-full p-2 border rounded-lg"
-          placeholder="Enter your custom tip"
-          min="0"
-          disabled={donation === 0}
-        />
-        {donation === 0 && (
-          <p className="text-sm text-red-500">
-            Please select or enter a donation amount first.
-          </p>
-        )}
-      </div>
-
-      <div className="flex items-center space-x-2">
-        <Checkbox />
         <p>Donate anonymously</p>
       </div>
 
@@ -128,10 +88,6 @@ export default function DonationForm() {
           <p>₦{donation.toLocaleString()}</p>
         </div>
         <div className="flex justify-between">
-          <p>RefreeG Tip</p>
-          <p>₦{tip.toLocaleString()}</p>
-        </div>
-        <div className="flex justify-between">
           <div className="flex items-center space-x-1">
             <p>Service Fee</p>
             <Image
@@ -141,24 +97,23 @@ export default function DonationForm() {
               height={20}
             />
           </div>
-          <p>₦{serviceFee.toLocaleString()}</p>
+          <p>₦{(serviceFee + PayStackFee).toLocaleString()}</p>
         </div>
         <div className="flex justify-between font-bold text-lg">
           <p>Total</p>
-          <p>₦{totalAmount.toLocaleString()}</p>
+          <p>₦{(totalAmount+PayStackFee).toLocaleString()}</p>
         </div>
       </div>
 
-      <Button
-        className={`w-full text-white py-3 rounded-lg ${
-          donation === 0
-            ? "bg-gray-400 cursor-not-allowed"
-            : "bg-blue-600 hover:bg-blue-700"
-        }`}
+      <PaymentButton
+        user={user}
+        causeUserId={cause.userId}
+        causeId={cause.id}
+        totalAmount={totalAmount}
+        serviceFee={serviceFee}
         disabled={donation === 0}
-      >
-        Proceed
-      </Button>
+        isAnonymous={isAnonymous}
+      />
     </>
   );
 }

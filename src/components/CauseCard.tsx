@@ -49,13 +49,13 @@ export const MainCauseCard: React.FC<
 
         <div className="p-4">
           <div className="flex items-center mb-2">
-            <div className="h-6 w-6 rounded-full overflow-hidden mr-2">
+            <div className="h-8 w-8 aspect-square rounded-full overflow-hidden mr-2">
               <Image
-                src={profileImage ?? img}
+                src={profileImage }
                 alt="profile"
-                width={24}
-                height={24}
-                className="w-full h-full object-cover"
+                width={34}
+                height={34}
+                className="w-full h-full aspect-square"
               />
             </div>
 
@@ -73,7 +73,7 @@ export const MainCauseCard: React.FC<
 
           <div className="flex text-xs text-gray-500 mb-2">
             <span className="text-black font-medium flex items-center gap-1">
-              <GoClock /> {daysLeft}
+              <GoClock /> {daysLeft} days left
             </span>
             <span className="mx-2 text-md text-black">•</span>
             <span>{progressPercentage}% funded</span>

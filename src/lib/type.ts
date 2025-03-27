@@ -6,12 +6,12 @@ export type elementProps = {
 };
 export type typographyProps = elementProps & {
   color?:
-    | "text-primary"
-    | "text-secondary"
-    | "text-primary-foreground"
-    | "text-secondary-foreground"
-    | "text-popover"
-    | "text-gray-400";
+  | "text-primary"
+  | "text-secondary"
+  | "text-primary-foreground"
+  | "text-secondary-foreground"
+  | "text-popover"
+  | "text-gray-400";
 };
 
 export interface User {
@@ -28,13 +28,6 @@ export interface User {
   pin: number;
   donationPreference: string;
   profileImage: string;
-  isVerified: boolean;
-  createdAt: Date | string | number;
-  updatedAt: Date | string | number;
-  followersCount?: number;
-  followingCount?: number;
-  causesCount?: number;
-  userType?: "individual" | "organization";
 }
 
 export interface Country {
@@ -165,6 +158,7 @@ export type Cause = {
     type: string;
     progress: number;
   };
+
   img: string;
   userId: string;
   zipCode: string;
@@ -181,6 +175,32 @@ export type Cause = {
   progressPercentage: number; // Add this
 };
 
+export interface TransactionData extends Pick<User, "email" | "firstName" | "lastName" | "id"> {
+  amount: number;
+  serviceFee: number;
+  causeId: string;
+  subaccounts: {
+    subaccount: string,
+    share: number
+  }[]
+}
+export interface Transaction {
+  id: string;
+  amount: number;
+  causeId: string;
+  userId: string;
+  timestamp: string;
+  customer_name: string;
+}
+
+export interface ICreateSubaccount {
+  bank_code: string,
+  account_number: string,
+  percentage_charge?: number,
+  business_name: string
+}
+
+
 export interface MainCauseCardProps
   extends Omit<
     Cause,
@@ -194,7 +214,7 @@ export interface MainCauseCardProps
   > {
   daysLeft: string;
   progressPercentage: number;
-  tags?:  string[];
+  tags?: string[];
   hideDescription?: boolean;
   hideTags?: boolean;
   hideButton?: boolean;
