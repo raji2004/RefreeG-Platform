@@ -37,6 +37,7 @@ export default function Whyweexist() {
     <div className="w-full px-6 md:px-10 mt-4 lg:mt-24">
       <div className="w-full flex justify-center">
         <Image
+          draggable="false"
           src="/team.JPG"
           alt="RefreeG Team"
           width={600}
