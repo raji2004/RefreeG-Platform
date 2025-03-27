@@ -21,7 +21,7 @@ export const logTransaction = async ({
         const cause = await getCauseById(causeId)
         await updateCauseById(causeId, {
             ...cause,
-            raisedAmount: cause!.raisedAmount + amount
+            raisedAmount: Number(cause!.raisedAmount) + amount
         })
         const causeDonationRef = collection(db, `causes/${causeId}/donated`);
         await addDoc(causeDonationRef, {
