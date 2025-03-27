@@ -1,6 +1,7 @@
 "use server"
 import { doc, addDoc, collection, getDocs } from "firebase/firestore";
 import { db } from "../config";
+import { getCauseById, updateCauseById } from "./cause";
 
 export const logTransaction = async ({
     userId,
@@ -16,7 +17,12 @@ export const logTransaction = async ({
     transactionId: string;
 }) => {
     try {
-        // Save to cause collection
+        // 
+        const cause = await getCauseById(causeId)
+        await updateCauseById(causeId, {
+            ...cause,
+            raisedAmount: cause!.raisedAmount + amount
+        })
         const causeDonationRef = collection(db, `causes/${causeId}/donated`);
         await addDoc(causeDonationRef, {
             userId,
