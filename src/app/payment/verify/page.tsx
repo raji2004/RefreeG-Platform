@@ -5,11 +5,11 @@ import { usePayment } from "@/hooks/usePayment";
 import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "react-toastify";
 
-export default function PaymentVerification() {
+export default function PaymentVerification({ searchParams }: { searchParams: { reference: string } }) {
     const { verifyPayment, isLoading, error } = usePayment();
     const router = useRouter();
-    const searchParams = useSearchParams();
-    const reference = searchParams.get("reference");
+   
+    const reference = searchParams.reference;
 
     useEffect(() => {
         const verifyTransaction = async () => {
