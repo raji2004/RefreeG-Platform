@@ -55,25 +55,25 @@ export const WhatDoWeFocusOn: FC = () => {
             imageSrc={"/images/education.png"}
             title="📚 Education & Literacy"
             description=" Scholarships, school support, books for students."
-            linkHref="/blockchain-transparency" // Use query parameter
+            linkHref="/education-and-literacy" // Use query parameter
           />
           <FeatureCard
             imageSrc={"/images/vocation.png"}
             title="🛠️ Vocational Training:"
             description="Skill-building to empower unemployed youth."
-            linkHref="/vetted-causes" // Use query parameter
+            linkHref="/vocational-training" // Use query parameter
           />
           <FeatureCard
             imageSrc={"/images/healthcare.png"}
             title="🚑 Healthcare Support:"
             description="Medical aid for underserved communities."
-            linkHref="/easy-donation-process" // Use query parameter
+            linkHref="/healthcare-support" // Use query parameter
           />
           <FeatureCard
             imageSrc={"/images/gbv.png"}
             title="👩‍👧‍👦 Gender-Based Violence Support:"
             description="Aid for survivors & women empowerment."
-            linkHref="/global-access" // Use query parameter
+            linkHref="/gender-based-violence-support" // Use query parameter
           />
         </div>
       </div>
