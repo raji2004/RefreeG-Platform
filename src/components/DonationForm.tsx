@@ -10,6 +10,7 @@ import PaymentButton from "./PaymentButton";
 
 export default function DonationForm({ cause, user }: { cause: Cause, user: User }) {
   const [donation, setDonation] = useState(0);
+  const [isAnonymous, setIsAnonymous] = useState(false);
   const serviceFee = 100;
   const totalAmount = donation + serviceFee;
 
@@ -70,7 +71,10 @@ export default function DonationForm({ cause, user }: { cause: Cause, user: User
       <Separator />
 
       <div className="flex items-center space-x-2">
-        <Checkbox />
+        <Checkbox
+          checked={isAnonymous}
+          onCheckedChange={(checked) => setIsAnonymous(checked as boolean)}
+        />
         <p>Donate anonymously</p>
       </div>
 
@@ -107,6 +111,7 @@ export default function DonationForm({ cause, user }: { cause: Cause, user: User
         totalAmount={totalAmount}
         serviceFee={serviceFee}
         disabled={donation === 0}
+        isAnonymous={isAnonymous}
       />
     </>
   );

@@ -14,6 +14,7 @@ interface PaymentButtonProps {
     serviceFee: number;
     disabled?: boolean;
     causeId: string;
+    isAnonymous?: boolean;
 }
 
 export default function PaymentButton({
@@ -22,7 +23,8 @@ export default function PaymentButton({
     totalAmount,
     serviceFee,
     causeId,
-    disabled
+    disabled,
+    isAnonymous = false
 }: PaymentButtonProps) {
     const [isLoading, setIsLoading] = useState(false);
     const { initializePayment } = usePayment();
@@ -44,13 +46,13 @@ export default function PaymentButton({
                 amount: totalAmount,
                 serviceFee: serviceFee,
                 id: user.id,
-                firstName: user.firstName,
-                lastName: user.lastName,
+                firstName: isAnonymous ? "Anonymous Donor" : user.firstName,
+                lastName: isAnonymous ? "" : user.lastName,
                 subaccounts: [{
                     subaccount: userSubaccount,
                     share: totalAmount * 100
                 }],
-                causeId: causeId
+                causeId: causeId,
             });
         } catch (error) {
             console.error('Payment initialization failed:', error);
