@@ -54,10 +54,18 @@ export const getCauseTransactions = async (causeId: string): Promise<Transaction
         const donationsRef = collection(db, `causes/${causeId}/donated`);
         const querySnapshot = await getDocs(donationsRef);
 
-        const transactions = querySnapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
-        })) as Transaction[];
+        const transactions = querySnapshot.docs.map(doc => {
+            const data = doc.data();
+            // Validate and map each field explicitly
+            return {
+                id: doc.id,
+                amount: typeof data.amount === 'number' ? data.amount : 0,
+                causeId: causeId,
+                userId: typeof data.userId === 'string' ? data.userId : '',
+                timestamp: typeof data.timestamp === 'string' ? data.timestamp : new Date().toISOString(),
+                customer_name: typeof data.customer_name === 'string' ? data.customer_name : 'Anonymous'
+            };
+        });
 
         return transactions;
     } catch (error) {
@@ -66,17 +74,23 @@ export const getCauseTransactions = async (causeId: string): Promise<Transaction
     }
 }
 
-export const getUserTransactions = async (userId: string): Promise<Omit<Transaction, "userId"|'customer_name'>[]> => {
+export const getUserTransactions = async (userId: string): Promise<Omit<Transaction, "userId" | 'customer_name'>[]> => {
     try {
         const donationsRef = collection(db, `users/${userId}/donated`);
         const querySnapshot = await getDocs(donationsRef);
 
-        const transactions = querySnapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data()
-        }));
+        const transactions = querySnapshot.docs.map(doc => {
+            const data = doc.data();
+            // Validate and map each field explicitly
+            return {
+                id: doc.id,
+                amount: typeof data.amount === 'number' ? data.amount : 0,
+                causeId: typeof data.causeId === 'string' ? data.causeId : '',
+                timestamp: typeof data.timestamp === 'string' ? data.timestamp : new Date().toISOString()
+            };
+        });
 
-        return transactions as Omit<Transaction, "userId" | "customer_name">[];
+        return transactions;
     } catch (error) {
         console.error("Error fetching user transactions:", error);
         throw error;

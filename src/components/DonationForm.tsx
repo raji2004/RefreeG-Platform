@@ -13,6 +13,7 @@ export default function DonationForm({ cause, user }: { cause: Cause, user: User
   const [isAnonymous, setIsAnonymous] = useState(false);
   const serviceFee = 100;
   const totalAmount = donation + serviceFee;
+  const PayStackFee = 100;
 
   const handleDonationChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -96,11 +97,11 @@ export default function DonationForm({ cause, user }: { cause: Cause, user: User
               height={20}
             />
           </div>
-          <p>₦{(serviceFee + 100).toLocaleString()}</p>
+          <p>₦{(serviceFee + PayStackFee).toLocaleString()}</p>
         </div>
         <div className="flex justify-between font-bold text-lg">
           <p>Total</p>
-          <p>₦{(totalAmount+100).toLocaleString()}</p>
+          <p>₦{(totalAmount+PayStackFee).toLocaleString()}</p>
         </div>
       </div>
 
