@@ -9,12 +9,11 @@ import { H2, P, Ol } from "@/components/typograpy";
 // import { DonationCarousel } from "@/components/donationCarousel";
 import Hero from "./_components/hero";
 import { getCauses } from "@/lib/firebase/actions";
+import { Console } from "console";
 
 
 export default async function Home() {
   const causes = await getCauses();
-
-  
 
   return (
     <div>

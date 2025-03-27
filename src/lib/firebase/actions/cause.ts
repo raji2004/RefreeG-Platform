@@ -1,8 +1,8 @@
 'use server'
 import { Cause } from "@/lib/type";
-import { collection, addDoc, doc, getDoc, getDocs, query, where } from "firebase/firestore";
+import { collection, addDoc, doc, getDoc, getDocs, query, where, updateDoc } from "firebase/firestore";
 import { db } from "../config";
-import { checkIfBookmarked } from ".";
+import { checkIfBookmarked, getUserById } from ".";
 
 export const addCause = async (causeData: Omit<Cause, "id">): Promise<string> => {
     try {
@@ -16,11 +16,11 @@ export const addCause = async (causeData: Omit<Cause, "id">): Promise<string> =>
         throw error;
     }
 };
+
 export const getCauseById = async (causeId: string): Promise<Cause | null> => {
     try {
         const causeRef = doc(db, "causes", causeId);
         const docSnap = await getDoc(causeRef);
-        // console.log(causeId)
         if (!docSnap.exists()) {
             // console.log("Cause not found with ID:", causeId);
             return null;
@@ -58,19 +58,36 @@ export const getCauses = async (): Promise<Cause[]> => {
         const causes = await Promise.all(
             querySnapshot.docs.map(async (doc) => {
                 const data = doc.data();
-                
+
                 // Call async function to check if it's bookmarked
                 const isBookmarked = await checkIfBookmarked(doc.id);
-                
-                
 
-                return { id: doc.id, ...data, isBookmarked }  as Cause ;
+                const userProfile = await getUserById(data.userId);
+
+
+                return { id: doc.id, ...data, isBookmarked, profileImage: userProfile?.profileImage } as Cause;
             })
         );
 
         return causes.filter(cause => cause !== null) as Cause[];
     } catch (error) {
         console.error("Error fetching causes:", error);
+        throw error;
+    }
+};
+
+export const updateCauseById = async (causeId: string, updatedData: Partial<Omit<Cause, "id">>): Promise<void> => {
+    try {
+        if (!causeId) {
+            console.warn("Invalid cause ID provided:", causeId);
+            return;
+        }
+
+        const causeRef = doc(db, "causes", causeId);
+        await updateDoc(causeRef, updatedData);
+        console.log("Cause updated successfully:", causeId);
+    } catch (error) {
+        console.error("Error updating cause by ID:", error);
         throw error;
     }
 };
