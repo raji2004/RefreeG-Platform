@@ -19,9 +19,14 @@ export const logTransaction = async ({
     try {
         // 
         const cause = await getCauseById(causeId)
+        console.log('Current raisedAmount:', cause!.raisedAmount, typeof cause!.raisedAmount);
+        console.log('New amount:', amount, typeof amount);
+        const currentRaised = parseFloat(cause!.raisedAmount.toString());
+        const newAmount = parseFloat(amount.toString());
+        console.log('Parsed values:', currentRaised, newAmount);
         await updateCauseById(causeId, {
             ...cause,
-            raisedAmount: Number(cause!.raisedAmount) + amount
+            raisedAmount: currentRaised + newAmount
         })
         const causeDonationRef = collection(db, `causes/${causeId}/donated`);
         await addDoc(causeDonationRef, {
