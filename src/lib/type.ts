@@ -29,7 +29,9 @@ export interface User {
   profileImage: string;
   accDetails?: {
     account_number: string,
-    subaccount_code: string 
+    subaccount_code: string
+    bank_name: string
+    account_name: string
   }[]
 }
 
@@ -161,7 +163,7 @@ export type Cause = {
     type: string;
     progress: number;
   };
- 
+
   img: string;
   userId: string;
   zipCode: string;
@@ -180,12 +182,12 @@ export type Cause = {
 
 export interface TransactionData extends Pick<User, "email" | "firstName" | "lastName" | "id"> {
   amount: number;
+  serviceFee: number;
   subaccounts: {
     subaccount: string,
     share: number
-  }
-
-};
+  }[]
+}
 
 export interface ICreateSubaccount {
   bank_code: string,
@@ -208,7 +210,7 @@ export interface MainCauseCardProps
   > {
   daysLeft: string;
   progressPercentage: number;
-  tags?:  string[];
+  tags?: string[];
   hideDescription?: boolean;
   hideTags?: boolean;
   hideButton?: boolean;

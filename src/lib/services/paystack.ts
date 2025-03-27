@@ -1,5 +1,6 @@
 import { ICreateSubaccount, TransactionData } from "@/lib/type";
 import axios from "axios"; /// Get API key from appropriate environment variable
+import { getBaseURL } from "../helpers";
 const PAYSTACK_KEY = process.env.NEXT_PUBLIC_PAYSTACK_KEY;
 
 // Check if API key exists
@@ -19,28 +20,55 @@ const Paystack = {
   }),
 
   initializeTransaction: async function (data: TransactionData) {
-    const response = await this.api.post("/transaction/initialize", {
-      currency: "NGN",
-      email: data.email,
-      amount: data.amount * 100,
-      callback_url: "http://scfoodcourt.startupcampushq.com/main/home",
-      split: {
-        type: "flat",
-        bearer_type: "account",
-        subaccounts: data.subaccounts,
-      },
-      metadata: {
-        user_id: data.id,
-        amount: data.amount,
-        customer_name: data.firstName + " " + data.lastName,
-      },
-    });
+    try {
+      console.log('Initializing transaction with data:', data);
 
-    return response.data.data as {
-      authorization_url: string;
-      reference: string;
-      access_code: string;
-    };
+      // Validate required fields
+      if (!data.email || !data.amount || !data.id || !data.firstName || !data.lastName) {
+        throw new Error('Missing required fields for transaction initialization');
+      }
+      const baseUrl = await getBaseURL()
+
+      const requestData = {
+        currency: "NGN",
+        email: data.email,
+        amount: Math.round((data.amount + data.serviceFee )* 100), // Ensure amount is rounded to avoid floating point issues
+        callback_url: `${baseUrl}/payment/verify`,
+        split: {
+          type: "flat",
+          bearer_type: "account",
+          subaccounts: data.subaccounts || [], // Ensure subaccounts is always an array
+        },
+        metadata: {
+          user_id: data.id,
+          amount: data.amount,
+          customer_name: data.firstName + " " + data.lastName,
+        },
+      };
+
+      console.log('Sending request to Paystack with data:', requestData);
+
+      const response = await this.api.post("/transaction/initialize", requestData);
+      console.log('Paystack response:', response.data);
+
+      return response.data.data as {
+        authorization_url: string;
+        reference: string;
+        access_code: string;
+      };
+    } catch (error: any) {
+      console.error('Paystack initialization error:', {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+        data: error.response?.data?.message
+      });
+
+      throw new Error(
+        error.response?.data?.message ||
+        'Failed to initialize payment transaction'
+      );
+    }
   },
   verifyTransaction: async function (transactionReference: string) {
     const response = await this.api.get(

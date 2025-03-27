@@ -9,7 +9,7 @@ import { getCauseById, getUserById } from "@/lib/firebase/actions";
 import { getDaysLeft } from "@/lib/utils";
 import { Footer } from "@/components/ui/footer";
 import { CauseCategories } from "@/lib/utils";
-import { getSessionId } from "@/lib/helpers";
+import { getBaseURL, getSessionId } from "@/lib/helpers";
 import DonationProgressSection from "@/components/DonationProgressSection";
 import DonationList from "@/components/DonationList";
 import EmojiReaction from "@/components/EmojiReaction";
@@ -18,6 +18,8 @@ import UnicefBanner from "@/components/UnicefBanner";
 import CauseSection from "@/components/CauseSection";
 import CauseTabs from "@/components/CauseTabs";
 import NearbyCarousel from "@/components/NearbyCarousel";
+import ShareWrapper from "@/components/ShareWrapper";
+import Link from "next/link";
 import console from "console";
 
 const Section = ({
@@ -69,7 +71,9 @@ export default async function DonationDetail({
     "The recent floods in Maiduguri have displaced thousands of families, leaving them without food, shelter, and basic necessities. We are raising $50,000 to provide emergency relief, including temporary housing, medical supplies, and food. Together, we can help rebuild their lives.",
     "The recent floods in Maiduguri have displaced thousands of families, leaving them without food, shelter, and basic necessities. We are raising $50,000 to provide emergency relief, including temporary housing, medical supplies, and food. Together, we can help rebuild their lives.",
   ];
+  const baseUrl = await getBaseURL()
 
+  const causeUrl = `${baseUrl}/cause/${params.cause_id}`;
   return (
     <>
       <Navbar
@@ -130,12 +134,16 @@ export default async function DonationDetail({
 
           {/* Buttons for sharing and donating */}
           <div className="flex mt-4 space-x-4">
-            <button className="flex items-center bg-white border border-gray-400 px-12 py-3 rounded-md shadow-sm hover:bg-gray-300 transition-colors duration-300">
-              Share <BsShare className="ml-2" />
-            </button>
-            <button className="bg-[#433E3F] flex items-center text-white px-12 py-3 rounded-md shadow-sm hover:bg-gray-700 transition-colors duration-300">
-              Donate <BsChevronRight className="ml-2" />
-            </button>
+            <ShareWrapper url={causeUrl} title={cause.causeTitle}>
+              <button className="flex items-center bg-white border border-gray-400 px-12 py-3 rounded-md shadow-sm hover:bg-gray-300 transition-colors duration-300">
+                Share <BsShare className="ml-2" />
+              </button>
+            </ShareWrapper>
+            <Link href={`/cause/${params.cause_id}/payment`}>
+              <button className="bg-[#433E3F] flex items-center text-white px-12 py-3 rounded-md shadow-sm hover:bg-gray-700 transition-colors duration-300">
+                Donate <BsChevronRight className="ml-2" />
+              </button>
+            </Link>
           </div>
         </div>
 

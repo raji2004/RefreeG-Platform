@@ -3,6 +3,9 @@ import DonationProgress from "@/components/ui/donationProgress";
 import { Cause } from "@/lib/type";
 import { Button } from "@/components/ui/button";
 import { BsShare, BsChevronRight } from "react-icons/bs";
+import ShareWrapper from "@/components/ShareWrapper";
+import Link from "next/link";
+import { getBaseURL } from "@/lib/helpers";
 
 interface DonationProgressSectionProps {
   cause: Cause;
@@ -13,7 +16,7 @@ interface DonationProgressSectionProps {
   stats: string[];
 }
 
-function DonationProgressSection({
+async function DonationProgressSection({
   cause,
   donationAmount,
   goalAmount,
@@ -21,6 +24,9 @@ function DonationProgressSection({
   daysLeft,
   stats,
 }: DonationProgressSectionProps) {
+  const baseUrl = await getBaseURL()
+  const causeUrl = `${baseUrl}/cause/${cause.id}`;
+
   return (
     <div className="p-6 rounded-lg border border-gray-200 shadow-sm bg-white">
       <DonationProgress progressPercentage={progressPercentage} />
@@ -46,15 +52,19 @@ function DonationProgressSection({
 
       {/* Buttons for sharing and donating */}
       <div className="flex flex-col gap-3">
-        <Button
-          variant="outline"
-          className="w-full py-3 text-blue-600 border-blue-600 hover:bg-blue-50 font-medium flex items-center justify-center"
-        >
-          Share <BsShare className="ml-2" size={16} />
-        </Button>
-        <Button className="w-full py-3 bg-blue-600 text-white hover:bg-blue-700 font-medium flex items-center justify-center">
-          Donate <BsChevronRight className="ml-2" size={16} />
-        </Button>
+        <ShareWrapper url={causeUrl} title={cause.causeTitle}>
+          <Button
+            variant="outline"
+            className="w-full py-3 text-blue-600 border-blue-600 hover:bg-blue-50 font-medium flex items-center justify-center"
+          >
+            Share <BsShare className="ml-2" size={16} />
+          </Button>
+        </ShareWrapper>
+        <Link href={`/cause/${cause.id}/payment`}>
+          <Button className="w-full py-3 bg-blue-600 text-white hover:bg-blue-700 font-medium flex items-center justify-center">
+            Donate <BsChevronRight className="ml-2" size={16} />
+          </Button>
+        </Link>
       </div>
     </div>
   );
