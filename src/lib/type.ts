@@ -40,6 +40,7 @@ export interface User {
   followingCount?: number;
   causesCount?: number;
   userType?: "individual" | "organization";
+  bio: string;
 }
 
 export interface Country {
