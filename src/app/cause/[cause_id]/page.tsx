@@ -5,7 +5,7 @@ import { GoAlert } from "react-icons/go";
 import Image from "next/image";
 import { Navbar } from "@/components/ui/navbar";
 import CrowdfundingFeatures from "@/components/crowdfundingFeatures";
-import { getCauseById, getUserById } from "@/lib/firebase/actions";
+import { getCauseById, getCauseTransactions, getUserById } from "@/lib/firebase/actions";
 import { getDaysLeft } from "@/lib/utils";
 import { Footer } from "@/components/ui/footer";
 import { CauseCategories } from "@/lib/utils";
@@ -44,6 +44,7 @@ export default async function DonationDetail({
   params: { cause_id: string };
 }) {
   const cause = await getCauseById(params.cause_id);
+ 
   const session = await getSessionId();
   const loggeduser = await getUserById(session ?? "");
 
@@ -160,17 +161,17 @@ export default async function DonationDetail({
           />
 
           {/* Recent donations list */}
-          <DonationList />
+          <DonationList causeId={params.cause_id} />
           <EmojiReaction />
         </div>
       </div>
       {/* <DonationNav /> */}
 
-      <CauseTabs commentCount={20} />
+      {/* <CauseTabs commentCount={20} /> */}
 
       <CrowdfundingFeatures />
 
-      <NearbyCarousel />
+      {/* <NearbyCarousel /> */}
 
       <Footer />
     </>

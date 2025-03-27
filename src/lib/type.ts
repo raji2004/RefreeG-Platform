@@ -189,6 +189,14 @@ export interface TransactionData extends Pick<User, "email" | "firstName" | "las
     share: number
   }[]
 }
+export interface Transaction {
+  id: string;
+  amount: number;
+  causeId: string;
+  userId: string;
+  timestamp: string;
+  customer_name: string;
+}
 
 export interface ICreateSubaccount {
   bank_code: string,
