@@ -96,11 +96,11 @@ export default function DonationForm({ cause, user }: { cause: Cause, user: User
               height={20}
             />
           </div>
-          <p>₦{serviceFee.toLocaleString()}</p>
+          <p>₦{(serviceFee + 100).toLocaleString()}</p>
         </div>
         <div className="flex justify-between font-bold text-lg">
           <p>Total</p>
-          <p>₦{totalAmount.toLocaleString()}</p>
+          <p>₦{(totalAmount+100).toLocaleString()}</p>
         </div>
       </div>
 

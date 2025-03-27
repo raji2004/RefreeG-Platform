@@ -2,6 +2,7 @@
 import { doc, addDoc, collection, getDocs } from "firebase/firestore";
 import { db } from "../config";
 import { getCauseById, updateCauseById } from "./cause";
+import { Transaction } from "@/lib/type";
 
 export const logTransaction = async ({
     userId,
@@ -48,7 +49,7 @@ export const logTransaction = async ({
     }
 }
 
-export const getCauseTransactions = async (causeId: string) => {
+export const getCauseTransactions = async (causeId: string): Promise<Transaction[]> => {
     try {
         const donationsRef = collection(db, `causes/${causeId}/donated`);
         const querySnapshot = await getDocs(donationsRef);
@@ -56,7 +57,7 @@ export const getCauseTransactions = async (causeId: string) => {
         const transactions = querySnapshot.docs.map(doc => ({
             id: doc.id,
             ...doc.data()
-        }));
+        })) as Transaction[];
 
         return transactions;
     } catch (error) {
@@ -65,7 +66,7 @@ export const getCauseTransactions = async (causeId: string) => {
     }
 }
 
-export const getUserTransactions = async (userId: string) => {
+export const getUserTransactions = async (userId: string): Promise<Omit<Transaction, "userId"|'customer_name'>[]> => {
     try {
         const donationsRef = collection(db, `users/${userId}/donated`);
         const querySnapshot = await getDocs(donationsRef);
@@ -75,7 +76,7 @@ export const getUserTransactions = async (userId: string) => {
             ...doc.data()
         }));
 
-        return transactions;
+        return transactions as Omit<Transaction, "userId" | "customer_name">[];
     } catch (error) {
         console.error("Error fetching user transactions:", error);
         throw error;
