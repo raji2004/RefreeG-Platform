@@ -103,6 +103,7 @@ export default function DonationForm({ cause, user }: { cause: Cause, user: User
       <PaymentButton
         user={user}
         causeUserId={cause.userId}
+        causeId={cause.id}
         totalAmount={totalAmount}
         serviceFee={serviceFee}
         disabled={donation === 0}

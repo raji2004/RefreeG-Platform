@@ -183,6 +183,7 @@ export type Cause = {
 export interface TransactionData extends Pick<User, "email" | "firstName" | "lastName" | "id"> {
   amount: number;
   serviceFee: number;
+  causeId: string;
   subaccounts: {
     subaccount: string,
     share: number

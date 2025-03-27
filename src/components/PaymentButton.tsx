@@ -13,6 +13,7 @@ interface PaymentButtonProps {
     totalAmount: number;
     serviceFee: number;
     disabled?: boolean;
+    causeId: string;
 }
 
 export default function PaymentButton({
@@ -20,6 +21,7 @@ export default function PaymentButton({
     causeUserId,
     totalAmount,
     serviceFee,
+    causeId,
     disabled
 }: PaymentButtonProps) {
     const [isLoading, setIsLoading] = useState(false);
@@ -48,6 +50,7 @@ export default function PaymentButton({
                     subaccount: userSubaccount,
                     share: totalAmount * 100
                 }],
+                causeId: causeId
             });
         } catch (error) {
             console.error('Payment initialization failed:', error);

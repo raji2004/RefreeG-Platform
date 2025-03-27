@@ -43,6 +43,7 @@ const Paystack = {
           user_id: data.id,
           amount: data.amount,
           customer_name: data.firstName + " " + data.lastName,
+          cause_id: data.causeId,
         },
       };
 
