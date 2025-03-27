@@ -23,7 +23,7 @@ export default function PaymentVerification({ searchParams }: { searchParams: { 
 
             if (isSuccessful) {
                 // Redirect to success page or dashboard
-                router.push("/dashboard");
+                router.push("/");
             } else {
                 // Redirect to error page or back to donation form
                 router.push("/donation/failed");
