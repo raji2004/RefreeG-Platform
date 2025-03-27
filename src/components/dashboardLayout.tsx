@@ -197,15 +197,15 @@ const Layout: React.FC<LayoutProps> = ({ profileImage, children }) => {
   return (
     <div className="flex flex-col min-h-screen">
       {/* Topbar */}
-      <div className="bg-white shadow-sm p-4 w-full sticky top-0 z-10">
-        <div className="container mx-auto flex justify-between items-center">
+      <div className="bg-white shadow-sm py-2 px-4 w-full sticky top-0 z-10">
+        <div className="container mx-auto flex justify-between items-center h-12">
           <div className="flex items-center">
             <Link href="/">
               <Image
                 src="/logo.svg"
                 alt="Logo"
-                width={40}
-                height={40}
+                width={32}
+                height={32}
                 className="mr-4"
               />
             </Link>
@@ -213,34 +213,32 @@ const Layout: React.FC<LayoutProps> = ({ profileImage, children }) => {
 
           <div className="flex items-center">
             <Link href="/admin/dashboard/notifications">
-              <NotificationIcon className="w-6 h-6 text-gray-500 mr-4 cursor-pointer" />
+              <NotificationIcon className="w-5 h-5 text-gray-500 mr-4 cursor-pointer" />
             </Link>
             {profileImage ? (
               <Link
                 href="/dashboard/UserProfile"
-                className="hidden md:block w-full h-full"
+                className="hidden md:block"
               >
-                <Image
-                  src={profileImage}
-                  alt="Profile"
-                  width={30}
-                  height={30}
-                  className="w-full h-full rounded-full aspect-square object-cover"
-                />
+                <div className="w-8 h-8 rounded-full overflow-hidden">
+                  <Image
+                    src={profileImage}
+                    alt="Profile"
+                    width={32}
+                    height={32}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
               </Link>
             ) : (
-              <div className="w-10 h-10 bg-gray-300 rounded-full" />
+              <div className="w-8 h-8 bg-gray-300 rounded-full" />
             )}
 
             <button
               onClick={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
-              className="md:hidden mr-4"
+              className="md:hidden ml-4"
             >
-              {isMobileSidebarOpen ? (
-                <XMarkIcon className="w-7 h-7" />
-              ) : (
-                <Bars3Icon className="w-7 h-7" />
-              )}
+              <Bars3Icon className="w-6 h-6" />
             </button>
           </div>
         </div>
