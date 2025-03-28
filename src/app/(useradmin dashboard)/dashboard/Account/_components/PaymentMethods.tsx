@@ -23,6 +23,7 @@ import { CreditCardForm } from "./CreditCardForm";
 import { CryptoWalletForm } from "./CryptoWalletForm";
 import AccountNumberForm from "./AccountNumberForm";
 import { getSessionId } from "@/lib/helpers";
+import Paystack from "@/lib/services/paystack";
 
 // Interfaces for payment methods
 interface CreditCard {
@@ -44,7 +45,7 @@ interface AccountNumber {
   id: number;
   accountName: string;
   bankName: string;
-  accountType: "savings" | "current";
+  accountType: string;
   accountNumber: string;
 }
 
@@ -95,7 +96,7 @@ export default function PaymentMethods() {
             const accountMethod: AccountNumber = {
               id: Date.now() + index, // Generate a unique ID
               accountName: userData.firstName + " " + userData.lastName, // Use user's name if account name not available
-              bankName: acc.subaccount_code.split("-")[0] || "Bank", // Extract bank name from subaccount_code
+              bankName: acc.bank_name, // Extract bank name from subaccount_code
               accountType: acc.subaccount_code.split("-")[1] || "savings", // Extract account type from subaccount_code
               accountNumber: acc.account_number || "XXXXXXXX",
             };
@@ -148,17 +149,26 @@ export default function PaymentMethods() {
       setPaymentMethods((prev) => [...prev, newAccount]);
 
       // Format the data for Firebase (matching the User type's accDetails structure)
-      const accountUpdate = {
-        accDetails: [
-          {
-            account_number: data.accountNumber,
-            subaccount_code: `${data.bankName}-${data.accountType}`, // Using a combination as a placeholder
-            // You can add more fields here if needed
-          },
-        ],
-      };
-
-      // Update the user document in Firebase
+      // Update the user document in Firebase{
+        const paystackdata = {
+          bank_code: data.bankName,
+          account_number: data.accountNumber,
+          percentage_charge: 0,
+          business_name: data.accountName
+        }
+        const subaccount = await Paystack.createSubaccount(paystackdata)
+        const accountUpdate = {
+          accDetails: [
+            {
+              account_number: data.accountNumber,
+              account_name: data.accountName,
+              bank_name: data.bankName,
+              subaccount_code: subaccount.subaccount_code, // Using a combination as a placeholder
+              // You can add more fields here if needed
+            },
+          ],
+        };
+  
       await updateUserById(sessionId, accountUpdate);
       console.log("Account details saved to Firebase");
 
@@ -178,14 +188,7 @@ export default function PaymentMethods() {
     setPaymentMethods((prev) => prev.filter((method) => method.id !== id));
   };
 
-  const handleSubmitCreditCard = (data: any) => {
-    const newCard: CreditCard = {
-      id: Date.now(),
-      ...data,
-    };
-    setPaymentMethods((prev) => [...prev, newCard]);
-    setIsAddModalOpen(false);
-  };
+
 
   const renderCardTitle = () => {
     // TODO
@@ -224,39 +227,12 @@ export default function PaymentMethods() {
       );
     }
 
-    // Otherwise, show the appropriate form if allowed
-    switch (activeTab) {
-      case "creditCard":
-        return hasCreditCard ? (
-          <div className="text-center py-6 text-muted-foreground">
-            You already have a credit card. Please edit or remove it before adding another.
-          </div>
-        ) : (
-          <CreditCardForm onSubmit={handleSubmitCreditCard} />
-        );
-      case "cryptoWallet":
-        return hasCryptoWallet ? (
-          <div className="text-center py-6 text-muted-foreground">
-            You already have a crypto wallet. Please edit or remove it before adding another.
-          </div>
-        ) : (
-          <CryptoWalletForm onSubmit={handleSubmitCryptoWallet} />
-        );
-      case "accountNumber":
-        return hasAccountNumber ? (
-          <div className="text-center py-6 text-muted-foreground">
-            You already have an account number. Please edit or remove it before adding another.
-          </div>
-        ) : (
-          <AccountNumberForm onSubmit={handleSubmitAccountNumber} />
-        );
-      default:
-        return filteredMethods.length === 0 ? (
-          <div className="text-center py-6 text-muted-foreground">
-            No payment methods available
-          </div>
-        ) : null;
-    }
+    // Show "No payment methods" message for all tabs when there are no methods
+    return (
+      <div className="text-center py-6 text-muted-foreground">
+        No payment methods available
+      </div>
+    );
   };
 
   // Function to render existing payment methods
@@ -395,16 +371,30 @@ export default function PaymentMethods() {
                     <p className="text-sm text-muted-foreground">
                       {method.accountName} • {method.accountType}
                     </p>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      {showDetails[method.id]
+                        ? method.accountNumber
+                        : "**** **** " + method.accountNumber.slice(-4)}
+                    </p>
                   </div>
                 </div>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={() => removeMethod(method.id)}
-                  className="text-red-500 hover:text-red-600 hover:bg-red-50"
-                >
-                  <Trash2Icon className="h-4 w-4" />
-                </Button>
+                <div className="flex gap-2">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => toggleDetails(method.id)}
+                  >
+                    <EyeIcon className="h-4 w-4" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => removeMethod(method.id)}
+                    className="text-red-500 hover:text-red-600 hover:bg-red-50"
+                  >
+                    <Trash2Icon className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
             )}
           </Card>
@@ -413,45 +403,6 @@ export default function PaymentMethods() {
     );
   };
 
-  // Use a ref to track if we've already added test data
-  const testDataAdded = React.useRef(false);
-
-  useEffect(() => {
-    // Only add test data once and only in development
-    if (
-      paymentMethods.length === 0 &&
-      !testDataAdded.current &&
-      process.env.NODE_ENV === "development"
-    ) {
-      testDataAdded.current = true;
-
-      // This is just for development testing
-      const testCard: CreditCard = {
-        id: 1,
-        name: "Test User",
-        bankName: "Test Bank",
-        cardNumber: "4111111111111111",
-        expiry: "12/25",
-        cvv: "123",
-      };
-
-      const testWallet: CryptoWallet = {
-        id: 2,
-        address: "0x1234567890abcdef1234567890abcdef12345678",
-        network: "Ethereum",
-      };
-
-      const testAccount: AccountNumber = {
-        id: 3,
-        accountName: "Test Account",
-        bankName: "Test Bank",
-        accountType: "savings",
-        accountNumber: "1234567890",
-      };
-
-      setPaymentMethods([testCard, testWallet, testAccount]);
-    }
-  }, [paymentMethods.length]);
 
   return (
     <Card className="w-full">

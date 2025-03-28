@@ -19,6 +19,7 @@ interface AccountNumberFormProps {
     bankName: string;
     accountType: "savings" | "current";
     accountNumber: string;
+    subaccount_code: string;
   }) => void;
 }
 
@@ -95,6 +96,7 @@ function AccountNumberForm({ onSubmit }: AccountNumberFormProps) {
       bankName,
       accountType,
       accountNumber,
+      subaccount_code:bankCode
     });
   };
 
