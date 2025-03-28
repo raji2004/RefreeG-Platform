@@ -61,10 +61,15 @@ export function Footer() {
 
             <p className="text-[10px] mt-3">
               By Subscribing you agree with our{" "}
-              <span className="text-bold font-medium underline">Privacy policy</span>
+              <Link
+                href="https://www.refreeg.com/privacy-policy"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span className="font-medium underline">Privacy policy</span>
+              </Link>
             </p>
           </div>
-
 
           <div className="w-full md:w-2/12">
             <p className="font-medium text-[15px]">Quick Links</p>

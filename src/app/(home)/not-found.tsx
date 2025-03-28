@@ -2,8 +2,10 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 export default function NotFoundPage() {
+  const router = useRouter();
   return (
     <div className="flex flex-col items-center justify-center min-h-[90vh] bg-white px-4 text-center pb-20">
       <div className="max-w-lg">
@@ -23,7 +25,7 @@ export default function NotFoundPage() {
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <button
-            onClick={() => window.history.back()}
+            onClick={() => router.push("/")}
             className="px-6 py-2 border border-gray-400 text-gray-700 rounded-md hover:bg-gray-100"
           >
             Go back

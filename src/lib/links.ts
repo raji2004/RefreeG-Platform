@@ -7,22 +7,12 @@ export const quickLinks = [
   {
     key: 2,
     label: "About Us",
-    route: "/ourMission",
+    route: "/OurMission",
   },
   {
     key: 3,
     label: "Who we are",
-    route: "#who-we-are",
-  },
-  {
-    key: 4,
-    label: "Ramadan drive",
-    route: "/christmasdrive",
-  },
-  {
-    key: 5,
-    label: "Petitions",
-    route: "/petitions",
+    route: "/OurStory",
   },
 ];
 
