@@ -12,11 +12,12 @@ export default async function DonatePage({ params }: { params: { cause_id: strin
   if (!user) redirect('/login')
   const cause = await getCauseById(params.cause_id)
   if (!cause) redirect('/')
+  const serviceFee = process.env.NEXT_PUBLIC_REFREEG_SERVICE_FEE
     return (
         <div className="min-h-screen bg-gray-100">
             <Navbar userSession={!!sessionId} profile={user?.profileImage === "" ? undefined : user?.profileImage} />
             <div className="max-w-3xl mx-auto p-4 space-y-5 bg-white shadow-md rounded-lg my-10">
-                <DonationForm cause={cause} user={user} />
+                <DonationForm cause={cause} user={user} serviceFee={parseFloat(serviceFee!)} />
             </div>
         </div>
     );

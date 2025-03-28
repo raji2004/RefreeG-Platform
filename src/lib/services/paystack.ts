@@ -32,12 +32,13 @@ const Paystack = {
       const requestData = {
         currency: "NGN",
         email: data.email,
-        amount: Math.round((data.amount + data.serviceFee )* 100), // Ensure amount is rounded to avoid floating point issues
+        amount: Math.round((data.amount + data.serviceFee) * 100), // Ensure amount is rounded to avoid floating point issues
         callback_url: `${baseUrl}/payment/verify`,
         split: {
           type: "flat",
           bearer_type: "account",
           subaccounts: data.subaccounts || [], // Ensure subaccounts is always an array
+          transaction_charge: data.serviceFee
         },
         metadata: {
           user_id: data.id,
