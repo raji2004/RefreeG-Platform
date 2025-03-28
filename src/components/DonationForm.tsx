@@ -8,10 +8,9 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Cause, User } from "@/lib/type";
 import PaymentButton from "./PaymentButton";
 
-export default function DonationForm({ cause, user }: { cause: Cause, user: User }) {
+export default function DonationForm({ cause, user, serviceFee }: { cause: Cause, user: User, serviceFee: number }) {
   const [donation, setDonation] = useState(0);
   const [isAnonymous, setIsAnonymous] = useState(false);
-  const serviceFee = 100;
   const totalAmount = donation + serviceFee;
   const PayStackFee = 100;
 
