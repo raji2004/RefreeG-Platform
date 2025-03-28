@@ -63,14 +63,27 @@ export default function GeneralInfo({ user }: { user: User }) {
     };
 
     const handleSaveChanges = async () => {
-        updateUserById(user.id,
-            {
+        try {
+            const newProfileImage = await saveProfileImageToDB();
+            
+            await updateUserById(user.id, {
                 ...user,
                 ...formValues,
-                profileImage: await saveProfileImageToDB(),
+                profileImage: newProfileImage || currentProfileImage,
                 phoneNumber: formValues.phone
             });
-        setIsEditing(false);
+    
+            // Update local state
+            if (newProfileImage) {
+                setCurrentProfileImage(newProfileImage);
+            }
+            
+            setIsEditing(false);
+            toast.success("Profile updated successfully!");
+        } catch (error) {
+            console.error("Error updating profile:", error);
+            toast.error("Failed to update profile");
+        }
     };
 
     return (
@@ -96,7 +109,7 @@ export default function GeneralInfo({ user }: { user: User }) {
                         <Label htmlFor="fileInput" className="cursor-pointer">
                             <Image
                                 src={
-                                    previewImage ? URL.createObjectURL(previewImage) : currentProfileImage || "/UserProfile/editPhoto.svg"
+                                    previewImage ? URL.createObjectURL(previewImage) : currentProfileImage || "/UserProfile/defaultProfile.svg"
                                 }
                                 className="w-full h-full rounded-full object-cover"
                                 alt="Profile Picture"
@@ -110,7 +123,7 @@ export default function GeneralInfo({ user }: { user: User }) {
                         </Label>
                     ) : (
                         <Image
-                            src={currentProfileImage || "/UserProfile/editPhoto.svg"}
+                            src={currentProfileImage || "/UserProfile/defaultProfile.svg"}
                             className="w-full h-full rounded-full object-cover"
                             alt="Profile Picture"
                             width={160}
@@ -133,8 +146,7 @@ export default function GeneralInfo({ user }: { user: User }) {
                     <Label className="block text-sm sm:text-lg font-medium">First Name</Label>
                     <Input
                         type="text"
-                        name="fullName"
-
+                        name="firstName"  // Changed from fullName to firstName
                         readOnly={!isEditing}
                         defaultValue={formValues.firstName}
                         onChange={handleInputChange}
@@ -143,8 +155,7 @@ export default function GeneralInfo({ user }: { user: User }) {
                     <Label className="block text-sm sm:text-lg font-medium">Last Name</Label>
                     <Input
                         type="text"
-                        name="fullName"
-
+                        name="lastName"  // Changed from fullName to lastName
                         readOnly={!isEditing}
                         defaultValue={formValues.lastName}
                         onChange={handleInputChange}
