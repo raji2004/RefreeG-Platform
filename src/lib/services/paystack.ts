@@ -33,7 +33,7 @@ const Paystack = {
         currency: "NGN",
         email: data.email,
         amount: Math.round((data.amount + data.serviceFee) * 100), // Ensure amount is rounded to avoid floating point issues
-        callback_url: `${baseUrl}/payment/verify`,
+        callback_url: `${baseUrl}/cause/${data.causeId}/payment/verify`,
         transaction_charge: data.serviceFee * 100,
         subaccount: data.subaccounts[0].subaccount,
         bearer: "subaccount",
