@@ -3,7 +3,6 @@ import HowDoWeAchieveThis from "../OurMission/_components/HowDoWeAchieveThis";
 import Hero from "./_components/hero";
 import ByNumbers from "./_components/ByNumbers";
 import ChangeLives from "./_components/ChangeLives";
-import JoinCommunity from "../OurMission/_components/JoinCommunity";
 
 export default function Impact() {
     return (
@@ -11,8 +10,7 @@ export default function Impact() {
             <Hero />
             <ByNumbers />
             <HowDoWeAchieveThis />
-            <ChangeLives />
-            <JoinCommunity />            
+            <ChangeLives />           
         </div>
     )
 }

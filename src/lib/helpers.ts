@@ -28,10 +28,11 @@ export const fetchCountriesData = async (): Promise<SortedCountry[]> => {
 };
 
 export const checkUserSession = () => {
-  const cookieStore = cookies();
-  const userSession = cookieStore.get("userSession")?.value;
-  return userSession ? true : false;
-};
+    const cookieStore = cookies();
+    const userSession = cookieStore.get('userSession')?.value;
+    return userSession ? true : false;
+}
+
 export const getSessionId = async () => {
   const cookieStore = cookies();
 
@@ -41,10 +42,23 @@ export const getSessionId = async () => {
   return decodeURIComponent(userId).replace(/"/g, "").trim();
 };
 
+// lib/helpers.ts
 export const SessionLogout = async () => {
-  const cookieStore = cookies();
-  await cookieStore.delete("userSession");
-  return true;
-};
+    // Server-side: Delete cookie
+    const cookieStore = cookies();
+    cookieStore.delete('userSession');
+    
+    // Return a response that the client can handle
+    return { success: true };
+  };
 
+export const getBaseURL = (): string => {
+    if (typeof window !== "undefined") {
+      // Client-side (browser)
+      return window.location.origin;
+    } else {
+      // Server-side (Node.js)
+      return process.env.BASE_URL || "http://localhost:3000"; // Fallback for local dev
+    }
+};
 

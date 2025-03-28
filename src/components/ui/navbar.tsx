@@ -39,7 +39,7 @@ const MenuLink = ({ href, children, className, onClick, ...props }: MenuLinkProp
   </Link>
 );
 
-export function Navbar({ userSession,profile }: { userSession?: boolean ,profile?:string}) {
+export function Navbar ({ userSession, profile }: { userSession?: boolean, profile?: string }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const [aboutUsOpen, setAboutUsOpen] = useState(false);
@@ -51,6 +51,23 @@ export function Navbar({ userSession,profile }: { userSession?: boolean ,profile
 
   const toggleSearchModal = () => {
     setIsSearchModalOpen(!isSearchModalOpen);
+  };
+
+  const handleLogout = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    try {
+      // Server-side logout
+      await SessionLogout();
+      
+      // Client-side cleanup
+      localStorage.clear();
+      sessionStorage.clear();
+      
+      // Force reload
+      window.location.assign('/?_=' + Date.now());
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
   };
 
   return (
@@ -155,7 +172,7 @@ export function Navbar({ userSession,profile }: { userSession?: boolean ,profile
 
 
 
-        {userSession ? <MenuLink href='/dashboard/UserProfile'> <Image
+        {userSession ? <MenuLink href={userSession ? '/dashboard/UserProfile' : "/login"}> <Image
           src={profile??"/UserProfile/defaultProfile.svg"}
           alt="Profile"
           width={40}
@@ -250,7 +267,7 @@ export function Navbar({ userSession,profile }: { userSession?: boolean ,profile
               }
 
               {userSession && <div className=' ml-auto'>
-                <Button variant='outline' size='icon' className='border-none' onClick={()=> SessionLogout()}>
+                <Button variant='outline' size='icon' className='border-none' onClick={handleLogout}>
                   <LogOut size={24} />
                 </Button>
               </div>
