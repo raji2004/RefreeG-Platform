@@ -1,6 +1,7 @@
 import { ICreateSubaccount, TransactionData } from "@/lib/type";
 import axios from "axios"; /// Get API key from appropriate environment variable
-import { getBaseURL } from "../helpers";
+import { getBaseURL } from "../utils";
+
 const PAYSTACK_KEY = process.env.NEXT_PUBLIC_PAYSTACK_KEY;
 
 // Check if API key exists
