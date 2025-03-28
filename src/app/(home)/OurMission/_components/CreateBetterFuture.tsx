@@ -4,7 +4,7 @@ import { FiArrowUpRight } from "react-icons/fi";
 
 export default function CreateBetterFuture() {
   return (
-    <div className='w-full md:w-5/6 lg:w-1/2 px-10 mt-8'>
+    <div className='w-full md:w-5/6 lg:w-1/2 px-10 mt-8 mb-8'>
         <div className='text-xl md:text-2xl lg:text-4xl font-semibold w-full'>Join Us in Creating a Better Future 🌱</div>
         <div className='mt-2 text-base'>
             RefreeG is more than just a crowdfunding platform—it’s a movement for real change. Whether you’re looking to start a cause, donate, or spread awareness, your action can help change lives.

@@ -2,6 +2,7 @@
 import { blogs } from "@/lib/blog"; // Adjust the path to your blogs array
 import Image from "next/image";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 
 export default function BlogPage({
   params,
@@ -16,21 +17,7 @@ export default function BlogPage({
 
   // If the blog is not found, show a 404 message
   if (!blog) {
-    return (
-      <div className="flex flex-col items-center justify-center h-screen">
-        <Image src='/images/logo.svg' alt="logo" height={100} width={100} />
-        <h1 className="text-4xl font-bold mb-4 mt-4">404 - Page Not Found</h1>
-        <p className="mb-8">
-          We can&apos;t seem to find the page you&apos;re looking for.
-        </p>
-        <Link
-          href="/"
-          className="px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-700"
-        >
-          Go Back Home
-        </Link>
-      </div>
-    );
+    notFound(); // Redirects to app/(home)/not-found.tsx automatically
   }
 
   return (
