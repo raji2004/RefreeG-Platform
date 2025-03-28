@@ -4,8 +4,6 @@ import WhatDoWeFocusOn from "./_components/WhatDoWeFocusOn";
 import Hero from "./_components/hero";
 import Whyweexist from "./_components/whyweexist";
 import CreateBetterFuture from "./_components/CreateBetterFuture";
-import JoinCommunity from "./_components/JoinCommunity";
-
 export default function Mission() {
     return (
         <div className="w-full">
@@ -13,8 +11,7 @@ export default function Mission() {
             <Whyweexist />
             <HowDoWeAchieveThis />
             <WhatDoWeFocusOn />
-            <CreateBetterFuture />
-            <JoinCommunity />            
+            <CreateBetterFuture />           
         </div>
     )
 }
