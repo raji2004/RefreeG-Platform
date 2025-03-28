@@ -8,7 +8,7 @@ import {
   legalLinks,
   quickLinks,
   socialLinks,
-} from "../../lib/index";
+} from "../../lib/links";
 
 const Icon = ({ href, children }: { href: string; children: ReactNode }) => {
   return (
