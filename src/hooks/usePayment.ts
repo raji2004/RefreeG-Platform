@@ -49,17 +49,16 @@ export const usePayment = (): UsePaymentReturn => {
             if (isSuccessful) {
                 // Clear the stored reference
                 localStorage.removeItem('payment_reference');
-                toast.success('Payment successful!');
                 return true;
             } else {
                 setError('Payment verification failed');
-                toast.error('Payment verification failed');
+               
                 return false;
             }
         } catch (error) {
             console.error('Payment verification failed:', error);
             setError('Failed to verify payment');
-            toast.error('Failed to verify payment');
+           
             return false;
         } finally {
             setIsLoading(false);
