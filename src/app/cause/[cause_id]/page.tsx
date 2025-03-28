@@ -10,10 +10,10 @@ import {
   getCauseTransactions,
   getUserById,
 } from "@/lib/firebase/actions";
-import { getDaysLeft } from "@/lib/utils";
+import { getBaseURL, getDaysLeft } from "@/lib/utils";
 import { Footer } from "@/components/ui/footer";
 import { CauseCategories } from "@/lib/utils";
-import { getBaseURL, getSessionId } from "@/lib/helpers";
+import { getSessionId } from "@/lib/helpers";
 import DonationProgressSection from "@/components/DonationProgressSection";
 import DonationList from "@/components/DonationList";
 import EmojiReaction from "@/components/EmojiReaction";

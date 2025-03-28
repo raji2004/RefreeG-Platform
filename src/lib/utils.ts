@@ -87,3 +87,13 @@ export const CauseCategories: CauseCategory[] = [
   { name: "Agriculture", icon: Sprout },
   { name: "Environment", icon: Leaf },
 ] as const;
+
+export const getBaseURL = (): string => {
+  if (typeof window !== "undefined") {
+    // Client-side (browser)
+    return window.location.origin;
+  } else {
+    // Server-side (Node.js)
+    return process.env.BASE_URL || "http://localhost:3000"; // Fallback for local dev
+  }
+};

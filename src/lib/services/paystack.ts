@@ -1,6 +1,7 @@
 import { ICreateSubaccount, TransactionData } from "@/lib/type";
 import axios from "axios"; /// Get API key from appropriate environment variable
-import { getBaseURL } from "../helpers";
+import { getBaseURL } from "../utils";
+
 const PAYSTACK_KEY = process.env.NEXT_PUBLIC_PAYSTACK_KEY;
 
 // Check if API key exists
@@ -33,13 +34,10 @@ const Paystack = {
         currency: "NGN",
         email: data.email,
         amount: Math.round((data.amount + data.serviceFee) * 100), // Ensure amount is rounded to avoid floating point issues
-        callback_url: `${baseUrl}/payment/verify`,
-        split: {
-          type: "flat",
-          bearer_type: "account",
-          subaccounts: data.subaccounts || [], // Ensure subaccounts is always an array
-          transaction_charge: data.serviceFee
-        },
+        callback_url: `${baseUrl}/cause/${data.causeId}/payment/verify`,
+        transaction_charge: data.serviceFee * 100,
+        subaccount: data.subaccounts[0].subaccount,
+        bearer: "subaccount",
         metadata: {
           user_id: data.id,
           amount: data.amount,
