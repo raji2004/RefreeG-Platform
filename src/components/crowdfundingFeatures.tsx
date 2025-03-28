@@ -41,7 +41,7 @@ const CrowdfundingFeatures: React.FC = () => {
   return (
     <section className="py-16 px-6 md:px-20 lg:px-32 bg-white">
       <h2 className="text-lg md:text-xl mb-12">
-        We are crowdfunding at it's best!
+        We are crowdfunding at it&apos;s best!
       </h2>
       <div className="grid gap-8 md:grid-cols-3">
         {features.map((feature, index) => (
@@ -90,9 +90,7 @@ const CrowdfundingFeatures: React.FC = () => {
                   {feature.hoverTitle}
                 </h3>
                 <div className="mb-6 overflow-y-auto max-h-[200px] scrollbar-hide">
-                  <p className="text-sm text-gray-700">
-                    {feature.description}
-                  </p>
+                  <p className="text-sm text-gray-700">{feature.description}</p>
                 </div>
 
                 {/* Read More Link (stays at bottom for hover content) */}
