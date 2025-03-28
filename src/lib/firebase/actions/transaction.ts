@@ -3,6 +3,7 @@ import { doc, addDoc, collection, getDocs } from "firebase/firestore";
 import { db } from "../config";
 import { getCauseById, updateCauseById } from "./cause";
 import { Transaction } from "@/lib/type";
+import { calculateServiceFee } from "@/lib/utils";
 
 export const logTransaction = async ({
     userId,
@@ -18,10 +19,11 @@ export const logTransaction = async ({
     transactionId: string;
 }) => {
     try {
-        const serviceFee = process.env.NEXT_PUBLIC_REFREEG_SERVICE_FEE
+        const serviceFee = calculateServiceFee(amount)
+
         const cause = await getCauseById(causeId)
         const currentRaised = parseFloat(cause!.raisedAmount.toString());
-        const newAmount = parseFloat(amount.toString()) - parseFloat(serviceFee!);
+        const newAmount = parseFloat(amount.toString()) - serviceFee;
         await updateCauseById(causeId, {
             ...cause,
             raisedAmount: currentRaised + newAmount

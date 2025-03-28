@@ -1,4 +1,5 @@
 "use server";
+import { revalidatePath } from "next/cache";
 import { Country, SortedCountry } from "./type";
 import { cookies } from "next/headers";
 
@@ -44,6 +45,7 @@ export const getSessionId = async () => {
 export const SessionLogout = async () => {
   const cookieStore = cookies();
   await cookieStore.delete("userSession");
+  revalidatePath("/");
   return true;
 };
 
