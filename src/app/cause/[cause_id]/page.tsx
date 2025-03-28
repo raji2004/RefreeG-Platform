@@ -45,9 +45,6 @@ export default async function DonationDetail({
 }) {
   const cause = await getCauseById(params.cause_id);
  
-  const session = await getSessionId();
-  const loggeduser = await getUserById(session ?? "");
-
   if (!cause) {
     return <div>Cause not found</div>;
   }
@@ -77,10 +74,7 @@ export default async function DonationDetail({
   const causeUrl = `${baseUrl}/cause/${params.cause_id}`;
   return (
     <>
-      <Navbar
-        userSession={session !== undefined ? true : false}
-        profile={loggeduser?.profileImage}
-      />
+    
       <div className="p-4 md:flex md:justify-between mt-10">
         {/* Left side - Main content */}
         <div className="md:w-2/4">
