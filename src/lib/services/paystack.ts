@@ -1,6 +1,7 @@
 import { ICreateSubaccount, TransactionData } from "@/lib/type";
 import axios from "axios"; /// Get API key from appropriate environment variable
-import { getBaseURL } from "../helpers";
+import { getBaseURL } from "../utils";
+
 const PAYSTACK_KEY = process.env.NEXT_PUBLIC_PAYSTACK_KEY;
 
 // Check if API key exists
@@ -24,7 +25,7 @@ const Paystack = {
       console.log('Initializing transaction with data:', data);
 
       // Validate required fields
-      if (!data.email || !data.amount || !data.id || !data.firstName || !data.lastName) {
+      if (!data.amount) {
         throw new Error('Missing required fields for transaction initialization');
       }
       const baseUrl = await getBaseURL()

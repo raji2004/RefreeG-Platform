@@ -6,10 +6,10 @@ import Image from "next/image";
 import { Navbar } from "@/components/ui/navbar";
 import CrowdfundingFeatures from "@/components/crowdfundingFeatures";
 import { getCauseById, getCauseTransactions, getUserById } from "@/lib/firebase/actions";
-import { getDaysLeft } from "@/lib/utils";
+import { getBaseURL, getDaysLeft } from "@/lib/utils";
 import { Footer } from "@/components/ui/footer";
 import { CauseCategories } from "@/lib/utils";
-import { getBaseURL, getSessionId } from "@/lib/helpers";
+import {  getSessionId } from "@/lib/helpers";
 import DonationProgressSection from "@/components/DonationProgressSection";
 import DonationList from "@/components/DonationList";
 import EmojiReaction from "@/components/EmojiReaction";
@@ -45,9 +45,6 @@ export default async function DonationDetail({
 }) {
   const cause = await getCauseById(params.cause_id);
  
-  const session = await getSessionId();
-  const loggeduser = await getUserById(session ?? "");
-
   if (!cause) {
     return <div>Cause not found</div>;
   }
@@ -77,10 +74,7 @@ export default async function DonationDetail({
   const causeUrl = `${baseUrl}/cause/${params.cause_id}`;
   return (
     <>
-      <Navbar
-        userSession={session !== undefined ? true : false}
-        profile={loggeduser?.profileImage}
-      />
+    
       <div className="p-4 md:flex md:justify-between mt-10">
         {/* Left side - Main content */}
         <div className="md:w-2/4">

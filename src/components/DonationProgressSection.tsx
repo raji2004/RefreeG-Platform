@@ -5,7 +5,8 @@ import { Button } from "@/components/ui/button";
 import { BsShare, BsChevronRight } from "react-icons/bs";
 import ShareWrapper from "@/components/ShareWrapper";
 import Link from "next/link";
-import { getBaseURL } from "@/lib/helpers";
+import { getBaseURL } from "@/lib/utils";
+
 
 interface DonationProgressSectionProps {
   cause: Cause;

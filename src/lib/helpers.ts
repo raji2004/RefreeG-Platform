@@ -1,4 +1,5 @@
 "use server";
+import { revalidatePath } from "next/cache";
 import { Country, SortedCountry } from "./type";
 import { cookies } from "next/headers";
 
@@ -44,15 +45,8 @@ export const getSessionId = async () => {
 export const SessionLogout = async () => {
   const cookieStore = cookies();
   await cookieStore.delete("userSession");
+  revalidatePath("/");
   return true;
 };
 
-export const getBaseURL = (): string => {
-  if (typeof window !== "undefined") {
-    // Client-side (browser)
-    return window.location.origin;
-  } else {
-    // Server-side (Node.js)
-    return process.env.BASE_URL || "http://localhost:3000"; // Fallback for local dev
-  }
-};
+
