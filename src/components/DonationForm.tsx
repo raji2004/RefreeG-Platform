@@ -125,7 +125,7 @@ export default function DonationForm({ cause, user,  }: { cause: Cause, user: Us
               height={20}
             />
           </div>
-          <p>₦{(serviceFee).toLocaleString()}</p>
+          <p>₦{(serviceFee + PayStackFee).toLocaleString()}</p>
         </div>
         <div className="flex justify-between font-bold text-lg">
           <p>Total</p>
