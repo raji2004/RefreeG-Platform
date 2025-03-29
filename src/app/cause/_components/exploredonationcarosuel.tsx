@@ -9,20 +9,29 @@ import {
 } from "@/components/ui/carousel";
 import { MainCauseCard } from "@/components/CauseCard";
 import { useState, useEffect } from "react";
-import { causesData } from "@/lib/dummyData";
+import { fetchCausesByCategory } from "@/lib/firebase/admin";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "../../../components/ui/button";
 import { Cause } from "@/lib/type";
 import { getDaysLeft } from "@/lib/utils";
 
-export const DonationCarousel = ({ causes }: { causes: Cause[] }) => {
-  // const mainCause = {
-  //   ...causesData[0],
-  //   description: causesData[0].description || "",
-  // }; // Ensure description is defined
-  // const otherCauses = causesData.slice(1);
+export const DonationCarousel: React.FC<{ category: string }> = ({ category }) => {
+  const [causes, setCauses] = useState<any[]>([]);
   const [api, setApi] = useState<CarouselApi>();
   const [mobileApi, setMobileApi] = useState<CarouselApi>();
+
+  useEffect(() => {
+    const getCauses = async () => {
+      try {
+        const data = await fetchCausesByCategory(category); // Replace "YourCategory" with the desired category
+        setCauses(data);
+      } catch (error) {
+        console.error('Failed to fetch causes by category:', error);
+      }
+    };
+
+    getCauses();
+  }, []);
 
   const handleNext = () => {
     if (api) {
