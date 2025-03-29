@@ -7,7 +7,6 @@ interface Feature {
   description: string;
   imageSrc: string;
   hoverTitle: string;
-  hoverDescription: string;
   hoverImageSrc: string;
 }
 
@@ -15,31 +14,25 @@ const features: Feature[] = [
   {
     title: "Transparency Through Blockchain",
     description:
-      "At RefreeG, every donation is securely recorded on the blockchain, ensuring complete transparency in how funds are allocated and used. Donors can track their contributions in real-time, knowing exactly where their money goes and how it’s making a difference.",
+      "At RefreeG, every donation is securely recorded on the blockchain, ensuring complete transparency in how funds are allocated and used. Donors can track their contributions in real-time, knowing exactly where their money goes and how it's making a difference.",
     imageSrc: "/money.svg",
     hoverTitle: "Track Your Impact",
-    hoverDescription:
-      "At RefreeG, every donation is securely recorded on the blockchain, ensuring complete transparency in how funds are allocated and used. Donors can track their contributions in real-time, knowing exactly where their money goes and how it’s making a difference.",
     hoverImageSrc: "/money.svg",
   },
   {
     title: "Focus on Socioeconomic Growth",
     description:
-      "RefreeG supports causes that drive long-lasting socioeconomic impact, from education and vocational training to healthcare and disaster relief. By contributing, you’re not just making a donation—you’re empowering communities and fostering sustainable development across Africa.",
+      "RefreeG supports causes that drive long-lasting socioeconomic impact, from education and vocational training to healthcare and disaster relief. By contributing, you're not just making a donation—you're empowering communities and fostering sustainable development across Africa.",
     imageSrc: "/rafiki.svg",
     hoverTitle: "Empower Communities",
-    hoverDescription:
-      "At RefreeG, every donation is securely recorded on the blockchain, ensuring complete transparency in how funds are allocated and used. Donors can track their contributions in real-time, knowing exactly where their money goes and how it’s making a difference.",
     hoverImageSrc: "/money.svg",
   },
   {
     title: "Empowering Underprivileged Communities",
     description:
-      "Our platform bridges the gap between those who want to help and those in need by providing critical support to underprivileged communities. Whether it’s helping victims of gender-based violence, providing educational resources, or aiding disaster relief, your support directly impacts lives.",
+      "Our platform bridges the gap between those who want to help and those in need by providing critical support to underprivileged communities. Whether it's helping victims of gender-based violence, providing educational resources, or aiding disaster relief, your support directly impacts lives.",
     imageSrc: "/money.svg",
     hoverTitle: "Create Real Change",
-    hoverDescription:
-      "At RefreeG, every donation is securely recorded on the blockchain, ensuring complete transparency in how funds are allocated and used. Donors can track their contributions in real-time, knowing exactly where their money goes and how it’s making a difference.",
     hoverImageSrc: "/money.svg",
   },
 ];
@@ -97,9 +90,7 @@ const CrowdfundingFeatures: React.FC = () => {
                   {feature.hoverTitle}
                 </h3>
                 <div className="mb-6 overflow-y-auto max-h-[200px] scrollbar-hide">
-                  <p className="text-sm text-gray-700">
-                    {feature.hoverDescription}
-                  </p>
+                  <p className="text-sm text-gray-700">{feature.description}</p>
                 </div>
 
                 {/* Read More Link (stays at bottom for hover content) */}
