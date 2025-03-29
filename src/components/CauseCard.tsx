@@ -7,6 +7,9 @@ import Link from "next/link";
 import DonationProgress from "../components/ui/donationProgress";
 import BookmarkButton from "./ui/BookmarkButton";
 import { MainCauseCardProps } from "@/lib/type";
+import { BsBookmark } from "react-icons/bs";
+import { GoClock } from "react-icons/go";
+import { Badge } from "./ui/badge";
 
 export const MainCauseCard: React.FC<
   MainCauseCardProps & { onRemoveBookmark: (id: string) => void }
@@ -16,10 +19,10 @@ export const MainCauseCard: React.FC<
   id,
   profileImage,
   causeTitle,
-  daysLeft,
-  progressPercentage,
-  raisedAmount,
-  goalAmount,
+  daysLeft = 0,
+  progressPercentage = 0,
+  raisedAmount = 0,
+  goalAmount = 0,
   description,
   tags,
   hideDescription,
@@ -28,84 +31,90 @@ export const MainCauseCard: React.FC<
   isBookmarked,
   onRemoveBookmark,
 }) => {
-  return (
-    <div className="bg-white w-full rounded-lg">
-      {/* Image */}
-      <Image
-        src={img}
-        alt={uploadedImage?.name || "Cause Image"}
-        height={300}
-        width={600}
-        className="rounded-lg w-full"
-      />
-      {/* Content */}
-      <div className="flex justify-between mt-4">
-        <div className="flex mb-2">
-          {/* Profile Image */}
-          <Image
-            src={profileImage ?? img}
-            alt="profile"
-            height={40}
-            width={40}
-            className="md:size-16 mr-4 rounded-full"
-          />
-          {/* Title and Details */}
-          <div className="flex-1">
-            <h3 className="text-xl md:text-2xl font-semibold">{causeTitle}</h3>
-            <p className="flex mt-2 text-gray-600">
-              <Image
-                src="/images/clock.svg"
-                alt="clock"
-                height={20}
-                width={20}
-                className="mr-1"
-              />
-              {daysLeft} days • {progressPercentage}% funded
-            </p>
-            {!hideDescription && (
-              <p className="mt-2 hidden lg:block">{description}</p>
-            )}
+    return (
+      <div className="border border-gray-200 rounded-lg overflow-hidden">
+        <div className="relative">
+          <div className="relative h-48 w-full">
+            <Image
+              src={img}
+              alt={uploadedImage?.name || "Cause Image"}
+              fill
+              className="object-cover"
+            />
           </div>
+          <Badge className="absolute bottom-2 left-2 bg-white text-black text-xs px-2 py-1 rounded-full">
+            {raisedAmount.toLocaleString()} donations
+          </Badge>
         </div>
-        {/* Bookmark Button Component */}
-        <BookmarkButton
-          causeId={id} // Pass only the cause ID
-          isBookmarked={isBookmarked} // Pass isBookmarked prop
-          onRemoveBookmark={onRemoveBookmark}
-        />
-      </div>
-      {/* Tags */}
-      {!hideTags && (
-        <div className="hidden md:flex space-x-2 mt-9">
-          {tags?.map((tag, index) => (
-            <span
-              key={index}
-              className="text-sm bg-gray-200 rounded-full px-3 py-1 flex items-center hover:bg-gray-300 transition-colors duration-300"
-            >
-              {tag.icon} {tag.text}
+
+        <div className="p-4">
+          <div className="flex items-center mb-2">
+            <div className="h-8 w-8 aspect-square rounded-full overflow-hidden mr-2">
+              <Image
+                src={profileImage }
+                alt="profile"
+                width={34}
+                height={34}
+                className="w-full h-full aspect-square"
+              />
+            </div>
+
+            <div className="flex items-center justify-between w-full">
+              <h3 className="font-medium">{causeTitle}</h3>
+              <button onClick={() => onRemoveBookmark(id)}>
+                <BookmarkButton
+                  causeId={id}
+                  isBookmarked={isBookmarked}
+                  onRemoveBookmark={onRemoveBookmark}
+                />
+              </button>
+            </div>
+          </div>
+
+          <div className="flex text-xs text-gray-500 mb-2">
+            <span className="text-black font-medium flex items-center gap-1">
+              <GoClock /> {daysLeft} 
             </span>
-          ))}
+            <span className="mx-2 text-md text-black">•</span>
+            <span>{progressPercentage}% funded</span>
+          </div>
+
+          <div className="w-full bg-gray-200 rounded-full h-1.5 mb-4">
+            <div
+              className="bg-blue-600 h-1.5 rounded-full"
+              style={{ width: `${progressPercentage}%` }}
+            ></div>
+          </div>
+
+          <div className="font-bold mb-2">₦{raisedAmount.toLocaleString()} raised</div>
+          <div className="text-xs text-gray-500 mb-4">
+            Goal: ₦{goalAmount.toLocaleString()}
+          </div>
+
+          {!hideTags && tags && tags.length > 0 && (
+            <div className="flex flex-wrap gap-2 mb-4">
+              {tags.map((tag, index) => (
+                <Badge key={index} variant="outline" className="text-xs">
+                  {tag}
+                </Badge>
+              ))}
+            </div>
+          )}
+
+          {!hideDescription && description && (
+            <p className="text-sm text-gray-600 mb-4 line-clamp-2">
+              {description}
+            </p>
+          )}
+
+          {!hideButton && (
+            <Link href={`/cause/${id}`}>
+              <button className=" bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors flex items-center justify-center">
+                Donate now <span className="ml-1">›</span>
+              </button>
+            </Link>
+          )}
         </div>
-      )}
-      {/* Donation Progress */}
-      <div className="mt-6">
-        <DonationProgress
-          currentAmount={raisedAmount}
-          goalAmount={goalAmount}
-        />
-        <div className="font-bold text-gray-800 mt-2">
-          ₦{raisedAmount} raised
-        </div>
-        <div className="text-gray-800">Goal: ₦{goalAmount}</div>
       </div>
-      {/* Donate Button */}
-      {!hideButton && (
-        <Link href={`/cause/${id}`} className="flex justify-center mt-4">
-          <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
-            Donate now
-          </button>
-        </Link>
-      )}
-    </div>
-  );
-};
+    );
+  };
