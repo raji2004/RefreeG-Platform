@@ -12,7 +12,7 @@ export const logTransaction = async ({
     customer_name,
     transactionId
 }: {
-    userId: string;
+    userId?: string;
     causeId: string;
     amount: number;
     customer_name: string;
@@ -30,13 +30,13 @@ export const logTransaction = async ({
         })
         const causeDonationRef = collection(db, `causes/${causeId}/donated`);
         await addDoc(causeDonationRef, {
-            userId,
+            userId: userId || 'anonymous',
             customer_name,
             amount,
             timestamp: new Date().toISOString()
         });
 
-        // Save to user collection
+        if(!userId || userId === undefined) return { success: true };// Save to user collection
         const userDonationRef = collection(db, `users/${userId}/donated`);
         await addDoc(userDonationRef, {
             causeId,

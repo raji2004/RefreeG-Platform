@@ -12,7 +12,7 @@ import { toast } from 'react-toastify';
 export default function PaymentVerification({ searchParams }: { searchParams: { reference: string, transaction_id: string } }) {
 
     const router = useRouter();
-    const { verifyPayment, isLoading, error } = usePayment();
+    const { verifyPayment, error } = usePayment();
     const [verificationStatus, setVerificationStatus] = useState<'loading' | 'success' | 'failed'>('loading');
     const [errorMessage, setErrorMessage] = useState('');
 
@@ -20,9 +20,8 @@ export default function PaymentVerification({ searchParams }: { searchParams: { 
         const verifyPaymentStatus = async () => {
             try {
                 const reference = searchParams.reference
-                const transactionId = searchParams.transaction_id;
 
-                if (!reference || !transactionId) {
+                if (!reference) {
                     setVerificationStatus('failed');
                     setErrorMessage('Invalid payment verification parameters');
                     return;
@@ -31,25 +30,27 @@ export default function PaymentVerification({ searchParams }: { searchParams: { 
                 const isSuccessful = await verifyPayment(reference);
 
                 if (isSuccessful) {
+                    await new Promise(resolve => setTimeout(resolve, 1000));
                     setVerificationStatus('success');
                 } else {
                     setVerificationStatus('failed');
-                    setErrorMessage(error || 'Payment verification failed');
+                    setErrorMessage( 'Payment verification failed');
                 }
             } catch (error) {
+                console.error('Payment verification error:', error);
                 setVerificationStatus('failed');
                 setErrorMessage('Failed to verify payment. Please contact support.');
             }
         };
 
         verifyPaymentStatus();
-    }, [searchParams, verifyPayment, error]);
+    },);
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-palette-baseWhite p-4">
             <Card className="w-full max-w-md p-8">
                 <div className="flex flex-col items-center space-y-6">
-                    {(verificationStatus === 'loading' || isLoading) && (
+                    {(verificationStatus === 'loading' ) && (
                         <motion.div
                             initial={{ scale: 0 }}
                             animate={{ scale: 1 }}

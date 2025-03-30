@@ -100,5 +100,5 @@ export const getBaseURL = (): string => {
 
 export const calculateServiceFee = (amount: number): number => {
   const serviceFeePercentage = Number(process.env.NEXT_PUBLIC_REFREEG_SERVICE_FEE || "0");
-  return (amount * (serviceFeePercentage / 100)) || 0;
+  return Math.round((amount * (serviceFeePercentage / 100)) || 0);
 };
