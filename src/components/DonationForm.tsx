@@ -1,22 +1,35 @@
 "use client";
 
 import Image from "next/image";
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, useEffect } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Separator } from "@/components/ui/separator";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Cause, User } from "@/lib/type";
 import PaymentButton from "./PaymentButton";
+import { calculateServiceFee } from "@/lib/utils";
 
-export default function DonationForm({ cause, user, serviceFee }: { cause: Cause, user: User, serviceFee: number }) {
+export default function DonationForm({ cause, user,  }: { cause: Cause, user: User | null, }) {
   const [donation, setDonation] = useState(0);
   const [isAnonymous, setIsAnonymous] = useState(false);
+  const [serviceFee, setServiceFee] = useState<number>(0);
+  const [email, setEmail] = useState("");
+  
+  console.log(serviceFee)
   const totalAmount = donation + serviceFee;
   const PayStackFee = 100;
+
+  useEffect(() => {
+    setServiceFee(calculateServiceFee(donation));
+  }, [donation]);
 
   const handleDonationChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setDonation(Number(value));
+  };
+
+  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
   };
 
   return (
@@ -79,6 +92,22 @@ export default function DonationForm({ cause, user, serviceFee }: { cause: Cause
       </div>
 
       <Separator />
+      {!user && (
+        <div className="space-y-2">
+          <label htmlFor="email" className="text-sm font-medium">
+            Email Address
+          </label>
+          <input
+            type="email"
+            id="email"
+            value={email}
+            onChange={handleEmailChange}
+            className="w-full p-2 border rounded-md"
+            placeholder="Enter your email"
+            required
+          />
+        </div>
+      )}
 
       <div className="space-y-3">
         <h2 className="font-bold">Your Donation Summary</h2>
@@ -100,18 +129,20 @@ export default function DonationForm({ cause, user, serviceFee }: { cause: Cause
         </div>
         <div className="flex justify-between font-bold text-lg">
           <p>Total</p>
-          <p>₦{(totalAmount+PayStackFee).toLocaleString()}</p>
+          <p>₦{(totalAmount + PayStackFee).toLocaleString()}</p>
         </div>
       </div>
 
+    
       <PaymentButton
         user={user}
         causeUserId={cause.userId}
         causeId={cause.id}
         totalAmount={totalAmount}
         serviceFee={serviceFee}
-        disabled={donation === 0}
+        disabled={donation === 0 || (!user && !email)}
         isAnonymous={isAnonymous}
+        email={!user ? email : undefined}
       />
     </>
   );

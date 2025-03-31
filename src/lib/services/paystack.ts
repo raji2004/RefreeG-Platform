@@ -25,7 +25,7 @@ const Paystack = {
       console.log('Initializing transaction with data:', data);
 
       // Validate required fields
-      if (!data.email || !data.amount || !data.id || !data.firstName || !data.lastName) {
+      if (!data.amount) {
         throw new Error('Missing required fields for transaction initialization');
       }
       const baseUrl = await getBaseURL()

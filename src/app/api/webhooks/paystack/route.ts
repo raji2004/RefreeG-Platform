@@ -37,7 +37,7 @@ export async function POST(request: Request) {
         const { metadata, reference } = data;
 
         // Validate metadata fields
-        if (!metadata?.user_id || !metadata?.cause_id || !metadata?.amount || !metadata?.customer_name) {
+        if ( !metadata?.cause_id || !metadata?.amount || !metadata?.customer_name) {
             return new NextResponse(JSON.stringify({
                 error: "Missing required metadata fields"
             }), { status: 400 });

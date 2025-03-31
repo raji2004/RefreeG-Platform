@@ -9,10 +9,10 @@ function CauseSection({ section }: CauseParagraphsProps) {
     <>
       {section?.map((section, index) => (
         <div key={index} className="mt-4">
-          <h3 key={index} className="font-bold">
+          <h3  className="font-bold">
             {section.header}
           </h3>
-          <p key={index} className="mt-2 text-md">
+          <p  className="mt-2 text-md">
             {section.description}
           </p>
         </div>
