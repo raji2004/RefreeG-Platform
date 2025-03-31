@@ -1,24 +1,86 @@
-"use client"
+"use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import {
+  verifyBeforeUpdateEmail,
+  EmailAuthProvider,
+  reauthenticateWithCredential,
+} from "firebase/auth";
+import { updateUserById } from "@/lib/firebase/actions";
+import { auth } from "@/lib/firebase/config";
+import { getSessionId } from "@/lib/helpers";
+import { getUserById } from "@/lib/firebase/actions";
 
 export default function ChangeEmail() {
   const router = useRouter();
   const [currentEmail, setCurrentEmail] = useState("");
   const [newEmail, setNewEmail] = useState("");
   const [step, setStep] = useState(1);
-  const [otp, setOtp] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchUserEmail = async () => {
+      try {
+        const sessionId = await getSessionId();
+        if (sessionId) {
+          const user = await getUserById(sessionId);
+          if (user && user.email) {
+            setCurrentEmail(user.email);
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching user email:", error);
+      }
+    };
+
+    fetchUserEmail();
+  }, []);
 
   const handleProceed = () => {
     if (currentEmail && newEmail) {
-      setStep(2); // Move to OTP step
+      setStep(2); // Move to password step
     }
   };
 
-  const handleVerifyOtp = () => {
-    if (otp.length === 4) {
-      setStep(3); // Move to success step
+  const handleVerifyPassword = async () => {
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const user = auth.currentUser;
+      console.log(user);
+      if (!user) {
+        throw new Error("User not authenticated");
+      }
+
+      // Reauthenticate with current password
+      const credential = EmailAuthProvider.credential(
+        user.email || currentEmail,
+        password
+      );
+      await reauthenticateWithCredential(user, credential);
+
+      console.log("User reauthenticated");
+
+      // Send verification email to the new email address
+      await verifyBeforeUpdateEmail(user, newEmail);
+
+      // Update email in database
+      // Note: The auth email won't actually change until the user clicks the verification link
+      await updateUserById(user.uid, { email: newEmail });
+
+      // Move to verification step
+      setStep(3);
+    } catch (error) {
+      console.error("Error updating email:", error);
+      setError(
+        error instanceof Error ? error.message : "Failed to update email"
+      );
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -48,42 +110,46 @@ export default function ChangeEmail() {
           >
             Proceed ➜
           </button>
+          {error && <p className="text-red-500 mt-2">{error}</p>}
         </div>
       )}
 
       {step === 2 && (
         <div className="w-full max-w-md bg-white p-6 rounded-lg shadow">
           <h2 className="text-lg font-semibold mb-4">
-            Enter the 4-digit pin we sent to your new email
+            Enter your password to confirm
           </h2>
           <input
-            type="text"
-            placeholder="****"
+            type="password"
+            placeholder="Password"
             className="w-full border p-2 rounded mb-4 text-center text-lg tracking-widest"
-            value={otp}
-            onChange={(e) => setOtp(e.target.value)}
-            maxLength={4}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
           <button
-            onClick={handleVerifyOtp}
-            className="w-full bg-blue-600 text-white p-3 rounded-lg"
+            onClick={handleVerifyPassword}
+            disabled={isLoading}
+            className="w-full bg-blue-600 text-white p-3 rounded-lg flex justify-center items-center"
           >
-            Proceed ➜
+            {isLoading ? (
+              <span className="inline-block w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></span>
+            ) : null}
+            {isLoading ? "Processing..." : "Proceed ➜"}
           </button>
+          {error && <p className="text-red-500 mt-2">{error}</p>}
         </div>
       )}
 
       {step === 3 && (
         <div className="w-full max-w-md bg-white p-6 rounded-lg shadow text-center">
-          <h2 className="text-lg font-semibold">
-            Your email has been successfully changed
-          </h2>
+          <h2 className="text-lg font-semibold">Verification email sent</h2>
           <p className="mt-2 text-gray-600">
-            You have successfully changed your email, please use the new one
-            when logging in.
+            A verification email has been sent to {newEmail}. Please check your
+            inbox and click the verification link to complete the email change
+            process.
           </p>
           <button
-            onClick={() => router.push("/profile")}
+            onClick={() => router.push("/admin/dashboard")}
             className="w-full bg-black text-white p-3 rounded-lg mt-4"
           >
             Close
