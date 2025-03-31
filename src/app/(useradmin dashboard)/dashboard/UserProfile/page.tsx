@@ -10,7 +10,7 @@ export default async function UserProfile() {
   }
   const user = await getUserById(session);
   if (user === null) {
-    redirect("/"); // Redirect to login if user not found
+    redirect("/login"); // Redirect to login if user not found
   }
   return (
     <GeneralInfo
