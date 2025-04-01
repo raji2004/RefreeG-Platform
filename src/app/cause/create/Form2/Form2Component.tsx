@@ -3,11 +3,20 @@
 import React from "react";
 import Image from "next/image";
 import { useFormContext, Controller } from "react-hook-form";
-import { FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
+import {
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
 import { DatePicker } from "@/components/ui/date-picker";
 
 export const Form2 = () => {
-  const { register, control, formState: { errors } } = useFormContext();
+  const {
+    register,
+    control,
+    formState: { errors },
+  } = useFormContext();
 
   return (
     <div className="space-x-3">
@@ -53,7 +62,9 @@ export const Form2 = () => {
                 <option value="Health Care">Health Care</option>
                 <option value="Women’s Empowerment">Women’s Empowerment</option>
                 <option value="Youth Development">Youth Development</option>
-                <option value="Economic Development">Economic Development</option>
+                <option value="Economic Development">
+                  Economic Development
+                </option>
                 <option value="Agriculture">Agriculture</option>
                 <option value="Environment">Environment</option>
               </select>
@@ -63,7 +74,9 @@ export const Form2 = () => {
             </div>
           </FormControl>
           {errors.causeCategory && (
-            <FormMessage>{errors.causeCategory.message?.toString()}</FormMessage>
+            <FormMessage>
+              {errors.causeCategory.message?.toString()}
+            </FormMessage>
           )}
         </FormItem>
 
@@ -80,7 +93,9 @@ export const Form2 = () => {
                   defaultValue={field.value ? new Date(field.value) : undefined}
                   onChange={(selectedDate: Date | undefined) =>
                     field.onChange(
-                      selectedDate ? selectedDate.toISOString().split("T")[0] : ""
+                      selectedDate
+                        ? selectedDate.toISOString().split("T")[0]
+                        : ""
                     )
                   }
                   className="w-full"
@@ -112,23 +127,51 @@ export const Form2 = () => {
             <Controller
               control={control}
               name="goalAmount"
-              defaultValue="0"
+              defaultValue="1000" // Start with a default value of 1000 instead of 0
+              rules={{
+                validate: (value) => {
+                  const num = parseInt(value, 10);
+                  return num >= 1 || "Goal amount must be at least 1";
+                },
+              }}
               render={({ field }) => {
-                const goal = field.value || "0";
+                const goal = field.value || "1000"; // Fallback to 1000 if empty
                 const incrementGoal = () => {
                   const newValue = (parseInt(goal, 10) + 1000).toString();
                   field.onChange(newValue);
                 };
                 const decrementGoal = () => {
-                  const newValue = Math.max(parseInt(goal, 10) - 1000, 0).toString();
+                  const newValue = Math.max(
+                    parseInt(goal, 10) - 1000,
+                    1
+                  ).toString(); // Minimum value is 1
                   field.onChange(newValue);
                 };
+                const handleInputChange = (
+                  e: React.ChangeEvent<HTMLInputElement>
+                ) => {
+                  let value = e.target.value;
+
+                  // Remove non-numeric characters
+                  value = value.replace(/[^0-9]/g, "");
+
+                  // Remove leading zeros
+                  value = value.replace(/^0+/, "");
+
+                  // If empty or invalid, set to "1"
+                  if (!value || parseInt(value, 10) < 1) {
+                    value = "1";
+                  }
+
+                  field.onChange(value);
+                };
+
                 return (
                   <div className="relative">
                     <input
                       type="text"
                       value={goal}
-                      onChange={field.onChange}
+                      onChange={handleInputChange}
                       placeholder="Goal Amount"
                       className="px-[9px] py-[13px] pr-20 border-b border-[#898384] w-full focus:outline-none text-[#898384] text-base font-medium font-montserrat bg-transparent"
                     />
