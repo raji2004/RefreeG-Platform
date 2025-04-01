@@ -12,8 +12,7 @@ import {
   FaGlobe,
 } from "react-icons/fa";
 import { addCause } from "@/lib/firebase/actions";
-import { getDaysLeft } from "@/lib/utils";
-import { generateKeywords } from "@/lib/utils";
+import { getDaysLeft, generateKeywords } from "@/lib/utils";
 
 interface Section {
   id: number;
@@ -37,24 +36,20 @@ const PreviewPage = () => {
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
-    // Retrieve form data
     const savedFormData = localStorage.getItem("formData");
     if (savedFormData) {
       setFormData(JSON.parse(savedFormData));
     }
-    // Retrieve sections
     const savedSections = localStorage.getItem("formSections");
     if (savedSections) {
       setSections(JSON.parse(savedSections));
     }
-    // Retrieve uploaded image
     const imageData = localStorage.getItem("uploadedImage");
     if (imageData) {
       setUploadedImage(JSON.parse(imageData));
     }
   }, []);
 
-  // Validate that all required fields are provided.
   const isFormValid = () => {
     if (!formData) return false;
     if (
@@ -81,7 +76,6 @@ const PreviewPage = () => {
   };
 
   const handleSubmit = async () => {
-    console.log("Submitting form...");
     if (!isFormValid()) {
       setErrorMessage("Please fill out all required fields before submitting.");
       return;
@@ -90,14 +84,11 @@ const PreviewPage = () => {
 
     try {
       const currentUser = await getSessionId();
-
       if (currentUser === undefined) router.push("/login");
-      console.log("Current User: ", currentUser);
 
       // Generate keywords from the cause title
       const keywords = generateKeywords(formData.causeTitle);
 
-      // Combine the formData, sections, and uploadedImage into one object.
       const finalData = {
         ...formData,
         sections,
@@ -105,11 +96,10 @@ const PreviewPage = () => {
         userId: currentUser,
         raisedAmount: 0,
         goalAmount: parseInt(formData.goalAmount),
-        keywords, // Add the generated keywords
+        keywords, // Include generated keywords
       };
 
       const causeId = await addCause(finalData);
-      console.log("Document saved with ID:", causeId);
       router.push(`/See_Preview/Success?id=${causeId}`);
     } catch (error: any) {
       console.error("Error adding document:", error.message);
@@ -130,9 +120,8 @@ const PreviewPage = () => {
               <h1 className="text-black text-[40px] font-bold font-montserrat md:text-left">
                 {formData.causeTitle}
               </h1>
-              {uploadedImage ? (
+              {uploadedImage && (
                 <div className="mb-6 w-full">
-                  {/* Image container with enforced aspect ratio */}
                   <div className="relative md:ml-[100px] w-[90%] md:w-[68%] aspect-video rounded-lg overflow-hidden">
                     <Image
                       src={uploadedImage.src}
@@ -142,8 +131,6 @@ const PreviewPage = () => {
                     />
                   </div>
                 </div>
-              ) : (
-                <div className="mb-6 text-center">No image uploaded</div>
               )}
               <div className="flex md:flex-row gap-2 mt-9 items-center justify-start md:justify-start">
                 <span className="text-sm bg-gray-200 rounded-full px-3 py-1 flex items-center">
@@ -157,17 +144,16 @@ const PreviewPage = () => {
                 <FaGlobe className="mr-1" /> United Nations International
                 Childrens Emergency Fund
               </p>
-              {sections.length > 0 &&
-                sections.map((section) => (
-                  <div key={section.id} className="mb-6 w-full text-justify">
-                    <h2 className="text-black text-xl font-bold font-montserrat mb-2">
-                      {section.header || `Section ${section.id}`}
-                    </h2>
-                    <p className="w-full md:w-11/12 text-black text-lg font-normal font-montserrat">
-                      {section.description || "No description provided."}
-                    </p>
-                  </div>
-                ))}
+              {sections.map((section) => (
+                <div key={section.id} className="mb-6 w-full text-justify">
+                  <h2 className="text-black text-xl font-bold font-montserrat mb-2">
+                    {section.header || `Section ${section.id}`}
+                  </h2>
+                  <p className="w-full md:w-11/12 text-black text-lg font-normal font-montserrat">
+                    {section.description || "No description provided."}
+                  </p>
+                </div>
+              ))}
             </>
           ) : (
             <p className="text-center">Loading...</p>
