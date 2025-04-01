@@ -1,15 +1,13 @@
 "use client";
-
 import { useState } from "react";
+import { Sheet, SheetTrigger, SheetContent } from "../ui/sheet";
+import { Button } from "../ui/button";
 import Link from "next/link";
-import Image from "next/image";
 import Logo from "../../../public/images/logo.svg";
 import Search from "../../../public/images/search.svg";
 import Dropdown from "../../../public/images/dropdown.svg";
-import SearchModal from "./searchModal";
-import { ChevronDown, LogOut } from "lucide-react";
-import { SessionLogout } from "@/lib/helpers";
-
+import Image from "next/image";
+import { ReactNode } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,15 +16,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Sheet, SheetTrigger, SheetContent } from "../ui/sheet";
-import { Button } from "../ui/button";
-import { ReactNode } from "react";
+import SearchModal from "./searchModal";
+import { ChevronDown, LogOut } from "lucide-react";
+import { SessionLogout } from "@/lib/helpers";
+// import { TestProfileLink } from "./testbutton";
 
 interface MenuLinkProps {
   href: string;
   children: ReactNode;
   className?: string;
-  onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void;
+  onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void; // Explicitly define event type
 }
 
 const MenuLink = ({
@@ -40,19 +39,20 @@ const MenuLink = ({
     href={href}
     className={`relative group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-base font-medium transition-colors duration-500 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 ease-in-out transform hover:-translate-y-1 hover:scale-110 ${className}`}
     prefetch={false}
-    onClick={onClick}
+    onClick={onClick} // No change here, just ensuring type compatibility
     {...props}
   >
     {children}
   </Link>
 );
 
-interface NavbarProps {
+export function Navbar({
+  userSession,
+  profile,
+}: {
   userSession?: boolean;
   profile?: string;
-}
-
-export function Navbar({ userSession, profile }: NavbarProps) {
+}) {
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const [aboutUsOpen, setAboutUsOpen] = useState(false);
@@ -88,6 +88,8 @@ export function Navbar({ userSession, profile }: NavbarProps) {
         <MenuLink href="#" className="hover:bg-blue-100">
           Explore causes
         </MenuLink>
+
+        {/* <TestProfileLink /> */}
 
         <div
           className="relative"
@@ -183,12 +185,15 @@ export function Navbar({ userSession, profile }: NavbarProps) {
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem>
-                <Link href="/dashboard/UserProfile">Profile</Link>
+                {" "}
+                <Link href={"/dashboard/UserProfile"}> Profile</Link>
               </DropdownMenuItem>
               <DropdownMenuItem>
-                <Link href="/dashvoard/Account">Settings</Link>
+                {" "}
+                <Link href={"/dashvoard/Account"}> Settings </Link>
               </DropdownMenuItem>
               <DropdownMenuItem onClick={() => SessionLogout()}>
+                {" "}
                 Logout
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -204,6 +209,7 @@ export function Navbar({ userSession, profile }: NavbarProps) {
 
         {userSession ? (
           <MenuLink href="/dashboard/UserProfile">
+            {" "}
             <Image
               src={profile ?? "/UserProfile/defaultProfile.svg"}
               alt="Profile"
@@ -233,7 +239,7 @@ export function Navbar({ userSession, profile }: NavbarProps) {
           </SheetTrigger>
 
           <SheetContent side="left" className="bg-white flex flex-col h-full">
-            <Link href="#" className="mr-6 lg:flex" prefetch={false}>
+            <Link href="#" className="mr-6  lg:flex" prefetch={false}>
               <Image
                 src="/images/logo.png"
                 alt="logo"
@@ -266,6 +272,7 @@ export function Navbar({ userSession, profile }: NavbarProps) {
                     <MenuLink href="#" className="text-xs">
                       Our Story (The &quot;Why&quot; Behind RefreeG)
                     </MenuLink>
+
                     <MenuLink href="#" className="text-xs">
                       Our Impact
                     </MenuLink>
@@ -282,10 +289,9 @@ export function Navbar({ userSession, profile }: NavbarProps) {
               <MenuLink href="#">How it works</MenuLink>
               <MenuLink
                 href={userSession ? "/cause/create" : "/login"}
-                className="text-white hover:text-white bg-blue-600 hover:bg-blue-700"
                 onClick={(e) => {
                   if (!userSession) {
-                    e.preventDefault();
+                    e.preventDefault(); // Prevent default navigation
                     alert("You need to log in before listing a cause.");
                   }
                 }}
@@ -294,9 +300,10 @@ export function Navbar({ userSession, profile }: NavbarProps) {
               </MenuLink>
             </div>
 
-            <div className="mt-auto flex justify-start items-center">
+            <div className="mt-auto flex justify-start items-center  ">
               {userSession ? (
                 <MenuLink href="/dashboard/UserProfile">
+                  {" "}
                   <Image
                     src={profile ?? "/UserProfile/defaultProfile.svg"}
                     alt="Profile"
@@ -312,7 +319,7 @@ export function Navbar({ userSession, profile }: NavbarProps) {
               )}
 
               {userSession && (
-                <div className="ml-auto">
+                <div className=" ml-auto">
                   <Button
                     variant="outline"
                     size="icon"
@@ -349,6 +356,7 @@ function MenuIcon(props: IconProps) {
       xmlns="http://www.w3.org/2000/svg"
       width="24"
       height="24"
+      viewBox="0 0 24"
       fill="none"
       stroke="currentColor"
       strokeWidth="2"
@@ -369,6 +377,7 @@ function MountainIcon(props: IconProps) {
       xmlns="http://www.w3.org/2000/svg"
       width="24"
       height="24"
+      viewBox="0 0 24"
       fill="none"
       stroke="currentColor"
       strokeWidth="2"

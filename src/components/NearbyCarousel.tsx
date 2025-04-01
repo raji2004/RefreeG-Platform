@@ -181,9 +181,11 @@ const NearbyCarousel: React.FC = () => {
                     Goal: ₦{item.goalAmount.toLocaleString()}
                   </div>
 
-                  <button className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors flex items-center justify-center">
-                    Donate now <span className="ml-1">›</span>
-                  </button>
+                  <Link href={`/${item.id}/payment`}>
+                    <button className="bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors flex items-center justify-center">
+                      Donate now <span className="ml-1">›</span>
+                    </button>
+                  </Link>
                 </div>
               </div>
             </div>
