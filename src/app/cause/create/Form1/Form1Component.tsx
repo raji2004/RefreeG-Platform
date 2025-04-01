@@ -204,7 +204,7 @@ export const Form1 = () => {
               className="mt-1 px-5 py-3.5 w-[200px] block rounded-[10px] border border-[#898384]"
             >
               <option value="">Select Currency</option>
-              <option value="Flat Currency">Flat Currency</option>
+              <option value="Fiat Currency">Fiat Currency</option>
               <option value="Crypto Currency">Crypto Currency</option>
             </select>
           </FormControl>
