@@ -12,7 +12,7 @@ export default function Mission() {
             <Whyweexist />
             <HowDoWeAchieveThis />
             <WhatDoWeFocusOn />
-            <CreateBetterFuture />
+            <CreateBetterFuture />          
         </div>
     )
 }

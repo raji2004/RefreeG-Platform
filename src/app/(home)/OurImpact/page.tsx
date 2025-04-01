@@ -10,7 +10,7 @@ export default function Impact() {
             <Hero />
             <ByNumbers />
             <HowDoWeAchieveThis />
-            <ChangeLives />
+            <ChangeLives />       
         </div>
     )
 }

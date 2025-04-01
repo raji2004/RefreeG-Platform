@@ -30,7 +30,13 @@ interface MenuLinkProps {
   onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void; // Explicitly define event type
 }
 
-const MenuLink = ({ href, children, className, onClick, ...props }: MenuLinkProps) => (
+const MenuLink = ({
+  href,
+  children,
+  className,
+  onClick,
+  ...props
+}: MenuLinkProps) => (
   <Link
     href={href}
     className={`relative group inline-flex h-9 w-max items-center justify-center rounded-md px-4 py-2 text-base font-medium transition-colors duration-500 hover:text-gray-900 focus:bg-gray-100 focus:text-gray-900 focus:outline-none disabled:pointer-events-none disabled:opacity-50 data-[active]:bg-gray-100/50 data-[state=open]:bg-gray-100/50 dark:bg-gray-950 dark:hover:bg-gray-800 dark:hover:text-gray-50 dark:focus:bg-gray-800 ease-in-out transform hover:-translate-y-1 hover:scale-110 ${className}`}
@@ -131,15 +137,17 @@ export function Navbar({ userSession,profile }: { userSession?: boolean ,profile
 
         <MenuLink href="/cause" className='hover:bg-blue-100'>Explore causes</MenuLink>
 
-        <div 
+        {/* <TestProfileLink /> */}
+
+        <div
           className="relative"
-          onMouseEnter={() => setAboutUsOpen(true)} 
+          onMouseEnter={() => setAboutUsOpen(true)}
           onMouseLeave={() => setAboutUsOpen(false)}
         >
           <MenuLink href="#" className="hover:bg-blue-100">
             <DropdownMenu open={aboutUsOpen} onOpenChange={setAboutUsOpen}>
               <DropdownMenuTrigger asChild>
-                <div 
+                <div
                   className="flex items-center cursor-pointer"
                   onClick={(e) => {
                     e.stopPropagation(); // Prevents closing when clicking inside
@@ -147,29 +155,46 @@ export function Navbar({ userSession,profile }: { userSession?: boolean ,profile
                   }}
                 >
                   About us
-                  <Image src={Dropdown} height={12} width={12} alt="dropdown" className="ml-2" />
+                  <Image
+                    src={Dropdown}
+                    height={12}
+                    width={12}
+                    alt="dropdown"
+                    className="ml-2"
+                  />
                 </div>
               </DropdownMenuTrigger>
 
-              <DropdownMenuContent className="absolute mt-2 py-4 bg-white shadow-lg rounded-md hidden lg:block" align="start">
+              <DropdownMenuContent
+                className="absolute mt-2 py-4 bg-white shadow-lg rounded-md hidden lg:block"
+                align="start"
+              >
                 <div className="">
-                  <div className='flex'>
+                  <div className="flex">
                     <DropdownMenuItem asChild>
-                      <Link href="/OurMission" className="whitespace-nowrap hover:underline hover:bg-[#D6EBFF] px-4 py-2 block">
+                      <Link
+                        href="/OurMission"
+                        className="whitespace-nowrap hover:underline hover:bg-[#D6EBFF] px-4 py-2 block"
+                      >
                         Our Mission
                       </Link>
                     </DropdownMenuItem>
 
                     <DropdownMenuItem asChild>
-                      <Link href="/OurStory" className="whitespace-nowrap hover:underline hover:bg-[#D6EBFF] px-4 py-2 block">
+                      <Link
+                        href="/OurStory"
+                        className="whitespace-nowrap hover:underline hover:bg-[#D6EBFF] px-4 py-2 block"
+                      >
                         Our Story (The &quot;Why&quot; Behind RefreeG)
                       </Link>
                     </DropdownMenuItem>
-
                   </div>
-                  <div className='flex'>
+                  <div className="flex">
                     <DropdownMenuItem asChild>
-                      <Link href="/OurImpact" className="whitespace-nowrap hover:underline hover:bg-[#D6EBFF] px-4 py-2 block">
+                      <Link
+                        href="/OurImpact"
+                        className="whitespace-nowrap hover:underline hover:bg-[#D6EBFF] px-4 py-2 block"
+                      >
                         Our Impact
                       </Link>
                     </DropdownMenuItem>
@@ -189,19 +214,33 @@ export function Navbar({ userSession,profile }: { userSession?: boolean ,profile
           </MenuLink>
         </div>
 
-
-        <MenuLink href="#" className='hover:bg-blue-100'>
+        <MenuLink href="#" className="hover:bg-blue-100">
           <DropdownMenu>
             <DropdownMenuTrigger className="flex outline-none items-center">
               How it works
-              <Image src={Dropdown} height={12} width={12} alt="dropdown" className='ml-2' />
+              <Image
+                src={Dropdown}
+                height={12}
+                width={12}
+                alt="dropdown"
+                className="ml-2"
+              />
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem> <Link href={'/dashboard/UserProfile'}> Profile</Link></DropdownMenuItem>
-              <DropdownMenuItem> <Link href={'/dashvoard/Account'}> Settings </Link></DropdownMenuItem>
-              <DropdownMenuItem onClick={()=> SessionLogout()}>  Logout</DropdownMenuItem>
+              <DropdownMenuItem>
+                {" "}
+                <Link href={"/dashboard/UserProfile"}> Profile</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                {" "}
+                <Link href={"/dashvoard/Account"}> Settings </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => SessionLogout()}>
+                {" "}
+                Logout
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </MenuLink>
@@ -210,7 +249,6 @@ export function Navbar({ userSession,profile }: { userSession?: boolean ,profile
           href={userSession ? "/cause/create" : "/login"}
           className="text-white hover:text-white bg-blue-600 hover:bg-blue-700"
         >
-
           List a cause
         </MenuLink>
 
@@ -308,7 +346,11 @@ export function Navbar({ userSession,profile }: { userSession?: boolean ,profile
                   className="w-full font-medium text-left flex justify-between items-center py-2 px-3 hover:bg-gray-100"
                 >
                   About Us
-                  <ChevronDown className={`h-4 w-4 transition-transform ${aboutUsOpen ? "rotate-180" : ""}`} />
+                  <ChevronDown
+                    className={`h-4 w-4 transition-transform ${
+                      aboutUsOpen ? "rotate-180" : ""
+                    }`}
+                  />
                 </button>
 
                 {aboutUsOpen && (
@@ -337,32 +379,39 @@ export function Navbar({ userSession,profile }: { userSession?: boolean ,profile
               >
                 List a cause
               </MenuLink>
-
             </div>
 
-            <div className='mt-auto flex justify-start items-center  '>
-              {userSession ? <MenuLink href='/dashboard/UserProfile'> <Image
-                src={profile??"/UserProfile/defaultProfile.svg"}
-                alt="Profile"
-                width={40}
-                height={40}
-                className="rounded-full"
-              />
-              </MenuLink> : <MenuLink href="/login" className="hover:underline">
-                Login
-              </MenuLink>
-              }
+            <div className="mt-auto flex justify-start items-center  ">
+              {userSession ? (
+                <MenuLink href="/dashboard/UserProfile">
+                  {" "}
+                  <Image
+                    src={profile ?? "/UserProfile/defaultProfile.svg"}
+                    alt="Profile"
+                    width={40}
+                    height={40}
+                    className="rounded-full"
+                  />
+                </MenuLink>
+              ) : (
+                <MenuLink href="/login" className="hover:underline">
+                  Login
+                </MenuLink>
+              )}
 
-              {userSession && <div className=' ml-auto'>
-                <Button variant='outline' size='icon' className='border-none' onClick={()=> SessionLogout()}>
-                  <LogOut size={24} />
-                </Button>
-              </div>
-              }
+              {userSession && (
+                <div className=" ml-auto">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="border-none"
+                    onClick={() => SessionLogout()}
+                  >
+                    <LogOut size={24} />
+                  </Button>
+                </div>
+              )}
             </div>
-
-
-
           </SheetContent>
         </Sheet>
       </div>
@@ -370,7 +419,7 @@ export function Navbar({ userSession,profile }: { userSession?: boolean ,profile
   );
 }
 
-interface IconProps extends React.SVGProps<SVGSVGElement> { }
+interface IconProps extends React.SVGProps<SVGSVGElement> {}
 
 function MenuIcon(props: IconProps) {
   return (

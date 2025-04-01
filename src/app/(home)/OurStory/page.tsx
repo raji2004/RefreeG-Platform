@@ -6,7 +6,7 @@ export default function Impact() {
     return (
         <div className="w-full">
             <Hero />
-            <Stories />      
+            <Stories />   
         </div>
     )
 }
