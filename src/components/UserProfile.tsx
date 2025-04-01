@@ -1,11 +1,10 @@
 // components/UserProfile.tsx
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { User } from "@/lib/type";
 import ProfileNav from "./ProfileNav";
-import { getCausesByUserId } from "@/lib/firebase/actions";
 import { VerifiedBadge } from "./ui/VerifiedBadge";
 
 interface UserProfileProps {
@@ -27,26 +26,9 @@ const UserProfile: React.FC<UserProfileProps> = ({
     isVerified,
     followersCount = 0,
     followingCount = 0,
-    causesCount: initialCausesCount = 0,
+    causesCount = 0,
     userType = "individual",
   } = user;
-
-  // State for causes count with initial value from props
-  const [causesCount, setCausesCount] = useState(initialCausesCount);
-
-  // Fetch causes count on component mount (for real-time updates)
-  useEffect(() => {
-    const fetchCausesCount = async () => {
-      try {
-        const causes = await getCausesByUserId(user.id);
-        setCausesCount(causes.length);
-      } catch (error) {
-        console.error("Error fetching causes count:", error);
-      }
-    };
-
-    fetchCausesCount();
-  }, [user.id]);
 
   // Determine the correct label for causes
   const causesLabel = causesCount === 1 ? "cause" : "causes";

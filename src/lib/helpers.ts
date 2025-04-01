@@ -50,31 +50,23 @@ export const SessionLogout = async () => {
   return true;
 };
 
-// Helper function to fetch user data with error handling
-export async function fetchUserData(userId: string) {
+export async function getProfileData(userId: string) {
   try {
-    const profileUser = await getUserById(userId);
+    const [profileUser, userCauses] = await Promise.all([
+      getUserById(userId),
+      getCausesByUserId(userId),
+    ]);
+
     if (!profileUser) {
       return null;
     }
 
-    const userCauses = await getCausesByUserId(userId);
     return {
       ...profileUser,
       causesCount: userCauses.length,
     };
   } catch (error) {
-    console.error("Error fetching user data:", error);
-    return null;
-  }
-}
-
-// Helper function to get current user ID with error handling
-export async function fetchCurrentUserId() {
-  try {
-    return await getSessionId();
-  } catch (error) {
-    console.error("Error getting session ID:", error);
+    console.error("Error fetching profile data:", error);
     return null;
   }
 }
