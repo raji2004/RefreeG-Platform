@@ -5,9 +5,15 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Navbar from "../cause/create/_components/navbar";
 import { getSessionId } from "@/lib/helpers";
-import { FaExclamationTriangle, FaHeartbeat, FaMapMarkerAlt, FaGlobe } from "react-icons/fa";
+import {
+  FaExclamationTriangle,
+  FaHeartbeat,
+  FaMapMarkerAlt,
+  FaGlobe,
+} from "react-icons/fa";
 import { addCause } from "@/lib/firebase/actions";
 import { getDaysLeft } from "@/lib/utils";
+import { generateKeywords } from "@/lib/utils";
 
 interface Section {
   id: number;
@@ -24,7 +30,9 @@ interface UploadedImage {
 const PreviewPage = () => {
   const router = useRouter();
   const [sections, setSections] = useState<Section[]>([]);
-  const [uploadedImage, setUploadedImage] = useState<UploadedImage | null>(null);
+  const [uploadedImage, setUploadedImage] = useState<UploadedImage | null>(
+    null
+  );
   const [formData, setFormData] = useState<any>(null);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -86,18 +94,30 @@ const PreviewPage = () => {
       if (currentUser === undefined) router.push("/login");
       console.log("Current User: ", currentUser);
 
+      // Generate keywords from the cause title
+      const keywords = generateKeywords(formData.causeTitle);
+
       // Combine the formData, sections, and uploadedImage into one object.
-      const finalData = { ...formData, sections, img: uploadedImage?.src, userId: currentUser, raisedAmount: 0, goalAmount: parseInt(formData.goalAmount) };
+      const finalData = {
+        ...formData,
+        sections,
+        img: uploadedImage?.src,
+        userId: currentUser,
+        raisedAmount: 0,
+        goalAmount: parseInt(formData.goalAmount),
+        keywords, // Add the generated keywords
+      };
+
       const causeId = await addCause(finalData);
       console.log("Document saved with ID:", causeId);
       router.push(`/See_Preview/Success?id=${causeId}`);
     } catch (error: any) {
       console.error("Error adding document:", error.message);
-      setErrorMessage("There was an error submitting the form. Please try again.");
+      setErrorMessage(
+        "There was an error submitting the form. Please try again."
+      );
     }
   };
-
- 
 
   return (
     <div>
@@ -134,7 +154,8 @@ const PreviewPage = () => {
                 </span>
               </div>
               <p className="flex items-center mt-4 mb-4 font-semibold text-sm justify-start md:justify-start">
-                <FaGlobe className="mr-1" /> United Nations International Childrens Emergency Fund
+                <FaGlobe className="mr-1" /> United Nations International
+                Childrens Emergency Fund
               </p>
               {sections.length > 0 &&
                 sections.map((section) => (
