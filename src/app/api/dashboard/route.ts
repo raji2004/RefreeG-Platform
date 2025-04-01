@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { db } from "../../../lib/firebase/config"; // Adjust the import as needed
+import { db } from "../../../lib/firebase/config";
 import {
   collection,
   query,
@@ -9,12 +9,16 @@ import {
   limit,
 } from "firebase/firestore";
 
+interface Donation {
+  id: string;
+  [key: string]: any;
+}
+
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const userId = searchParams.get("userId");
-  const page = Number(searchParams.get("page")) || 1; // Pagination
-  const pageSize = 10; // Number of records per page
-  const offset = (page - 1) * pageSize;
+  const page = Number(searchParams.get("page")) || 1;
+  const pageSize = 10;
 
   if (!userId) {
     return NextResponse.json(
@@ -33,16 +37,28 @@ export async function GET(req: Request) {
     );
 
     const donationDocs = await getDocs(donationsQuery);
-    const donations = donationDocs.docs.map((doc) => ({
+    const donations: Donation[] = donationDocs.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
     }));
 
-    return NextResponse.json({ donations, page });
-  } catch (error) {
+    return NextResponse.json({
+      success: true,
+      data: {
+        donations,
+        page,
+        pageSize,
+        total: donations.length, // Consider adding total count if needed
+      },
+    });
+  } catch (error: any) {
     console.error("Error fetching donation history:", error);
     return NextResponse.json(
-      { message: "Error fetching donation history" },
+      {
+        success: false,
+        message: "Error fetching donation history",
+        error: error.message,
+      },
       { status: 500 }
     );
   }

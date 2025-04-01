@@ -18,7 +18,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { updateUserById, getUserById } from "@/lib/firebase/actions";
+import {
+  updateUserById,
+  getUserById,
+  deleteUserFields,
+} from "@/lib/firebase/actions";
 import { CreditCardForm } from "./CreditCardForm";
 import { CryptoWalletForm } from "./CryptoWalletForm";
 import AccountNumberForm from "./AccountNumberForm";
@@ -150,25 +154,25 @@ export default function PaymentMethods() {
 
       // Format the data for Firebase (matching the User type's accDetails structure)
       // Update the user document in Firebase{
-        const paystackdata = {
-          bank_code: data.bankName,
-          account_number: data.accountNumber,
-          percentage_charge: 0,
-          business_name: data.accountName
-        }
-        const subaccount = await Paystack.createSubaccount(paystackdata)
-        const accountUpdate = {
-          accDetails: [
-            {
-              account_number: data.accountNumber,
-              account_name: data.accountName,
-              bank_name: data.bankName,
-              subaccount_code: subaccount.subaccount_code, // Using a combination as a placeholder
-              // You can add more fields here if needed
-            },
-          ],
-        };
-  
+      const paystackdata = {
+        bank_code: data.bankName,
+        account_number: data.accountNumber,
+        percentage_charge: 0,
+        business_name: data.accountName,
+      };
+      const subaccount = await Paystack.createSubaccount(paystackdata);
+      const accountUpdate = {
+        accDetails: [
+          {
+            account_number: data.accountNumber,
+            account_name: data.accountName,
+            bank_name: data.bankName,
+            subaccount_code: subaccount.subaccount_code, // Using a combination as a placeholder
+            // You can add more fields here if needed
+          },
+        ],
+      };
+
       await updateUserById(sessionId, accountUpdate);
       console.log("Account details saved to Firebase");
 
@@ -184,11 +188,12 @@ export default function PaymentMethods() {
     setShowAccountDetails((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
-  const handleRemoveMethod = (id: number) => {
-    setPaymentMethods((prev) => prev.filter((method) => method.id !== id));
+  const handleRemoveMethod = async (id: number) => {
+    try {
+      await deleteUserFields(sessionId!, [id]);
+      setPaymentMethods((prev) => prev.filter((method) => method.id !== id));
+    } catch (error) {}
   };
-
-
 
   const renderCardTitle = () => {
     // TODO
@@ -196,9 +201,15 @@ export default function PaymentMethods() {
 
   const renderPaymentMethods = (activeTab: string) => {
     // Check if there's already a payment method of the active type
-    const hasAccountNumber = paymentMethods.some((method) => "accountNumber" in method);
-    const hasCreditCard = paymentMethods.some((method) => "cardNumber" in method);
-    const hasCryptoWallet = paymentMethods.some((method) => "address" in method);
+    const hasAccountNumber = paymentMethods.some(
+      (method) => "accountNumber" in method
+    );
+    const hasCreditCard = paymentMethods.some(
+      (method) => "cardNumber" in method
+    );
+    const hasCryptoWallet = paymentMethods.some(
+      (method) => "address" in method
+    );
 
     // Filter methods based on the active tab
     let filteredMethods: PaymentMethod[] = [];
@@ -206,11 +217,15 @@ export default function PaymentMethods() {
     if (activeTab === "all") {
       filteredMethods = paymentMethods;
     } else if (activeTab === "creditCard") {
-      filteredMethods = paymentMethods.filter((method) => "cardNumber" in method);
+      filteredMethods = paymentMethods.filter(
+        (method) => "cardNumber" in method
+      );
     } else if (activeTab === "cryptoWallet") {
       filteredMethods = paymentMethods.filter((method) => "address" in method);
     } else if (activeTab === "accountNumber") {
-      filteredMethods = paymentMethods.filter((method) => "accountNumber" in method);
+      filteredMethods = paymentMethods.filter(
+        (method) => "accountNumber" in method
+      );
     }
 
     // If there are methods of the active type, show them
@@ -402,7 +417,6 @@ export default function PaymentMethods() {
       </div>
     );
   };
-
 
   return (
     <Card className="w-full">
