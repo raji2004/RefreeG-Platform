@@ -1,62 +1,24 @@
+// components/UserProfile.tsx
 "use client";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { User } from "@/lib/type";
 import ProfileNav from "./ProfileNav";
-import { useRouter } from "next/navigation";
+import { getCausesByUserId } from "@/lib/firebase/actions";
 import { VerifiedBadge } from "./ui/VerifiedBadge";
-import { fetchUserData, fetchCurrentUserId } from "@/lib/helpers";
 
 interface UserProfileProps {
-  userId: string;
+  user: User;
+  isOwnProfile: boolean;
+  currentUserId?: string;
 }
 
-const UserProfile: React.FC<UserProfileProps> = ({ userId }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [isOwnProfile, setIsOwnProfile] = useState(false);
-  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const router = useRouter();
-
-  useEffect(() => {
-    const loadProfileData = async () => {
-      setIsLoading(true);
-
-      // Get current user ID
-      const loggedInUserId = await fetchCurrentUserId();
-      setCurrentUserId(loggedInUserId);
-
-      // Get profile data
-      const profileData = await fetchUserData(userId);
-
-      // If profile doesn't exist, redirect to home
-      if (!profileData) {
-        router.push("/");
-        return;
-      }
-
-      // Check if this is the user's own profile
-      const isOwn = loggedInUserId === userId;
-      setIsOwnProfile(isOwn);
-
-      // Set user data
-      setUser(profileData);
-      setIsLoading(false);
-    };
-
-    loadProfileData();
-  }, [userId, router]);
-
-  // Show loading state
-  if (isLoading || !user) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        Loading...
-      </div>
-    );
-  }
-
+const UserProfile: React.FC<UserProfileProps> = ({
+  user,
+  isOwnProfile,
+  currentUserId,
+}) => {
   const {
     firstName,
     lastName,
@@ -65,9 +27,26 @@ const UserProfile: React.FC<UserProfileProps> = ({ userId }) => {
     isVerified,
     followersCount = 0,
     followingCount = 0,
-    causesCount = 0,
+    causesCount: initialCausesCount = 0,
     userType = "individual",
   } = user;
+
+  // State for causes count with initial value from props
+  const [causesCount, setCausesCount] = useState(initialCausesCount);
+
+  // Fetch causes count on component mount (for real-time updates)
+  useEffect(() => {
+    const fetchCausesCount = async () => {
+      try {
+        const causes = await getCausesByUserId(user.id);
+        setCausesCount(causes.length);
+      } catch (error) {
+        console.error("Error fetching causes count:", error);
+      }
+    };
+
+    fetchCausesCount();
+  }, [user.id]);
 
   // Determine the correct label for causes
   const causesLabel = causesCount === 1 ? "cause" : "causes";
@@ -192,9 +171,9 @@ const UserProfile: React.FC<UserProfileProps> = ({ userId }) => {
       <ProfileNav
         isOwnProfile={isOwnProfile}
         userId={user.id}
-        currentUserId={currentUserId || undefined}
-        firstName={firstName}
-        lastName={lastName}
+        currentUserId={currentUserId}
+        firstName={user.firstName}
+        lastName={user.lastName}
       />
     </div>
   );
