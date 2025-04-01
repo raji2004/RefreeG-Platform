@@ -5,11 +5,15 @@ import { GoAlert } from "react-icons/go";
 import Image from "next/image";
 import { Navbar } from "@/components/ui/navbar";
 import CrowdfundingFeatures from "@/components/crowdfundingFeatures";
-import { getCauseById, getCauseTransactions, getUserById } from "@/lib/firebase/actions";
+import {
+  getCauseById,
+  getCauseTransactions,
+  getUserById,
+} from "@/lib/firebase/actions";
 import { getBaseURL, getDaysLeft } from "@/lib/utils";
 import { Footer } from "@/components/ui/footer";
 import { CauseCategories } from "@/lib/utils";
-import {  getSessionId } from "@/lib/helpers";
+import { getSessionId } from "@/lib/helpers";
 import DonationProgressSection from "@/components/DonationProgressSection";
 import DonationList from "@/components/DonationList";
 import EmojiReaction from "@/components/EmojiReaction";
@@ -44,7 +48,7 @@ export default async function DonationDetail({
   params: { cause_id: string };
 }) {
   const cause = await getCauseById(params.cause_id);
- 
+
   if (!cause) {
     return <div>Cause not found</div>;
   }
@@ -69,12 +73,11 @@ export default async function DonationDetail({
     "The recent floods in Maiduguri have displaced thousands of families, leaving them without food, shelter, and basic necessities. We are raising $50,000 to provide emergency relief, including temporary housing, medical supplies, and food. Together, we can help rebuild their lives.",
     "The recent floods in Maiduguri have displaced thousands of families, leaving them without food, shelter, and basic necessities. We are raising $50,000 to provide emergency relief, including temporary housing, medical supplies, and food. Together, we can help rebuild their lives.",
   ];
-  const baseUrl = await getBaseURL()
+  const baseUrl = await getBaseURL();
 
   const causeUrl = `${baseUrl}/cause/${params.cause_id}`;
   return (
     <>
-    
       <div className="p-4 md:flex md:justify-between mt-10">
         {/* Left side - Main content */}
         <div className="md:w-2/4">
@@ -122,6 +125,8 @@ export default async function DonationDetail({
           {/* Organization supporting the cause */}
           <UnicefBanner
             name={causeUser?.firstName + " " + causeUser?.lastName}
+            userId={causeUser?.id}
+            isVerified={causeUser?.isVerified} // Pass the verification status
           />
 
           {/* Cause description paragraphs */}

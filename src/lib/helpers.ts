@@ -2,6 +2,7 @@
 import { revalidatePath } from "next/cache";
 import { Country, SortedCountry } from "./type";
 import { cookies } from "next/headers";
+import { getUserById, getCausesByUserId } from "./firebase/actions";
 
 function sortCountries(countries: Country[]) {
   return countries
@@ -51,3 +52,23 @@ export const SessionLogout = async () => {
   return true;
 };
 
+export async function getProfileData(userId: string) {
+  try {
+    const [profileUser, userCauses] = await Promise.all([
+      getUserById(userId),
+      getCausesByUserId(userId),
+    ]);
+
+    if (!profileUser) {
+      return null;
+    }
+
+    return {
+      ...profileUser,
+      causesCount: userCauses.length,
+    };
+  } catch (error) {
+    console.error("Error fetching profile data:", error);
+    return null;
+  }
+}
