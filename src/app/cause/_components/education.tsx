@@ -18,7 +18,7 @@ export default function Education({ causes = [] }: { causes?: any[] }) {
           View all <ChevronRight size={20} />
         </a>
       </div>
-      <DonationCarousel causes={causes} />
+      <DonationCarousel category="Education" />
     </div>
   );
 }

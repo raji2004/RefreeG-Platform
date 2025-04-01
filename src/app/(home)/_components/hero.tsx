@@ -36,7 +36,7 @@ const Hero = () => {
         </p>
 
         <Link
-        href={""}
+        href={"/cause"}
         className="flex gap-[6px] bg-light py-[10px] px-[15px] rounded-[8px] text-[#003366] text-[15px] items-center justify-center mx-auto relative z-30 
             md:mt-16 mt-8 font-semibold cursor-pointer bg-[#EFF4FB] hover:bg-[#336BAD] hover:text-light hover:text-white transition"
         >
