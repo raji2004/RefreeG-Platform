@@ -10,7 +10,7 @@ import { H2, P, Ol } from "@/components/typograpy";
 import Hero from "./_components/hero";
 import { getCauses } from "@/lib/firebase/actions";
 import { Console } from "console";
-
+import YouTubeEmbed from "@/components/YoutubeEmbed";
 
 export default async function Home() {
   const causes = await getCauses();
@@ -39,27 +39,29 @@ export default async function Home() {
         </nav>
       </div> */}
 
-      {/* <div className="pt-2 px-10 pb-8 mb-8">
+      <div className="pt-2 px-10 pb-8 mb-8">
         <H2 className="mt-8 font-semibold text-2xl">How it works</H2>
         <P className="text-xl mb-12">
           How donation on{" "}
-          <Link href="https://www.refreeg.com" className="text-gray-500 text-xl font-semibold underline">
+          <Link
+            href="https://www.refreeg.com"
+            className="text-gray-500 text-xl font-semibold underline"
+          >
             Refreeg
           </Link>{" "}
-
           works!
         </P>
 
-        <Image
-          src="/images/video.svg"
-          alt="How it works video"
-          height={400}
-          width={800}
-          className=" mx-auto"
-        />
-      </div> */}
+        <div className="relative aspect-video w-full max-w-4xl mx-auto">
+          <YouTubeEmbed
+            videoId="lzAJXX99ew0"
+            title="How Refreeg donations work"
+            className="my-8"
+          />
+        </div>
+      </div>
 
-      <HappeningNearYou causes={causes}  />
+      <HappeningNearYou causes={causes} />
       <div className="w-full justify-center pt-20 pb-12 lg:pb-20 px-10 mb-20 space-y-5 text-white bg-customBlueGray">
         <H2>How do we ensure transparency?</H2>
         <Ol className="mb-16">
