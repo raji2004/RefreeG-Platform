@@ -39,7 +39,7 @@ export default async function Home() {
         </nav>
       </div> */}
 
-      <div className="pt-2 px-10 pb-8 mb-8">
+      {/* <div className="pt-2 px-10 pb-8 mb-8">
         <H2 className="mt-8 font-semibold text-2xl">How it works</H2>
         <P className="text-xl mb-12">
           How donation on{" "}
@@ -57,7 +57,7 @@ export default async function Home() {
           width={800}
           className=" mx-auto"
         />
-      </div>
+      </div> */}
 
       <HappeningNearYou causes={causes}  />
       <div className="w-full justify-center pt-20 pb-12 lg:pb-20 px-10 mb-20 space-y-5 text-white bg-customBlueGray">
