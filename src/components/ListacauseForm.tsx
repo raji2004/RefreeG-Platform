@@ -190,19 +190,19 @@ export default function ListacauseForm() {
               <TabsTrigger
                 value="step-1"
                 disabled={step < 1}
-                completed={step > 1}
-              ></TabsTrigger>
+                data-completed={step > 1}
+              />
               <TabsTrigger
                 value="step-2"
                 disabled={step < 2}
-                completed={step > 2}
-              ></TabsTrigger>
+                data-completed={step > 2}
+              />
               <TabsTrigger
                 value="step-3"
                 disabled={step < 3}
-                completed={step > 3}
-              ></TabsTrigger>
-              <TabsTrigger value="step-4" disabled={step < 4}></TabsTrigger>
+                data-completed={step > 3}
+              />
+              <TabsTrigger value="step-4" disabled={step < 4} />
             </TabsList>
 
             <TabsContent value="step-1">
