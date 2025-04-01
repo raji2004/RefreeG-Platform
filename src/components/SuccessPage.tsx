@@ -4,13 +4,40 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { Cause } from "@/lib/type";
 import Link from "next/link";
+import { getSessionId } from "@/lib/helpers";
+import { checkUserHasAccount } from "@/lib/firebase/actions";
 
+export default function SuccessPage({
+  causeData,
+  baseURL,
+}: {
+  causeData: Cause;
+  baseURL: string;
+}) {
+  const causeUrl = `${baseURL}/cause/${causeData.id}`;
+  const [showAccountModal, setShowAccountModal] = useState(false);
+  const [isCheckingAccount, setIsCheckingAccount] = useState(true);
+  const [isOpen, setIsOpen] = useState(false);
 
+  useEffect(() => {
+    const verifyAccount = async () => {
+      try {
+        const userId = await getSessionId();
+        if (!userId) return;
 
+        const hasAccount = await checkUserHasAccount(userId);
+        if (!hasAccount) {
+          setShowAccountModal(true);
+        }
+      } catch (error) {
+        console.error("Error verifying account:", error);
+      } finally {
+        setIsCheckingAccount(false);
+      }
+    };
 
-export default function SuccessPage({causeData,baseURL}:{causeData:Cause,baseURL:string}) {
-const causeUrl= `${baseURL}/cause/${causeData.id}`;
- console.log(causeUrl)
+    verifyAccount();
+  }, []);
 
   // Share handler functions
   const handleCopyLink = () => {
@@ -18,7 +45,7 @@ const causeUrl= `${baseURL}/cause/${causeData.id}`;
       navigator.clipboard
         .writeText(causeUrl)
         .then(() => alert("Link copied to clipboard!"))
-        .catch(() => alert("Failed to copy link "));
+        .catch(() => alert("Failed to copy link"));
     }
   };
 
@@ -99,11 +126,42 @@ const causeUrl= `${baseURL}/cause/${causeData.id}`;
     return `${dayWord} day${diffDays > 1 ? "s" : ""} left`;
   }
 
-  // Track whether the bottom panel is open or collapsed
-  const [isOpen, setIsOpen] = useState(false);
-
   return (
     <div className="min-h-screen bg-gray-50 pb-24">
+      {/* Account Setup Modal */}
+      {showAccountModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
+            <div className="border-b p-4 flex justify-between items-center">
+              <h2 className="text-xl font-semibold">Account Setup Required</h2>
+            </div>
+            <div className="text-center p-4">
+              <Image
+                src="/rafiki.svg"
+                width={80}
+                height={80}
+                alt="Warning"
+                className="mx-auto mb-4"
+              />
+              <h3 className="text-lg font-semibold mb-2">
+                Complete Your Account Setup
+              </h3>
+              <p className="text-gray-600 mb-6">
+                To receive donations for your cause, you need to connect your
+                bank account. This ensures funds can be transferred to you
+                securely.
+              </p>
+              <Link
+                href="/dashboard/Account"
+                className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg inline-block"
+              >
+                Set Up Account Now
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Top Section: Congratulatory Message */}
       <div className="px-4 py-8 flex flex-col items-center justify-center text-center space-y-4">
         <h1 className="text-2xl font-semibold">
@@ -124,12 +182,11 @@ const causeUrl= `${baseURL}/cause/${causeData.id}`;
           />
         </div>
       </div>
-      
 
       {/* Bottom Panel with "Pull-up" Effect */}
       <div
         className={`
-          fixed bottom-2 left-0 w-full z-50 bg-[#214570] text-white px-4 pt-4 pb-6 rounded-t-3xl
+          fixed bottom-2 left-0 w-full z-40 bg-[#214570] text-white px-4 pt-4 pb-6 rounded-t-3xl
           transition-transform duration-300
           ${isOpen ? "translate-y-3" : "translate-y-[calc(100%-80px)]"}
         `}
@@ -183,7 +240,9 @@ const causeUrl= `${baseURL}/cause/${causeData.id}`;
                 <p className="text-xs">
                   Deadline:{" "}
                   {causeData?.deadline
-                    ? `${causeData.deadline} | ${getDaysLeft(causeData.deadline)}`
+                    ? `${causeData.deadline} | ${getDaysLeft(
+                        causeData.deadline
+                      )}`
                     : "N/A"}
                 </p>
               </div>
@@ -197,7 +256,7 @@ const causeUrl= `${baseURL}/cause/${causeData.id}`;
               </button>
             </div>
             <Link
-            href={`/cause/${causeData.id}`}
+              href={`/cause/${causeData.id}`}
               className="mt-4 flex items-center justify-center space-x-2 bg-white text-black py-2 px-4 rounded-md w-full"
               aria-label="View cause page"
             >
