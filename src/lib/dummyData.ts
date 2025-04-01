@@ -211,6 +211,41 @@ export const stories = [
 
 ];
 
+export const howToDonate = [
+  {
+    imageSrc: "/images/radio.svg",
+    title: "Find a Cause You Believe In",
+    points: [
+      "Browse through various causes on our platform—whether it’s education, healthcare, disaster relief, or community development. Use filters to refine your search based on category, location, or urgency.",
+    ],
+    linkHref: "#",
+  },
+  {
+    imageSrc: "/images/radio.svg",
+    title: "Make Your Donation",
+    points: [
+      "Once you’ve found a cause, click on it to read more details. Hit the 'Donate Now' button and choose a payment method. We support multiple payment options to ensure a seamless experience.",
+    ],
+    linkHref: "#",
+  },
+  {
+    imageSrc: "/images/radio.svg",
+    title: "Stay Updated",
+    points: [
+      "Browse through various causes on our platform—whether it’s education, healthcare, disaster relief, or community development. Use filters to refine your search based on category, location, or urgency.",
+    ],
+    linkHref: "#",
+  },
+  {
+    imageSrc: "/images/radio.svg",
+    title: "Spread the Word",
+    points: [
+      "Support doesn’t stop at donating! Share the cause with friends and family to amplify the impact. Every share brings more potential donors to the cause.",
+    ],
+    linkHref: "#",
+  },
+];
+
 export const faqs = [
   {
     question: "What is RefreeG?",

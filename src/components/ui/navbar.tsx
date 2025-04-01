@@ -56,6 +56,7 @@ export function Navbar({
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const [aboutUsOpen, setAboutUsOpen] = useState(false);
+  const [howItWorksOpen, setHowItWorksOpen] = useState(false);
 
   const handleSearch = () => {
     alert(`Searching for: ${searchQuery}`);
@@ -169,36 +170,84 @@ export function Navbar({
           </MenuLink>
         </div>
 
-        <MenuLink href="#" className="hover:bg-blue-100">
-          <DropdownMenu>
-            <DropdownMenuTrigger className="flex outline-none items-center">
-              How it works
-              <Image
-                src={Dropdown}
-                height={12}
-                width={12}
-                alt="dropdown"
-                className="ml-2"
-              />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                {" "}
-                <Link href={"/dashboard/UserProfile"}> Profile</Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                {" "}
-                <Link href={"/dashvoard/Account"}> Settings </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => SessionLogout()}>
-                {" "}
-                Logout
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </MenuLink>
+
+        <div
+          className="relative"
+          onMouseEnter={() => setHowItWorksOpen(true)}
+          onMouseLeave={() => setHowItWorksOpen(false)}
+        >
+          <MenuLink href="#" className="hover:bg-blue-100">
+            <DropdownMenu open={howItWorksOpen} onOpenChange={setHowItWorksOpen}>
+              <DropdownMenuTrigger asChild>
+                <div
+                  className="flex items-center cursor-pointer"
+                  onClick={(e) => {
+                    e.stopPropagation(); // Prevents closing when clicking inside
+                    setHowItWorksOpen((prev) => !prev);
+                  }}
+                >
+                  How it works
+                  <Image
+                    src={Dropdown}
+                    height={12}
+                    width={12}
+                    alt="dropdown"
+                    className="ml-2"
+                  />
+                </div>
+              </DropdownMenuTrigger>
+
+              <DropdownMenuContent
+                className="absolute mt-2 py-4 bg-white shadow-lg rounded-md hidden lg:block"
+                align="start"
+              >
+                <div className="">
+                  <div className="flex">
+                    <DropdownMenuItem asChild>
+                      <Link
+                        href="/HowToDonate"
+                        className="whitespace-nowrap hover:underline hover:bg-[#D6EBFF] px-4 py-2 block"
+                      >
+                        How to donate
+                      </Link>
+                    </DropdownMenuItem>
+
+                    <DropdownMenuItem asChild>
+                      <Link
+                        href="/OurStory"
+                        className="whitespace-nowrap hover:underline hover:bg-[#D6EBFF] px-4 py-2 block"
+                      >
+                        Our Story (The &quot;Why&quot; Behind RefreeG)
+                      </Link>
+                    </DropdownMenuItem>
+                  </div>
+                  <div className="flex">
+                    <DropdownMenuItem asChild>
+                      <Link
+                        href="/OurImpact"
+                        className="whitespace-nowrap hover:underline hover:bg-[#D6EBFF] px-4 py-2 block"
+                      >
+                        Cause verification and trust
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="whitespace-nowrap hover:underline">
+                      Who Are We Made By?
+                    </DropdownMenuItem>
+                  </div>
+
+                  <DropdownMenuItem asChild>
+                    <Link
+                      href="/WhatWeDo"
+                      className="whitespace-nowrap hover:underline hover:bg-[#D6EBFF] px-4 py-2 block"
+                    >
+                      What We Do
+                    </Link>
+                  </DropdownMenuItem>
+                </div>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </MenuLink>
+        </div>
 
         <MenuLink
           href={userSession ? "/cause/create" : "/login"}
@@ -266,27 +315,61 @@ export function Navbar({
 
                 {aboutUsOpen && (
                   <div className="pl-4 space-y-1">
-                    <MenuLink href="#" className="text-xs">
+                    <MenuLink href="/OurMission" className="text-xs">
                       Our Mission
                     </MenuLink>
-                    <MenuLink href="#" className="text-xs">
+                    <MenuLink href="/OurStory" className="text-xs">
                       Our Story (The &quot;Why&quot; Behind RefreeG)
                     </MenuLink>
 
-                    <MenuLink href="#" className="text-xs">
+                    <MenuLink href="/OutImpact" className="text-xs">
                       Our Impact
                     </MenuLink>
                     <MenuLink href="#" className="text-xs">
                       Who Are We Made By?
                     </MenuLink>
-                    <MenuLink href="#" className="text-xs">
+                    <MenuLink href="/WhatWeDo" className="text-xs">
                       What We Do
                     </MenuLink>
                   </div>
                 )}
               </div>
 
-              <MenuLink href="#">How it works</MenuLink>
+              <div className="lg:hidden">
+                <button
+                  onClick={() => setHowItWorksOpen((prev) => !prev)}
+                  className="w-full text-left flex justify-between items-center py-2 px-3 hover:bg-gray-100"
+                >
+                  How it Works
+                  <ChevronDown
+                    className={`h-4 w-4 transition-transform ${
+                      howItWorksOpen ? "rotate-180" : ""
+                    }`}
+                  />
+                </button>
+
+                {howItWorksOpen && (
+                  <div className="pl-4 space-y-1">
+                    <MenuLink href="/HowToDonate" className="text-xs">
+                      How to Donate
+                    </MenuLink>
+                    <MenuLink href="/OurStory" className="text-xs">
+                      Cause Verification and Trust
+                    </MenuLink>
+
+                    <MenuLink href="/OutImpact" className="text-xs">
+                      Our Impact
+                    </MenuLink>
+                    <MenuLink href="#" className="text-xs">
+                      Who Are We Made By?
+                    </MenuLink>
+                    <MenuLink href="/WhatWeDo" className="text-xs">
+                      What We Do
+                    </MenuLink>
+                  </div>
+                )}
+              </div>
+
               <MenuLink
                 href={userSession ? "/cause/create" : "/login"}
                 onClick={(e) => {
