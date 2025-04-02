@@ -4,11 +4,18 @@ import { useState, useEffect } from "react";
 import { BrowserProvider, ethers } from "ethers";
 import { MetaMaskInpageProvider } from "@metamask/providers";
 import { db } from "@/lib/firebase/config";
-import { doc, getDoc } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  setDoc,
+  collection,
+  serverTimestamp,
+} from "firebase/firestore";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { toast } from "react-toastify";
 import { updateCauseRaisedAmount } from "@/lib/firebase/actions/progress";
+import { getSessionId } from "@/lib/helpers";
 
 const DEFAULT_MATIC_TO_NAIRA_RATE = 302.51;
 
@@ -85,6 +92,48 @@ export default function MaticDonationButton({
 
     fetchRecipientAddress();
   }, [causeId]);
+
+  const logTransaction = async (
+    causeId: string,
+    txHash: string,
+    amountInMatic: number,
+    amountInNaira: number,
+    walletAddress: string,
+    recipientAddress: string
+  ) => {
+    try {
+      const userId = await getSessionId();
+      if (!userId) {
+        console.error("User not logged in - transaction not logged");
+        return;
+      }
+
+      const transactionsRef = collection(db, "transactions");
+      const newTransactionRef = doc(transactionsRef);
+
+      await setDoc(newTransactionRef, {
+        causeId,
+        txHash,
+        amountInMatic,
+        amountInNaira,
+        walletAddress,
+        recipientAddress,
+        userId,
+        paymentMethod: "MATIC",
+        status: "completed",
+        timestamp: serverTimestamp(),
+        network: "Polygon Amoy Testnet",
+        currency: "MATIC",
+      });
+
+      console.log(
+        "Transaction logged with recipient address:",
+        recipientAddress
+      );
+    } catch (error) {
+      console.error("Error logging transaction:", error);
+    }
+  };
 
   const switchToAmoyNetwork = async () => {
     try {
@@ -180,7 +229,19 @@ export default function MaticDonationButton({
       toast.success("Transaction confirmed!");
 
       const nairaAmount = parseFloat(nairaEquivalent);
-      await updateCauseRaisedAmount(causeId, nairaAmount);
+      const maticAmount = parseFloat(donationAmount);
+
+      await Promise.all([
+        updateCauseRaisedAmount(causeId, nairaAmount),
+        logTransaction(
+          causeId,
+          tx.hash,
+          maticAmount,
+          nairaAmount,
+          walletAddress,
+          recipientAddress
+        ),
+      ]);
 
       if (onDonationSuccess) {
         onDonationSuccess(nairaAmount);
