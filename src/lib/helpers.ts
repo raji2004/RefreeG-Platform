@@ -30,10 +30,11 @@ export const fetchCountriesData = async (): Promise<SortedCountry[]> => {
 };
 
 export const checkUserSession = () => {
-  const cookieStore = cookies();
-  const userSession = cookieStore.get("userSession")?.value;
-  return userSession ? true : false;
-};
+    const cookieStore = cookies();
+    const userSession = cookieStore.get('userSession')?.value;
+    return userSession ? true : false;
+}
+
 export const getSessionId = async () => {
   const cookieStore = cookies();
 
@@ -43,6 +44,7 @@ export const getSessionId = async () => {
   return decodeURIComponent(userId).replace(/"/g, "").trim();
 };
 
+// lib/helpers.ts
 export const SessionLogout = async () => {
   const cookieStore = cookies();
   await cookieStore.delete("userSession");
