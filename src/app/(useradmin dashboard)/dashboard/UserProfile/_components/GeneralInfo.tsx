@@ -104,7 +104,7 @@ export default function GeneralInfo({ user }: { user: User }) {
                 src={
                   previewImage
                     ? URL.createObjectURL(previewImage)
-                    : currentProfileImage || "/UserProfile/editPhoto.svg"
+                    : currentProfileImage || "/UserProfile/defaultProfile.svg"
                 }
                 className="w-full h-full rounded-full object-cover"
                 alt="Profile Picture"
@@ -117,7 +117,7 @@ export default function GeneralInfo({ user }: { user: User }) {
             </Label>
           ) : (
             <Image
-              src={currentProfileImage || "/UserProfile/editPhoto.svg"}
+              src={currentProfileImage || "/UserProfile/defaultProfile.svg"}
               className="w-full h-full rounded-full object-cover"
               alt="Profile Picture"
               width={160}

@@ -41,6 +41,9 @@ export interface User {
   causesCount?: number;
   userType?: "individual" | "organization";
   bio: string;
+  cryptoWallets?: {
+    [network: string]: string; // Just store the address directly
+  };
 }
 
 export interface Country {
@@ -181,11 +184,13 @@ export type Cause = {
   state: string;
   currency: string;
   raisedAmount: number;
+  donationCount:number;
   profileImage: string;
   isBookmarked: boolean;
   onRemoveBookmark?: (id: string) => void;
   daysLeft: string; // Add this
   progressPercentage: number; // Add this
+  keywords: string[];
 };
 
 export interface TransactionData
