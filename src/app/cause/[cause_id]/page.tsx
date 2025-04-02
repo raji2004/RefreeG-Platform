@@ -59,11 +59,12 @@ export default async function DonationDetail({
   const causeUser = await getUserById(cause.userId);
   const goalAmount = Number(cause.goalAmount);
   const donationAmount = cause.raisedAmount;
+  const donationCount = cause.donationCount;
   const daysleft = getDaysLeft(cause.deadline);
   const progressPercentage = (donationAmount / goalAmount) * 100;
 
   const stats = [
-    `${cause.raisedAmount.toLocaleString()} Donations`,
+    `${cause.donationCount || 0} Donations`, // Use donationCount instead of raisedAmount
     `${progressPercentage.toFixed(1)}% funded`,
     daysleft,
   ];
@@ -128,6 +129,7 @@ export default async function DonationDetail({
           <DonationProgressSection
             cause={cause}
             donationAmount={donationAmount}
+            donationCount={cause.donationCount || 0}
             goalAmount={goalAmount}
             progressPercentage={progressPercentage}
             daysLeft={daysleft}

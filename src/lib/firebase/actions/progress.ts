@@ -54,3 +54,14 @@ export function calculateProgressPercentage(
   const percentage = (raisedAmount / goalAmount) * 100;
   return Math.min(percentage, 100); // Cap at 100%
 }
+
+export const updateCauseDonationStats = async (
+  causeId: string,
+  amount: number
+) => {
+  const causeRef = doc(db, "causes", causeId);
+  await updateDoc(causeRef, {
+    raisedAmount: increment(amount),
+    donationCount: increment(1),
+  });
+};

@@ -184,6 +184,7 @@ export type Cause = {
   state: string;
   currency: string;
   raisedAmount: number;
+  donationCount:number;
   profileImage: string;
   isBookmarked: boolean;
   onRemoveBookmark?: (id: string) => void;

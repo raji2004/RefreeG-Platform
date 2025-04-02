@@ -15,6 +15,7 @@ import { db } from "@/lib/firebase/config";
 interface DonationProgressSectionProps {
   cause: Cause;
   donationAmount: number;
+  donationCount: number; // Add this
   goalAmount: number;
   progressPercentage: number;
   daysLeft: string;
@@ -25,6 +26,7 @@ export default function DonationProgressSection({
   cause,
   donationAmount: initialDonationAmount,
   goalAmount,
+  donationCount: initialDonationCount, // Add this
   progressPercentage: initialProgressPercentage,
   daysLeft,
   stats,
@@ -32,6 +34,9 @@ export default function DonationProgressSection({
   const [currentDonationAmount, setCurrentDonationAmount] = useState(
     initialDonationAmount
   );
+  const [currentDonationCount, setCurrentDonationCount] =
+    useState(initialDonationCount);
+
   const [currentProgressPercentage, setCurrentProgressPercentage] = useState(
     initialProgressPercentage
   );
@@ -45,9 +50,11 @@ export default function DonationProgressSection({
       if (doc.exists()) {
         const causeData = doc.data();
         const newAmount = causeData.raisedAmount;
+        const newCount = causeData.donationCount || 0; // Make sure this field exists
         const newPercentage = (newAmount / goalAmount) * 100;
 
         setCurrentDonationAmount(newAmount);
+        setCurrentDonationCount(newCount);
         setCurrentProgressPercentage(newPercentage);
       }
     });
