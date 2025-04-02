@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useFormContext } from "react-hook-form";
 import {
   FormItem,
@@ -29,8 +29,39 @@ export const Form1 = () => {
   const [authLoading, setAuthLoading] = useState<boolean>(true);
 
   // Watch the state field to pass its current value for ZIP code validation
-  const stateValue = watch("state"); 
+  const stateValue = watch("state");
   const currency = watch("currency");
+
+  const fetchStatesForCountry = useCallback(
+    async (country: string) => {
+      setLoadingStates(true);
+      setStateError(null);
+      try {
+        const res = await fetch("/api/states", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ country }),
+        });
+        const data = await res.json();
+        if (data.states && Array.isArray(data.states)) {
+          setStateOptions(data.states);
+
+          // If the current stored state isn't in the new list, reset it to empty
+          if (stateValue && !data.states.includes(stateValue)) {
+            setValue("state", "");
+          }
+        } else {
+          setStateError("No states found for your country.");
+        }
+      } catch (error) {
+        console.error("Error fetching states:", error);
+        setStateError("Error fetching states. Please try again later.");
+      } finally {
+        setLoadingStates(false);
+      }
+    },
+    [setValue, stateValue]
+  );
 
   useEffect(() => {
     const auth = getAuth();
@@ -60,35 +91,7 @@ export const Form1 = () => {
       setAuthLoading(false);
     });
     return () => unsubscribe();
-  }, []);
-
-  const fetchStatesForCountry = async (country: string) => {
-    setLoadingStates(true);
-    setStateError(null);
-    try {
-      const res = await fetch("/api/states", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ country }),
-      });
-      const data = await res.json();
-      if (data.states && Array.isArray(data.states)) {
-        setStateOptions(data.states);
-
-        // If the current stored state isn't in the new list, reset it to empty
-        if (stateValue && !data.states.includes(stateValue)) {
-          setValue("state", "");
-        }
-      } else {
-        setStateError("No states found for your country.");
-      }
-    } catch (error) {
-      console.error("Error fetching states:", error);
-      setStateError("Error fetching states. Please try again later.");
-    } finally {
-      setLoadingStates(false);
-    }
-  };
+  }, [fetchStatesForCountry]);
 
   return (
     <div className="p-4">
@@ -109,13 +112,11 @@ export const Form1 = () => {
                 <p>Loading user info...</p>
               ) : userCountry ? (
                 <select
-                  // Use react-hook-form’s register for validation
                   {...register("state", {
                     required: "State is required",
                     validate: (value) =>
                       value.trim() !== "" || "Please select a valid state",
                   })}
-                  // Control the select with watch("state") so it stays selected if valid
                   value={stateValue || ""}
                   onChange={(e) => {
                     setValue("state", e.target.value, { shouldValidate: true });
@@ -188,41 +189,6 @@ export const Form1 = () => {
             <FormMessage>{errors.zipCode?.message?.toString()}</FormMessage>
           </FormItem>
         </div>
-
-        {/* Currency type remains unchanged */}
-        <h2 className="text-[#2b2829] text-xl font-medium font-montserrat mt-16">
-          How would you like to collect your donation?
-        </h2>
-        <p className="pl-4 text-[#2b2829] text-sm font-normal font-montserrat">
-          Choose the currency you want to receive donations in.
-        </p>
-        <FormItem>
-          <FormLabel>Currency type</FormLabel>
-          <FormControl>
-            <select
-              {...register("currency")}
-              className="mt-1 px-5 py-3.5 w-[200px] block rounded-[10px] border border-[#898384]"
-            >
-              <option value="">Select Currency</option>
-              <option value="Fiat Currency">Fiat Currency</option>
-              <option value="Crypto Currency">Crypto Currency</option>
-            </select>
-          </FormControl>
-          <FormMessage>{errors.currency?.message?.toString()}</FormMessage>
-        </FormItem>
-
-        {/* When Crypto Currency is selected, show a button to setup crypto donation */}
-        {currency === "Crypto Currency" && (
-          <div className="mt-4">
-            <button
-              type="button"
-              className="px-5 py-3.5 bg-blue-500 text-white rounded-md"
-              onClick={() => (window.location.href = "/crypto-donation")}
-            >
-              Setup Crypto Donation
-            </button>
-          </div>
-        )}
       </form>
     </div>
   );

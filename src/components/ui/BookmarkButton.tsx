@@ -1,14 +1,11 @@
-// components/ui/BookmarkButton.tsx
 "use client";
 
-import React, { useState } from "react";
-import { Bookmark } from "lucide-react";
-import { BsBookmarkDash, BsBookmarkFill, BsBookmark } from "react-icons/bs";
+import React, { useState, useEffect } from "react";
+import { BsBookmarkFill, BsBookmark } from "react-icons/bs";
 import { addBookmark, removeBookmark } from "@/lib/firebase/actions";
 
-
 interface BookmarkButtonProps {
-  causeId: string; // Only the cause ID is needed
+  causeId: string;
   isBookmarked: boolean;
   onRemoveBookmark?: (id: string) => void;
 }
@@ -19,39 +16,44 @@ const BookmarkButton: React.FC<BookmarkButtonProps> = ({
   onRemoveBookmark,
 }) => {
   const [isBookmarked, setIsBookmarked] = useState(initialBookmarked);
+  const [isProcessing, setIsProcessing] = useState(false);
 
+  useEffect(() => {
+    setIsBookmarked(initialBookmarked);
+  }, [initialBookmarked]);
 
   const toggleBookmark = async () => {
+    if (isProcessing) return;
 
+    setIsProcessing(true);
+    const newBookmarkedState = !isBookmarked;
+    setIsBookmarked(newBookmarkedState);
 
-    setIsBookmarked((prev) => !prev);
     try {
-      if (isBookmarked) {
-        await removeBookmark(causeId); // Use the utility function
-        onRemoveBookmark?.(causeId);
+      if (newBookmarkedState) {
+        await addBookmark(causeId);
       } else {
-        await addBookmark(causeId); // Use the utility function
+        await removeBookmark(causeId);
+        onRemoveBookmark?.(causeId);
       }
     } catch (error) {
       console.error("Error toggling bookmark:", error);
-      setIsBookmarked((prev) => !prev);
+      setIsBookmarked(!newBookmarkedState); // Revert on error
+    } finally {
+      setIsProcessing(false);
     }
-
-    window.dispatchEvent(new Event("storage"));
   };
 
   return (
-    <div onClick={toggleBookmark} className="cursor-pointer">
+    <div
+      onClick={toggleBookmark}
+      className="cursor-pointer"
+      aria-busy={isProcessing}
+    >
       {isBookmarked ? (
-        <BsBookmarkFill
-          size={20}
-          className="text-blue-600"
-        />
+        <BsBookmarkFill size={20} className="text-blue-600" />
       ) : (
-        <BsBookmark
-          size={20}
-          className="text-black"
-        />
+        <BsBookmark size={20} className="text-black" />
       )}
     </div>
   );
