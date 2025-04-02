@@ -41,6 +41,9 @@ export interface User {
   causesCount?: number;
   userType?: "individual" | "organization";
   bio: string;
+  cryptoWallets?: {
+    [network: string]: string; // Just store the address directly
+  };
 }
 
 export interface Country {

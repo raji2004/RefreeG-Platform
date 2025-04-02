@@ -10,6 +10,7 @@ import { H2, P, Ol } from "@/components/typograpy";
 import Hero from "./_components/hero";
 import { getCauses } from "@/lib/firebase/actions";
 import { Console } from "console";
+import MaticDonationButton from "@/components/ui/MaticDonationButton";
 
 
 export default async function Home() {
@@ -58,6 +59,7 @@ export default async function Home() {
           className=" mx-auto"
         />
       </div>
+      <MaticDonationButton />
 
       <HappeningNearYou causes={causes}  />
       <div className="w-full justify-center pt-20 pb-12 lg:pb-20 px-10 mb-20 space-y-5 text-white bg-customBlueGray">
