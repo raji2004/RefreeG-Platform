@@ -186,6 +186,7 @@ export type Cause = {
   onRemoveBookmark?: (id: string) => void;
   daysLeft: string; // Add this
   progressPercentage: number; // Add this
+  keywords: string[];
 };
 
 export interface TransactionData
