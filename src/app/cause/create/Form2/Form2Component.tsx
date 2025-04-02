@@ -9,38 +9,14 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
-import { DatePicker } from "@/components/ui/date-picker"; // Ensure correct import path
-
-// Helper functions (if needed in future)
-function numberToWords(num: number): string {
-  const words = [
-    "zero",
-    "one",
-    "two",
-    "three",
-    "four",
-    "five",
-    "six",
-    "seven",
-    "eight",
-    "nine",
-    "ten",
-  ];
-  return num <= 10 ? words[num] : num.toString();
-}
-
-function getTimeLeft(deadline: Date | null): string {
-  if (!deadline) return "";
-  const now = new Date();
-  const diffTime = deadline.getTime() - now.getTime();
-  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-  if (diffDays <= 0) return "Today";
-  if (diffDays === 1) return "one day left";
-  return `${numberToWords(diffDays)} days left`;
-}
+import { DatePicker } from "@/components/ui/date-picker";
 
 export const Form2 = () => {
-  const { register, control } = useFormContext();
+  const {
+    register,
+    control,
+    formState: { errors },
+  } = useFormContext();
 
   return (
     <div className="space-x-3">
@@ -55,6 +31,7 @@ export const Form2 = () => {
       <div className="flex flex-col space-y-4 gap-5">
         {/* Cause Title Field */}
         <FormItem>
+          <FormLabel>Cause Title</FormLabel>
           <FormControl>
             <input
               type="text"
@@ -63,14 +40,17 @@ export const Form2 = () => {
               className="px-[9px] py-[13px] border-b border-[#898384] w-full focus:outline-none text-[#898384] text-base font-medium font-montserrat"
             />
           </FormControl>
+          {errors.causeTitle && (
+            <FormMessage>{errors.causeTitle.message?.toString()}</FormMessage>
+          )}
           <p className="text-[#5a5555] text-sm font-normal font-montserrat">
             *Note: Pick a short, attention-grabbing title.
           </p>
-          <FormMessage />
         </FormItem>
 
         {/* Cause Category Field */}
         <FormItem>
+          <FormLabel>Cause Category</FormLabel>
           <FormControl>
             <div className="relative">
               <select
@@ -82,7 +62,9 @@ export const Form2 = () => {
                 <option value="Health Care">Health Care</option>
                 <option value="Women’s Empowerment">Women’s Empowerment</option>
                 <option value="Youth Development">Youth Development</option>
-                <option value="Economic Development">Economic Development</option>
+                <option value="Economic Development">
+                  Economic Development
+                </option>
                 <option value="Agriculture">Agriculture</option>
                 <option value="Environment">Environment</option>
               </select>
@@ -91,11 +73,16 @@ export const Form2 = () => {
               </span>
             </div>
           </FormControl>
-          <FormMessage />
+          {errors.causeCategory && (
+            <FormMessage>
+              {errors.causeCategory.message?.toString()}
+            </FormMessage>
+          )}
         </FormItem>
 
-        {/* Deadline with Custom DatePicker Field */}
+        {/* Deadline Field with DatePicker */}
         <FormItem>
+          <FormLabel>Deadline</FormLabel>
           <FormControl>
             <Controller
               control={control}
@@ -106,14 +93,19 @@ export const Form2 = () => {
                   defaultValue={field.value ? new Date(field.value) : undefined}
                   onChange={(selectedDate: Date | undefined) =>
                     field.onChange(
-                      selectedDate ? selectedDate.toISOString().split("T")[0] : ""
+                      selectedDate
+                        ? selectedDate.toISOString().split("T")[0]
+                        : ""
                     )
                   }
-                  className="w-full" // Add additional styling as needed
+                  className="w-full"
                 />
               )}
             />
           </FormControl>
+          {errors.deadline && (
+            <FormMessage>{errors.deadline.message?.toString()}</FormMessage>
+          )}
           <p className="text-[#5a5555] text-sm font-normal font-montserrat">
             *Note: This is when the cause will be delisted from the platform.{" "}
             <span className="inline-flex gap-1 items-center text-sm font-medium font-montserrat underline cursor-pointer">
@@ -126,32 +118,60 @@ export const Form2 = () => {
               />
             </span>
           </p>
-          <FormMessage />
         </FormItem>
 
         {/* Goal Amount Field */}
         <FormItem>
+          <FormLabel>Goal Amount</FormLabel>
           <FormControl>
             <Controller
               control={control}
               name="goalAmount"
-              defaultValue="0"
+              defaultValue="1000" // Start with a default value of 1000 instead of 0
+              rules={{
+                validate: (value) => {
+                  const num = parseInt(value, 10);
+                  return num >= 1 || "Goal amount must be at least 1";
+                },
+              }}
               render={({ field }) => {
-                const goal = field.value || "0";
+                const goal = field.value || "1000"; // Fallback to 1000 if empty
                 const incrementGoal = () => {
                   const newValue = (parseInt(goal, 10) + 1000).toString();
                   field.onChange(newValue);
                 };
                 const decrementGoal = () => {
-                  const newValue = Math.max(parseInt(goal, 10) - 1000, 0).toString();
+                  const newValue = Math.max(
+                    parseInt(goal, 10) - 1000,
+                    1
+                  ).toString(); // Minimum value is 1
                   field.onChange(newValue);
                 };
+                const handleInputChange = (
+                  e: React.ChangeEvent<HTMLInputElement>
+                ) => {
+                  let value = e.target.value;
+
+                  // Remove non-numeric characters
+                  value = value.replace(/[^0-9]/g, "");
+
+                  // Remove leading zeros
+                  value = value.replace(/^0+/, "");
+
+                  // If empty or invalid, set to "1"
+                  if (!value || parseInt(value, 10) < 1) {
+                    value = "1";
+                  }
+
+                  field.onChange(value);
+                };
+
                 return (
                   <div className="relative">
                     <input
                       type="text"
                       value={goal}
-                      onChange={field.onChange}
+                      onChange={handleInputChange}
                       placeholder="Goal Amount"
                       className="px-[9px] py-[13px] pr-20 border-b border-[#898384] w-full focus:outline-none text-[#898384] text-base font-medium font-montserrat bg-transparent"
                     />
@@ -176,11 +196,12 @@ export const Form2 = () => {
               }}
             />
           </FormControl>
-          {/* New note for goal amount */}
+          {errors.goalAmount && (
+            <FormMessage>{errors.goalAmount.message?.toString()}</FormMessage>
+          )}
           <p className="text-[#5a5555] text-sm font-normal font-montserrat">
             *Note: Enter the donation target you wish to achieve for your cause.
           </p>
-          <FormMessage />
         </FormItem>
       </div>
     </div>
