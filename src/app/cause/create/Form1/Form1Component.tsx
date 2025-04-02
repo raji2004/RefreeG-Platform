@@ -29,7 +29,7 @@ export const Form1 = () => {
   const [authLoading, setAuthLoading] = useState<boolean>(true);
 
   // Watch the state field to pass its current value for ZIP code validation
-  const stateValue = watch("state"); 
+  const stateValue = watch("state");
   const currency = watch("currency");
 
   useEffect(() => {
@@ -188,8 +188,7 @@ export const Form1 = () => {
             <FormMessage>{errors.zipCode?.message?.toString()}</FormMessage>
           </FormItem>
         </div>
-
-        {/* Currency type remains unchanged */}
+        {/* Currency type remains unchanged
         <h2 className="text-[#2b2829] text-xl font-medium font-montserrat mt-16">
           How would you like to collect your donation?
         </h2>
@@ -210,8 +209,7 @@ export const Form1 = () => {
           </FormControl>
           <FormMessage>{errors.currency?.message?.toString()}</FormMessage>
         </FormItem>
-
-        {/* When Crypto Currency is selected, show a button to setup crypto donation */}
+        When Crypto Currency is selected, show a button to setup crypto donation
         {currency === "Crypto Currency" && (
           <div className="mt-4">
             <button
@@ -222,7 +220,7 @@ export const Form1 = () => {
               Setup Crypto Donation
             </button>
           </div>
-        )}
+        )} */}
       </form>
     </div>
   );
