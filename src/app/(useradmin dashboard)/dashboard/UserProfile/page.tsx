@@ -6,11 +6,11 @@ import { getUserById } from "@/lib/firebase/actions";
 export default async function UserProfile() {
   const session = await getSessionId();
   if (!session) {
-    redirect("/login");
+    redirect("/");
   }
   const user = await getUserById(session);
   if (user === null) {
-    return <div> user not found</div>
+    redirect("/login"); // Redirect to login if user not found
   }
   return (
     <GeneralInfo
@@ -19,7 +19,6 @@ export default async function UserProfile() {
           ...user,
           profileImage: user.profileImage ?? "/UserProfile/defaultProfile.svg",
         }
-
       }
     />
   );
