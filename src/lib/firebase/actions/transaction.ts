@@ -90,3 +90,4 @@ export const getUserTransactions = async (userId: string): Promise<Omit<Transact
         throw error;
     }
 }
+

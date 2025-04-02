@@ -75,6 +75,7 @@ const Layout: React.FC<LayoutProps> = ({ profileImage, children }) => {
           name: "Donation History",
           path: "/dashboard/DonationHistory",
           icon: DonationHistoryIcon,
+          hasDropdown: true,
         },
         {
           name: "Signed Petitions",
@@ -83,21 +84,21 @@ const Layout: React.FC<LayoutProps> = ({ profileImage, children }) => {
         },
       ],
     },
-    {
-      name: "Cause Dashboard",
-      path: "/admin/dashboard",
-      icon: CauseDashboardIcon,
-    },
+    // {
+    //   name: "Cause Dashboard",
+    //   path: "/admin/dashboard",
+    //   icon: CauseDashboardIcon,
+    // },
     {
       name: "Favourite Causes",
       path: "/admin/dashboard/favourite-causes",
       icon: FavouritesIcon,
     },
-    {
-      name: "Notification Centre",
-      path: "/admin/dashboard/notifications",
-      icon: NotificationIcon,
-    },
+    // {
+    //   name: "Notification Centre",
+    //   path: "/admin/dashboard/notifications",
+    //   icon: NotificationIcon,
+    // },
     { name: "Account", path: "/dashboard/Account", icon: AccountIcon },
     { name: "Security", path: "/admin/dashboard/security", icon: SecurityIcon },
     {

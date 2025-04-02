@@ -1,18 +1,16 @@
-// components/MaticDonationButton.tsx
 "use client";
 
 import { useState, useEffect } from "react";
 import { BrowserProvider, ethers } from "ethers";
 import { MetaMaskInpageProvider } from "@metamask/providers";
-import { getCauseById } from "@/lib/firebase/actions";
 import { db } from "@/lib/firebase/config";
 import { doc, getDoc } from "firebase/firestore";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { toast } from "react-toastify";
+import { updateCauseRaisedAmount } from "@/lib/firebase/actions/progress";
 
-// Default exchange rate (will be updated via API)
-const DEFAULT_MATIC_TO_NAIRA_RATE = 302.51; // 1 MATIC = 302.51 Naira
+const DEFAULT_MATIC_TO_NAIRA_RATE = 302.51;
 
 declare global {
   interface Window {
@@ -22,13 +20,15 @@ declare global {
 
 interface MaticDonationButtonProps {
   causeId: string;
+  onDonationSuccess?: (amountInNaira: number) => void;
 }
 
 export default function MaticDonationButton({
   causeId,
+  onDonationSuccess,
 }: MaticDonationButtonProps) {
   const [donationAmount, setDonationAmount] = useState<string>("0.1");
-  const [nairaEquivalent, setNairaEquivalent] = useState<string>("120.00");
+  const [nairaEquivalent, setNairaEquivalent] = useState<string>("30.25");
   const [exchangeRate, setExchangeRate] = useState<number>(
     DEFAULT_MATIC_TO_NAIRA_RATE
   );
@@ -40,22 +40,17 @@ export default function MaticDonationButton({
   const [isLoadingAddress, setIsLoadingAddress] = useState<boolean>(true);
   const params = useParams();
 
-  // Fetch current exchange rate
   useEffect(() => {
     const fetchExchangeRate = async () => {
       setIsFetchingRate(true);
       try {
-        // Replace with your actual API endpoint
-        const response = await fetch(
-          "https://api.example.com/crypto-rates/matic"
-        );
+        const response = await fetch("/api/crypto-rates/matic");
         const data = await response.json();
         if (data?.rate) {
           setExchangeRate(data.rate);
         }
       } catch (err) {
         console.error("Failed to fetch exchange rate:", err);
-        // Fallback to default rate if API fails
         setExchangeRate(DEFAULT_MATIC_TO_NAIRA_RATE);
       } finally {
         setIsFetchingRate(false);
@@ -65,7 +60,6 @@ export default function MaticDonationButton({
     fetchExchangeRate();
   }, []);
 
-  // Update Naira equivalent when MATIC amount or rate changes
   useEffect(() => {
     const amount = parseFloat(donationAmount);
     if (!isNaN(amount) && amount > 0) {
@@ -115,33 +109,57 @@ export default function MaticDonationButton({
     fetchRecipientAddress();
   }, [causeId]);
 
+  // Updated switchToAmoyNetwork function
   const switchToAmoyNetwork = async () => {
     try {
+      // First try to switch the network
       await window.ethereum?.request({
-        method: "wallet_addEthereumChain",
-        params: [
-          {
-            chainId: "0x13882",
-            chainName: "Polygon Amoy Testnet",
-            nativeCurrency: {
-              name: "MATIC",
-              symbol: "MATIC",
-              decimals: 18,
-            },
-            rpcUrls: ["https://rpc-amoy.polygon.technology/"],
-            blockExplorerUrls: ["https://amoy.polygonscan.com/"],
-          },
-        ],
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: "0x13882" }],
       });
-    } catch (err) {
-      console.error("Failed to switch network:", err);
-      throw new Error("Failed to switch to Polygon Amoy network");
+    } catch (switchError: any) {
+      // This error code indicates that the chain has not been added to MetaMask
+      if (switchError.code === 4902) {
+        try {
+          // Add the network if it's not already added
+          await window.ethereum?.request({
+            method: "wallet_addEthereumChain",
+            params: [
+              {
+                chainId: "0x13882",
+                chainName: "Polygon Amoy Testnet",
+                nativeCurrency: {
+                  name: "MATIC",
+                  symbol: "MATIC",
+                  decimals: 18,
+                },
+                rpcUrls: ["https://rpc-amoy.polygon.technology/"],
+                blockExplorerUrls: ["https://amoy.polygonscan.com/"],
+              },
+            ],
+          });
+        } catch (addError) {
+          console.error("Failed to add Amoy network:", addError);
+          throw new Error(
+            "Please add Polygon Amoy network to MetaMask manually"
+          );
+        }
+      } else {
+        console.error("Failed to switch to Amoy network:", switchError);
+        throw new Error("Failed to switch to Polygon Amoy network");
+      }
     }
   };
 
+  // Updated handleDonate function with better error handling
   const handleDonate = async () => {
     if (!recipientAddress) {
       setError("Recipient wallet address not available");
+      return;
+    }
+
+    if (!window.ethereum) {
+      setError("Please install MetaMask to donate with MATIC");
       return;
     }
 
@@ -155,13 +173,20 @@ export default function MaticDonationButton({
         throw new Error("Please enter a valid donation amount");
       }
 
-      if (!window.ethereum) {
-        toast.error("Please install MetaMask to donate with MATIC.");
-        setIsDonating(false);
-        return;
-      }
-
+      // Request accounts first
       await window.ethereum.request({ method: "eth_requestAccounts" });
+
+      // Handle network switching with better error messaging
+      try {
+        await switchToAmoyNetwork();
+      } catch (networkError) {
+        console.error("Network error:", networkError);
+        throw new Error(
+          networkError instanceof Error
+            ? networkError.message
+            : "Network switch failed. Please ensure you're on Polygon Amoy Testnet"
+        );
+      }
 
       const provider = new BrowserProvider(window.ethereum as any);
       const signer = await provider.getSigner();
@@ -169,11 +194,8 @@ export default function MaticDonationButton({
       const balance = await provider.getBalance(walletAddress);
       const amountInWei = ethers.parseEther(donationAmount);
 
-      // Check if balance is sufficient
       if (balance < amountInWei) {
-        toast.error("Insufficient balance in your wallet.");
-        setIsDonating(false);
-        return;
+        throw new Error("Insufficient balance in your wallet");
       }
 
       const tx = await signer.sendTransaction({
@@ -182,17 +204,42 @@ export default function MaticDonationButton({
       });
 
       setTxHash(tx.hash);
-      toast.success("Donation successful! Transaction submitted.");
+      toast.success("Transaction submitted!");
+
+      // Wait for transaction confirmation
+      const receipt = await tx.wait();
+      toast.success("Transaction confirmed!");
+
+      const nairaAmount = parseFloat(nairaEquivalent);
+
+      // Update Firestore with the new donation amount
+      await updateCauseRaisedAmount(causeId, nairaAmount);
+
+      if (onDonationSuccess) {
+        onDonationSuccess(nairaAmount);
+      }
     } catch (err) {
       console.error("Donation error:", err);
 
+      // User rejected the transaction
       if (
-        (err as any).code !== 4001 &&
-        (err as any).code !== "ACTION_REJECTED"
+        (err as any).code === 4001 ||
+        (err as any).code === "ACTION_REJECTED"
       ) {
-        setError(
-          err instanceof Error ? err.message : "Failed to process donation"
-        );
+        setError("Transaction was rejected");
+        toast.warning("You rejected the transaction");
+      }
+      // Network related errors
+      else if ((err as any).code === "NETWORK_ERROR") {
+        setError("Network error. Please check your connection");
+        toast.error("Network error occurred");
+      }
+      // Other errors
+      else {
+        const errorMessage =
+          err instanceof Error ? err.message : "Donation failed";
+        setError(errorMessage);
+        toast.error(errorMessage);
       }
     } finally {
       setIsDonating(false);
@@ -214,7 +261,7 @@ export default function MaticDonationButton({
           Donate with MATIC (Testnet)
         </h2>
         <div className="mt-4 p-3 bg-yellow-50 text-yellow-700 rounded-md">
-          <p>The creator hasn&apos;t set up a Polygon wallet address.</p>
+          <p>The creator hasn't set up a Polygon wallet address.</p>
           <p className="mt-2">
             <Link
               href={`/cause/${params.cause_id}/payment`}
