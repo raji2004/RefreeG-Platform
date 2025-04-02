@@ -11,7 +11,6 @@ import Hero from "./_components/hero";
 import { getCauses } from "@/lib/firebase/actions";
 import { Console } from "console";
 import YouTubeEmbed from "@/components/YoutubeEmbed";
-import MaticDonationButton from "@/components/ui/MaticDonationButton";
 
 export default async function Home() {
   const causes = await getCauses();
@@ -39,8 +38,6 @@ export default async function Home() {
           <a href="#" className="px-3 py-1 bg-gray-200 text-gray-600 rounded-md hover:bg-gray-300">4</a>
         </nav>
       </div> */}
-
-      <MaticDonationButton />
 
       <div className="pt-2 px-10 pb-8 mb-8">
         <H2 className="mt-8 font-semibold text-2xl">How it works</H2>

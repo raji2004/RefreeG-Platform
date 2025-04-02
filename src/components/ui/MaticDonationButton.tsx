@@ -1,9 +1,14 @@
 // components/MaticDonationButton.tsx
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BrowserProvider, ethers } from "ethers";
 import { MetaMaskInpageProvider } from "@metamask/providers";
+import { getCauseById } from "@/lib/firebase/actions"; // Changed from getCausesByUserId
+import { db } from "@/lib/firebase/config";
+import { doc, getDoc } from "firebase/firestore";
+import Link from "next/link";
+import { useParams } from "next/navigation";
 
 declare global {
   interface Window {
@@ -11,13 +16,62 @@ declare global {
   }
 }
 
-export default function MaticDonationButton() {
+interface MaticDonationButtonProps {
+  causeId: string;
+}
+
+export default function MaticDonationButton({
+  causeId,
+}: MaticDonationButtonProps) {
   const [donationAmount, setDonationAmount] = useState<string>("0.1");
   const [isDonating, setIsDonating] = useState<boolean>(false);
   const [txHash, setTxHash] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [recipientAddress, setRecipientAddress] = useState<string | null>(null);
+  const [isLoadingAddress, setIsLoadingAddress] = useState<boolean>(true);
+  const params = useParams();
 
-  const recipientAddress = "0xC6d64870FD10b109b940EAAC286D5c00Bdd1db3a";
+  useEffect(() => {
+    const fetchRecipientAddress = async () => {
+      try {
+        // Get the cause directly by ID instead of by user ID
+        const causeDocRef = doc(db, "causes", causeId);
+        const causeDoc = await getDoc(causeDocRef);
+
+        if (!causeDoc.exists()) {
+          throw new Error("Cause not found");
+        }
+
+        const causeData = causeDoc.data();
+        const creatorId = causeData.userId;
+
+        // Get the creator's user document
+        const userDocRef = doc(db, "users", creatorId);
+        const userDoc = await getDoc(userDocRef);
+
+        if (!userDoc.exists()) {
+          throw new Error("Creator not found");
+        }
+
+        const userData = userDoc.data();
+
+        // Check if the user has a MATIC wallet address (using the correct field name)
+        if (userData.cryptoWallets?.["matic-amoy"]) {
+          setRecipientAddress(userData.cryptoWallets["matic-amoy"]);
+        } else {
+          setRecipientAddress(null);
+        }
+      } catch (err) {
+        console.error("Error fetching recipient address:", err);
+        setError("Failed to load recipient wallet information");
+        setRecipientAddress(null);
+      } finally {
+        setIsLoadingAddress(false);
+      }
+    };
+
+    fetchRecipientAddress();
+  }, [causeId]);
 
   const switchToAmoyNetwork = async () => {
     try {
@@ -44,6 +98,11 @@ export default function MaticDonationButton() {
   };
 
   const handleDonate = async () => {
+    if (!recipientAddress) {
+      setError("Recipient wallet address not available");
+      return;
+    }
+
     setIsDonating(true);
     setError(null);
     setTxHash(null);
@@ -102,6 +161,35 @@ export default function MaticDonationButton() {
       setIsDonating(false);
     }
   };
+
+  if (isLoadingAddress) {
+    return (
+      <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
+        <p>Loading wallet information...</p>
+      </div>
+    );
+  }
+
+  if (!recipientAddress) {
+    return (
+      <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
+        <h2 className="text-xl font-semibold text-gray-800 mb-4">
+          Donate with MATIC (Testnet)
+        </h2>
+        <div className="mt-4 p-3 bg-yellow-50 text-yellow-700 rounded-md">
+          <p>The creator hasn't set up a Polygon wallet address.</p>
+          <p className="mt-2">
+            <Link
+              href={`/cause/${params.cause_id}/payment`}
+              className="text-purple-600 hover:underline"
+            >
+              Please use another payment method
+            </Link>
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
