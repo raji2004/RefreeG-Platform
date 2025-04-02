@@ -29,36 +29,13 @@ export default function MaticDonationButton({
 }: MaticDonationButtonProps) {
   const [donationAmount, setDonationAmount] = useState<string>("0.1");
   const [nairaEquivalent, setNairaEquivalent] = useState<string>("30.25");
-  const [exchangeRate, setExchangeRate] = useState<number>(
-    DEFAULT_MATIC_TO_NAIRA_RATE
-  );
-  const [isFetchingRate, setIsFetchingRate] = useState<boolean>(false);
+  const [exchangeRate] = useState<number>(DEFAULT_MATIC_TO_NAIRA_RATE);
   const [isDonating, setIsDonating] = useState<boolean>(false);
   const [txHash, setTxHash] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [recipientAddress, setRecipientAddress] = useState<string | null>(null);
   const [isLoadingAddress, setIsLoadingAddress] = useState<boolean>(true);
   const params = useParams();
-
-  useEffect(() => {
-    const fetchExchangeRate = async () => {
-      setIsFetchingRate(true);
-      try {
-        const response = await fetch("/api/crypto-rates/matic");
-        const data = await response.json();
-        if (data?.rate) {
-          setExchangeRate(data.rate);
-        }
-      } catch (err) {
-        console.error("Failed to fetch exchange rate:", err);
-        setExchangeRate(DEFAULT_MATIC_TO_NAIRA_RATE);
-      } finally {
-        setIsFetchingRate(false);
-      }
-    };
-
-    fetchExchangeRate();
-  }, []);
 
   useEffect(() => {
     const amount = parseFloat(donationAmount);
@@ -109,19 +86,15 @@ export default function MaticDonationButton({
     fetchRecipientAddress();
   }, [causeId]);
 
-  // Updated switchToAmoyNetwork function
   const switchToAmoyNetwork = async () => {
     try {
-      // First try to switch the network
       await window.ethereum?.request({
         method: "wallet_switchEthereumChain",
         params: [{ chainId: "0x13882" }],
       });
     } catch (switchError: any) {
-      // This error code indicates that the chain has not been added to MetaMask
       if (switchError.code === 4902) {
         try {
-          // Add the network if it's not already added
           await window.ethereum?.request({
             method: "wallet_addEthereumChain",
             params: [
@@ -151,7 +124,6 @@ export default function MaticDonationButton({
     }
   };
 
-  // Updated handleDonate function with better error handling
   const handleDonate = async () => {
     if (!recipientAddress) {
       setError("Recipient wallet address not available");
@@ -173,10 +145,8 @@ export default function MaticDonationButton({
         throw new Error("Please enter a valid donation amount");
       }
 
-      // Request accounts first
       await window.ethereum.request({ method: "eth_requestAccounts" });
 
-      // Handle network switching with better error messaging
       try {
         await switchToAmoyNetwork();
       } catch (networkError) {
@@ -206,13 +176,10 @@ export default function MaticDonationButton({
       setTxHash(tx.hash);
       toast.success("Transaction submitted!");
 
-      // Wait for transaction confirmation
       const receipt = await tx.wait();
       toast.success("Transaction confirmed!");
 
       const nairaAmount = parseFloat(nairaEquivalent);
-
-      // Update Firestore with the new donation amount
       await updateCauseRaisedAmount(causeId, nairaAmount);
 
       if (onDonationSuccess) {
@@ -221,21 +188,16 @@ export default function MaticDonationButton({
     } catch (err) {
       console.error("Donation error:", err);
 
-      // User rejected the transaction
       if (
         (err as any).code === 4001 ||
         (err as any).code === "ACTION_REJECTED"
       ) {
         setError("Transaction was rejected");
         toast.warning("You rejected the transaction");
-      }
-      // Network related errors
-      else if ((err as any).code === "NETWORK_ERROR") {
+      } else if ((err as any).code === "NETWORK_ERROR") {
         setError("Network error. Please check your connection");
         toast.error("Network error occurred");
-      }
-      // Other errors
-      else {
+      } else {
         const errorMessage =
           err instanceof Error ? err.message : "Donation failed";
         setError(errorMessage);
@@ -298,24 +260,17 @@ export default function MaticDonationButton({
           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
           disabled={isDonating}
         />
-        <div className="mt-2 text-sm text-gray-600 flex items-center">
+        <div className="mt-2 text-sm text-gray-600">
           ≈ ₦{nairaEquivalent} Naira
-          {isFetchingRate && (
-            <span className="ml-2 text-xs text-gray-400">
-              (Updating rate...)
-            </span>
-          )}
         </div>
         <p className="mt-1 text-xs text-gray-500">Using Polygon Amoy Testnet</p>
       </div>
 
       <button
         onClick={handleDonate}
-        disabled={isDonating || isFetchingRate}
+        disabled={isDonating}
         className={`w-full py-2 px-4 rounded-md text-white font-medium ${
-          isDonating || isFetchingRate
-            ? "bg-blue-400"
-            : "bg-purple-600 hover:bg-blue-700"
+          isDonating ? "bg-blue-400" : "bg-purple-600 hover:bg-blue-700"
         } focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors`}
       >
         {isDonating ? "Processing..." : "Donate with MATIC"}
