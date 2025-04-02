@@ -6,12 +6,12 @@ export type elementProps = {
 };
 export type typographyProps = elementProps & {
   color?:
-  | "text-primary"
-  | "text-secondary"
-  | "text-primary-foreground"
-  | "text-secondary-foreground"
-  | "text-popover"
-  | "text-gray-400";
+    | "text-primary"
+    | "text-secondary"
+    | "text-primary-foreground"
+    | "text-secondary-foreground"
+    | "text-popover"
+    | "text-gray-400";
 };
 
 export interface User {
@@ -28,11 +28,19 @@ export interface User {
   donationPreference: string;
   profileImage: string;
   accDetails?: {
-    account_number: string,
-    subaccount_code: string
-    bank_name: string
-    account_name: string
-  }[]
+    account_number: string;
+    subaccount_code: string;
+    bank_name: string;
+    account_name: string;
+  }[];
+  isVerified: boolean;
+  createdAt: Date | string | number;
+  updatedAt: Date | string | number;
+  followersCount?: number;
+  followingCount?: number;
+  causesCount?: number;
+  userType?: "individual" | "organization";
+  bio: string;
 }
 
 export interface Country {
@@ -178,16 +186,18 @@ export type Cause = {
   onRemoveBookmark?: (id: string) => void;
   daysLeft: string; // Add this
   progressPercentage: number; // Add this
+  keywords: string[];
 };
 
-export interface TransactionData extends Pick<User, "email" | "firstName" | "lastName" | "id"> {
+export interface TransactionData
+  extends Pick<User, "email" | "firstName" | "lastName" | "id"> {
   amount: number;
   serviceFee: number;
   causeId: string;
   subaccounts: {
-    subaccount: string,
-    share: number
-  }[]
+    subaccount: string;
+    share: number;
+  }[];
 }
 export interface Transaction {
   id: string;
@@ -199,12 +209,11 @@ export interface Transaction {
 }
 
 export interface ICreateSubaccount {
-  bank_code: string,
-  account_number: string,
-  percentage_charge?: number,
-  business_name: string
+  bank_code: string;
+  account_number: string;
+  percentage_charge?: number;
+  business_name: string;
 }
-
 
 export interface MainCauseCardProps
   extends Omit<
