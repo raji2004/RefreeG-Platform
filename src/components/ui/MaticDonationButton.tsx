@@ -156,7 +156,9 @@ export default function MaticDonationButton({
       }
 
       if (!window.ethereum) {
-        throw new Error("Please install MetaMask to donate with MATIC");
+        toast.error("Please install MetaMask to donate with MATIC.");
+        setIsDonating(false);
+        return;
       }
 
       await window.ethereum.request({ method: "eth_requestAccounts" });
@@ -169,7 +171,6 @@ export default function MaticDonationButton({
 
       // Check if balance is sufficient
       if (balance < amountInWei) {
-        setError(null); // Clear existing errors
         toast.error("Insufficient balance in your wallet.");
         setIsDonating(false);
         return;
@@ -181,6 +182,7 @@ export default function MaticDonationButton({
       });
 
       setTxHash(tx.hash);
+      toast.success("Donation successful! Transaction submitted.");
     } catch (err) {
       console.error("Donation error:", err);
 
