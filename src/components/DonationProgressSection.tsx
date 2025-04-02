@@ -6,7 +6,7 @@ import { BsShare, BsChevronRight } from "react-icons/bs";
 import ShareWrapper from "@/components/ShareWrapper";
 import Link from "next/link";
 import { getBaseURL } from "@/lib/utils";
-
+import MaticDonationButton from "./ui/MaticDonationButton";
 
 interface DonationProgressSectionProps {
   cause: Cause;
@@ -25,7 +25,7 @@ async function DonationProgressSection({
   daysLeft,
   stats,
 }: DonationProgressSectionProps) {
-  const baseUrl = await getBaseURL()
+  const baseUrl = await getBaseURL();
   const causeUrl = `${baseUrl}/cause/${cause.id}`;
 
   return (
@@ -61,11 +61,21 @@ async function DonationProgressSection({
             Share <BsShare className="ml-2" size={16} />
           </Button>
         </ShareWrapper>
+
+        {/* Naira Donation Button */}
         <Link href={`/cause/${cause.id}/payment`}>
           <Button className="w-full py-3 bg-blue-600 text-white hover:bg-blue-700 font-medium flex items-center justify-center">
-            Donate <BsChevronRight className="ml-2" size={16} />
+            Donate in Naira <BsChevronRight className="ml-2" size={16} />
           </Button>
         </Link>
+
+        {/* MATIC Donation Button */}
+        <div className="border-t border-gray-200 pt-3 mt-2">
+          <p className="text-sm text-gray-800 text-center mb-2">
+            Or donate with cryptocurrency
+          </p>
+          <MaticDonationButton causeId={cause.id} />
+        </div>
       </div>
     </div>
   );

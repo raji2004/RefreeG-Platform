@@ -27,7 +27,7 @@ export default function DonationButtons({
 
       {/* Naira Donation Button */}
       <Link href={`/cause/${causeId}/payment`} className="flex-1 min-w-[200px]">
-        <button className="w-full bg-[#433E3F] flex items-center justify-center text-white px-6 py-3 rounded-md shadow-sm hover:bg-gray-700 transition-colors duration-300">
+        <button className="w-full bg-blue-600 flex items-center justify-center text-white font-medium px-6 py-3 rounded-md shadow-sm hover:bg-gray-700 transition-colors duration-300">
           Donate in Naira <BsChevronRight className="ml-2" />
         </button>
       </Link>
