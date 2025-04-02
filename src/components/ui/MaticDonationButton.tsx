@@ -17,7 +17,6 @@ export default function MaticDonationButton() {
   const [txHash, setTxHash] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  // Your platform's MATIC wallet address (use testnet address for Amoy)
   const recipientAddress = "0xC6d64870FD10b109b940EAAC286D5c00Bdd1db3a";
 
   const switchToAmoyNetwork = async () => {
