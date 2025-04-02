@@ -64,7 +64,9 @@ export default async function DonationDetail({
   const progressPercentage = (donationAmount / goalAmount) * 100;
 
   const stats = [
-    `${cause.donationCount || 0} Donations`, // Use donationCount instead of raisedAmount
+    `${cause.donationCount || 0} ${
+      cause.donationCount === 1 ? "Donation" : "Donations"
+    }`,
     `${progressPercentage.toFixed(1)}% funded`,
     daysleft,
   ];

@@ -8,17 +8,21 @@ import { doc, updateDoc, increment, getDoc } from "firebase/firestore";
  * @param amount - Amount to increment the raisedAmount by
  * @throws Error if the update fails
  */
-export async function updateCauseRaisedAmount(causeId: string, amount: number) {
+export const updateCauseRaisedAmount = async (
+  causeId: string,
+  amount: number
+) => {
   try {
     const causeRef = doc(db, "causes", causeId);
     await updateDoc(causeRef, {
       raisedAmount: increment(amount),
+      donationCount: increment(1),
     });
   } catch (error) {
     console.error("Error updating cause raised amount:", error);
     throw error;
   }
-}
+};
 
 /**
  * Gets the current raised amount for a cause

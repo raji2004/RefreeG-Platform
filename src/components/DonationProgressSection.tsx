@@ -15,7 +15,7 @@ import { db } from "@/lib/firebase/config";
 interface DonationProgressSectionProps {
   cause: Cause;
   donationAmount: number;
-  donationCount: number; // Add this
+  donationCount: number;
   goalAmount: number;
   progressPercentage: number;
   daysLeft: string;
@@ -26,7 +26,7 @@ export default function DonationProgressSection({
   cause,
   donationAmount: initialDonationAmount,
   goalAmount,
-  donationCount: initialDonationCount, // Add this
+  donationCount: initialDonationCount,
   progressPercentage: initialProgressPercentage,
   daysLeft,
   stats,
@@ -36,13 +36,18 @@ export default function DonationProgressSection({
   );
   const [currentDonationCount, setCurrentDonationCount] =
     useState(initialDonationCount);
-
   const [currentProgressPercentage, setCurrentProgressPercentage] = useState(
     initialProgressPercentage
   );
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const baseUrl = getBaseURL();
   const causeUrl = `${baseUrl}/cause/${cause.id}`;
+
+  // Helper function for proper pluralization
+  const getDonationText = (count: number) => {
+    return count === 1 ? `${count} Donation` : `${count} Donations`;
+  };
 
   useEffect(() => {
     const causeRef = doc(db, "causes", cause.id);
@@ -50,30 +55,46 @@ export default function DonationProgressSection({
       if (doc.exists()) {
         const causeData = doc.data();
         const newAmount = causeData.raisedAmount;
-        const newCount = causeData.donationCount || 0; // Make sure this field exists
+        const newCount = causeData.donationCount || 0;
         const newPercentage = (newAmount / goalAmount) * 100;
 
-        setCurrentDonationAmount(newAmount);
-        setCurrentDonationCount(newCount);
-        setCurrentProgressPercentage(newPercentage);
+        // Only update if values have actually changed
+        if (
+          newAmount !== currentDonationAmount ||
+          newCount !== currentDonationCount
+        ) {
+          setCurrentDonationAmount(newAmount);
+          setCurrentDonationCount(newCount);
+          setCurrentProgressPercentage(newPercentage);
+        }
       }
     });
 
     return () => unsubscribe();
-  }, [cause.id, goalAmount]);
+  }, [cause.id, goalAmount, currentDonationAmount, currentDonationCount]);
 
   const handleMaticDonationSuccess = (amountInNaira: number) => {
-    // Optional: For immediate UI update before Firestore updates
-    const newAmount = currentDonationAmount + amountInNaira;
-    const newPercentage = (newAmount / goalAmount) * 100;
+    setIsUpdating(true);
+    try {
+      // Optimistic update
+      const newAmount = currentDonationAmount + amountInNaira;
+      const newCount = currentDonationCount + 1;
+      const newPercentage = (newAmount / goalAmount) * 100;
 
-    setCurrentDonationAmount(newAmount);
-    setCurrentProgressPercentage(newPercentage);
+      setCurrentDonationAmount(newAmount);
+      setCurrentDonationCount(newCount);
+      setCurrentProgressPercentage(newPercentage);
+    } finally {
+      setIsUpdating(false);
+    }
   };
 
   return (
     <div className="p-6 rounded-lg border border-gray-200 shadow-sm bg-white">
-      <DonationProgress progressPercentage={currentProgressPercentage} />
+      <DonationProgress
+        progressPercentage={currentProgressPercentage}
+        isLoading={isUpdating}
+      />
       <h2 className="text-2xl font-semibold mt-3">
         ₦{currentDonationAmount.toLocaleString()} raised
       </h2>
@@ -83,12 +104,12 @@ export default function DonationProgressSection({
       </p>
 
       <div className="flex gap-2 mb-5">
-        {stats.map((stat) => (
+        {stats.map((stat, index) => (
           <div
-            key={stat}
+            key={index}
             className="px-3 py-1 rounded-full border border-gray-300 text-sm"
           >
-            {stat}
+            {index === 0 ? getDonationText(currentDonationCount) : stat}
           </div>
         ))}
       </div>
