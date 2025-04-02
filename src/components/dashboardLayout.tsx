@@ -32,6 +32,26 @@ interface LayoutProps {
   children: React.ReactNode;
 }
 
+interface NavItemBase {
+  name: string;
+  path: string;
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+  onClick?: () => void;
+  isLoading?: boolean;
+}
+
+interface NavItemWithDropdown extends NavItemBase {
+  hasDropdown: true;
+  subItems: {
+    name: string;
+    path: string;
+    icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+    hasDropdown?: boolean;
+  }[];
+}
+
+type NavItem = NavItemBase | NavItemWithDropdown;
+
 const Layout: React.FC<LayoutProps> = ({ profileImage, children }) => {
   const router = useRouter();
   const pathname = usePathname();
@@ -44,11 +64,8 @@ const Layout: React.FC<LayoutProps> = ({ profileImage, children }) => {
     setIsSigningOut(true);
     startTransition(async () => {
       await handleSignOut();
-      // The redirect happens in handleSignOut, but we'll keep the state for UI
     });
   };
-
-
 
   useEffect(() => {
     if (
@@ -62,8 +79,9 @@ const Layout: React.FC<LayoutProps> = ({ profileImage, children }) => {
     }
   }, [pathname]);
 
-  const navItems = [
+  const navItems: NavItem[] = [
     { name: "Profile", path: "/dashboard/UserProfile", icon: UserIcon },
+    /*
     {
       name: "Activity Overflow",
       path: "#",
@@ -84,6 +102,7 @@ const Layout: React.FC<LayoutProps> = ({ profileImage, children }) => {
         },
       ],
     },
+    */
     // {
     //   name: "Cause Dashboard",
     //   path: "/admin/dashboard",
@@ -122,8 +141,12 @@ const Layout: React.FC<LayoutProps> = ({ profileImage, children }) => {
       </h1>
       <nav>
         <ul>
-          {navItems.map(
-            ({ name, path, icon: Icon, hasDropdown, subItems, onClick, isLoading }) => (
+          {navItems.map((item) => {
+            const { name, path, icon: Icon, onClick, isLoading } = item;
+            const hasDropdown = 'hasDropdown' in item && item.hasDropdown;
+            const subItems = hasDropdown ? item.subItems : [];
+
+            return (
               <li key={name} className="mb-4">
                 <button
                   onClick={(e) => {
@@ -188,8 +211,8 @@ const Layout: React.FC<LayoutProps> = ({ profileImage, children }) => {
                   </div>
                 )}
               </li>
-            )
-          )}
+            );
+          })}
         </ul>
       </nav>
     </div>
