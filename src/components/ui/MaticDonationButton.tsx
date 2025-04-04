@@ -36,6 +36,8 @@ export default function MaticDonationButton({
 }: MaticDonationButtonProps) {
   const [donationAmount, setDonationAmount] = useState<string>("0.1");
   const [nairaEquivalent, setNairaEquivalent] = useState<string>("30.25");
+  const [formattedNairaEquivalent, setFormattedNairaEquivalent] =
+    useState<string>("30.25");
   const [exchangeRate] = useState<number>(DEFAULT_MATIC_TO_NAIRA_RATE);
   const [isDonating, setIsDonating] = useState<boolean>(false);
   const [txHash, setTxHash] = useState<string | null>(null);
@@ -45,21 +47,41 @@ export default function MaticDonationButton({
   const [inputMode, setInputMode] = useState<"matic" | "naira">("matic");
   const params = useParams();
 
+  // Format number with commas
+  const formatNumberWithCommas = (value: string): string => {
+    // Handle empty or invalid input
+    if (!value || isNaN(parseFloat(value))) return value;
+
+    // If value contains a decimal point, format only the integer part
+    const parts = value.split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+    // Rejoin with decimal part if it exists
+    return parts.length > 1 ? `${parts[0]}.${parts[1]}` : parts[0];
+  };
+
+  // Remove commas for calculations
+  const removeCommas = (value: string): string => {
+    return value.replace(/,/g, "");
+  };
+
   useEffect(() => {
     if (inputMode === "matic") {
       const amount = parseFloat(donationAmount);
       if (!isNaN(amount) && amount > 0) {
         const nairaValue = (amount * exchangeRate).toFixed(2);
         setNairaEquivalent(nairaValue);
+        setFormattedNairaEquivalent(formatNumberWithCommas(nairaValue));
       } else {
         setNairaEquivalent("0.00");
+        setFormattedNairaEquivalent("0.00");
       }
     }
   }, [donationAmount, exchangeRate, inputMode]);
 
   useEffect(() => {
     if (inputMode === "naira") {
-      const amount = parseFloat(nairaEquivalent);
+      const amount = parseFloat(removeCommas(nairaEquivalent));
       if (!isNaN(amount) && amount > 0) {
         const maticValue = (amount / exchangeRate).toFixed(6);
         setDonationAmount(maticValue);
@@ -76,7 +98,13 @@ export default function MaticDonationButton({
 
   const handleNairaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputMode("naira");
-    setNairaEquivalent(e.target.value);
+
+    // Remove any existing commas before processing
+    const rawValue = removeCommas(e.target.value);
+    setNairaEquivalent(rawValue);
+
+    // Format with commas for display
+    setFormattedNairaEquivalent(formatNumberWithCommas(rawValue));
   };
 
   useEffect(() => {
@@ -253,7 +281,8 @@ export default function MaticDonationButton({
       const receipt = await tx.wait();
       toast.success("Transaction confirmed!");
 
-      const nairaAmount = parseFloat(nairaEquivalent);
+      // Use the unformatted value for calculations
+      const nairaAmount = parseFloat(removeCommas(nairaEquivalent));
       const maticAmount = parseFloat(donationAmount);
 
       await Promise.all([
@@ -365,11 +394,9 @@ export default function MaticDonationButton({
             <span className="text-gray-500 sm:text-sm">₦</span>
           </div>
           <input
-            type="number"
+            type="text"
             id="nairaAmount"
-            min="1"
-            step="1"
-            value={nairaEquivalent}
+            value={formattedNairaEquivalent}
             onChange={handleNairaChange}
             className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
             disabled={isDonating}
