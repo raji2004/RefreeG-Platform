@@ -291,7 +291,13 @@ export default function MaticDonationButton({
         onDonationSuccess(nairaAmount);
       }
     } catch (err: any) {
-      console.error("Donation error:", err);
+      console.error("Donation error:", {
+        message: err.message,
+        code: err.code,
+        data: err.data,
+        stack: err.stack,
+        fullError: err,
+      });
 
       let userFriendlyMessage = "Donation failed. Please try again.";
 
@@ -302,9 +308,16 @@ export default function MaticDonationButton({
         err.message?.includes("network")
       ) {
         userFriendlyMessage = "Network error. Please check your connection";
-      } else if (err.message?.includes("insufficient funds")) {
+      } else if (
+        err.message?.includes("insufficient funds") ||
+        err.message?.includes("Insufficient") ||
+        err.message?.includes("not enough") ||
+        err.message?.includes("balance") ||
+        err.message?.includes("underflow") ||
+        err.code === "INSUFFICIENT_FUNDS"
+      ) {
         userFriendlyMessage =
-          "Insufficient MATIC balance. Please add MATIC to your wallet";
+          "Insufficient MATIC balance. Please ensure you have enough MATIC in your wallet";
       } else if (err.message?.includes("user rejected signing")) {
         userFriendlyMessage = "You rejected the transaction signature";
       } else if (err.message?.includes("invalid address")) {
@@ -339,7 +352,8 @@ export default function MaticDonationButton({
           Donate with MATIC
         </h2>
         <div className="mt-4 p-3 bg-yellow-50 text-yellow-700 rounded-md">
-          <p>The creator hasn't set up a Polygon wallet address.</p>
+          <p>The creator hasn&apos;t set up a Polygon wallet address.</p>
+
           <p className="mt-2">
             <Link
               href={`/cause/${params.cause_id}/payment`}
