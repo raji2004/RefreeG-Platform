@@ -125,8 +125,8 @@ export default function DonationProgressSection({
         </ShareWrapper>
 
         <Link href={`/cause/${cause.id}/payment`}>
-          <Button className="w-full py-3 bg-blue-600 text-white hover:bg-blue-700 font-medium flex items-center justify-center">
-            Donate in Naira <BsChevronRight className="ml-2" size={16} />
+          <Button className="w-full py-2 bg-blue-600 text-white hover:bg-blue-700 font-medium flex items-center justify-center text-base">
+            Donate in Naira <BsChevronRight className="ml-2" size={14} />
           </Button>
         </Link>
 
