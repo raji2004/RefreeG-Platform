@@ -17,16 +17,13 @@ const DonationProgress: React.FC<DonationProgressProps> = ({
 
   return (
     <div className="w-full relative">
-      {/* Container for progress bar and moving percentage */}
       <div className="relative h-10">
-        {" "}
-        {/* Percentage indicator that moves with progress */}
         <div
           className="absolute top-0 flex justify-center"
           style={{
-            left: `${Math.min(progressPercentage, 97)}%`, // Cap at 97% to prevent overflow
+            left: `${Math.min(progressPercentage, 97)}%`,
             transform: "translateX(-50%)",
-            transition: "left 0.3s ease-out", // Smooth movement
+            transition: "left 0.3s ease-out",
           }}
         >
           <span
@@ -42,9 +39,7 @@ const DonationProgress: React.FC<DonationProgressProps> = ({
             {isLoading ? "..." : `${Math.round(progressPercentage)}%`}
           </span>
         </div>
-        {/* Progress bar positioned below the percentage */}
         <div className="absolute bottom-0 w-full">
-          {/* Background layer for loading state */}
           {isLoading && (
             <div className="absolute inset-0 h-3 bg-gray-200 animate-pulse rounded-full"></div>
           )}
