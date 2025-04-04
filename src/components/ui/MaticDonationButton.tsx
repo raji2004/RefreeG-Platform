@@ -228,11 +228,13 @@ export default function MaticDonationButton({
 
   const handleDonate = async () => {
     if (!recipientAddress) {
+      toast.error("Recipient wallet address not available");
       setError("Recipient wallet address not available");
       return;
     }
 
     if (!window.ethereum) {
+      toast.error("Please install MetaMask to donate with MATIC");
       setError("Please install MetaMask to donate with MATIC");
       return;
     }
@@ -247,6 +249,7 @@ export default function MaticDonationButton({
         throw new Error("Please enter a valid donation amount");
       }
 
+      // Request account access if needed
       await window.ethereum.request({ method: "eth_requestAccounts" });
 
       try {
@@ -254,9 +257,7 @@ export default function MaticDonationButton({
       } catch (networkError) {
         console.error("Network error:", networkError);
         throw new Error(
-          networkError instanceof Error
-            ? networkError.message
-            : "Network switch failed. Please ensure you're on Polygon Amoy Testnet"
+          "Please switch to Polygon Amoy Testnet in your wallet and try again"
         );
       }
 
@@ -267,7 +268,9 @@ export default function MaticDonationButton({
       const amountInWei = ethers.parseEther(donationAmount);
 
       if (balance < amountInWei) {
-        throw new Error("Insufficient balance in your wallet");
+        throw new Error(
+          "Insufficient MATIC balance. Please ensure you have enough MATIC in your wallet"
+        );
       }
 
       const tx = await signer.sendTransaction({
@@ -276,10 +279,10 @@ export default function MaticDonationButton({
       });
 
       setTxHash(tx.hash);
-      toast.success("Transaction submitted!");
+      toast.success("Transaction submitted! Waiting for confirmation...");
 
       const receipt = await tx.wait();
-      toast.success("Transaction confirmed!");
+      toast.success("Transaction confirmed! Thank you for your donation.");
 
       // Use the unformatted value for calculations
       const nairaAmount = parseFloat(removeCommas(nairaEquivalent));
@@ -300,24 +303,38 @@ export default function MaticDonationButton({
       if (onDonationSuccess) {
         onDonationSuccess(nairaAmount);
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error("Donation error:", err);
 
-      if (
-        (err as any).code === 4001 ||
-        (err as any).code === "ACTION_REJECTED"
+      let userFriendlyMessage = "Donation failed. Please try again.";
+
+      // Handle specific error cases
+      if (err.code === 4001 || err.code === "ACTION_REJECTED") {
+        userFriendlyMessage = "Transaction was rejected by your wallet";
+      } else if (
+        err.code === "NETWORK_ERROR" ||
+        err.message?.includes("network")
       ) {
-        setError("Transaction was rejected");
-        toast.warning("You rejected the transaction");
-      } else if ((err as any).code === "NETWORK_ERROR") {
-        setError("Network error. Please check your connection");
-        toast.error("Network error occurred");
-      } else {
-        const errorMessage =
-          err instanceof Error ? err.message : "Donation failed";
-        setError(errorMessage);
-        toast.error(errorMessage);
+        userFriendlyMessage = "Network error. Please check your connection";
+      } else if (err.message?.includes("insufficient funds")) {
+        userFriendlyMessage =
+          "Insufficient MATIC balance. Please add MATIC to your wallet";
+      } else if (err.message?.includes("user rejected signing")) {
+        userFriendlyMessage = "You rejected the transaction signature";
+      } else if (err.message?.includes("invalid address")) {
+        userFriendlyMessage = "Invalid recipient address";
+      } else if (err.code === -32603 || err.message?.includes("JSON-RPC")) {
+        userFriendlyMessage =
+          "Transaction failed. Please check your wallet and try again.";
       }
+
+      // Show toast notification
+      toast.error(userFriendlyMessage, {
+        autoClose: 5000,
+      });
+
+      // Set error for display in the UI
+      setError(userFriendlyMessage);
     } finally {
       setIsDonating(false);
     }
