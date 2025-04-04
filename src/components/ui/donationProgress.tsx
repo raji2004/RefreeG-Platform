@@ -13,12 +13,13 @@ const DonationProgress: React.FC<DonationProgressProps> = ({
   progressPercentage,
   isLoading = false,
 }) => {
+  const hasReachedGoal = progressPercentage >= 100;
+
   return (
     <div className="w-full relative">
       {/* Container for progress bar and moving percentage */}
       <div className="relative h-10">
         {" "}
-        {/* Increased height to accommodate moving percentage */}
         {/* Percentage indicator that moves with progress */}
         <div
           className="absolute top-0 flex justify-center"
@@ -33,6 +34,8 @@ const DonationProgress: React.FC<DonationProgressProps> = ({
               "text-sm font-semibold px-2 py-1 rounded-md",
               isLoading
                 ? "text-gray-500 bg-gray-100"
+                : hasReachedGoal
+                ? "text-green-600 bg-green-100"
                 : "text-primary bg-primary-foreground shadow-sm"
             )}
           >
@@ -48,10 +51,14 @@ const DonationProgress: React.FC<DonationProgressProps> = ({
 
           <Progress
             className={cn(
-              "h-3 rounded-full bg-gray-200",
-              isLoading ? "opacity-70" : ""
+              "h-3 rounded-full",
+              isLoading
+                ? "opacity-70 bg-gray-200"
+                : hasReachedGoal
+                ? "bg-green-500"
+                : "bg-gray-200"
             )}
-            value={progressPercentage}
+            value={hasReachedGoal ? 100 : progressPercentage}
           />
         </div>
       </div>

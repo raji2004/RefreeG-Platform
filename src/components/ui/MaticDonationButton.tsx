@@ -42,17 +42,42 @@ export default function MaticDonationButton({
   const [error, setError] = useState<string | null>(null);
   const [recipientAddress, setRecipientAddress] = useState<string | null>(null);
   const [isLoadingAddress, setIsLoadingAddress] = useState<boolean>(true);
+  const [inputMode, setInputMode] = useState<"matic" | "naira">("matic");
   const params = useParams();
 
   useEffect(() => {
-    const amount = parseFloat(donationAmount);
-    if (!isNaN(amount) && amount > 0) {
-      const nairaValue = (amount * exchangeRate).toFixed(2);
-      setNairaEquivalent(nairaValue);
-    } else {
-      setNairaEquivalent("0.00");
+    if (inputMode === "matic") {
+      const amount = parseFloat(donationAmount);
+      if (!isNaN(amount) && amount > 0) {
+        const nairaValue = (amount * exchangeRate).toFixed(2);
+        setNairaEquivalent(nairaValue);
+      } else {
+        setNairaEquivalent("0.00");
+      }
     }
-  }, [donationAmount, exchangeRate]);
+  }, [donationAmount, exchangeRate, inputMode]);
+
+  useEffect(() => {
+    if (inputMode === "naira") {
+      const amount = parseFloat(nairaEquivalent);
+      if (!isNaN(amount) && amount > 0) {
+        const maticValue = (amount / exchangeRate).toFixed(6);
+        setDonationAmount(maticValue);
+      } else {
+        setDonationAmount("0.00");
+      }
+    }
+  }, [nairaEquivalent, exchangeRate, inputMode]);
+
+  const handleMaticChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputMode("matic");
+    setDonationAmount(e.target.value);
+  };
+
+  const handleNairaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputMode("naira");
+    setNairaEquivalent(e.target.value);
+  };
 
   useEffect(() => {
     const fetchRecipientAddress = async () => {
@@ -76,8 +101,8 @@ export default function MaticDonationButton({
 
         const userData = userDoc.data();
 
-        if (userData.cryptoWallets?.["matic"]) {
-          setRecipientAddress(userData.cryptoWallets["matic"]);
+        if (userData.cryptoWallets?.["matic-amoy"]) {
+          setRecipientAddress(userData.cryptoWallets["matic-amoy"]);
         } else {
           setRecipientAddress(null);
         }
@@ -122,7 +147,7 @@ export default function MaticDonationButton({
         paymentMethod: "MATIC",
         status: "completed",
         timestamp: serverTimestamp(),
-        network: "Polygon Mainnet",
+        network: "Polygon Amoy Testnet",
         currency: "MATIC",
       });
 
@@ -135,11 +160,11 @@ export default function MaticDonationButton({
     }
   };
 
-  const switchToPolygonNetwork = async () => {
+  const switchToAmoyNetwork = async () => {
     try {
       await window.ethereum?.request({
         method: "wallet_switchEthereumChain",
-        params: [{ chainId: "0x89" }], // Polygon Mainnet chain ID
+        params: [{ chainId: "0x13882" }],
       });
     } catch (switchError: any) {
       if (switchError.code === 4902) {
@@ -148,27 +173,27 @@ export default function MaticDonationButton({
             method: "wallet_addEthereumChain",
             params: [
               {
-                chainId: "0x89",
-                chainName: "Polygon Mainnet",
+                chainId: "0x13882",
+                chainName: "Polygon Amoy Testnet",
                 nativeCurrency: {
                   name: "MATIC",
                   symbol: "MATIC",
                   decimals: 18,
                 },
-                rpcUrls: ["https://polygon-rpc.com/"],
-                blockExplorerUrls: ["https://polygonscan.com/"],
+                rpcUrls: ["https://rpc-amoy.polygon.technology/"],
+                blockExplorerUrls: ["https://amoy.polygonscan.com/"],
               },
             ],
           });
         } catch (addError) {
-          console.error("Failed to add Polygon network:", addError);
+          console.error("Failed to add Amoy network:", addError);
           throw new Error(
-            "Please add Polygon Mainnet network to MetaMask manually"
+            "Please add Polygon Amoy network to MetaMask manually"
           );
         }
       } else {
-        console.error("Failed to switch to Polygon network:", switchError);
-        throw new Error("Failed to switch to Polygon Mainnet");
+        console.error("Failed to switch to Amoy network:", switchError);
+        throw new Error("Failed to switch to Polygon Amoy network");
       }
     }
   };
@@ -197,13 +222,13 @@ export default function MaticDonationButton({
       await window.ethereum.request({ method: "eth_requestAccounts" });
 
       try {
-        await switchToPolygonNetwork();
+        await switchToAmoyNetwork();
       } catch (networkError) {
         console.error("Network error:", networkError);
         throw new Error(
           networkError instanceof Error
             ? networkError.message
-            : "Network switch failed. Please ensure you're on Polygon Mainnet"
+            : "Network switch failed. Please ensure you're on Polygon Amoy Testnet"
         );
       }
 
@@ -281,7 +306,7 @@ export default function MaticDonationButton({
     return (
       <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
         <h2 className="text-xl font-semibold text-gray-800 mb-4">
-          Donate with MATIC
+          Donate with MATIC (Testnet)
         </h2>
         <div className="mt-4 p-3 bg-yellow-50 text-yellow-700 rounded-md">
           <p>The creator hasn&apos;t set up a Polygon wallet address.</p>
@@ -301,7 +326,7 @@ export default function MaticDonationButton({
   return (
     <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
       <h2 className="text-xl font-semibold text-gray-800 mb-4">
-        Donate with MATIC
+        Donate with MATIC (Testnet)
       </h2>
 
       <div className="mb-4">
@@ -311,20 +336,46 @@ export default function MaticDonationButton({
         >
           Amount (MATIC)
         </label>
-        <input
-          type="number"
-          id="amount"
-          min="0.01"
-          step="0.01"
-          value={donationAmount}
-          onChange={(e) => setDonationAmount(e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-          disabled={isDonating}
-        />
-        <div className="mt-2 text-sm text-gray-600">
-          ≈ ₦{nairaEquivalent} Naira
+        <div className="relative rounded-md shadow-sm">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <span className="text-gray-500 sm:text-sm">MATIC</span>
+          </div>
+          <input
+            type="number"
+            id="amount"
+            min="0.01"
+            step="0.01"
+            value={donationAmount}
+            onChange={handleMaticChange}
+            className="block w-full pl-16 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+            disabled={isDonating}
+          />
         </div>
-        <p className="mt-1 text-xs text-gray-500">Using Polygon Mainnet</p>
+      </div>
+
+      <div className="mb-4">
+        <label
+          htmlFor="nairaAmount"
+          className="block text-sm font-medium text-gray-700 mb-1"
+        >
+          Amount (Naira)
+        </label>
+        <div className="relative rounded-md shadow-sm">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <span className="text-gray-500 sm:text-sm">₦</span>
+          </div>
+          <input
+            type="number"
+            id="nairaAmount"
+            min="1"
+            step="1"
+            value={nairaEquivalent}
+            onChange={handleNairaChange}
+            className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+            disabled={isDonating}
+          />
+        </div>
+        <p className="mt-1 text-xs text-gray-500">Using Polygon Amoy Testnet</p>
       </div>
 
       <button
@@ -349,7 +400,7 @@ export default function MaticDonationButton({
           <p className="mt-1 text-sm">
             Transaction:{" "}
             <a
-              href={`https://polygonscan.com/tx/${txHash}`}
+              href={`https://amoy.polygonscan.com/tx/${txHash}`}
               target="_blank"
               rel="noopener noreferrer"
               className="underline hover:text-green-800"
