@@ -1,7 +1,6 @@
 /* @import "slick-carousel/slick/slick.css";
 @import "slick-carousel/slick/slick-theme.css"; */
 
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -38,6 +37,9 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+}
+html {
+  scroll-behavior: smooth;
 }
 
 .custom-dots {
@@ -122,16 +124,15 @@ body {
 
 @media (max-width: 950px) {
   .custom-lg\:hidden {
-      display: none;
+    display: none;
   }
   .custom-lg\:flex {
-      display: flex;
+    display: flex;
   }
   .custom-lg\:text-sm {
-      font-size: 0.875rem; /* Tailwind's text-sm size */
+    font-size: 0.875rem; /* Tailwind's text-sm size */
   }
 }
-
 
 .faq-collapsed {
   max-height: 500px; /* Adjust based on the initial visible content */

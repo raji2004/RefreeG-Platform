@@ -180,7 +180,7 @@ export function Navbar ({ userSession, profile }: { userSession?: boolean, profi
           </MenuLink>
         </div>
 
-        <MenuLink href="#" className="hover:bg-blue-100">
+        {/* <MenuLink href="#" className="hover:bg-blue-100">
           <DropdownMenu>
             <DropdownMenuTrigger className="flex outline-none items-center">
               How it works
@@ -209,7 +209,7 @@ export function Navbar ({ userSession, profile }: { userSession?: boolean, profi
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-        </MenuLink>
+        </MenuLink> */}
 
         <MenuLink
           href={userSession ? "/cause/create" : "/login"}

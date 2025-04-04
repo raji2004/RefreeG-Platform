@@ -36,23 +36,67 @@ export default function MaticDonationButton({
 }: MaticDonationButtonProps) {
   const [donationAmount, setDonationAmount] = useState<string>("0.1");
   const [nairaEquivalent, setNairaEquivalent] = useState<string>("30.25");
+  const [formattedNairaEquivalent, setFormattedNairaEquivalent] =
+    useState<string>("30.25");
   const [exchangeRate] = useState<number>(DEFAULT_MATIC_TO_NAIRA_RATE);
   const [isDonating, setIsDonating] = useState<boolean>(false);
   const [txHash, setTxHash] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [recipientAddress, setRecipientAddress] = useState<string | null>(null);
   const [isLoadingAddress, setIsLoadingAddress] = useState<boolean>(true);
+  const [inputMode, setInputMode] = useState<"matic" | "naira">("matic");
   const params = useParams();
 
+  // Format number with commas
+  const formatNumberWithCommas = (value: string): string => {
+    if (!value || isNaN(parseFloat(value))) return value;
+    const parts = value.split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return parts.length > 1 ? `${parts[0]}.${parts[1]}` : parts[0];
+  };
+
+  // Remove commas for calculations
+  const removeCommas = (value: string): string => {
+    return value.replace(/,/g, "");
+  };
+
   useEffect(() => {
-    const amount = parseFloat(donationAmount);
-    if (!isNaN(amount) && amount > 0) {
-      const nairaValue = (amount * exchangeRate).toFixed(2);
-      setNairaEquivalent(nairaValue);
-    } else {
-      setNairaEquivalent("0.00");
+    if (inputMode === "matic") {
+      const amount = parseFloat(donationAmount);
+      if (!isNaN(amount) && amount > 0) {
+        const nairaValue = (amount * exchangeRate).toFixed(2);
+        setNairaEquivalent(nairaValue);
+        setFormattedNairaEquivalent(formatNumberWithCommas(nairaValue));
+      } else {
+        setNairaEquivalent("0.00");
+        setFormattedNairaEquivalent("0.00");
+      }
     }
-  }, [donationAmount, exchangeRate]);
+  }, [donationAmount, exchangeRate, inputMode]);
+
+  useEffect(() => {
+    if (inputMode === "naira") {
+      const amount = parseFloat(removeCommas(nairaEquivalent));
+      if (!isNaN(amount) && amount > 0) {
+        const maticValue = (amount / exchangeRate).toFixed(6);
+        setDonationAmount(maticValue);
+      } else {
+        setDonationAmount("0.00");
+      }
+    }
+  }, [nairaEquivalent, exchangeRate, inputMode]);
+
+  const handleMaticChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputMode("matic");
+    setDonationAmount(e.target.value);
+  };
+
+  const handleNairaChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputMode("naira");
+    const rawValue = removeCommas(e.target.value);
+    setNairaEquivalent(rawValue);
+    setFormattedNairaEquivalent(formatNumberWithCommas(rawValue));
+  };
 
   useEffect(() => {
     const fetchRecipientAddress = async () => {
@@ -135,11 +179,11 @@ export default function MaticDonationButton({
     }
   };
 
-  const switchToPolygonNetwork = async () => {
+  const switchToMainnet = async () => {
     try {
       await window.ethereum?.request({
         method: "wallet_switchEthereumChain",
-        params: [{ chainId: "0x89" }], // Polygon Mainnet chain ID
+        params: [{ chainId: "0x89" }], // Polygon mainnet chain ID
       });
     } catch (switchError: any) {
       if (switchError.code === 4902) {
@@ -162,24 +206,24 @@ export default function MaticDonationButton({
           });
         } catch (addError) {
           console.error("Failed to add Polygon network:", addError);
-          throw new Error(
-            "Please add Polygon Mainnet network to MetaMask manually"
-          );
+          throw new Error("Please add Polygon network to MetaMask manually");
         }
       } else {
         console.error("Failed to switch to Polygon network:", switchError);
-        throw new Error("Failed to switch to Polygon Mainnet");
+        throw new Error("Failed to switch to Polygon network");
       }
     }
   };
 
   const handleDonate = async () => {
     if (!recipientAddress) {
+      toast.error("Recipient wallet address not available");
       setError("Recipient wallet address not available");
       return;
     }
 
     if (!window.ethereum) {
+      toast.error("Please install MetaMask to donate with MATIC");
       setError("Please install MetaMask to donate with MATIC");
       return;
     }
@@ -197,13 +241,11 @@ export default function MaticDonationButton({
       await window.ethereum.request({ method: "eth_requestAccounts" });
 
       try {
-        await switchToPolygonNetwork();
+        await switchToMainnet();
       } catch (networkError) {
         console.error("Network error:", networkError);
         throw new Error(
-          networkError instanceof Error
-            ? networkError.message
-            : "Network switch failed. Please ensure you're on Polygon Mainnet"
+          "Please switch to Polygon Mainnet in your wallet and try again"
         );
       }
 
@@ -214,7 +256,9 @@ export default function MaticDonationButton({
       const amountInWei = ethers.parseEther(donationAmount);
 
       if (balance < amountInWei) {
-        throw new Error("Insufficient balance in your wallet");
+        throw new Error(
+          "Insufficient MATIC balance. Please ensure you have enough MATIC in your wallet"
+        );
       }
 
       const tx = await signer.sendTransaction({
@@ -223,12 +267,12 @@ export default function MaticDonationButton({
       });
 
       setTxHash(tx.hash);
-      toast.success("Transaction submitted!");
+      toast.success("Transaction submitted! Waiting for confirmation...");
 
       const receipt = await tx.wait();
-      toast.success("Transaction confirmed!");
+      toast.success("Transaction confirmed! Thank you for your donation.");
 
-      const nairaAmount = parseFloat(nairaEquivalent);
+      const nairaAmount = parseFloat(removeCommas(nairaEquivalent));
       const maticAmount = parseFloat(donationAmount);
 
       await Promise.all([
@@ -246,24 +290,48 @@ export default function MaticDonationButton({
       if (onDonationSuccess) {
         onDonationSuccess(nairaAmount);
       }
-    } catch (err) {
-      console.error("Donation error:", err);
+    } catch (err: any) {
+      console.error("Donation error:", {
+        message: err.message,
+        code: err.code,
+        data: err.data,
+        stack: err.stack,
+        fullError: err,
+      });
 
-      if (
-        (err as any).code === 4001 ||
-        (err as any).code === "ACTION_REJECTED"
+      let userFriendlyMessage = "Donation failed. Please try again.";
+
+      if (err.code === 4001 || err.code === "ACTION_REJECTED") {
+        userFriendlyMessage = "Transaction was rejected by your wallet";
+      } else if (
+        err.code === "NETWORK_ERROR" ||
+        err.message?.includes("network")
       ) {
-        setError("Transaction was rejected");
-        toast.warning("You rejected the transaction");
-      } else if ((err as any).code === "NETWORK_ERROR") {
-        setError("Network error. Please check your connection");
-        toast.error("Network error occurred");
-      } else {
-        const errorMessage =
-          err instanceof Error ? err.message : "Donation failed";
-        setError(errorMessage);
-        toast.error(errorMessage);
+        userFriendlyMessage = "Network error. Please check your connection";
+      } else if (
+        err.message?.includes("insufficient funds") ||
+        err.message?.includes("Insufficient") ||
+        err.message?.includes("not enough") ||
+        err.message?.includes("balance") ||
+        err.message?.includes("underflow") ||
+        err.code === "INSUFFICIENT_FUNDS"
+      ) {
+        userFriendlyMessage =
+          "Insufficient MATIC balance. Please ensure you have enough MATIC in your wallet";
+      } else if (err.message?.includes("user rejected signing")) {
+        userFriendlyMessage = "You rejected the transaction signature";
+      } else if (err.message?.includes("invalid address")) {
+        userFriendlyMessage = "Invalid recipient address";
+      } else if (err.code === -32603 || err.message?.includes("JSON-RPC")) {
+        userFriendlyMessage =
+          "Transaction failed. Please check your wallet and try again.";
       }
+
+      toast.error(userFriendlyMessage, {
+        autoClose: 5000,
+      });
+
+      setError(userFriendlyMessage);
     } finally {
       setIsDonating(false);
     }
@@ -285,6 +353,7 @@ export default function MaticDonationButton({
         </h2>
         <div className="mt-4 p-3 bg-yellow-50 text-yellow-700 rounded-md">
           <p>The creator hasn&apos;t set up a Polygon wallet address.</p>
+
           <p className="mt-2">
             <Link
               href={`/cause/${params.cause_id}/payment`}
@@ -311,18 +380,42 @@ export default function MaticDonationButton({
         >
           Amount (MATIC)
         </label>
-        <input
-          type="number"
-          id="amount"
-          min="0.01"
-          step="0.01"
-          value={donationAmount}
-          onChange={(e) => setDonationAmount(e.target.value)}
-          className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
-          disabled={isDonating}
-        />
-        <div className="mt-2 text-sm text-gray-600">
-          ≈ ₦{nairaEquivalent} Naira
+        <div className="relative rounded-md shadow-sm">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <span className="text-gray-500 sm:text-sm">MATIC</span>
+          </div>
+          <input
+            type="number"
+            id="amount"
+            min="0.01"
+            step="0.01"
+            value={donationAmount}
+            onChange={handleMaticChange}
+            className="block w-full pl-16 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+            disabled={isDonating}
+          />
+        </div>
+      </div>
+
+      <div className="mb-4">
+        <label
+          htmlFor="nairaAmount"
+          className="block text-sm font-medium text-gray-700 mb-1"
+        >
+          Amount (Naira)
+        </label>
+        <div className="relative rounded-md shadow-sm">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <span className="text-gray-500 sm:text-sm">₦</span>
+          </div>
+          <input
+            type="text"
+            id="nairaAmount"
+            value={formattedNairaEquivalent}
+            onChange={handleNairaChange}
+            className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-purple-500"
+            disabled={isDonating}
+          />
         </div>
         <p className="mt-1 text-xs text-gray-500">Using Polygon Mainnet</p>
       </div>
