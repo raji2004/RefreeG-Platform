@@ -50,15 +50,15 @@ const DonationProgress: React.FC<DonationProgressProps> = ({
           )}
 
           <Progress
-            className={cn(
-              "h-3 rounded-full",
+            className={cn("h-3 rounded-full", isLoading ? "opacity-70" : "")}
+            value={hasReachedGoal ? 100 : progressPercentage}
+            indicatorColor={
               isLoading
-                ? "opacity-70 bg-gray-200"
+                ? "bg-gray-200"
                 : hasReachedGoal
                 ? "bg-green-500"
-                : "bg-gray-200"
-            )}
-            value={hasReachedGoal ? 100 : progressPercentage}
+                : "bg-blue-600"
+            }
           />
         </div>
       </div>
