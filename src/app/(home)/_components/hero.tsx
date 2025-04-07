@@ -36,14 +36,14 @@ const Hero = () => {
         </p>
 
         <Link
-        href={"/cause"}
-        className="flex gap-[6px] bg-light py-[10px] px-[15px] rounded-[8px] text-[#003366] text-[15px] items-center justify-center mx-auto relative z-30 
-            md:mt-16 mt-8 font-semibold cursor-pointer bg-[#EFF4FB] hover:bg-[#336BAD] hover:text-light hover:text-white transition"
+          href="#causes-section"
+          scroll={true}
+          className="flex gap-[6px] bg-light py-[10px] px-[15px] rounded-[8px] text-[#003366] text-[15px] items-center justify-center mx-auto relative z-30 
+      md:mt-16 mt-8 font-semibold cursor-pointer bg-[#EFF4FB] hover:bg-[#336BAD] hover:text-light hover:text-white transition"
         >
-            Explore Causes
-            <ArrowRight size={"18"} />
+          Explore Causes
+          <ArrowRight size={"18"} />
         </Link>
-
       </div>
 
       <div className="md:px-0 px-[30px] md:mt-0 mt-6">

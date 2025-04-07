@@ -46,14 +46,8 @@ const MenuLink = ({
   </Link>
 );
 
-export function Navbar({
-  userSession,
-  profile,
-}: {
-  userSession?: boolean;
-  profile?: string;
-}) {
-  const [searchQuery, setSearchQuery] = useState("");
+export function Navbar ({ userSession, profile }: { userSession?: boolean, profile?: string }) {
+  const [searchQuery, setSearchQuery] = useState('');
   const [isSearchModalOpen, setIsSearchModalOpen] = useState(false);
   const [aboutUsOpen, setAboutUsOpen] = useState(false);
 
@@ -64,6 +58,23 @@ export function Navbar({
 
   const toggleSearchModal = () => {
     setIsSearchModalOpen(!isSearchModalOpen);
+  };
+
+  const handleLogout = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    try {
+      // Server-side logout
+      await SessionLogout();
+      
+      // Client-side cleanup
+      localStorage.clear();
+      sessionStorage.clear();
+      
+      // Force reload
+      window.location.assign('/?_=' + Date.now());
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
   };
 
   return (
@@ -167,7 +178,7 @@ export function Navbar({
           </MenuLink>
         </div>
 
-        <MenuLink href="#" className="hover:bg-blue-100">
+        {/* <MenuLink href="#" className="hover:bg-blue-100">
           <DropdownMenu>
             <DropdownMenuTrigger className="flex outline-none items-center">
               How it works
@@ -196,7 +207,7 @@ export function Navbar({
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-        </MenuLink>
+        </MenuLink> */}
 
         <MenuLink
           href={userSession ? "/cause/create" : "/login"}
@@ -205,22 +216,19 @@ export function Navbar({
           List a cause
         </MenuLink>
 
-        {userSession ? (
-          <MenuLink href="/dashboard/UserProfile">
-            {" "}
-            <Image
-              src={profile ?? "/UserProfile/defaultProfile.svg"}
-              alt="Profile"
-              width={40}
-              height={40}
-              className="rounded-full aspect-square"
-            />
-          </MenuLink>
-        ) : (
-          <MenuLink href="/login" className="hover:underline">
-            Login
-          </MenuLink>
-        )}
+
+
+        {userSession ? <MenuLink href={userSession ? '/dashboard/UserProfile' : "/login"}> <Image
+          src={profile??"/UserProfile/defaultProfile.svg"}
+          alt="Profile"
+          width={40}
+          height={40}
+          className="rounded-full aspect-square"
+        />
+        </MenuLink> : <MenuLink href="/login" className="hover:underline">
+          Login
+        </MenuLink>
+        }
       </nav>
 
       {/* Small Screen Menu and Search Button */}
@@ -316,18 +324,12 @@ export function Navbar({
                 </MenuLink>
               )}
 
-              {userSession && (
-                <div className=" ml-auto">
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="border-none"
-                    onClick={() => SessionLogout()}
-                  >
-                    <LogOut size={24} />
-                  </Button>
-                </div>
-              )}
+              {userSession && <div className=' ml-auto'>
+                <Button variant='outline' size='icon' className='border-none' onClick={handleLogout}>
+                  <LogOut size={24} />
+                </Button>
+              </div>
+              }
             </div>
           </SheetContent>
         </Sheet>

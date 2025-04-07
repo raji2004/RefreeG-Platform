@@ -55,25 +55,25 @@ export const HowDoWeAchieveThis: FC = () => {
             imageSrc={"/images/blockchain.png"}
             title="🔗Blockchain-Powered Transparency"
             description="Every donation made on RefreeG is trackable and verifiable using blockchain technology, ensuring that funds are used for their intended purpose."
-            linkHref="/blockchain-transparency" // Use query parameter
+            linkHref="/blockchain-powered-transparency" // Use query parameter
           />
           <FeatureCard
             imageSrc={"/images/seamless.png"}
             title="💰 Seamless & Inclusive Giving"
             description="We support multiple payment methods, including mobile money, cryptocurrency, and traditional bank transfers, making it easy for anyone, anywhere to contribute."
-            linkHref="/vetted-causes" // Use query parameter
+            linkHref="/seamless-inclusive-giving" // Use query parameter
           />
           <FeatureCard
             imageSrc={"/images/community.png"}
             title="👥 A Community-First Approach"
             description="We support multiple payment methods, including mobile money, cryptocurrency, and traditional bank transfers, making it easy for anyone, anywhere to contribute."
-            linkHref="/easy-donation-process" // Use query parameter
+            linkHref="/community-first-approach" // Use query parameter
           />
           <FeatureCard
             imageSrc={"/images/changemakers.png"}
             title="🌍 Empowering Local Changemakers"
             description="We provide a platform where individuals, organizations, and businesses can start causes to raise funds for meaningful projects."
-            linkHref="/global-access" // Use query parameter
+            linkHref="/empowering-local-changemakers" // Use query parameter
           />
         </div>
       </div>

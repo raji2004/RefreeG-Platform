@@ -22,7 +22,7 @@ export const checkEmailExists = async (email: string) => {
 export const handleSignOut = async () => {
   const cookieStore = cookies();
   cookieStore.delete('userSession')
-  redirect("/login"); // Redirect to login after sign out
+  redirect("/"); // Redirect to login after sign out
 };
 
 

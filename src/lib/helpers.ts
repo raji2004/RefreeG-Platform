@@ -30,10 +30,11 @@ export const fetchCountriesData = async (): Promise<SortedCountry[]> => {
 };
 
 export const checkUserSession = () => {
-  const cookieStore = cookies();
-  const userSession = cookieStore.get("userSession")?.value;
-  return userSession ? true : false;
-};
+    const cookieStore = cookies();
+    const userSession = cookieStore.get('userSession')?.value;
+    return userSession ? true : false;
+}
+
 export const getSessionId = async () => {
   const cookieStore = cookies();
 
@@ -43,6 +44,7 @@ export const getSessionId = async () => {
   return decodeURIComponent(userId).replace(/"/g, "").trim();
 };
 
+// lib/helpers.ts
 export const SessionLogout = async () => {
   const cookieStore = cookies();
   await cookieStore.delete("userSession");
@@ -70,3 +72,28 @@ export async function getProfileData(userId: string) {
     return null;
   }
 }
+
+export const fetchStatesForCountry = async (
+  country: string
+): Promise<string[]> => {
+  try {
+    const response = await fetch(
+      "https://countriesnow.space/api/v0.1/countries/states",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ country }),
+      }
+    );
+    const data = await response.json();
+    if (!data.error && data.data && data.data.states) {
+      // Return an array of state names
+      return data.data.states.map((s: { name: string }) => s.name);
+    } else {
+      throw new Error("No states data found for this country");
+    }
+  } catch (error) {
+    console.error("Error fetching states for country:", error);
+    throw error;
+  }
+};

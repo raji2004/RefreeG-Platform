@@ -71,13 +71,14 @@ export default function LoginForm() {
       setCookie("userSession", JSON.stringify(res?.user.uid), {
         maxAge: sessionAge,
       });
-      if (res != undefined) {
-        push("/");
+      if (res) {
+        window.location.href = "/"; // This will force a full page reload
       } else {
         toast("Invalid email or password");
       }
     } catch (e) {
       console.error("error", e);
+      toast("Login failed. Please try again."); // Added user feedback
     }
   };
 

@@ -10,7 +10,7 @@ export default function WhatWeDo() {
             <Hero />
             <WhyChooseRefreeg />
             <MakeaDifference />
-            <HowDoWeAchieveThis />
+            <HowDoWeAchieveThis />        
         </div>
     )
 }
