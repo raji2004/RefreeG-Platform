@@ -6,10 +6,22 @@ import { ChevronRight } from "lucide-react";
 import FAQ from "../(home)/_components/frequentlyAskedQuestions";
 import Education from "./_components/education";
 import FoodRelief from "./_components/foodRelief";
+import { Navbar } from "@/components/ui/navbar";
+import { Footer } from "@/components/ui/footer";
+import { checkUserSession } from "@/lib/helpers";
+import { getSessionId } from "@/lib/helpers";
+import { getUserById } from "@/lib/firebase/actions";
 // import Education from "./_components/education";
-export default function Home() {
+export default function Home(
+  
+
+
+
+) {
   return (
+
     <div>
+      <Navbar />
       <div className="w-full px-4 py-8 bg-white border-b space-y-12">
         <H2 className="text-center font-semibold">
           Explore Causes. Change Lives
@@ -18,6 +30,7 @@ export default function Home() {
         <FoodRelief />
         <Education />
         <FAQ />
+        <Footer />
       </div>
 
       {/* <div className="flex justify-end mt-4">
