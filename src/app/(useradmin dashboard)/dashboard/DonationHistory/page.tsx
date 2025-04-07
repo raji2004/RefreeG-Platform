@@ -9,6 +9,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ChevronRight, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { DonationHistory } from "@/lib/type";
 
 interface Donation {
   id: string;
@@ -103,7 +104,7 @@ export default function Donations() {
       ) : (
         <DataTable
           columns={donationHistoryColumn}
-          data={donations}
+          data={donations as unknown as DonationHistory[]}
           filterColumn="cause"
           filterColumnPlaceholder="Search Cause"
         />
