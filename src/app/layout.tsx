@@ -8,11 +8,11 @@ import "react-toastify/dist/ReactToastify.css";
 const montserrat = Montserrat({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "RefreeG-Platform",
-  description: "Join Us as we create a world where no one is left behind",
+  title: ": RefreeG – Crowdfunding for a Better Africa",
+  description: "RefreeG is a crowdfunding platform dedicated to empowering individuals and communities by raising funds for impactful causes. From education and healthcare to disaster relief and social entrepreneurship, we help connect donors with verified causes that drive real change. Start a cause, donate, or join a community making a difference today.",
   openGraph: {
-    title: "RefreeG Platform",
-    description: "Join Us as we create a world where no one is left behind",
+    title: "RefreeG – Crowdfunding for a Better Africa",
+    description: "RefreeG is a crowdfunding platform dedicated to empowering individuals and communities by raising funds for impactful causes. From education and healthcare to disaster relief and social entrepreneurship, we help connect donors with verified causes that drive real change. Start a cause, donate, or join a community making a difference today.",
     url: "https://www.refreeg.com",
     images: ["/logo.png"],
   },
