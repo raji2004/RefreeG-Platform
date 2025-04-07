@@ -19,7 +19,7 @@ interface DonationProgressSectionProps {
   goalAmount: number;
   progressPercentage: number;
   daysLeft: string;
-  stats: string[];
+  stats: string[]; // This prop can actually be removed now
 }
 
 export default function DonationProgressSection({
@@ -29,7 +29,7 @@ export default function DonationProgressSection({
   donationCount: initialDonationCount,
   progressPercentage: initialProgressPercentage,
   daysLeft,
-  stats,
+  stats: initialStats, // This can be removed from props
 }: DonationProgressSectionProps) {
   const [currentDonationAmount, setCurrentDonationAmount] = useState(
     initialDonationAmount
@@ -48,6 +48,13 @@ export default function DonationProgressSection({
   const getDonationText = (count: number) => {
     return count === 1 ? `${count} Donation` : `${count} Donations`;
   };
+
+  // Dynamic stats calculation
+  const stats = [
+    getDonationText(currentDonationCount),
+    `${currentProgressPercentage.toFixed(1)}% funded`,
+    daysLeft,
+  ];
 
   useEffect(() => {
     const causeRef = doc(db, "causes", cause.id);
@@ -109,7 +116,7 @@ export default function DonationProgressSection({
             key={index}
             className="px-3 py-1 rounded-full border border-gray-300 text-sm"
           >
-            {index === 0 ? getDonationText(currentDonationCount) : stat}
+            {stat}
           </div>
         ))}
       </div>
@@ -125,8 +132,8 @@ export default function DonationProgressSection({
         </ShareWrapper>
 
         <Link href={`/cause/${cause.id}/payment`}>
-          <Button className="w-full py-3 bg-blue-600 text-white hover:bg-blue-700 font-medium flex items-center justify-center">
-            Donate in Naira <BsChevronRight className="ml-2" size={16} />
+          <Button className="w-full py-2 bg-blue-600 text-white hover:bg-blue-700 font-medium flex items-center justify-center text-base">
+            Donate in Naira <BsChevronRight className="ml-2" size={14} />
           </Button>
         </Link>
 

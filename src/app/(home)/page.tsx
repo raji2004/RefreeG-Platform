@@ -61,7 +61,10 @@ export default async function Home() {
         </div>
       </div>
 
-      <HappeningNearYou causes={causes} />
+      <div id="causes-section">
+        <HappeningNearYou causes={causes} />
+      </div>
+
       <div className="w-full justify-center pt-20 pb-12 lg:pb-20 px-10 mb-20 space-y-5 text-white bg-customBlueGray">
         <H2>How do we ensure transparency?</H2>
         <Ol className="mb-16">
