@@ -17,7 +17,7 @@ const YouTubeEmbed: React.FC<YouTubeEmbedProps> = ({
       className={`relative aspect-video w-full max-w-4xl mx-auto ${className}`}
     >
       <iframe
-        src={`https://www.youtube.com/embed/${videoId}`}
+        src={`https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&loop=1&rel=0`}
         title={title}
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowFullScreen
