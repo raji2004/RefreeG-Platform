@@ -13,19 +13,17 @@ const DonationProgress: React.FC<DonationProgressProps> = ({
   progressPercentage,
   isLoading = false,
 }) => {
+  const hasReachedGoal = progressPercentage >= 100;
+
   return (
     <div className="w-full relative">
-      {/* Container for progress bar and moving percentage */}
       <div className="relative h-10">
-        {" "}
-        {/* Increased height to accommodate moving percentage */}
-        {/* Percentage indicator that moves with progress */}
         <div
           className="absolute top-0 flex justify-center"
           style={{
-            left: `${Math.min(progressPercentage, 97)}%`, // Cap at 97% to prevent overflow
+            left: `${Math.min(progressPercentage, 97)}%`,
             transform: "translateX(-50%)",
-            transition: "left 0.3s ease-out", // Smooth movement
+            transition: "left 0.3s ease-out",
           }}
         >
           <span
@@ -33,25 +31,29 @@ const DonationProgress: React.FC<DonationProgressProps> = ({
               "text-sm font-semibold px-2 py-1 rounded-md",
               isLoading
                 ? "text-gray-500 bg-gray-100"
+                : hasReachedGoal
+                ? "text-green-600 bg-green-100"
                 : "text-primary bg-primary-foreground shadow-sm"
             )}
           >
             {isLoading ? "..." : `${Math.round(progressPercentage)}%`}
           </span>
         </div>
-        {/* Progress bar positioned below the percentage */}
         <div className="absolute bottom-0 w-full">
-          {/* Background layer for loading state */}
           {isLoading && (
             <div className="absolute inset-0 h-3 bg-gray-200 animate-pulse rounded-full"></div>
           )}
 
           <Progress
-            className={cn(
-              "h-3 rounded-full bg-gray-200",
-              isLoading ? "opacity-70" : ""
-            )}
-            value={progressPercentage}
+            className={cn("h-3 rounded-full", isLoading ? "opacity-70" : "")}
+            value={hasReachedGoal ? 100 : progressPercentage}
+            indicatorColor={
+              isLoading
+                ? "bg-gray-200"
+                : hasReachedGoal
+                ? "bg-green-500"
+                : "bg-blue-600"
+            }
           />
         </div>
       </div>
