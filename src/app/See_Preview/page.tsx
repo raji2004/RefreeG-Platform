@@ -55,7 +55,6 @@ const PreviewPage = () => {
     if (
       !formData.state.trim() ||
       !formData.zipCode.trim() ||
-      !formData.currency.trim() ||
       !formData.causeTitle.trim() ||
       !formData.causeCategory.trim() ||
       !formData.deadline.trim() ||

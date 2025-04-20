@@ -1,11 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { db } from "@/lib/firebase/config";
-import { collection, addDoc } from "firebase/firestore";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -21,7 +20,7 @@ export interface UploadedImage {
   size: number;
   progress: number;
   type: string;
-  path?: string; // Optional path property
+  path?: string;
 }
 
 // Define the complete form data interface and Zod schema
@@ -67,12 +66,12 @@ const fullSchema = z.object({
       type: z.string(),
     })
     .nullable()
-    .refine((img) => img !== null && img.progress >= 100, {
+    .refine((img) => img !== null && img!.progress >= 100, {
       message: "Image is required and must be fully uploaded",
     }),
 });
 
-// (Optional) Create step‑specific schemas if you need them
+// Step-specific schemas (if needed)
 const step1Schema = fullSchema.pick({
   state: true,
   zipCode: true,
@@ -84,18 +83,15 @@ const step2Schema = fullSchema.pick({
   deadline: true,
   goalAmount: true,
 });
-const step3Schema = z.object({
-  uploadedImage: fullSchema.shape.uploadedImage,
-});
+const step3Schema = z.object({ uploadedImage: fullSchema.shape.uploadedImage });
 const step4Schema = fullSchema.pick({ deadline: true, goalAmount: true });
 
 export default function ListacauseForm() {
   const router = useRouter();
   const [step, setStep] = useState(1);
   const [mounted, setMounted] = useState(false);
-  const [cryptoSetupDone, setCryptoSetupDone] = useState<boolean>(false);
 
-  // Retrieve initial data from localStorage if available
+  // Retrieve initial data from localStorage
   const initialValues: FormData = (() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("formData");
@@ -126,19 +122,13 @@ export default function ListacauseForm() {
     formState: { errors },
   } = methods;
 
-  // Save formData to localStorage on change
+  // Persist form data to localStorage on change
   useEffect(() => {
     const subscription = watch((value) => {
       localStorage.setItem("formData", JSON.stringify(value));
     });
     return () => subscription.unsubscribe();
   }, [watch]);
-
-  // Read cryptoSetupDone flag on mount
-  useEffect(() => {
-    const flag = localStorage.getItem("cryptoSetupDone");
-    setCryptoSetupDone(flag === "true");
-  }, []);
 
   // Mark component as mounted
   useEffect(() => {
@@ -147,16 +137,8 @@ export default function ListacauseForm() {
 
   // Validate fields for the current step before advancing
   const handleNext = async () => {
-    if (
-      step === 1 &&
-      watch("currency") === "Crypto Currency" &&
-      !cryptoSetupDone
-    ) {
-      alert("Please setup your crypto donation before proceeding.");
-      return;
-    }
     let fieldNames: (keyof FormData)[] = [];
-    if (step === 1) fieldNames = ["state", "zipCode", "currency"];
+    if (step === 1) fieldNames = ["state", "zipCode"];
     if (step === 2)
       fieldNames = ["causeTitle", "causeCategory", "deadline", "goalAmount"];
     if (step === 3) fieldNames = ["uploadedImage"];
@@ -240,9 +222,28 @@ export default function ListacauseForm() {
             </Button>
           )}
           {step < 4 && (
-            <Button type="button" onClick={handleNext}>
-              Next
-            </Button>
+            <Button
+            type="button"
+            onClick={handleNext}
+            variant="ghost"                       
+            className="
+              bg-[#0070E0]                        
+              hover:bg-[#005BB5]                  
+              text-white                          
+              px-20 py-5                          
+              flex items-center gap-2            
+            "
+          >
+            Proceed
+            <Image
+              src="/List_a_cause/chevronRight2.svg"
+              alt="Proceed"
+              width={20}
+              height={20}
+              className="filter invert"           
+            />
+          </Button>
+          
           )}
         </div>
       </form>
