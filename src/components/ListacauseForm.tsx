@@ -13,6 +13,7 @@ import { Form1 } from "@/app/cause/create/Form1/Form1Component";// Update these 
 import { Form2 } from "@/app/cause/create/Form2/Form2Component";
 import { Form3 } from "@/app/cause/create/Form3/Form3Component";
 import { Form4 } from "../app/cause/create/Form4/Form4Component";
+import { ChevronRight } from "lucide-react";
 
 // Define the UploadedImage interface
 export interface UploadedImage {
@@ -176,12 +177,25 @@ export default function ListacauseForm() {
               setStep(newStep);
             }}
           >
-            <TabsList className="flex gap-8 my-20 md:my-8 mb-8">
-              <TabsTrigger value="step-1" disabled={step < 1}></TabsTrigger>
-              <TabsTrigger value="step-2" disabled={step < 2}></TabsTrigger>
-              <TabsTrigger value="step-3" disabled={step < 3}></TabsTrigger>
-              <TabsTrigger value="step-4" disabled={step < 4}></TabsTrigger>
-            </TabsList>
+            {/* Custom step indicators instead of TabsList/TabsTrigger */}
+            <div className="flex gap-8 my-20 md:my-8 mb-8 justify-start">
+              <div 
+                onClick={() => step >= 1 && setStep(1)}
+                className={`w-10 h-2 rounded-md cursor-pointer transition-colors ${step >= 1 ? (step === 1 ? 'bg-blue-600' : 'bg-[#E6EEF8]') : 'bg-[#E6EEF8] cursor-not-allowed'}`}
+              />
+              <div 
+                onClick={() => step >= 2 && setStep(2)}
+                className={`w-10 h-2 rounded-md cursor-pointer transition-colors ${step >= 2 ? (step === 2 ? 'bg-blue-600' : 'bg-gray-300') : 'bg-gray-200 cursor-not-allowed'}`}
+              />
+              <div 
+                onClick={() => step >= 3 && setStep(3)}
+                className={`w-10 h-2 rounded-md cursor-pointer transition-colors ${step >= 3 ? (step === 3 ? 'bg-blue-600' : 'bg-gray-300') : 'bg-gray-200 cursor-not-allowed'}`}
+              />
+              <div 
+                onClick={() => step >= 4 && setStep(4)}
+                className={`w-10 h-2 rounded-md cursor-pointer transition-colors ${step >= 4 ? (step === 4 ? 'bg-blue-600' : 'bg-gray-300') : 'bg-gray-200 cursor-not-allowed'}`}
+              />
+            </div>
 
             <TabsContent value="step-1">
               <Form1 />
@@ -208,20 +222,25 @@ export default function ListacauseForm() {
 
         <hr className="border-t border-gray-300" />
         <div className="flex justify-between p-4">
-          {step > 1 && (
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={() => setStep(step - 1)}
-            >
-              Back
-            </Button>
-          )}
-          {step < 4 && (
-            <Button type="button" onClick={handleNext}>
-              Next
-            </Button>
-          )}
+          <div>
+            {step > 1 && (
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => setStep(step - 1)}
+              >
+                Back
+              </Button>
+            )}
+          </div>
+          <div>
+            {step < 4 && (
+              <Button type="button" onClick={handleNext} className="flex items-center gap-2 bg-blue-600 ml-auto px-20 py-4 hover:bg-blue-700">
+                Proceed
+                <ChevronRight className="ml-2" />
+              </Button>
+            )}
+          </div>
         </div>
       </form>
     </FormProvider>

@@ -10,6 +10,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { DatePicker } from "@/components/ui/date-picker"; // Ensure correct import path
+import { ChevronDown } from "lucide-react";
 
 // Helper functions (if needed in future)
 function numberToWords(num: number): string {
@@ -87,7 +88,7 @@ export const Form2 = () => {
                 <option value="Environment">Environment</option>
               </select>
               <span className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none text-[#898384]">
-                ▼
+                <ChevronDown className="w-4 h-4" />
               </span>
             </div>
           </FormControl>
@@ -146,12 +147,19 @@ export const Form2 = () => {
                   const newValue = Math.max(parseInt(goal, 10) - 1000, 0).toString();
                   field.onChange(newValue);
                 };
+                const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+                  const value = e.target.value;
+                  // Allow only numbers
+                  if (value === "" || /^\d+$/.test(value)) {
+                    field.onChange(value);
+                  }
+                };
                 return (
                   <div className="relative">
                     <input
                       type="text"
                       value={goal}
-                      onChange={field.onChange}
+                      onChange={handleInputChange}
                       placeholder="Goal Amount"
                       className="px-[9px] py-[13px] pr-20 border-b border-[#898384] w-full focus:outline-none text-[#898384] text-base font-medium font-montserrat bg-transparent"
                     />

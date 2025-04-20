@@ -46,6 +46,21 @@ export const Form3 = () => {
   
     const file = event.target.files[0];
     console.log("Selected file:", file);
+    
+    // Create a temporary object URL for preview
+    const previewUrl = URL.createObjectURL(file);
+    
+    // Initialize media object immediately with 0% progress
+    const initialMedia: UploadedImage = {
+      src: previewUrl,
+      name: file.name,
+      size: Math.round(file.size / 1024),
+      progress: 0,
+      type: file.type,
+    };
+    
+    // Set media immediately to show progress bar
+    setMedia(initialMedia);
   
     // Define limits
     const maxImageSize = 5 * 1024 * 1024; // 5MB
@@ -171,12 +186,13 @@ export const Form3 = () => {
                   />
                 ) : (
                   // Wrap the image in a fixed-aspect ratio container (landscape 16:9)
-                  <div className="relative w-[200px] h-[112.5px]">
+                  <div className="relative w-[200px] h-[112.5px] z-0">
                     <Image
                       src={media.src}
                       alt="Uploaded preview"
                       fill
                       className="object-cover rounded-lg"
+                      style={{ zIndex: 0 }}
                     />
                   </div>
                 )
@@ -247,7 +263,8 @@ export const Form3 = () => {
 
       {media && (
         <div className="mt-4">
-          <div className="border block w-2/4 border-[#b5b3b3] py-3 px-2">
+          {/* Always show the file component with progress indicator */}
+          <div className="border block w-2/4 border-[#b5b3b3] py-3 px-2 mb-2">
             <div className="flex items-center justify-between">
               <div className="flex gap-2">
                 <Image
@@ -264,7 +281,7 @@ export const Form3 = () => {
                   <p className="text-[#b5b3b3] text-xs">{media.size} KB</p>
                 </span>
               </div>
-              {media.progress === 100 && (
+              {media.progress >= 100 && (
                 <span className="justify-end">
                   <Image
                     src="/List_a_cause/check.svg"
@@ -276,16 +293,20 @@ export const Form3 = () => {
                 </span>
               )}
             </div>
-            <div className="flex">
-              <div className="w-full mt-2 bg-gray-200 rounded-lg overflow-hidden">
-                <div
-                  className="bg-blue-500 h-4 transition-all duration-200"
-                  style={{ width: `${media.progress}%` }}
-                ></div>
+            {media.progress < 100 && (
+              <div className="flex">
+                <div className="w-full mt-2 bg-gray-200 rounded-lg overflow-hidden">
+                  <div
+                    className="bg-blue-500 h-4 transition-all duration-200"
+                    style={{ width: `${media.progress}%` }}
+                  ></div>
+                </div>
               </div>
-            </div>
+            )}
           </div>
-          <div>
+          
+          {/* File management component with delete option only shown when upload is complete */}
+          {media.progress >= 100 && (
             <div className="border block w-2/4 border-[#b5b3b3] py-3 px-2">
               <div className="flex items-center justify-between">
                 <div className="flex gap-2">
@@ -314,7 +335,7 @@ export const Form3 = () => {
                 </button>
               </div>
             </div>
-          </div>
+          )}
         </div>
       )}
     </div>

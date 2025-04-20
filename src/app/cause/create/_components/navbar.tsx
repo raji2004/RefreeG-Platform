@@ -12,7 +12,7 @@ const Navbar = ({ profile }: { profile?: string }) => {
   // Replace with the correct path for your preview page
   const userProfile = profile === "" || profile === undefined ? "/list_a_cause/profile.svg" : profile
   return (
-    <nav className=" w-full px-6 py-3 h-16 flex items-center justify-between bg-white shadow-md fixed">
+    <nav className=" w-full px-6 py-3 h-16 flex items-center justify-between bg-white shadow-md fixed z-50">
       {/* Back Link */}
       <button onClick={() => window.history.back()} className="text-black text-sm flex items-center">
         <Image src="/list_a_cause/leftarrow.svg" alt="Back" width={15} height={15} className="mr-1" />
