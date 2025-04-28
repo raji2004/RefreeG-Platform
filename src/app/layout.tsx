@@ -18,6 +18,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+      <meta name="google-adsense-account" content="ca-pub-6133323682562865" />
+      </head>
       <body
         className={`${montserrat.className} bg-white text-black  `}
       >
