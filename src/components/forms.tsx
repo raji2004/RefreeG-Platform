@@ -62,7 +62,7 @@ export default function LoginForm() {
   });
 
   const { push } = useRouter();
-  const [signInWithEmailAndPassword] = useSignInWithEmailAndPassword(auth);
+  const [signInWithEmailAndPassword,signInError,signInLoading] = useSignInWithEmailAndPassword(auth);
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
