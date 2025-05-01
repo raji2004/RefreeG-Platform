@@ -69,7 +69,11 @@ export const Form2 = () => {
                 <option value="Environment">Environment</option>
               </select>
               <span className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none text-[#898384]">
-                ▼
+                <Image 
+                src="/List_a_cause/chevron-down-4.svg"
+                alt="Category"
+                width={20}
+                height={20}/>
               </span>
             </div>
           </FormControl>

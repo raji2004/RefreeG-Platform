@@ -23,6 +23,7 @@ export const MainCauseCard: React.FC<
   progressPercentage = 0,
   raisedAmount = 0,
   goalAmount = 0,
+  donationCount = 0, // Add donationCount to props
   description,
   tags,
   hideDescription,
@@ -31,6 +32,11 @@ export const MainCauseCard: React.FC<
   isBookmarked,
   onRemoveBookmark,
 }) => {
+  // Helper function for proper pluralization
+  const getDonationText = (count: number) => {
+    return count === 1 ? `${count} Donation` : `${count} Donations`;
+  };
+
   return (
     <div className="border border-gray-200 rounded-lg overflow-hidden">
       <div className="relative">
@@ -43,7 +49,7 @@ export const MainCauseCard: React.FC<
           />
         </div>
         <Badge className="absolute bottom-2 left-2 bg-white text-black text-xs px-2 py-1 rounded-full">
-          {raisedAmount.toLocaleString()} donations
+          {getDonationText(donationCount)} {/* Updated to use donationCount */}
         </Badge>
       </div>
 

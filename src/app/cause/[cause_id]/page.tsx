@@ -24,7 +24,7 @@ import CauseTabs from "@/components/CauseTabs";
 import NearbyCarousel from "@/components/NearbyCarousel";
 import ShareWrapper from "@/components/ShareWrapper";
 import Link from "next/link";
-import console from "console";
+import DonationButtons from "@/components/DonationButtons";
 
 const Section = ({
   title,
@@ -41,7 +41,6 @@ const Section = ({
   );
 };
 
-// Main component definition
 export default async function DonationDetail({
   params,
 }: {
@@ -52,6 +51,7 @@ export default async function DonationDetail({
   if (!cause) {
     return <div>Cause not found</div>;
   }
+
   const matchedCategory = CauseCategories.find(
     (item) => item.name === cause.causeCategory
   );
@@ -59,23 +59,21 @@ export default async function DonationDetail({
   const causeUser = await getUserById(cause.userId);
   const goalAmount = Number(cause.goalAmount);
   const donationAmount = cause.raisedAmount;
+  const donationCount = cause.donationCount;
   const daysleft = getDaysLeft(cause.deadline);
   const progressPercentage = (donationAmount / goalAmount) * 100;
 
   const stats = [
-    `${cause.raisedAmount.toLocaleString()} Donations`,
+    `${cause.donationCount || 0} ${
+      cause.donationCount === 1 ? "Donation" : "Donations"
+    }`,
     `${progressPercentage.toFixed(1)}% funded`,
     daysleft,
   ];
 
-  const paragraphs = [
-    "The recent floods in Maiduguri have displaced thousands of families, leaving them without food, shelter, and basic necessities. We are raising $50,000 to provide emergency relief, including temporary housing, medical supplies, and food. Together, we can help rebuild their lives.",
-    "The recent floods in Maiduguri have displaced thousands of families, leaving them without food, shelter, and basic necessities. We are raising $50,000 to provide emergency relief, including temporary housing, medical supplies, and food. Together, we can help rebuild their lives.",
-    "The recent floods in Maiduguri have displaced thousands of families, leaving them without food, shelter, and basic necessities. We are raising $50,000 to provide emergency relief, including temporary housing, medical supplies, and food. Together, we can help rebuild their lives.",
-  ];
   const baseUrl = await getBaseURL();
-
   const causeUrl = `${baseUrl}/cause/${params.cause_id}`;
+
   return (
     <>
       <div className="p-4 md:flex md:justify-between mt-10">
@@ -90,14 +88,6 @@ export default async function DonationDetail({
             high precedence
           </Badge>
 
-          {/* Important notification about high-priority cause */}
-          {/* <p className="text-red-600 font-medium flex items-center">
-            <FaExclamationTriangle className="mr-2" />
-            This cause is of high precedence
-          </p> */}
-
-          {/* Image carousel with slider settings */}
-
           <div className="relative">
             <Image
               src={cause?.img ?? "/DonationDetail/flood1.svg"}
@@ -111,67 +101,49 @@ export default async function DonationDetail({
             />
           </div>
 
-          {/* Tag indicators for category and location */}
           <div className="flex space-x-2 mt-9">
-            <Badge className="text-sm bg-white border border-black text-black cursor-pointer rounded-full px-3 py-1 flex items-center hover:bg-gray-300/40 hover:underline transition-colors duration-300 ">
+            <Badge className="text-sm bg-white border border-black text-black cursor-pointer rounded-full px-3 py-1 flex items-center hover:bg-gray-300/40 hover:underline transition-colors duration-300">
               <IconComponent className="mr-1" />{" "}
               {cause?.causeCategory ?? "Health"}
             </Badge>
-            <Badge className="text-sm bg-white border border-black text-black cursor-pointer rounded-full px-3 py-1 flex items-center hover:bg-gray-300/40 hover:underline transition-colors duration-300 ">
+            <Badge className="text-sm bg-white border border-black text-black cursor-pointer rounded-full px-3 py-1 flex items-center hover:bg-gray-300/40 hover:underline transition-colors duration-300">
               <FaMapMarkerAlt className="mr-1" /> {cause?.state ?? "Borno"}
             </Badge>
           </div>
 
-          {/* Organization supporting the cause */}
           <UnicefBanner
             name={causeUser?.firstName + " " + causeUser?.lastName}
             userId={causeUser?.id}
-            isVerified={causeUser?.isVerified} // Pass the verification status
+            isVerified={causeUser?.isVerified}
           />
 
-          {/* Cause description paragraphs */}
           <CauseSection section={cause.sections} />
 
-          {/* Buttons for sharing and donating */}
-          <div className="flex mt-4 space-x-4">
-            <ShareWrapper url={causeUrl} title={cause.causeTitle}>
-              <button className="flex items-center bg-white border border-gray-400 px-12 py-3 rounded-md shadow-sm hover:bg-gray-300 transition-colors duration-300">
-                Share <BsShare className="ml-2" />
-              </button>
-            </ShareWrapper>
-            <Link href={`/cause/${params.cause_id}/payment`}>
-              <button className="bg-[#433E3F] flex items-center text-white px-12 py-3 rounded-md shadow-sm hover:bg-gray-700 transition-colors duration-300">
-                Donate <BsChevronRight className="ml-2" />
-              </button>
-            </Link>
-          </div>
+          <DonationButtons
+            causeId={params.cause_id}
+            causeUrl={causeUrl}
+            causeTitle={cause.causeTitle}
+          />
         </div>
 
         {/* Right side - Donation details section */}
         <div className="mt-8 md:mt-0 md:w-[40%] mr-10">
-          {/* Donation progress bar */}
           <DonationProgressSection
             cause={cause}
             donationAmount={donationAmount}
+            donationCount={cause.donationCount || 0}
             goalAmount={goalAmount}
             progressPercentage={progressPercentage}
             daysLeft={daysleft}
             stats={stats}
           />
 
-          {/* Recent donations list */}
           <DonationList causeId={params.cause_id} />
           <EmojiReaction />
         </div>
       </div>
-      {/* <DonationNav /> */}
-
-      {/* <CauseTabs commentCount={20} /> */}
 
       <CrowdfundingFeatures />
-
-      {/* <NearbyCarousel /> */}
-
       <Footer />
     </>
   );
