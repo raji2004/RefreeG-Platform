@@ -62,7 +62,7 @@ export default function LoginForm() {
   });
 
   const { push } = useRouter();
-  const [signInWithEmailAndPassword] = useSignInWithEmailAndPassword(auth);
+  const [signInWithEmailAndPassword,signInError,signInLoading] = useSignInWithEmailAndPassword(auth);
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
@@ -71,13 +71,14 @@ export default function LoginForm() {
       setCookie("userSession", JSON.stringify(res?.user.uid), {
         maxAge: sessionAge,
       });
-      if (res != undefined) {
-        push("/");
+      if (res) {
+        window.location.href = "/"; // This will force a full page reload
       } else {
         toast("Invalid email or password");
       }
     } catch (e) {
       console.error("error", e);
+      toast("Login failed. Please try again."); // Added user feedback
     }
   };
 
@@ -555,7 +556,20 @@ export const SignupForm5 = () => {
         phoneNumber: oldParam.phoneNumber,
         pin: oldParam.pin,
         profileImage: "",
+
+        // Required fields
+        bio: oldParam.bio || "", // Set from user input if available
+        createdAt: oldParam.createdAt || new Date().toISOString(),
+        updatedAt: oldParam.updatedAt || new Date().toISOString(),
+        isVerified: true,
+
+        // Dynamic fields that will change over time
+        followersCount: oldParam.followersCount || 0,
+        followingCount: oldParam.followingCount || 0,
+        causesCount: oldParam.causesCount || 0,
+        userType: oldParam.userType || "individual", // Default but can be changed
       });
+
       setCookie("userSession", JSON.stringify(res?.user.uid), {
         maxAge: sessionAge,
       });

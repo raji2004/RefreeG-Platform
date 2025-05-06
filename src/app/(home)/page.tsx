@@ -10,6 +10,7 @@ import { H2, P, Ol } from "@/components/typograpy";
 import Hero from "./_components/hero";
 import { getCauses } from "@/lib/firebase/actions";
 import UrgentCauses from "@/components/ui/urgentCauses";
+import YouTubeEmbed from "@/components/YoutubeEmbed";
 
 export default async function Home() {
   const causes = await getCauses();
@@ -46,20 +47,26 @@ export default async function Home() {
         <H2 className="mt-8 font-medium text-xl">How it works</H2>
         <P className="text-lg mb-12 text-gray-500">
           How donation on{" "}
-          <Link href="https://www.refreeg.com" className="text-gray-500 text-xl font-semibold underline">
+          <Link
+            href="https://www.refreeg.com"
+            className="text-gray-500 text-xl font-semibold underline"
+          >
             Refreeg
           </Link>{" "}
-
           works!
         </P>
 
-        <Image
-          src="/images/video.svg"
-          alt="How it works video"
-          height={400}
-          width={800}
-          className=" mx-auto"
-        />
+        <div className="relative aspect-video w-full max-w-4xl mx-auto">
+          <YouTubeEmbed
+            videoId="lzAJXX99ew0"
+            title="How Refreeg donations work"
+            className="my-8"
+          />
+        </div>
+      </div>
+
+      <div id="causes-section">
+        <HappeningNearYou causes={causes} />
       </div>
 
       {/* <HappeningNearYou causes={causes}  /> */}

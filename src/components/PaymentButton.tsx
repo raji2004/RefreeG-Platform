@@ -8,13 +8,14 @@ import { User } from "@/lib/type";
 import { getUserById } from "@/lib/firebase/actions";
 
 interface PaymentButtonProps {
-    user: User;
+    user: User | null;
     causeUserId: string;
     totalAmount: number;
     serviceFee: number;
     disabled?: boolean;
     causeId: string;
     isAnonymous?: boolean;
+    email?: string;
 }
 
 export default function PaymentButton({
@@ -24,7 +25,8 @@ export default function PaymentButton({
     serviceFee,
     causeId,
     disabled,
-    isAnonymous = false
+    isAnonymous = false,
+    email
 }: PaymentButtonProps) {
     const [isLoading, setIsLoading] = useState(false);
     const { initializePayment } = usePayment();
@@ -42,12 +44,12 @@ export default function PaymentButton({
             }
 
             await initializePayment({
-                email: user.email,
+                email: user?.email || email || "",
                 amount: totalAmount,
                 serviceFee: serviceFee,
-                id: user.id,
-                firstName: isAnonymous ? "Anonymous Donor" : user.firstName,
-                lastName: isAnonymous ? "" : user.lastName,
+                id: user?.id || "",
+                firstName: (!user || isAnonymous) ? "Anonymous Donor" : user.firstName,
+                lastName: isAnonymous ? "" : (user?.lastName || ""),
                 subaccounts: [{
                     subaccount: userSubaccount,
                     share: totalAmount * 100

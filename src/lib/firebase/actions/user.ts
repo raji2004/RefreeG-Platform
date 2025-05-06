@@ -6,7 +6,6 @@ import {
   getDoc,
   getDocs,
   setDoc,
-  deleteField,
   updateDoc,
 } from "firebase/firestore";
 import { db } from "../config";
@@ -91,24 +90,48 @@ export const getAllUsers = async (): Promise<User[]> => {
 
 // delete a field from user
 export const deleteUserFields = async (
-  userId: string,
-  fieldsToDelete: (string | number)[]
-): Promise<void> => {
+userId: string, p0: number[],
+): Promise<boolean> => {
   try {
-    if (!userId) throw new Error("User ID is required");
+    if (!userId) {
+      console.warn("Invalid user ID provided:", userId);
+      return false;
+    }
 
-    const userRef = doc(db, "users", userId);
-    const updateData: Record<string, any> = {};
+    const userRef = doc(db, "users", userId); // Get reference to the document
+    const userDoc = await getDoc(userRef); // Fetch the document snapshot
 
-    // Mark each field for deletion
-    fieldsToDelete.forEach((field) => {
-      updateData[field] = deleteField();
-    });
+    if (!userDoc.exists()) return false;
 
-    await updateDoc(userRef, updateData);
-    console.log("Fields deleted successfully:", fieldsToDelete);
+    const userData = userDoc.data();
+    return !!userData?.accDetails?.[0]?.account_number;
   } catch (error) {
-    console.error("Error deleting fields:", error);
-    throw error;
+    console.error("Error checking user account:", error);
+    return false;
+  }
+};
+
+/**
+ * Check if a user has an account by checking if they have account details
+ * @param userId The ID of the user to check
+ * @returns A boolean indicating whether the user has an account
+ */
+export const checkUserHasAccount = async (userId: string): Promise<boolean> => {
+  try {
+    if (!userId) {
+      console.warn("Invalid user ID provided:", userId);
+      return false;
+    }
+
+    const userRef = doc(db, "users", userId); // Get reference to the document
+    const userDoc = await getDoc(userRef); // Fetch the document snapshot
+
+    if (!userDoc.exists()) return false;
+
+    const userData = userDoc.data();
+    return !!userData?.accDetails?.[0]?.account_number;
+  } catch (error) {
+    console.error("Error checking user account:", error);
+    return false;
   }
 };

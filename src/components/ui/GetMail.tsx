@@ -1,7 +1,7 @@
 "use client";
+import { handleSubmit } from "@/lib/formActions";
 import { Mail } from "lucide-react";
 import React, { useState } from "react";
-import { handleSubmit } from "../../lib/formActions";
 import { toast } from "react-toastify";
 
 const GetMail = () => {

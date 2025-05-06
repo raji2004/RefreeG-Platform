@@ -1,6 +1,7 @@
 import { ICreateSubaccount, TransactionData } from "@/lib/type";
 import axios from "axios"; /// Get API key from appropriate environment variable
-import { getBaseURL } from "../helpers";
+import { getBaseURL } from "../utils";
+
 const PAYSTACK_KEY = process.env.NEXT_PUBLIC_PAYSTACK_KEY;
 
 // Check if API key exists
@@ -24,7 +25,7 @@ const Paystack = {
       console.log('Initializing transaction with data:', data);
 
       // Validate required fields
-      if (!data.email || !data.amount || !data.id || !data.firstName || !data.lastName) {
+      if (!data.amount) {
         throw new Error('Missing required fields for transaction initialization');
       }
       const baseUrl = await getBaseURL()
@@ -32,13 +33,11 @@ const Paystack = {
       const requestData = {
         currency: "NGN",
         email: data.email,
-        amount: Math.round((data.amount + data.serviceFee )* 100), // Ensure amount is rounded to avoid floating point issues
-        callback_url: `${baseUrl}/payment/verify`,
-        split: {
-          type: "flat",
-          bearer_type: "account",
-          subaccounts: data.subaccounts || [], // Ensure subaccounts is always an array
-        },
+        amount: Math.round((data.amount + data.serviceFee) * 100), // Ensure amount is rounded to avoid floating point issues
+        callback_url: `${baseUrl}/cause/${data.causeId}/payment/verify`,
+        transaction_charge: data.serviceFee * 100,
+        subaccount: data.subaccounts[0].subaccount,
+        bearer: "subaccount",
         metadata: {
           user_id: data.id,
           amount: data.amount,

@@ -3,6 +3,7 @@ import { doc, addDoc, collection, getDocs } from "firebase/firestore";
 import { db } from "../config";
 import { getCauseById, updateCauseById } from "./cause";
 import { Transaction } from "@/lib/type";
+import { calculateServiceFee } from "@/lib/utils";
 
 export const logTransaction = async ({
     userId,
@@ -11,30 +12,31 @@ export const logTransaction = async ({
     customer_name,
     transactionId
 }: {
-    userId: string;
+    userId?: string;
     causeId: string;
     amount: number;
     customer_name: string;
     transactionId: string;
 }) => {
     try {
-        // 
+        const serviceFee = calculateServiceFee(amount)
+
         const cause = await getCauseById(causeId)
         const currentRaised = parseFloat(cause!.raisedAmount.toString());
-        const newAmount = parseFloat(amount.toString());
+        const newAmount = parseFloat(amount.toString()) - serviceFee;
         await updateCauseById(causeId, {
             ...cause,
             raisedAmount: currentRaised + newAmount
         })
         const causeDonationRef = collection(db, `causes/${causeId}/donated`);
         await addDoc(causeDonationRef, {
-            userId,
+            userId: userId || 'anonymous',
             customer_name,
             amount,
             timestamp: new Date().toISOString()
         });
 
-        // Save to user collection
+        if(!userId || userId === undefined) return { success: true };// Save to user collection
         const userDonationRef = collection(db, `users/${userId}/donated`);
         await addDoc(userDonationRef, {
             causeId,
@@ -54,20 +56,12 @@ export const getCauseTransactions = async (causeId: string): Promise<Transaction
         const donationsRef = collection(db, `causes/${causeId}/donated`);
         const querySnapshot = await getDocs(donationsRef);
 
-        const transactions = querySnapshot.docs.map(doc => {
-            const data = doc.data();
-            // Validate and map each field explicitly
-            return {
-                id: doc.id,
-                amount: typeof data.amount === 'number' ? data.amount : 0,
-                causeId: causeId,
-                userId: typeof data.userId === 'string' ? data.userId : '',
-                timestamp: typeof data.timestamp === 'string' ? data.timestamp : new Date().toISOString(),
-                customer_name: typeof data.customer_name === 'string' ? data.customer_name : 'Anonymous'
-            };
-        });
+        const transactions = querySnapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        }));
 
-        return transactions;
+        return transactions as Transaction[];
     } catch (error) {
         console.error("Error fetching cause transactions:", error);
         throw error;
@@ -96,3 +90,4 @@ export const getUserTransactions = async (userId: string): Promise<Omit<Transact
         throw error;
     }
 }
+

@@ -1,27 +1,27 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { db } from "@/lib/firebase/config";
-import { collection, addDoc } from "firebase/firestore";
 import { useForm, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Form1 } from "@/app/cause/create/Form1/Form1Component";// Update these components to use useFormContext()
+import { Form1 } from "@/app/cause/create/Form1/Form1Component";
 import { Form2 } from "@/app/cause/create/Form2/Form2Component";
 import { Form3 } from "@/app/cause/create/Form3/Form3Component";
-import { Form4 } from "../app/cause/create/Form4/Form4Component";
+import { Form4 } from "@/app/cause/create/Form4/Form4Component";
 import { ChevronRight } from "lucide-react";
 
 // Define the UploadedImage interface
 export interface UploadedImage {
   src: string;
   name: string;
-  size: number; // in KB
+  size: number;
   progress: number;
   type: string;
+  path?: string;
 }
 
 // Define the complete form data interface and Zod schema
@@ -50,22 +50,12 @@ const fullSchema = z.object({
     }),
   goalAmount: z.preprocess(
     (val) => {
-      if (typeof val === "string") {
-        return parseFloat(val);
-      }
+      if (typeof val === "string") return parseFloat(val);
       return val;
     },
     z
-      .number()
-      .refine(
-        (num) => {
-          // Allow negative values without error.
-          if (num < 1000) return true;
-          // If non-negative, the number must be greater than zero.
-          return num > 1000;
-        },
-        { message: "Goal amount must be greater than 1000" }
-      )
+      .number({ invalid_type_error: "Goal amount must be a number" })
+      .min(1000, { message: "Goal amount must be at least 1000" })
       .transform((num) => num.toString())
   ),
   uploadedImage: z
@@ -77,21 +67,24 @@ const fullSchema = z.object({
       type: z.string(),
     })
     .nullable()
-    .refine((img) => img !== null && img.progress >= 100, {
+    .refine((img) => img !== null && img!.progress >= 100, {
       message: "Image is required and must be fully uploaded",
     }),
 });
 
-// Create step‑specific schemas by picking fields from the full schema.
+// Step-specific schemas (if needed)
 const step1Schema = fullSchema.pick({
   state: true,
   zipCode: true,
   currency: true,
 });
-const step2Schema = fullSchema.pick({ causeTitle: true, causeCategory: true });
-const step3Schema = z.object({
-  uploadedImage: fullSchema.shape.uploadedImage,
+const step2Schema = fullSchema.pick({
+  causeTitle: true,
+  causeCategory: true,
+  deadline: true,
+  goalAmount: true,
 });
+const step3Schema = z.object({ uploadedImage: fullSchema.shape.uploadedImage });
 const step4Schema = fullSchema.pick({ deadline: true, goalAmount: true });
 
 export default function ListacauseForm() {
@@ -99,7 +92,7 @@ export default function ListacauseForm() {
   const [step, setStep] = useState(1);
   const [mounted, setMounted] = useState(false);
 
-  // Retrieve initial data from localStorage if available
+  // Retrieve initial data from localStorage
   const initialValues: FormData = (() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("formData");
@@ -117,7 +110,6 @@ export default function ListacauseForm() {
     };
   })();
 
-  // Initialize react-hook-form with Zod validation using the full schema.
   const methods = useForm<FormData>({
     resolver: zodResolver(fullSchema),
     defaultValues: initialValues,
@@ -131,7 +123,7 @@ export default function ListacauseForm() {
     formState: { errors },
   } = methods;
 
-  // Save formData to localStorage whenever any value changes.
+  // Persist form data to localStorage on change
   useEffect(() => {
     const subscription = watch((value) => {
       localStorage.setItem("formData", JSON.stringify(value));
@@ -139,16 +131,17 @@ export default function ListacauseForm() {
     return () => subscription.unsubscribe();
   }, [watch]);
 
-  // Mark component as mounted to ensure client-only code runs correctly.
+  // Mark component as mounted
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // Handle going to the next step by triggering validation for only the current step’s fields.
+  // Validate fields for the current step before advancing
   const handleNext = async () => {
     let fieldNames: (keyof FormData)[] = [];
-    if (step === 1) fieldNames = ["state", "zipCode", "currency"];
-    if (step === 2) fieldNames = ["causeTitle", "causeCategory"];
+    if (step === 1) fieldNames = ["state", "zipCode"];
+    if (step === 2)
+      fieldNames = ["causeTitle", "causeCategory", "deadline", "goalAmount"];
     if (step === 3) fieldNames = ["uploadedImage"];
     if (step === 4) fieldNames = ["deadline", "goalAmount"];
 
@@ -158,10 +151,9 @@ export default function ListacauseForm() {
     }
   };
 
-  // Remove the final submit button; submission will be handled on the preview page.
   const onSubmit = async (data: FormData) => {
-    // We log the data for debugging purposes.
     console.log("Data ready for preview:", data);
+    // Add your submit logic here.
   };
 
   if (!mounted) return null;
@@ -222,25 +214,39 @@ export default function ListacauseForm() {
 
         <hr className="border-t border-gray-300" />
         <div className="flex justify-between p-4">
-          <div>
-            {step > 1 && (
-              <Button
-                type="button"
-                variant="secondary"
-                onClick={() => setStep(step - 1)}
-              >
-                Back
-              </Button>
-            )}
-          </div>
-          <div>
-            {step < 4 && (
-              <Button type="button" onClick={handleNext} className="flex items-center gap-2 bg-blue-600 ml-auto px-20 py-4 hover:bg-blue-700">
-                Proceed
-                <ChevronRight className="ml-2" />
-              </Button>
-            )}
-          </div>
+          {step > 1 && (
+            <Button
+              type="button"
+              variant="secondary"
+              onClick={() => setStep(step - 1)}
+            >
+              Back
+            </Button>
+          )}
+          {step < 4 && (
+            <Button
+            type="button"
+            onClick={handleNext}
+            variant="ghost"                       
+            className="
+              bg-[#0070E0]                        
+              hover:bg-[#005BB5]                  
+              text-white                          
+              px-20 py-5                          
+              flex items-center gap-2            
+            "
+          >
+            Proceed
+            <Image
+              src="/List_a_cause/chevronRight2.svg"
+              alt="Proceed"
+              width={20}
+              height={20}
+              className="filter invert"           
+            />
+          </Button>
+          
+          )}
         </div>
       </form>
     </FormProvider>

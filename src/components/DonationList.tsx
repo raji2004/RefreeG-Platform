@@ -13,8 +13,9 @@ async function DonationList({ causeId }: { causeId: string }) {
       name: transaction.customer_name || "Anonymous",
       amount: `₦${transaction.amount.toLocaleString()}`,
       badgeText: isRecent ? "Recent" : "Transaction",
+      time: new Date(transaction.timestamp).getTime()
     };
-  });
+  }).sort((a, b) => b.time - a.time);
 
   return <DonationListClient donations={donations} totalCount={causeTransactions.length} />;
 }

@@ -10,7 +10,12 @@ import {
   FormMessage,
 } from "@/components/ui/form"; // Adjust the path as needed
 import { UploadedImage } from "@/components/ListacauseForm";
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import {
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+  deleteObject,
+} from "firebase/storage";
 import { storage } from "@/lib/firebase/config"; // Adjust the import path
 
 export const Form3 = () => {
@@ -35,15 +40,31 @@ export const Form3 = () => {
     setValue("uploadedImage", media);
   }, [media, setValue]);
 
-  const handleMediaChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleMediaChange = async (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
     setUploadError(null);
     clearErrors("uploadedImage");
-  
+
+    // If a media already exists, delete it before uploading the new one.
+    if (media && media.path) {
+      const oldImageRef = ref(storage, media.path);
+      try {
+        await deleteObject(oldImageRef);
+        console.log("Old image successfully deleted from Firebase Storage.");
+      } catch (error) {
+        console.error("Error deleting old image:", error);
+      }
+      setMedia(null);
+      localStorage.removeItem("uploadedImage");
+      setValue("uploadedImage", null);
+    }
+
     if (!event.target.files || event.target.files.length === 0) {
       console.log("No file selected");
       return;
     }
-  
+
     const file = event.target.files[0];
     console.log("Selected file:", file);
     
@@ -64,60 +85,46 @@ export const Form3 = () => {
   
     // Define limits
     const maxImageSize = 5 * 1024 * 1024; // 5MB
-    const maxVideoSize = 50 * 1024 * 1024; // 50MB
-  
-    // Allowed file types
+
+    // Allowed image types only
     const allowedImageTypes = ["image/jpeg", "image/png"];
-    const allowedVideoTypes = ["video/mp4"];
-  
-    // Validate image or video file
-    if (file.type.startsWith("image/")) {
-      if (!allowedImageTypes.includes(file.type)) {
-        const errMsg = "Invalid image format. Please upload a JPEG or PNG image.";
-        console.log("Validation error:", errMsg);
-        setUploadError(errMsg);
-        setError("uploadedImage", { type: "manual", message: errMsg });
-        return;
-      }
-      if (file.size > maxImageSize) {
-        const errMsg = "Image size exceeds the maximum allowed size of 5MB.";
-        console.log("Validation error:", errMsg);
-        setUploadError(errMsg);
-        setError("uploadedImage", { type: "manual", message: errMsg });
-        return;
-      }
-    } else if (file.type.startsWith("video/")) {
-      if (!allowedVideoTypes.includes(file.type)) {
-        const errMsg = "Invalid video format. Please upload an MP4 video.";
-        console.log("Validation error:", errMsg);
-        setUploadError(errMsg);
-        setError("uploadedImage", { type: "manual", message: errMsg });
-        return;
-      }
-      if (file.size > maxVideoSize) {
-        const errMsg = "Video size exceeds the maximum allowed size of 50MB.";
-        console.log("Validation error:", errMsg);
-        setUploadError(errMsg);
-        setError("uploadedImage", { type: "manual", message: errMsg });
-        return;
-      }
-    } else {
-      const errMsg = "Unsupported file type. Please upload an image or video.";
+
+    // Validate file: only allow images
+    if (!file.type.startsWith("image/")) {
+      const errMsg = "Unsupported file type. Please upload an image.";
       console.log("Validation error:", errMsg);
       setUploadError(errMsg);
       setError("uploadedImage", { type: "manual", message: errMsg });
       return;
     }
-  
+
+    if (!allowedImageTypes.includes(file.type)) {
+      const errMsg = "Invalid image format. Please upload a JPEG or PNG image.";
+      console.log("Validation error:", errMsg);
+      setUploadError(errMsg);
+      setError("uploadedImage", { type: "manual", message: errMsg });
+      return;
+    }
+
+    if (file.size > maxImageSize) {
+      const errMsg = "Image size exceeds the maximum allowed size of 5MB.";
+      console.log("Validation error:", errMsg);
+      setUploadError(errMsg);
+      setError("uploadedImage", { type: "manual", message: errMsg });
+      return;
+    }
+
     // Upload file to Firebase Storage
     const fileName = `${Date.now()}-${file.name}`;
-    const storageRef = ref(storage, `causes/${fileName}`);
+    const storagePath = `causes/${fileName}`;
+    const storageRef = ref(storage, storagePath);
     const uploadTask = uploadBytesResumable(storageRef, file);
-  
+
     uploadTask.on(
       "state_changed",
       (snapshot) => {
-        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        const progress =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         console.log(`Upload is ${progress}% done`);
         setMedia((prev) => (prev ? { ...prev, progress } : null));
       },
@@ -129,15 +136,16 @@ export const Form3 = () => {
         // Retrieve download URL after successful upload
         const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
         console.log("File available at:", downloadURL);
-  
+
         const updatedMedia: UploadedImage = {
           src: downloadURL,
           name: file.name,
           size: Math.round(file.size / 1024),
           progress: 100,
           type: file.type,
+          path: storagePath,
         };
-  
+
         setMedia(updatedMedia);
         setValue("uploadedImage", updatedMedia);
         localStorage.setItem("uploadedImage", JSON.stringify(updatedMedia));
@@ -145,7 +153,16 @@ export const Form3 = () => {
     );
   };
 
-  const handleRemoveMedia = () => {
+  const handleRemoveMedia = async () => {
+    if (media && media.path) {
+      const imageRef = ref(storage, media.path);
+      try {
+        await deleteObject(imageRef);
+        console.log("Image successfully deleted from Firebase Storage.");
+      } catch (error) {
+        console.error("Error deleting image from Firebase Storage:", error);
+      }
+    }
     setMedia(null);
     localStorage.removeItem("uploadedImage");
     setValue("uploadedImage", null);
@@ -161,11 +178,11 @@ export const Form3 = () => {
         Bring Your Cause to Life with Media
       </h2>
       <p className="text-[#2b2829] text-sm font-normal font-montserrat mb-2">
-        An image or video can be worth a thousand words. Add photos or videos
-        that showcase the real people, places, or situations your cause supports.
+        An image can be worth a thousand words. Add a photo that showcases the real
+        people, places, or situations your cause supports.
       </p>
       <FormItem>
-        <FormLabel>Upload Media</FormLabel>
+        <FormLabel>Upload Image</FormLabel>
         <FormControl>
           <>
             <button
@@ -185,7 +202,6 @@ export const Form3 = () => {
                     height={200}
                   />
                 ) : (
-                  // Wrap the image in a fixed-aspect ratio container (landscape 16:9)
                   <div className="relative w-[200px] h-[112.5px] z-0">
                     <Image
                       src={media.src}
@@ -209,7 +225,7 @@ export const Form3 = () => {
               ref={fileInputRef}
               id="media-upload"
               type="file"
-              accept="image/*,video/*"
+              accept="image/*"
               onChange={handleMediaChange}
               className="hidden"
             />
@@ -225,7 +241,7 @@ export const Form3 = () => {
         <button onClick={toggleGuidelines} className="flex gap-1 items-center">
           <p className="text-[#2b2829] text-[12px] font-normal font-montserrat underline">
             To ensure the best experience, please follow these guidelines when
-            uploading images or videos
+            uploading images
           </p>
           <Image
             src="/List_a_cause/chevron-down-4.svg"
@@ -235,9 +251,7 @@ export const Form3 = () => {
           />
         </button>
         <p className="text-[#2b2829] text-sm font-normal font-montserrat mt-10">
-          Note: Upload images that capture the spirit of your cause—a smile, a
-          community, a place in need. Add a short video to show the heart of your
-          cause. Let donors see and feel its impact.
+          Note: Upload images that capture the spirit of your cause—a smile, a community, a place in need.
         </p>
         {showGuidelines && (
           <div className="absolute left-0 mt-2 p-4 bg-white border border-gray-300 shadow-lg z-10">
@@ -247,15 +261,6 @@ export const Form3 = () => {
               Recommended format: JPEG or PNG
               <br />
               Ideal resolution: 1920 x 1080 pixels
-              <br />
-              <br />
-              <strong>Videos:</strong> Maximum size of 50 MB
-              <br />
-              Recommended format: MP4
-              <br />
-              Max resolution: 1080p (1920 x 1080)
-              <br />
-              Suggested length: 1-4 minutes
             </p>
           </div>
         )}
@@ -263,8 +268,46 @@ export const Form3 = () => {
 
       {media && (
         <div className="mt-4">
-          {/* Always show the file component with progress indicator */}
           <div className="border block w-2/4 border-[#b5b3b3] py-3 px-2 mb-2">
+            <div className="flex items-center justify-between">
+              <div className="flex gap-2 items-center min-w-0">
+                <Image
+                  src="/List_a_cause/file.svg"
+                  alt="File icon"
+                  width={30}
+                  height={30}
+                  className="flex-shrink-0"
+                />
+                <div className="flex flex-col flex-grow min-w-0">
+                  <p className="text-[#363939] text-xs font-normal truncate">
+                    {media.name}
+                  </p>
+                  <p className="text-[#b5b3b3] text-xs">{media.size} KB</p>
+                </div>
+              </div>
+              {media.progress >= 100 && (
+                <span className="justify-end">
+                  <Image
+                    src="/List_a_cause/check.svg"
+                    alt="Check"
+                    width={24}
+                    height={24}
+                  />
+                </span>
+              )}
+            </div>
+            {media.progress < 100 && (
+              <div className="flex">
+                <div className="w-full mt-2 bg-gray-200 rounded-lg overflow-hidden">
+                  <div
+                    className="bg-blue-500 h-4 transition-all duration-200"
+                    style={{ width: `${media.progress}%` }}
+                  ></div>
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="border block w-2/4 border-[#b5b3b3] py-3 px-2">
             <div className="flex items-center justify-between">
               <div className="flex gap-2">
                 <Image
@@ -281,61 +324,19 @@ export const Form3 = () => {
                   <p className="text-[#b5b3b3] text-xs">{media.size} KB</p>
                 </span>
               </div>
-              {media.progress >= 100 && (
-                <span className="justify-end">
-                  <Image
-                    src="/List_a_cause/check.svg"
-                    alt="Check"
-                    width={30}
-                    height={30}
-                    style={{ width: "30px", height: "30px" }}
-                  />
-                </span>
-              )}
+              <button
+                onClick={handleRemoveMedia}
+                className="flex-shrink-0 focus:outline-none"
+              >
+                <Image
+                  src="/List_a_cause/trash-2.svg"
+                  alt="Delete icon"
+                  width={24}
+                  height={24}
+                />
+              </button>
             </div>
-            {media.progress < 100 && (
-              <div className="flex">
-                <div className="w-full mt-2 bg-gray-200 rounded-lg overflow-hidden">
-                  <div
-                    className="bg-blue-500 h-4 transition-all duration-200"
-                    style={{ width: `${media.progress}%` }}
-                  ></div>
-                </div>
-              </div>
-            )}
           </div>
-          
-          {/* File management component with delete option only shown when upload is complete */}
-          {media.progress >= 100 && (
-            <div className="border block w-2/4 border-[#b5b3b3] py-3 px-2">
-              <div className="flex items-center justify-between">
-                <div className="flex gap-2">
-                  <Image
-                    src="/List_a_cause/file.svg"
-                    alt="File icon"
-                    width={30}
-                    height={30}
-                    style={{ width: "30px", height: "30px" }}
-                  />
-                  <span>
-                    <p className="text-[#363939] text-md md:text-lg font-normal">
-                      {media.name}
-                    </p>
-                    <p className="text-[#b5b3b3] text-xs">{media.size} KB</p>
-                  </span>
-                </div>
-                <button onClick={handleRemoveMedia}>
-                  <Image
-                    src="/List_a_cause/trash-2.svg"
-                    alt="Delete icon"
-                    width={30}
-                    height={30}
-                    style={{ width: "30px", height: "30px" }}
-                  />
-                </button>
-              </div>
-            </div>
-          )}
         </div>
       )}
     </div>
