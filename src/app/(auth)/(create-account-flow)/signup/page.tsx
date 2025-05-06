@@ -13,7 +13,6 @@ export default function Page({
     DOB: string;
   };
 }) {
-  console.log(searchParams);
   return (
     <FormWrapper step={1}>
         <Particles

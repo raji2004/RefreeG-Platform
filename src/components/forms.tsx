@@ -167,6 +167,7 @@ export const SignupForm1 = ({
   useEffect(() => {
     const getCountries = async () => {
       const data = await fetchCountriesData();
+
       setCountries(data);
     };
 

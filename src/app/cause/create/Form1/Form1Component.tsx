@@ -11,6 +11,8 @@ import {
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "@/lib/firebase/config";
+import FiatCurrencies from "../_components/FiatCurrencies";
+import CryptoCurrencies from "../_components/CryptoCurrencies";
 
 export const Form1 = () => {
   const {
@@ -30,6 +32,8 @@ export const Form1 = () => {
 
   // Watch the state field to pass its current value for ZIP code validation
   const stateValue = watch("state");
+  const [selectedFiatCurrency, setSelectedFiatCurrency] = useState("");
+  const [selectedCryptoCurrency, setSelectedCryptoCurrency] = useState("");
   const currency = watch("currency");
 
   const fetchStatesForCountry = useCallback(
@@ -93,6 +97,142 @@ export const Form1 = () => {
     return () => unsubscribe();
   }, [fetchStatesForCountry]);
 
+
+  // const fiatCurrencies = [
+  //   {
+  //     currency: "NGN",
+  //     image: "/list_a_cause/Nigeria.png"
+  //   },
+  //   {
+  //     currency: "USD",
+  //     image: "/list_a_cause/United States.png"
+  //   },
+  //   {
+  //     currency: "Pounds",
+  //     image: "/list_a_cause/United Kingdom.png"
+  //   },
+  //   {
+  //     currency: "EURO",
+  //     image: "/list_a_cause/Netherlands.png"
+  //   }
+  // ]
+
+  // const cryptoCurrencies = [
+  //   {
+  //     currency: "BTC",
+  //     image: "/list_a_cause/Bitcoin.png"
+  //   },
+  //   {
+  //     currency: "ETH",
+  //     image: "/list_a_cause/Ethereum.png"
+  //   },
+  //   {
+  //     currency: "BNB",
+  //     image: "/list_a_cause/Bnb.png"
+  //   },
+  //   {
+  //     currency: "Litecoin",
+  //     image: "/list_a_cause/Litecoin.png"
+  //   },
+  //   {
+  //     currency: "USDT",
+  //     image: "/list_a_cause/Tether.png"
+  //   },
+  //   {
+  //     currency: "TRX",
+  //     image: "/list_a_cause/trx.png"
+  //   },
+
+  //   {
+  //     currency: "Doge",
+  //     image: "/list_a_cause/dodge.png"
+  //   },
+  //   {
+  //     currency: "MATIC",
+  //     image: "/list_a_cause/matic.png"
+  //   },
+  //   {
+  //     currency: "Dot",
+  //     image: "/list_a_cause/dot.png"
+  //   },
+  //   {
+  //     currency: "BCH",
+  //     image: "/list_a_cause/bch.png"
+  //   },
+  //   {
+  //     currency: "XRP",
+  //     image: "/list_a_cause/xrp.png"
+  //   }
+  // ]
+
+
+  const fiatCurrencies = [
+    {
+      currency: "NGN",
+      image: "/list_a_cause/Nigeria.png"
+    },
+    {
+      currency: "USD",
+      image: "/list_a_cause/United States.png"
+    },
+    {
+      currency: "Pounds",
+      image: "/list_a_cause/United Kingdom.png"
+    },
+    {
+      currency: "EURO",
+      image: "/list_a_cause/Netherlands.png"
+    }
+  ]
+
+  const cryptoCurrencies = [
+    {
+      currency: "BTC",
+      image: "/list_a_cause/Bitcoin.png"
+    },
+    {
+      currency: "ETH",
+      image: "/list_a_cause/Ethereum.png"
+    },
+    {
+      currency: "BNB",
+      image: "/list_a_cause/Bnb.png"
+    },
+    {
+      currency: "Litecoin",
+      image: "/list_a_cause/Litecoin.png"
+    },
+    {
+      currency: "USDT",
+      image: "/list_a_cause/Tether.png"
+    },
+    {
+      currency: "TRX",
+      image: "/list_a_cause/trx.png"
+    },
+
+    {
+      currency: "Doge",
+      image: "/list_a_cause/dodge.png"
+    },
+    {
+      currency: "MATIC",
+      image: "/list_a_cause/matic.png"
+    },
+    {
+      currency: "Dot",
+      image: "/list_a_cause/dot.png"
+    },
+    {
+      currency: "BCH",
+      image: "/list_a_cause/bch.png"
+    },
+    {
+      currency: "XRP",
+      image: "/list_a_cause/xrp.png"
+    }
+  ]
+
   return (
     <div className="p-4">
       <h2 className="text-[#2b2829] text-xl font-medium font-montserrat">
@@ -106,7 +246,6 @@ export const Form1 = () => {
         <div className="flex gap-4">
           {/* State Field */}
           <FormItem>
-            <FormLabel>State</FormLabel>
             <FormControl>
               {authLoading && !userCountry ? (
                 <p>Loading user info...</p>

@@ -9,7 +9,36 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
-import { DatePicker } from "@/components/ui/date-picker";
+import { DatePicker } from "@/components/ui/date-picker"; // Ensure correct import path
+import { ChevronDown } from "lucide-react";
+
+// Helper functions (if needed in future)
+function numberToWords(num: number): string {
+  const words = [
+    "zero",
+    "one",
+    "two",
+    "three",
+    "four",
+    "five",
+    "six",
+    "seven",
+    "eight",
+    "nine",
+    "ten",
+  ];
+  return num <= 10 ? words[num] : num.toString();
+}
+
+function getTimeLeft(deadline: Date | null): string {
+  if (!deadline) return "";
+  const now = new Date();
+  const diffTime = deadline.getTime() - now.getTime();
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  if (diffDays <= 0) return "Today";
+  if (diffDays === 1) return "one day left";
+  return `${numberToWords(diffDays)} days left`;
+}
 
 export const Form2 = () => {
   const {
@@ -69,11 +98,7 @@ export const Form2 = () => {
                 <option value="Environment">Environment</option>
               </select>
               <span className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none text-[#898384]">
-                <Image 
-                src="/List_a_cause/chevron-down-4.svg"
-                alt="Category"
-                width={20}
-                height={20}/>
+                <ChevronDown className="w-4 h-4" />
               </span>
             </div>
           </FormControl>
@@ -151,25 +176,13 @@ export const Form2 = () => {
                   ).toString(); // Minimum value is 1
                   field.onChange(newValue);
                 };
-                const handleInputChange = (
-                  e: React.ChangeEvent<HTMLInputElement>
-                ) => {
-                  let value = e.target.value;
-
-                  // Remove non-numeric characters
-                  value = value.replace(/[^0-9]/g, "");
-
-                  // Remove leading zeros
-                  value = value.replace(/^0+/, "");
-
-                  // If empty or invalid, set to "1"
-                  if (!value || parseInt(value, 10) < 1) {
-                    value = "1";
+                const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+                  const value = e.target.value;
+                  // Allow only numbers
+                  if (value === "" || /^\d+$/.test(value)) {
+                    field.onChange(value);
                   }
-
-                  field.onChange(value);
                 };
-
                 return (
                   <div className="relative">
                     <input

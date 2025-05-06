@@ -4,6 +4,20 @@ import { db } from "./firebase/config"; // Import your Firebase setup
 export const handleSubmit = async (formData, toast) => {
   const email = formData.get("email");
 
+  console.log(email);
+
+  if (!email) {
+    toast({
+      title: "Invalid Email",
+      description: "Please enter a valid email address.",
+      status: "error",
+      duration: 3000,
+      isClosable: true,
+      position: "top",
+    });
+    return;
+  }
+
   try {
     // Check if the email already exists in the 'newsletter' collection
     const emailQuery = query(
@@ -26,7 +40,12 @@ export const handleSubmit = async (formData, toast) => {
     }
 
     // If email doesn't exist, add to the collection
-    const docRef = await addDoc(collection(db, "newsletter"), { email });
+    // The Cloud Function will automatically trigger when a new document is added
+    const docRef = await addDoc(collection(db, "newsletter"), {
+      email,
+      subscribedAt: new Date(),
+    });
+
     console.log("Submitted email:", docRef.id);
 
     // Show success toast
@@ -45,7 +64,7 @@ export const handleSubmit = async (formData, toast) => {
     console.error("Error submitting email:", error);
 
     toast({
-      title: "Suscribed",
+      title: "Error",
       description: "There was an issue subscribing. Please try again later.",
       duration: 5000,
       isClosable: true,

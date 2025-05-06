@@ -9,7 +9,7 @@ import { H2, P, Ol } from "@/components/typograpy";
 // import { DonationCarousel } from "@/components/donationCarousel";
 import Hero from "./_components/hero";
 import { getCauses } from "@/lib/firebase/actions";
-import { Console } from "console";
+import UrgentCauses from "@/components/ui/urgentCauses";
 import YouTubeEmbed from "@/components/YoutubeEmbed";
 
 export default async function Home() {
@@ -19,6 +19,8 @@ export default async function Home() {
     <div>
       <Hero />
       <WhyUseUs />
+
+      <UrgentCauses />
 
       {/* <div className="w-full  px-10 py-8 bg-white border-b">
         <div className="flex justify-between items-center mb-6">
@@ -39,9 +41,11 @@ export default async function Home() {
         </nav>
       </div> */}
 
+
+      {/* how it works */}
       <div className="pt-2 px-10 pb-8 mb-8">
-        <H2 className="mt-8 font-semibold text-2xl">How it works</H2>
-        <P className="text-xl mb-12">
+        <H2 className="mt-8 font-medium text-xl">How it works</H2>
+        <P className="text-lg mb-12 text-gray-500">
           How donation on{" "}
           <Link
             href="https://www.refreeg.com"
@@ -65,8 +69,11 @@ export default async function Home() {
         <HappeningNearYou causes={causes} />
       </div>
 
+      {/* <HappeningNearYou causes={causes}  /> */}
+
+      {/* how we ensure transparency */}
       <div className="w-full justify-center pt-20 pb-12 lg:pb-20 px-10 mb-20 space-y-5 text-white bg-customBlueGray">
-        <H2>How do we ensure transparency?</H2>
+        <H2 className="font-bold text-lg">How do we ensure transparency?</H2>
         <Ol className="mb-16">
           <P>
             At RefreeG, transparency is at the core of our operations. We
