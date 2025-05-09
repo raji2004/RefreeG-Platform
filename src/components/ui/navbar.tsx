@@ -96,9 +96,7 @@ export function Navbar ({ userSession, profile }: { userSession?: boolean, profi
           </MenuLink>
         </div>
 
-        <MenuLink href="#" className="hover:bg-blue-100">
-          Explore causes
-        </MenuLink>
+        <MenuLink href="../cause" className='hover:bg-blue-100'>Explore causes</MenuLink>
 
         {/* <TestProfileLink /> */}
 

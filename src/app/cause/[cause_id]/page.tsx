@@ -3,7 +3,7 @@ import { FaHeartbeat, FaMapMarkerAlt, FaShare } from "react-icons/fa";
 import { BsShare, BsChevronRight } from "react-icons/bs";
 import { GoAlert } from "react-icons/go";
 import Image from "next/image";
-import { Navbar } from "@/components/ui/navbar";
+// import { Navbar } from "@/components/ui/navbar";
 import CrowdfundingFeatures from "@/components/crowdfundingFeatures";
 import {
   getCauseById,
@@ -20,8 +20,8 @@ import EmojiReaction from "@/components/EmojiReaction";
 import { Badge } from "@/components/ui/badge";
 import UnicefBanner from "@/components/UnicefBanner";
 import CauseSection from "@/components/CauseSection";
-import CauseTabs from "@/components/CauseTabs";
-import NearbyCarousel from "@/components/NearbyCarousel";
+// import CauseTabs from "@/components/CauseTabs";
+// import NearbyCarousel from "@/components/NearbyCarousel";
 import ShareWrapper from "@/components/ShareWrapper";
 import Link from "next/link";
 import DonationButtons from "@/components/DonationButtons";
