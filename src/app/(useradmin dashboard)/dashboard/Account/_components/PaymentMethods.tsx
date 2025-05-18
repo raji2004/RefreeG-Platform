@@ -18,7 +18,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { updateUserById, getUserById } from "@/lib/firebase/actions";
+import {
+  updateUserById,
+  getUserById,
+  deleteUserFields,
+} from "@/lib/firebase/actions";
 import AccountNumberForm from "./AccountNumberForm";
 import { getSessionId } from "@/lib/helpers";
 import Paystack from "@/lib/services/paystack";
@@ -219,8 +223,11 @@ export default function PaymentMethods() {
     setShowAccountDetails((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
-  const handleRemoveMethod = (id: number) => {
-    setPaymentMethods((prev) => prev.filter((method) => method.id !== id));
+  const handleRemoveMethod = async (id: number) => {
+    try {
+      await deleteUserFields(sessionId!, [id]);
+      setPaymentMethods((prev) => prev.filter((method) => method.id !== id));
+    } catch (error) {}
   };
 
   const handleRemoveCryptoWallet = async (wallet: CryptoWallet) => {

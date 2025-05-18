@@ -88,6 +88,34 @@ export const getAllUsers = async (): Promise<User[]> => {
   }
 };
 
+// delete a field from user
+export const deleteUserFields = async (
+userId: string, p0: number[],
+): Promise<boolean> => {
+  try {
+    if (!userId) {
+      console.warn("Invalid user ID provided:", userId);
+      return false;
+    }
+
+    const userRef = doc(db, "users", userId); // Get reference to the document
+    const userDoc = await getDoc(userRef); // Fetch the document snapshot
+
+    if (!userDoc.exists()) return false;
+
+    const userData = userDoc.data();
+    return !!userData?.accDetails?.[0]?.account_number;
+  } catch (error) {
+    console.error("Error checking user account:", error);
+    return false;
+  }
+};
+
+/**
+ * Check if a user has an account by checking if they have account details
+ * @param userId The ID of the user to check
+ * @returns A boolean indicating whether the user has an account
+ */
 export const checkUserHasAccount = async (userId: string): Promise<boolean> => {
   try {
     if (!userId) {

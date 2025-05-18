@@ -67,7 +67,22 @@ export const Form3 = () => {
 
     const file = event.target.files[0];
     console.log("Selected file:", file);
-
+    
+    // Create a temporary object URL for preview
+    const previewUrl = URL.createObjectURL(file);
+    
+    // Initialize media object immediately with 0% progress
+    const initialMedia: UploadedImage = {
+      src: previewUrl,
+      name: file.name,
+      size: Math.round(file.size / 1024),
+      progress: 0,
+      type: file.type,
+    };
+    
+    // Set media immediately to show progress bar
+    setMedia(initialMedia);
+  
     // Define limits
     const maxImageSize = 5 * 1024 * 1024; // 5MB
 
@@ -178,17 +193,25 @@ export const Form3 = () => {
               }`}
             >
               {media ? (
-                <div className="relative w-[200px] h-[112.5px]">
-                  <Image
+                media.type.startsWith("video/") ? (
+                  <video
                     src={media.src}
-                    alt="Uploaded preview"
-                    fill
+                    controls
                     className="object-cover rounded-lg"
-                    onError={(e) => {
-                      console.error("Image failed to load", e);
-                    }}
+                    width={200}
+                    height={200}
                   />
-                </div>
+                ) : (
+                  <div className="relative w-[200px] h-[112.5px] z-0">
+                    <Image
+                      src={media.src}
+                      alt="Uploaded preview"
+                      fill
+                      className="object-cover rounded-lg"
+                      style={{ zIndex: 0 }}
+                    />
+                  </div>
+                )
               ) : (
                 <Image
                   src="/List_a_cause/Upload_to_Cloud.png"
@@ -244,9 +267,8 @@ export const Form3 = () => {
       </div>
 
       {media && (
-        <div className="mt-4 space-y-4">
-          {/* Upload progress block */}
-          <div className="border border-[#b5b3b3] rounded-md p-3 w-full max-w-[400px]">
+        <div className="mt-4">
+          <div className="border block w-2/4 border-[#b5b3b3] py-3 px-2 mb-2">
             <div className="flex items-center justify-between">
               <div className="flex gap-2 items-center min-w-0">
                 <Image
@@ -263,44 +285,44 @@ export const Form3 = () => {
                   <p className="text-[#b5b3b3] text-xs">{media.size} KB</p>
                 </div>
               </div>
-              {media.progress === 100 && (
-                <div className="flex-shrink-0">
+              {media.progress >= 100 && (
+                <span className="justify-end">
                   <Image
                     src="/List_a_cause/check.svg"
                     alt="Check"
                     width={24}
                     height={24}
                   />
-                </div>
+                </span>
               )}
             </div>
-            <div className="flex mt-2">
-              <div className="w-full bg-gray-200 rounded-lg overflow-hidden">
-                <div
-                  className="bg-blue-500 h-4 transition-all duration-200"
-                  style={{ width: `${media.progress}%` }}
-                ></div>
+            {media.progress < 100 && (
+              <div className="flex">
+                <div className="w-full mt-2 bg-gray-200 rounded-lg overflow-hidden">
+                  <div
+                    className="bg-blue-500 h-4 transition-all duration-200"
+                    style={{ width: `${media.progress}%` }}
+                  ></div>
+                </div>
               </div>
-            </div>
+            )}
           </div>
-
-          {/* Removal block */}
-          <div className="border border-[#b5b3b3] rounded-md p-3 w-full max-w-[400px]">
+          <div className="border block w-2/4 border-[#b5b3b3] py-3 px-2">
             <div className="flex items-center justify-between">
-              <div className="flex gap-2 items-center min-w-0">
+              <div className="flex gap-2">
                 <Image
                   src="/List_a_cause/file.svg"
                   alt="File icon"
                   width={30}
                   height={30}
-                  className="flex-shrink-0"
+                  style={{ width: "30px", height: "30px" }}
                 />
-                <div className="flex flex-col flex-grow min-w-0">
-                  <p className="text-[#363939] text-xs font-normal truncate">
+                <span>
+                  <p className="text-[#363939] text-md md:text-lg font-normal">
                     {media.name}
                   </p>
                   <p className="text-[#b5b3b3] text-xs">{media.size} KB</p>
-                </div>
+                </span>
               </div>
               <button
                 onClick={handleRemoveMedia}

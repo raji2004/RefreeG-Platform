@@ -12,6 +12,7 @@ import { Form1 } from "@/app/cause/create/Form1/Form1Component";
 import { Form2 } from "@/app/cause/create/Form2/Form2Component";
 import { Form3 } from "@/app/cause/create/Form3/Form3Component";
 import { Form4 } from "@/app/cause/create/Form4/Form4Component";
+import { ChevronRight } from "lucide-react";
 
 // Define the UploadedImage interface
 export interface UploadedImage {
@@ -168,24 +169,25 @@ export default function ListacauseForm() {
               setStep(newStep);
             }}
           >
-            <TabsList className="flex gap-8 my-20 md:my-8 mb-8">
-              <TabsTrigger
-                value="step-1"
-                disabled={step < 1}
-                data-completed={step > 1}
+            {/* Custom step indicators instead of TabsList/TabsTrigger */}
+            <div className="flex gap-8 my-20 md:my-8 mb-8 justify-start">
+              <div 
+                onClick={() => step >= 1 && setStep(1)}
+                className={`w-10 h-2 rounded-md cursor-pointer transition-colors ${step >= 1 ? (step === 1 ? 'bg-blue-600' : 'bg-[#E6EEF8]') : 'bg-[#E6EEF8] cursor-not-allowed'}`}
               />
-              <TabsTrigger
-                value="step-2"
-                disabled={step < 2}
-                data-completed={step > 2}
+              <div 
+                onClick={() => step >= 2 && setStep(2)}
+                className={`w-10 h-2 rounded-md cursor-pointer transition-colors ${step >= 2 ? (step === 2 ? 'bg-blue-600' : 'bg-gray-300') : 'bg-gray-200 cursor-not-allowed'}`}
               />
-              <TabsTrigger
-                value="step-3"
-                disabled={step < 3}
-                data-completed={step > 3}
+              <div 
+                onClick={() => step >= 3 && setStep(3)}
+                className={`w-10 h-2 rounded-md cursor-pointer transition-colors ${step >= 3 ? (step === 3 ? 'bg-blue-600' : 'bg-gray-300') : 'bg-gray-200 cursor-not-allowed'}`}
               />
-              <TabsTrigger value="step-4" disabled={step < 4} />
-            </TabsList>
+              <div 
+                onClick={() => step >= 4 && setStep(4)}
+                className={`w-10 h-2 rounded-md cursor-pointer transition-colors ${step >= 4 ? (step === 4 ? 'bg-blue-600' : 'bg-gray-300') : 'bg-gray-200 cursor-not-allowed'}`}
+              />
+            </div>
 
             <TabsContent value="step-1">
               <Form1 />

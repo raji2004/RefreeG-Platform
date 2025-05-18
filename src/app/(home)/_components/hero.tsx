@@ -49,6 +49,7 @@ const Hero = () => {
       <div className="md:px-0 px-[30px] md:mt-0 mt-6">
         <HeroComponent img1={"/heropic3.png"} img2={"/heropic4.png"} />
       </div>
+
     </section>
   );
 };
