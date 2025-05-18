@@ -14,14 +14,15 @@ export const getOldParams = (searchParams: ReadonlyURLSearchParams, params: URLS
   const oldObj: any = {}
   const oldParams = Array.from(searchParams.keys())
   oldParams.forEach((key: any) => {
-    const value = params.get(key);
+    // Get value from searchParams (original URL parameters)
+    const value = searchParams.get(key);
     if (value) {
+      // Set in the new params object and the returned object
       params.set(key, value);
       oldObj[`${key}`] = value
     }
   })
   return oldObj
-
 }
 
 export function getDaysLeft(deadline: string): string {
