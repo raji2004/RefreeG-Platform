@@ -34,9 +34,9 @@ import { InputOTP, InputOTPSeparator, InputOTPSlot } from "./ui/input-otp";
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 import {
-  useCreateUserWithEmailAndPassword,
-  useSignInWithEmailAndPassword,
-} from "react-firebase-hooks/auth";
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import { auth } from "@/lib/firebase/config";
 import { addUser, checkEmailExists } from "@/lib/firebase/actions";
 import { setCookie } from "cookies-next";
@@ -62,11 +62,14 @@ export default function LoginForm() {
   });
 
   const { push } = useRouter();
-  const [signInWithEmailAndPassword,signInError,signInLoading] = useSignInWithEmailAndPassword(auth);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     try {
-      const res = await signInWithEmailAndPassword(data.email, data.password);
+      setLoading(true);
+      setError(null);
+      const res = await signInWithEmailAndPassword(auth, data.email, data.password);
       console.log("res", res?.user.uid);
       setCookie("userSession", JSON.stringify(res?.user.uid), {
         maxAge: sessionAge,
@@ -76,9 +79,27 @@ export default function LoginForm() {
       } else {
         toast("Invalid email or password");
       }
-    } catch (e) {
-      console.error("error", e);
-      toast("Login failed. Please try again."); // Added user feedback
+    } catch (e: any) {
+      console.error("Login error:", e);
+      setError(e.message);
+      
+      // Extract error code if present
+      const errorMessage = e.message || 'Login failed';
+      const errorCode = errorMessage.includes('auth/') ? 
+        errorMessage.split('auth/')[1].split(')')[0] : '';
+      
+      // Handle common Firebase auth errors
+      if (errorCode === 'invalid-email') {
+        toast.error('Please enter a valid email address.');
+      } else if (errorCode === 'user-not-found' || errorCode === 'wrong-password') {
+        toast.error('Invalid email or password.');
+      } else if (errorCode === 'too-many-requests') {
+        toast.error('Too many failed login attempts. Please try again later.');
+      } else {
+        toast.error('Login failed: ' + e.message);
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -514,17 +535,22 @@ export const SignupForm5 = () => {
   const signu3Schema = signUpSchema.pick({
     donationPreference: true,
   });
-  const [createUserWithEmailAndPassword] =
-    useCreateUserWithEmailAndPassword(auth);
+  const [steps, setSteps] = useState(1);
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace, push } = useRouter();
+
+  // State for tracking authentication loading and error
+  const [loading, setLoading] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
+
   const form = useForm({
     resolver: zodResolver(signu3Schema),
     defaultValues: {
       donationPreference: [],
     },
   });
+
   const donationOptions = [
     "Education",
     "Healthcare",
@@ -536,17 +562,56 @@ export const SignupForm5 = () => {
   ];
 
   const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    console.log(data);
     const params = new URLSearchParams(searchParams);
     const oldParam = getOldParams(searchParams, params);
+    
+    // Safeguard against missing email/password from URL parameters
+    // Check if we have the required signup info from previous steps
+    if (!oldParam.email || !oldParam.password) {
+      console.error('Missing required signup information');
+      toast.error('Missing email or password. Please restart the signup process.');
+      return;
+    }
     Object.entries(data).forEach(([key, value]) => {
       params.set(key, value);
     });
     try {
-      const res = await createUserWithEmailAndPassword(
+      // Log the search parameters to debug
+      console.log('Search params:', searchParams.toString());
+      console.log('Full oldParam object:', { 
+        ...oldParam, 
+        // Mask password for security
+        password: oldParam.password ? '*'.repeat(Math.min(oldParam.password.length, 8)) : null 
+      });
+      
+      // Check if email and password are valid
+      if (!oldParam.email || typeof oldParam.email !== 'string') {
+        console.error('Invalid email format:', oldParam.email);
+        toast.error('Invalid email format. Please go back to the email entry step.');
+        return;
+      }
+      
+      if (!oldParam.password || typeof oldParam.password !== 'string' || oldParam.password.length < 6) {
+        console.error('Invalid password format or length');
+        toast.error('Password must be at least 6 characters long. Please go back to the password entry step.');
+        return;
+      }
+      
+      // Set loading state
+      setLoading(true);
+      setAuthError(null);
+      
+      // Use the direct Firebase auth method
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
         oldParam.email,
         oldParam.password
       );
-      await addUser(`${res?.user.uid}`, {
+
+      console.log(userCredential);
+
+      await addUser(`${userCredential.user.uid}`, {
         email: oldParam.email,
         donationPreference: data.donationPreference, // This is now an array
         firstName: oldParam.firstName,
@@ -570,13 +635,37 @@ export const SignupForm5 = () => {
         userType: oldParam.userType || "individual", // Default but can be changed
       });
 
-      setCookie("userSession", JSON.stringify(res?.user.uid), {
+      setCookie("userSession", JSON.stringify(userCredential.user.uid), {
         maxAge: sessionAge,
       });
       console.log("successful");
       push("/");
-    } catch (e) {
-      console.error("error:", e);
+    } catch (e: any) {
+      console.error('Registration error:', e);
+      setLoading(false);
+      
+      // Parse Firebase error message
+      const errorMessage = e.message || 'Failed to create account';
+      setAuthError(errorMessage);
+      
+      // Extract error code if present
+      const errorCode = errorMessage.includes('auth/') ? 
+        errorMessage.split('auth/')[1].split(')')[0] : '';
+      
+      // Map common Firebase error codes to user-friendly messages
+      if (errorCode === 'email-already-in-use') {
+        toast.error('This email is already registered. Please use a different email or try logging in.');
+      } else if (errorCode === 'weak-password') {
+        toast.error('Password should be at least 6 characters long.');
+      } else if (errorCode === 'invalid-email') {
+        toast.error('Please enter a valid email address.');
+      } else if (errorCode === 'internal-error') {
+        toast.error('Authentication failed. Please check your network connection and try again.');
+      } else {
+        toast.error('Failed to create account: ' + errorMessage);
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
